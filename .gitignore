@@ -1,0 +1,10 @@
+\.DS_Store
+\.qmake\.stash
+Makefile
+Makefile\.Debug
+Makefile\.Release
+bin/
+build/
+release/
+debug/
+downloader\.pro\.user
