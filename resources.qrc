@@ -5,4 +5,11 @@
         <file>resources/logo_title.png</file>
         <file>resources/minus.png</file>
     </qresource>
+
+    <qresource prefix="/slideshow">
+        <file alias="montage.jpg">resources/slideshow/montage.jpg</file>
+        <file alias="outils.jpg">resources/slideshow/outils.jpg</file>
+        <file alias="tournevis.jpg">resources/slideshow/tournevis.jpg</file>
+        <file alias="trousse.jpg">resources/slideshow/trousse.jpg</file>
+    </qresource>
 </RCC>

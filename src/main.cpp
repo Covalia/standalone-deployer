@@ -1,13 +1,14 @@
 #include <QApplication>
 #include <QDebug>
-#include "installer_main_frame.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
 	qDebug() << "Starting application";
-    QApplication a(argc, argv);
-    InstallerMainFrame w;
-    w.show();
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+	w.center();
 
-    return a.exec();
+	return a.exec();
 }

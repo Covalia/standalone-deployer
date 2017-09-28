@@ -1,3 +1,6 @@
+macx {
+QMAKE_MAC_SDK = macosx10.13
+}
 
 QT += core
 QT += gui
@@ -32,11 +35,11 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 SOURCES += src/main.cpp
-SOURCES += src/installer_main_frame.cpp
+SOURCES += src/mainwindow.cpp
 
-HEADERS += src/installer_main_frame.h
+HEADERS += src/mainwindow.h
 
-FORMS += ui/installer_main_frame.ui
+FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
