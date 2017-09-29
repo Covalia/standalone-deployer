@@ -15,8 +15,7 @@ class DownloadManager: public QObject
 	public:
 		DownloadManager(QObject *parent = 0);
 
-		void append(const QUrl &url);
-		void append(const QStringList &urlList);
+		void setUrlListToDownload(const QStringList &urlList);
 		QString saveFileName(const QUrl &url);
 
 	signals:

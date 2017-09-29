@@ -13,22 +13,22 @@ DownloadManager::DownloadManager(QObject *parent)
 {
 }
 
-void DownloadManager::append(const QStringList &urlList)
+void DownloadManager::setUrlListToDownload(const QStringList &urlList)
 {
-    foreach (QString url, urlList)
-        append(QUrl::fromEncoded(url.toLocal8Bit()));
+	totalCount = 0;
+	downloadedCount = 0;
+
+	// TODO détail du download ?
+    foreach (QString url, urlList) {
+		if (downloadQueue.isEmpty())
+			QTimer::singleShot(0, this, SLOT(startNextDownload()));
+
+		downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
+		++totalCount;
+	}
 
     if (downloadQueue.isEmpty())
         QTimer::singleShot(0, this, SIGNAL(finished()));
-}
-
-void DownloadManager::append(const QUrl &url)
-{
-    if (downloadQueue.isEmpty())
-        QTimer::singleShot(0, this, SLOT(startNextDownload()));
-
-    downloadQueue.enqueue(url);
-    ++totalCount;
 }
 
 QString DownloadManager::saveFileName(const QUrl &url)

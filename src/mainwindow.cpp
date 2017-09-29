@@ -119,8 +119,10 @@ void MainWindow::buttonClicked() {
 	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
 	connect(m_downloader, SIGNAL(updateDownloadMessage(QString)), this, SLOT(updateDownloadMessage(QString)));
 
-	m_downloader->append(QUrl("http://dev.covalia.fr/lanceur_covotem.php"));
-	m_downloader->append(QUrl("http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso"));
+	QStringList urls;
+	urls << "http://dev.covalia.fr/lanceur_covotem.php" <<
+		"http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso";
+	m_downloader->setUrlListToDownload(urls);
 }
 
 void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
