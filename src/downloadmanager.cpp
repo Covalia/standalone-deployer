@@ -76,6 +76,7 @@ void DownloadManager::startNextDownload()
     }
 
     QNetworkRequest request(url);
+	request.setRawHeader("User-Agent", "Covalia-Downloader");
     currentDownload = manager.get(request);
     connect(currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
