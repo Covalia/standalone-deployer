@@ -6,32 +6,41 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QSaveFile>
 #include <stdio.h>
+#include "config/global.h"
 
-DownloadManager::DownloadManager(QObject *parent)
-    : QObject(parent), downloadedCount(0), totalCount(0)
+DownloadManager::DownloadManager(QObject *_parent) : QObject(_parent),
+	m_currentDownloaderCount(0),
+	m_currentFileCount(0),
+	m_saveFile(0)
 {
+}
+
+DownloadManager::~DownloadManager() {
+	delete m_saveFile;
 }
 
 void DownloadManager::setUrlListToDownload(const QStringList &urlList)
 {
-	totalCount = 0;
-	downloadedCount = 0;
+	m_currentFileCount = 0;
+	m_currentDownloaderCount = 0;
 
+	// TODO signal pour initialiser la progress bar ?
 	// TODO détail du download ?
     foreach (QString url, urlList) {
-		if (downloadQueue.isEmpty())
+		if (m_downloadQueue.isEmpty())
 			QTimer::singleShot(0, this, SLOT(startNextDownload()));
 
-		downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
-		++totalCount;
+		m_downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
+		++m_currentFileCount;
 	}
 
-    if (downloadQueue.isEmpty())
+    if (m_downloadQueue.isEmpty())
         QTimer::singleShot(0, this, SIGNAL(finished()));
 }
 
-QString DownloadManager::saveFileName(const QUrl &url)
+QString DownloadManager::getFilename(const QUrl &url)
 {
     QString path = url.path();
     QString basename = QFileInfo(path).fileName();
@@ -48,38 +57,41 @@ QString DownloadManager::saveFileName(const QUrl &url)
 
 void DownloadManager::startNextDownload()
 {
-    if (downloadQueue.isEmpty()) {
-        printf("%d/%d files downloaded successfully\n", downloadedCount, totalCount);
+    if (m_downloadQueue.isEmpty()) {
+        printf("%d/%d files downloaded successfully\n", m_currentDownloaderCount, m_currentFileCount);
         emit finished();
         return;
     }
 
-    QUrl url = downloadQueue.dequeue();
+    QUrl url = m_downloadQueue.dequeue();
+    m_currentFilename = getFilename(url);
 
-    QString filename = saveFileName(url);
-    output.setFileName(filename);
-    if (!output.open(QIODevice::WriteOnly)) {
-        fprintf(stderr, "Problem opening save file '%s' for download '%s': %s\n",
-                qPrintable(filename), url.toEncoded().constData(),
-                qPrintable(output.errorString()));
+	m_saveFile = new QSaveFile(m_currentFilename);
 
+	qDebug() << "temporary file:" << m_saveFile->fileName();
+	if (!m_saveFile->open(QIODevice::WriteOnly)) {
+		qDebug() << "Error opening temporary file for URL: " << url.toEncoded().constData();
         startNextDownload();
         return;                 // skip this download
-    }
+	}
 
     QNetworkRequest request(url);
 	request.setRawHeader("User-Agent", "Covalia-Downloader");
-    currentDownload = manager.get(request);
+    currentDownload = m_manager.get(request);
+
     connect(currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
     connect(currentDownload, SIGNAL(finished()),
             SLOT(downloadFinished()));
     connect(currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
+	connect(currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
+			SLOT(errorOccured(QNetworkReply::NetworkError)));
+	// TODO redirect
 
-    // prepare the output
-    printf("Downloading %s...\n", url.toEncoded().constData());
-    downloadTime.start();
+
+    qDebug() << "Downloading" << url.toEncoded().constData();
+    m_downloadTime.start();
 }
 
 void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
@@ -87,7 +99,7 @@ void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
 	emit downloadProgress(bytesReceived, bytesTotal);
 
     // calculate the download speed
-    double speed = bytesReceived * 1000.0 / downloadTime.elapsed();
+    double speed = bytesReceived * 10000 / m_downloadTime.elapsed();
     QString unit;
     if (speed < 1024) {
         unit = "bytes/sec";
@@ -99,21 +111,24 @@ void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
         unit = "MB/s";
     }
 
-	emit updateDownloadMessage(QString::fromLatin1("%1 %2")
+	emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
                             .arg(speed, 3, 'f', 1).arg(unit));
 }
 
 void DownloadManager::downloadFinished()
 {
     // TODO progressBar.clear();
-    output.close();
+	m_saveFile->commit();
+
+	delete m_saveFile;
+	m_saveFile = 0;
 
     if (currentDownload->error()) {
         // download failed
         fprintf(stderr, "Failed: %s\n", qPrintable(currentDownload->errorString()));
     } else {
         printf("Succeeded.\n");
-        ++downloadedCount;
+        ++m_currentDownloaderCount;
     }
 
     currentDownload->deleteLater();
@@ -122,5 +137,11 @@ void DownloadManager::downloadFinished()
 
 void DownloadManager::downloadReadyRead()
 {
-    output.write(currentDownload->readAll());
+    m_saveFile->write(currentDownload->readAll());
 }
+
+void DownloadManager::errorOccured(QNetworkReply::NetworkError _error) {
+	qDebug() << _error;
+	m_saveFile->cancelWriting();
+}
+

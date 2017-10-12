@@ -35,11 +35,15 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 SOURCES += src/main.cpp
-SOURCES += src/mainwindow.cpp
-SOURCES += src/downloadmanager.cpp
+SOURCES += src/gui/mainwindow.cpp
+SOURCES += src/network/downloadmanager.cpp
+SOURCES += src/downloader/appdownloader.cpp
+SOURCES += src/config/global.cpp
 
-HEADERS += src/mainwindow.h
-HEADERS += src/downloadmanager.h
+HEADERS += src/gui/mainwindow.h
+HEADERS += src/network/downloadmanager.h
+HEADERS += src/downloader/appdownloader.h
+HEADERS += src/config/global.h
 
 FORMS += ui/mainwindow.ui
 

@@ -9,7 +9,7 @@ class QCloseEvent;
 class QMouseEvent;
 class QTimer;
 class QWidget;
-class DownloadManager;
+class AppDownloader;
 
 namespace Ui {
 	class MainWindow;
@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow
 		void updateSlideShow();
 		void buttonClicked();
 		void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-		void updateDownloadMessage(QString _message);
+		void updateDownloadSpeedMessage(QString _message);
 
 	private:
 		QTimer *m_timer;
@@ -40,7 +40,7 @@ class MainWindow : public QMainWindow
 		QPoint m_clickedPosition;
 		Ui::MainWindow *m_ui;
 		bool m_alreadyClosedOnMacOs = false;
-		DownloadManager *m_downloader;
+		AppDownloader *m_appDownloader;
 
 		virtual void closeEvent(QCloseEvent *);
 		void loadSlideShowImagesFromResources();

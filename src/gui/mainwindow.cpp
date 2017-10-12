@@ -6,17 +6,18 @@
 #include <QDirIterator>
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
-#include "downloadmanager.h"
+#include "downloader/appdownloader.h"
+#include "config/global.h"
 
 MainWindow::MainWindow(QWidget *_parent) :
 	QMainWindow(_parent),
 	m_timer(0),
 	m_ui(new Ui::MainWindow),
-	m_downloader(0)
+	m_appDownloader(0)
 {
 	m_ui->setupUi(this);
 
-	m_downloader = new DownloadManager(this);
+	m_appDownloader = new AppDownloader(Global::AppUrl, this);
 
 	connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 	connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
@@ -38,7 +39,7 @@ MainWindow::MainWindow(QWidget *_parent) :
 MainWindow::~MainWindow() {
 	delete m_ui;
 	delete m_timer;
-	delete m_downloader;
+	delete m_appDownloader;
 }
 
 void MainWindow::closeEvent(QCloseEvent *_event) {
@@ -116,13 +117,10 @@ void MainWindow::loadSlideShowImagesFromResources() {
 void MainWindow::buttonClicked() {
 	qDebug() << "Button clicked";
 
-	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
-	connect(m_downloader, SIGNAL(updateDownloadMessage(QString)), this, SLOT(updateDownloadMessage(QString)));
+	connect(m_appDownloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
+	connect(m_appDownloader, SIGNAL(downloadSpeedMessage(QString)), this, SLOT(updateDownloadSpeedMessage(QString)));
 
-	QStringList urls;
-	urls << "http://dev.covalia.fr/lanceur_covotem.php" <<
-		"http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso";
-	m_downloader->setUrlListToDownload(urls);
+	m_appDownloader->start();
 }
 
 void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
@@ -130,7 +128,7 @@ void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
 	m_ui->progressBar->setValue(_bytesReceived);
 }
 
-void MainWindow::updateDownloadMessage(QString _message) {
+void MainWindow::updateDownloadSpeedMessage(QString _message) {
 	m_ui->speedLabel->setText(_message);
 }
 
