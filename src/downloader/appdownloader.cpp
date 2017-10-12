@@ -1,11 +1,13 @@
 #include "appdownloader.h"
 #include "network/downloadmanager.h"
 #include "config/global.h"
+#include <QDebug>
 
-AppDownloader::AppDownloader(QString _appUrl, QObject *_parent) : QObject(_parent),
-	m_downloader(0)
+AppDownloader::AppDownloader(QString _appUrl, QString _appInstallDir, QObject *_parent) : QObject(_parent),
+	m_downloader(0),
+	m_appTreeManager(0)
 {
-
+	m_appTreeManager = new AppTreeManager(_appInstallDir, this);
 	m_downloader = new DownloadManager(this);
 	m_appUrl = _appUrl;
 
@@ -14,6 +16,7 @@ AppDownloader::AppDownloader(QString _appUrl, QObject *_parent) : QObject(_paren
 AppDownloader::~AppDownloader()
 {
 	delete m_downloader;
+	delete m_appTreeManager;
 }
 
 void AppDownloader::start()
@@ -22,6 +25,10 @@ void AppDownloader::start()
 
 	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
 	connect(m_downloader, SIGNAL(downloadSpeedMessage(QString)), this, SLOT(updateDownloadSpeedMessage(QString)));
+
+
+	bool result = m_appTreeManager->makeAppDirectories();
+	qDebug() << "makeAppDirectories" << result;
 
 	// QStringList urls;
 	// urls << "http://dev.covalia.fr/lanceur_covotem.php" <<

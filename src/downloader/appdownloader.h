@@ -2,6 +2,8 @@
 #define APP_DOWNLOADER_H
 
 #include <QObject>
+#include "fs/apptreemanager.h"
+
 class DownloadManager;
 
 class AppDownloader : public QObject
@@ -10,7 +12,7 @@ class AppDownloader : public QObject
 	Q_OBJECT
 
 	public:
-		explicit AppDownloader(QString _appUrl, QObject *_parent = 0);
+		explicit AppDownloader(QString _appUrl, QString _appInstallDir, QObject *_parent = 0);
 		virtual ~AppDownloader();
 		void start();
 
@@ -21,13 +23,11 @@ class AppDownloader : public QObject
 	private:
 		DownloadManager *m_downloader;
 		QString m_appUrl;
+		AppTreeManager *m_appTreeManager;
 
 	signals:
 		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 		void downloadSpeedMessage(QString _message);
-
-
-
 
 };
 

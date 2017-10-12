@@ -39,11 +39,13 @@ SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/downloader/appdownloader.cpp
 SOURCES += src/config/global.cpp
+SOURCES += src/fs/apptreemanager.cpp
 
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/downloader/appdownloader.h
 HEADERS += src/config/global.h
+HEADERS += src/fs/apptreemanager.h
 
 FORMS += ui/mainwindow.ui
 

@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *_parent) :
 {
 	m_ui->setupUi(this);
 
-	m_appDownloader = new AppDownloader(Global::AppUrl, this);
+	m_appDownloader = new AppDownloader(Global::AppUrl, Global::InstallationDir, this);
 
 	connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 	connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));

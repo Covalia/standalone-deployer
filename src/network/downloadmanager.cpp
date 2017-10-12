@@ -1,5 +1,5 @@
 #include "downloadmanager.h"
-
+#include <QDebug>
 #include <QFileInfo>
 #include <QNetworkRequest>
 #include <QNetworkReply>
