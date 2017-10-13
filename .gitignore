@@ -8,3 +8,5 @@ build/
 release/
 debug/
 downloader\.pro\.user
+
+downloader_plugin_import\.cpp
