@@ -14,14 +14,13 @@ class QSaveFile;
 class DownloadManager: public QObject
 {
 
-    Q_OBJECT
+	Q_OBJECT
 
 	public:
 		explicit DownloadManager(QObject *parent = 0);
 		virtual ~DownloadManager();
 
 		void setUrlListToDownload(const QStringList &urlList);
-		QString getFilename(const QUrl &url);
 
 	signals:
 		void finished();
@@ -34,6 +33,7 @@ class DownloadManager: public QObject
 		void downloadFinished();
 		void downloadReadyRead();
 		void errorOccured(QNetworkReply::NetworkError);
+		void metaDataChanged();
 
 	private:
 		int m_currentDownloaderCount;

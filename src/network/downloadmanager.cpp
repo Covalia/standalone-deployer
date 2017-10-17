@@ -40,21 +40,6 @@ void DownloadManager::setUrlListToDownload(const QStringList &urlList)
         QTimer::singleShot(0, this, SIGNAL(finished()));
 }
 
-QString DownloadManager::getFilename(const QUrl &url)
-{
-    QString path = url.path();
-    QString basename = QFileInfo(path).fileName();
-
-	// TODO https://stackoverflow.com/a/1395173/8570451
-	// se baser sur inline / attachment (de préférence) pour le nom du fichier.
-    if (basename.isEmpty())
-        basename = "download";
-
-	// on écrase systématiquement
-
-    return basename;
-}
-
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
@@ -64,21 +49,13 @@ void DownloadManager::startNextDownload()
     }
 
     QUrl url = m_downloadQueue.dequeue();
-    m_currentFilename = getFilename(url);
-
-	m_saveFile = new QSaveFile(m_currentFilename);
-
-	qDebug() << "temporary file:" << m_saveFile->fileName();
-	if (!m_saveFile->open(QIODevice::WriteOnly)) {
-		qDebug() << "Error opening temporary file for URL: " << url.toEncoded().constData();
-        startNextDownload();
-        return;                 // skip this download
-	}
 
     QNetworkRequest request(url);
 	request.setRawHeader("User-Agent", "Covalia-Downloader");
     m_currentDownload = m_manager.get(request);
 
+    connect(m_currentDownload, SIGNAL(metaDataChanged()),
+            SLOT(metaDataChanged()));
     connect(m_currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
     connect(m_currentDownload, SIGNAL(finished()),
@@ -91,6 +68,41 @@ void DownloadManager::startNextDownload()
 
     qDebug() << "Downloading" << url.toEncoded().constData();
     m_downloadTime.start();
+}
+
+void DownloadManager::metaDataChanged()
+{
+    m_currentFilename = "";
+
+    QString contentDisposition = "";
+    if (!contentDisposition.isEmpty()) {
+        const QString searchString = "filename=";
+        int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
+        if (index != -1) {
+            m_currentFilename = contentDisposition.mid(index + searchString.length());
+        }
+    }
+
+    if (m_currentFilename.isEmpty()) {
+        QString path = m_currentDownload->url().path();
+        if (!QFileInfo(path).fileName().isEmpty()) {
+            m_currentFilename = QFileInfo(path).fileName();
+        }
+        else {
+            m_currentFilename = "download";
+        }
+    }
+
+    qDebug() << "out filename:" << m_currentFilename;
+    m_saveFile = new QSaveFile(m_currentFilename);
+
+    qDebug() << "temporary file:" << m_saveFile->fileName();
+    if (!m_saveFile->open(QIODevice::WriteOnly)) {
+        qDebug() << "Error opening temporary file for URL: " << m_currentDownload->url().toEncoded().constData();
+        startNextDownload();
+        return; // skip this download
+    }
+
 }
 
 void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
