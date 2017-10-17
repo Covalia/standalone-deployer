@@ -10,10 +10,11 @@
 #include <stdio.h>
 #include "config/global.h"
 
-DownloadManager::DownloadManager(QObject *_parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QObject(_parent),
 	m_currentDownloaderCount(0),
 	m_currentFileCount(0),
-	m_saveFile(0)
+    m_saveFile(0),
+    m_temporaryDir(_saveDir)
 {
 }
 
@@ -94,7 +95,7 @@ void DownloadManager::metaDataChanged()
     }
 
     qDebug() << "out filename:" << m_currentFilename;
-    m_saveFile = new QSaveFile(m_currentFilename);
+    m_saveFile = new QSaveFile(m_temporaryDir + "/" + m_currentFilename);
 
     qDebug() << "temporary file:" << m_saveFile->fileName();
     if (!m_saveFile->open(QIODevice::WriteOnly)) {

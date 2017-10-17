@@ -8,7 +8,7 @@ AppDownloader::AppDownloader(QString _appUrl, QString _appInstallDir, QObject *_
 	m_appTreeManager(0)
 {
 	m_appTreeManager = new AppTreeManager(_appInstallDir, this);
-	m_downloader = new DownloadManager(this);
+    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), this);
 	m_appUrl = _appUrl;
 
 }

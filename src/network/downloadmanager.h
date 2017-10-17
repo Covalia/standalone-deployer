@@ -17,7 +17,7 @@ class DownloadManager: public QObject
 	Q_OBJECT
 
 	public:
-		explicit DownloadManager(QObject *parent = 0);
+		explicit DownloadManager(const QString &_saveDir, QObject *parent = 0);
 		virtual ~DownloadManager();
 
 		void setUrlListToDownload(const QStringList &urlList);
@@ -44,6 +44,7 @@ class DownloadManager: public QObject
 		QNetworkReply *m_currentDownload;
 		QSaveFile *m_saveFile;
 		QString m_currentFilename;
+		QString m_temporaryDir;
 		QTime m_downloadTime;
 
 };
