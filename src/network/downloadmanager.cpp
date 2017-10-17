@@ -77,18 +77,17 @@ void DownloadManager::startNextDownload()
 
     QNetworkRequest request(url);
 	request.setRawHeader("User-Agent", "Covalia-Downloader");
-    currentDownload = m_manager.get(request);
+    m_currentDownload = m_manager.get(request);
 
-    connect(currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
+    connect(m_currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
-    connect(currentDownload, SIGNAL(finished()),
+    connect(m_currentDownload, SIGNAL(finished()),
             SLOT(downloadFinished()));
-    connect(currentDownload, SIGNAL(readyRead()),
+    connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
-	connect(currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
+    connect(m_currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
 			SLOT(errorOccured(QNetworkReply::NetworkError)));
 	// TODO redirect
-
 
     qDebug() << "Downloading" << url.toEncoded().constData();
     m_downloadTime.start();
@@ -123,21 +122,21 @@ void DownloadManager::downloadFinished()
 	delete m_saveFile;
 	m_saveFile = 0;
 
-    if (currentDownload->error()) {
+    if (m_currentDownload->error()) {
         // download failed
-        fprintf(stderr, "Failed: %s\n", qPrintable(currentDownload->errorString()));
+        fprintf(stderr, "Failed: %s\n", qPrintable(m_currentDownload->errorString()));
     } else {
         printf("Succeeded.\n");
         ++m_currentDownloaderCount;
     }
 
-    currentDownload->deleteLater();
+    m_currentDownload->deleteLater();
     startNextDownload();
 }
 
 void DownloadManager::downloadReadyRead()
 {
-    m_saveFile->write(currentDownload->readAll());
+    m_saveFile->write(m_currentDownload->readAll());
 }
 
 void DownloadManager::errorOccured(QNetworkReply::NetworkError _error) {

@@ -41,7 +41,7 @@ class DownloadManager: public QObject
 
 		QNetworkAccessManager m_manager;
 		QQueue<QUrl> m_downloadQueue;
-		QNetworkReply *currentDownload;
+		QNetworkReply *m_currentDownload;
 		QSaveFile *m_saveFile;
 		QString m_currentFilename;
 		QTime m_downloadTime;
