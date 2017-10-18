@@ -34,12 +34,21 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-SOURCES += src/main.cpp
+SOURCES += src/main.cpp \
+    src/xml/deploymentxml.cpp \
+    src/xml/download.cpp \
+    src/app/application.cpp \
+    src/app/javaupdate.cpp
 SOURCES += src/mainwindow.cpp
 
-HEADERS += src/mainwindow.h
+HEADERS += src/mainwindow.h \
+    src/xml/deploymentxml.h \
+    src/xml/download.h \
+    src/app/application.h \
+    src/app/javaupdate.h
 
 FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
+
 
