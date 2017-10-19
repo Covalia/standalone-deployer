@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
-    <height>407</height>
+    <width>830</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,32 +19,23 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="leftMargin">
-     <number>0</number>
+     <number>5</number>
     </property>
     <property name="topMargin">
      <number>1</number>
     </property>
     <property name="rightMargin">
-     <number>0</number>
+     <number>5</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>5</number>
     </property>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMaximumSize</enum>
-      </property>
       <item>
        <widget class="QWidget" name="titleWidget" native="true">
         <property name="styleSheet">
-         <string notr="true">QWidget {
-background-color:rgb(46, 55, 76);
-}
-</string>
+         <string notr="true"/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <property name="leftMargin">
@@ -61,9 +52,6 @@ background-color:rgb(46, 55, 76);
          </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <property name="spacing">
-            <number>0</number>
-           </property>
            <item>
             <widget class="QLabel" name="titleIconLabel">
              <property name="sizePolicy">
@@ -106,7 +94,7 @@ font-family: &quot;Helvetica&quot;, Helvetica, serif;
 font-size: 17px;\n	font-weight: plain;</string>
              </property>
              <property name="text">
-              <string>Installeur</string>
+              <string>Installer</string>
              </property>
             </widget>
            </item>
@@ -133,8 +121,8 @@ font-size: 17px;\n	font-weight: plain;</string>
              </property>
              <property name="minimumSize">
               <size>
-               <width>40</width>
-               <height>40</height>
+               <width>34</width>
+               <height>34</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -165,8 +153,8 @@ background-color: rgb(33, 42, 63);
              </property>
              <property name="minimumSize">
               <size>
-               <width>40</width>
-               <height>40</height>
+               <width>34</width>
+               <height>34</height>
               </size>
              </property>
              <property name="styleSheet">
