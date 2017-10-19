@@ -32,9 +32,9 @@ class MainWindow : public QMainWindow
 		void updateSlideShow();
 		void buttonClicked();
 		void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void updateDownloadSpeedMessage(const QString &_message);
-        void updateServerUrlMessage(const QString &_message);
-        void updateDownloadFileMessage(const QString &_filename);
+        void updateDownloadSpeedMessage(const QString &_speed);
+        void updateServerUrlMessage(const QString &_url);
+        void updateDownloadFileMessage(const QString &_file);
 
 	private:
 		QTimer *m_timer;

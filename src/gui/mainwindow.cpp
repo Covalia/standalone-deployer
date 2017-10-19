@@ -132,14 +132,14 @@ void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
     m_ui->singleProgressBar->setValue(_bytesReceived);
 }
 
-void MainWindow::updateDownloadSpeedMessage(const QString &_message) {
-	m_ui->speedLabel->setText(_message);
+void MainWindow::updateDownloadSpeedMessage(const QString &_speed) {
+    m_ui->speedLabel->setText(_speed);
 }
 
-void MainWindow::updateServerUrlMessage(const QString &_message) {
-    m_ui->serverLabel->setText(_message);
+void MainWindow::updateServerUrlMessage(const QString &_url) {
+    m_ui->serverLabel->setText(tr("Téléchargement depuis le serveur %1").arg(_url));
 }
 
-void MainWindow::updateDownloadFileMessage(const QString &_filename) {
-    m_ui->currentFileLabel->setText(_filename);
+void MainWindow::updateDownloadFileMessage(const QString &_file) {
+    m_ui->currentFileLabel->setText(tr("Téléchargement du fichier %1").arg(_file));
 }

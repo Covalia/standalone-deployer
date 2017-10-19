@@ -18,8 +18,8 @@ class AppDownloader : public QObject
 
 	private slots:
 		void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void updateDownloadSpeedMessage(const QString &_message);
-        void updateDownloadFileMessage(const QString &_message);
+        void updateDownloadSpeedMessage(const QString &_speed);
+        void updateDownloadFileMessage(const QString &_file);
 
 	private:
 		DownloadManager *m_downloader;
@@ -28,9 +28,9 @@ class AppDownloader : public QObject
 
 	signals:
 		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void downloadSpeedMessage(const QString &_message);
-        void serverUrlMessage(const QString &_message);
-        void downloadFileMessage(const QString &_message);
+        void downloadSpeedMessage(const QString &_speed);
+        void serverUrlMessage(const QString &_url);
+        void downloadFileMessage(const QString &_file);
 
 };
 

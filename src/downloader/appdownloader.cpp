@@ -47,11 +47,11 @@ void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 	emit downloadProgress(_bytesReceived, _bytesTotal);
 }
 
-void AppDownloader::updateDownloadSpeedMessage(const QString &_message)
+void AppDownloader::updateDownloadSpeedMessage(const QString &_speed)
 {
-	emit downloadSpeedMessage(_message);
+    emit downloadSpeedMessage(_speed);
 }
 
-void AppDownloader::updateDownloadFileMessage(const QString &_message) {
-	emit downloadFileMessage(_message);
+void AppDownloader::updateDownloadFileMessage(const QString &_file) {
+    emit downloadFileMessage(_file);
 }
