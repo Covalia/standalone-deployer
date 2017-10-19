@@ -3,7 +3,7 @@
 #include "config/global.h"
 #include <QDebug>
 
-AppDownloader::AppDownloader(QString _appUrl, QString _appInstallDir, QObject *_parent) : QObject(_parent),
+AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallDir, QObject *_parent) : QObject(_parent),
 	m_downloader(0),
 	m_appTreeManager(0)
 {

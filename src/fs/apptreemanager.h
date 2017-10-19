@@ -8,11 +8,11 @@ class AppTreeManager: public QObject
 	Q_OBJECT
 
 	public:
-		AppTreeManager(QString _installationDir, QObject *_parent = 0);
+        AppTreeManager(const QString &_installationDir, QObject *_parent = 0);
 		virtual ~AppTreeManager();
 
 		bool makeAppDirectories();
-		static bool makeDirectoryIfNotExists(QString _directoryPath);
+        static bool makeDirectoryIfNotExists(const QString &_directoryPath);
 
 		QString getAppDirPath();
 		QString getConfigurationDirPath();

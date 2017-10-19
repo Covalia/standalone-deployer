@@ -5,7 +5,7 @@
 #include "config/global.h"
 
 
-AppTreeManager::AppTreeManager(QString _installationDir, QObject *_parent) :
+AppTreeManager::AppTreeManager(const QString &_installationDir, QObject *_parent) :
 	QObject(_parent),
 	m_installationDir(_installationDir)
 {
@@ -28,7 +28,7 @@ bool AppTreeManager::makeAppDirectories() {
 	return result;
 }
 
-bool AppTreeManager::makeDirectoryIfNotExists(QString _directoryPath) {
+bool AppTreeManager::makeDirectoryIfNotExists(const QString &_directoryPath) {
 
 	if (QFile(_directoryPath).exists()) {
 		// si le répertoire est en réalité un fichier, pas bon, il faut nettoyer

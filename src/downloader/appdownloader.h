@@ -12,7 +12,7 @@ class AppDownloader : public QObject
 	Q_OBJECT
 
 	public:
-		explicit AppDownloader(QString _appUrl, QString _appInstallDir, QObject *_parent = 0);
+        explicit AppDownloader(const QString &_appUrl, const QString &_appInstallDir, QObject *_parent = 0);
 		virtual ~AppDownloader();
 		void start();
 
