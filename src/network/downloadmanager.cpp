@@ -130,6 +130,7 @@ void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
 void DownloadManager::downloadFinished()
 {
     // TODO progressBar.clear();
+    emit downloadSpeedMessage("");
 	m_saveFile->commit();
 
 	delete m_saveFile;

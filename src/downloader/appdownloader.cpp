@@ -23,9 +23,10 @@ void AppDownloader::start()
 {
 	qDebug() << "start app downloader";
 
-	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
-	connect(m_downloader, SIGNAL(downloadSpeedMessage(QString)), this, SLOT(updateDownloadSpeedMessage(QString)));
-
+	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
+		SLOT(updateProgress(qint64, qint64)));
+	connect(m_downloader, SIGNAL(downloadSpeedMessage(const QString &)),
+		SLOT(updateDownloadSpeedMessage(const QString &)));
 
 	bool result = m_appTreeManager->makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;
@@ -43,7 +44,7 @@ void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 	emit downloadProgress(_bytesReceived, _bytesTotal);
 }
 
-void AppDownloader::updateDownloadSpeedMessage(QString _message)
+void AppDownloader::updateDownloadSpeedMessage(const QString &_message)
 {
 	emit downloadSpeedMessage(_message);
 }

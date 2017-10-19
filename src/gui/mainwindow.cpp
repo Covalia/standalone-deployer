@@ -118,7 +118,7 @@ void MainWindow::buttonClicked() {
 	qDebug() << "Button clicked";
 
 	connect(m_appDownloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
-	connect(m_appDownloader, SIGNAL(downloadSpeedMessage(QString)), this, SLOT(updateDownloadSpeedMessage(QString)));
+    connect(m_appDownloader, SIGNAL(downloadSpeedMessage(const QString &)), this, SLOT(updateDownloadSpeedMessage(const QString &)));
 
 	m_appDownloader->start();
 }
@@ -128,7 +128,7 @@ void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
 	m_ui->progressBar->setValue(_bytesReceived);
 }
 
-void MainWindow::updateDownloadSpeedMessage(QString _message) {
+void MainWindow::updateDownloadSpeedMessage(const QString &_message) {
 	m_ui->speedLabel->setText(_message);
 }
 

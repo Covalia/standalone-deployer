@@ -25,7 +25,7 @@ class DownloadManager: public QObject
 	signals:
 		void finished();
 		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-		void downloadSpeedMessage(QString _message);
+        void downloadSpeedMessage(const QString &_message);
 
 	private slots:
 		void startNextDownload();
