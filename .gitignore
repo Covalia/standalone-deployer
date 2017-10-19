@@ -1,10 +1,12 @@
-\.DS_Store
-\.qmake\.stash
+.DS_Store
+.qmake.stash
 Makefile
-Makefile\.Debug
-Makefile\.Release
+Makefile.Debug
+Makefile.Release
 bin/
 build/
 release/
 debug/
-downloader\.pro\.user
+*.pro\.user
+*.autosave
+*_plugin_import.cpp
