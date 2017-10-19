@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>830</width>
-    <height>538</height>
+    <width>700</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
       <item>
        <widget class="QWidget" name="titleWidget" native="true">
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">background: rgb(46, 55, 76);</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <property name="leftMargin">
@@ -94,7 +94,7 @@ font-family: &quot;Helvetica&quot;, Helvetica, serif;
 font-size: 17px;\n	font-weight: plain;</string>
              </property>
              <property name="text">
-              <string>Installer</string>
+              <string>Installeur</string>
              </property>
             </widget>
            </item>
