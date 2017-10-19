@@ -1,15 +1,11 @@
 #ifndef DEPLOYMENTXML_H
 #define DEPLOYMENTXML_H
 
-#include <iostream>
-#include <string>
-
-#include <QXmlStreamReader>
 #include <QString>
-#include <QFile>
+#include <QXmlStreamReader>
 #include <QList>
 #include <QMap>
-#include <QListIterator>
+
 #include <QDebug>
 
 #include "download.h"
@@ -51,17 +47,19 @@ static  QString JAVA_TAG = "java";
 static  QString JAVA_VERSION_ATTRIBUTE = "version";
 
 
-class DeploymentXML
+class DeploymentXML : public QObject
 {
-public:
-    QString memory;
-    QString version;
-    QList<QString> arguments;
-    QMap<Application,QList<Download>> applications;
-    QMap<QString,JavaUpdate> javaUpdates;
+    Q_OBJECT
 
 public:
-    DeploymentXML(const QString pathCnlp);
+    explicit DeploymentXML(const QString pathCnlp, QObject *_parent = 0);
+    ~DeploymentXML();
+
+    QString getVersion() const;
+    QList<QString> getArguments() const;
+    QMap<Application, QList<Download> > getApplications() const;
+    QMap<QString, JavaUpdate> getJavaUpdates() const;
+    QString getMemory() const;
 
 private:
     void processDeployment();
@@ -75,7 +73,13 @@ private:
     Download processDownload();
 
     QString readNextText();
-    QXmlStreamReader xml;
+
+    QXmlStreamReader m_xml;
+    QString m_memory;
+    QString m_version;
+    QList<QString> m_arguments;
+    QMap<Application,QList<Download>> m_applications;
+    QMap<QString,JavaUpdate> m_javaUpdates;
 };
 
 #endif // DEPLOYMENTXML_H

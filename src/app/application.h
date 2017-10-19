@@ -20,27 +20,33 @@ class Application
 { 
 
 public:
-    QString name;
-    QString version;
-    QString cnlpRemoteFileName;
-    QString cnlpLocalFileName;
-    QString downloaderExtensionClasspath;
-
-public:
     Application(QString _name,
                 QString _cnlpRemoteFileName,
                 QString _cnlpLocalFileName);
 
-    //bool operator==(Application const& a);
+    QString getName() const;
+    QString getVersion() const;
+    QString getCnlpRemoteFileName() const;
+    QString getCnlpLocalFileName() const;
+    QString getDownloaderExtensionClasspath() const;
 
-    //bool operator<(Application const& a);
+    void setName(const QString &name);
+    void setVersion(const QString &version);
+    void setCnlpRemoteFileName(const QString &cnlpRemoteFileName);
+    void setCnlpLocalFileName(const QString &cnlpLocalFileName);
+    void setDownloaderExtensionClasspath(const QString &downloaderExtensionClasspath);
 
-
+private:
+    QString m_name;
+    QString m_version;
+    QString m_cnlpRemoteFileName;
+    QString m_cnlpLocalFileName;
+    QString m_downloaderExtensionClasspath;
 };
 
 inline bool operator<(const Application &e1, const Application &e2)
 {
-    return e1.name < e2.name;
+    return e1.getName() < e2.getName();
 }
 
 #endif // APPLICATION_H
