@@ -225,7 +225,7 @@ background-color: rgb(33, 42, 63);
          <item row="0" column="0">
           <layout class="QGridLayout" name="gridLayout">
            <item row="1" column="0">
-            <widget class="QWidget" name="dowloaderWidget" native="true">
+            <widget class="QWidget" name="downloaderWidget" native="true">
              <property name="styleSheet">
               <string notr="true">background-color:#333;</string>
              </property>
