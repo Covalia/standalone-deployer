@@ -21,6 +21,10 @@ MainWindow::MainWindow(QWidget *_parent) :
 
 	connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 	connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    connect(m_appDownloader, SIGNAL(serverUrlMessage(const QString &)),
+            SLOT(updateServerUrlMessage(const QString &)));
+    connect(m_appDownloader, SIGNAL(downloadFileMessage(const QString &)),
+            SLOT(updateDownloadFileMessage(const QString &)));
 
 	setAttribute(Qt::WA_QuitOnClose);
 	setWindowFlags(Qt::FramelessWindowHint);
@@ -124,11 +128,18 @@ void MainWindow::buttonClicked() {
 }
 
 void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
-	m_ui->progressBar->setMaximum(_bytesTotal);
-	m_ui->progressBar->setValue(_bytesReceived);
+    m_ui->singleProgressBar->setMaximum(_bytesTotal);
+    m_ui->singleProgressBar->setValue(_bytesReceived);
 }
 
 void MainWindow::updateDownloadSpeedMessage(const QString &_message) {
 	m_ui->speedLabel->setText(_message);
 }
 
+void MainWindow::updateServerUrlMessage(const QString &_message) {
+    m_ui->serverLabel->setText(_message);
+}
+
+void MainWindow::updateDownloadFileMessage(const QString &_filename) {
+    m_ui->currentFileLabel->setText(_filename);
+}

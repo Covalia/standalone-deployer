@@ -33,6 +33,8 @@ class MainWindow : public QMainWindow
 		void buttonClicked();
 		void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_message);
+        void updateServerUrlMessage(const QString &_message);
+        void updateDownloadFileMessage(const QString &_filename);
 
 	private:
 		QTimer *m_timer;

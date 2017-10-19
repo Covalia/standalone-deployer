@@ -95,6 +95,7 @@ void DownloadManager::metaDataChanged()
     }
 
     qDebug() << "out filename:" << m_currentFilename;
+    emit downloadFileMessage(m_currentFilename);
     m_saveFile = new QSaveFile(m_temporaryDir + "/" + m_currentFilename);
 
     qDebug() << "temporary file:" << m_saveFile->fileName();
