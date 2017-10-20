@@ -20,7 +20,7 @@ class DownloadManager: public QObject
 		explicit DownloadManager(const QString &_saveDir, QObject *parent = 0);
 		virtual ~DownloadManager();
 
-		void setUrlListToDownload(const QStringList &urlList);
+        void setUrlListToDownload(const QStringList &_urlList);
 
 	signals:
 		void finished();
@@ -30,7 +30,7 @@ class DownloadManager: public QObject
 
 	private slots:
 		void startNextDownload();
-		void updateProgress(qint64 bytesReceived, qint64 bytesTotal);
+        void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 		void downloadFinished();
 		void downloadReadyRead();
 		void errorOccured(QNetworkReply::NetworkError);

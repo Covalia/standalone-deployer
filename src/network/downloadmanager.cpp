@@ -22,14 +22,14 @@ DownloadManager::~DownloadManager() {
 	delete m_saveFile;
 }
 
-void DownloadManager::setUrlListToDownload(const QStringList &urlList)
+void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 {
 	m_currentFileCount = 0;
 	m_currentDownloaderCount = 0;
 
 	// TODO signal pour initialiser la progress bar ?
 	// TODO détail du download ?
-    foreach (QString url, urlList) {
+    foreach (QString url, _urlList) {
 		if (m_downloadQueue.isEmpty())
 			QTimer::singleShot(0, this, SLOT(startNextDownload()));
 
@@ -107,12 +107,12 @@ void DownloadManager::metaDataChanged()
 
 }
 
-void DownloadManager::updateProgress(qint64 bytesReceived, qint64 bytesTotal)
+void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
-	emit downloadProgress(bytesReceived, bytesTotal);
+    emit downloadProgress(_bytesReceived, _bytesTotal);
 
     // calculate the download speed
-    double speed = bytesReceived * 1000 / m_downloadTime.elapsed();
+    double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
     QString unit;
     if (speed < 1024) {
         unit = "octets/s";
