@@ -2,40 +2,43 @@
 #include <QFile>
 
 
-DeploymentXML::DeploymentXML(const QString _pathCnlp, QObject *_parent) :
-    QObject(_parent)
+DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject *_parent) :
+    QObject(_parent),
+    m_xmlFile(_pathCnlp)
 {
-    this->m_memory = "512";
-    this->m_version = "";
-    this->m_applications = QMap<Application,QList<Download>>();
-    this->m_javaUpdates = QMap<QString, JavaUpdate>();
-    this->m_arguments = QList<QString>();
+    m_memory = "512";
+    m_version = "";
+    m_applications = QMap<Application,QList<Download>>();
+    m_javaUpdates = QMap<QString, JavaUpdate>();
+    m_arguments = QList<QString>();
 
-    QFile xmlFile(_pathCnlp);
-
-    if(!xmlFile.open(QFile::ReadOnly | QFile::Text)){
-        qDebug() << "Cannot read file" << xmlFile.errorString();
-        return;
-    }
-
-    m_xml.setDevice(&xmlFile);
-
-    if (m_xml.readNextStartElement() && m_xml.name() == "deployment"){
-        processDeployment();
-    }
 }
 
 DeploymentXML::~DeploymentXML()
 {
 }
 
+bool DeploymentXML::read() {
+
+    if (!m_xmlFile.open(QFile::ReadOnly | QFile::Text)){
+        qDebug() << "Cannot read file" << m_xmlFile.errorString();
+        return false;
+    }
+
+    m_xmlReader.setDevice(&m_xmlFile);
+
+    // TODO vérifier qu'on traite bien les erreurs XML
+    bool result = processDeployment();
+
+    m_xmlFile.close();
+
+    return result;
+}
+
+
 QString DeploymentXML::readNextText() {
-#ifndef USE_READ_ELEMENT_TEXT
-    m_xml.readNext();
-    return m_xml.text().toString();
-#else
-    return xml.readElementText();
-#endif
+    m_xmlReader.readNext();
+    return m_xmlReader.text().toString();
 }
 
 QMap<QString, JavaUpdate> DeploymentXML::getJavaUpdates() const
@@ -63,52 +66,65 @@ QString DeploymentXML::getVersion() const
     return m_version;
 }
 
-void DeploymentXML::processDeployment() {
-    if (!m_xml.isStartElement() || m_xml.name() != R_DEPLOYMENT_TAG){
-        return;
+bool DeploymentXML::processDeployment() {
+
+    if (!m_xmlReader.readNextStartElement()) {
+        return false;
     }
-    while (m_xml.readNextStartElement()) {
-        if (m_xml.name() == VERSION_TAG){
-            processVersion();
-            m_xml.skipCurrentElement();
+
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != R_DEPLOYMENT_TAG) {
+        return false;
+    }
+
+    bool result = true;
+
+    while (m_xmlReader.readNextStartElement()) {
+        if (m_xmlReader.name() == VERSION_TAG){
+            result &= processVersion();
+            m_xmlReader.skipCurrentElement();
         }
-        else if (m_xml.name() == MEMORY_TAG){
-            processMemory();
-            m_xml.skipCurrentElement();
+        else if (m_xmlReader.name() == MEMORY_TAG) {
+            result &= processMemory();
+            m_xmlReader.skipCurrentElement();
         }
-        else  if (m_xml.name() == JAVA_TAG){
-            processJava();
-            m_xml.skipCurrentElement();
+        else if (m_xmlReader.name() == JAVA_TAG) {
+            result &= processJava();
+            m_xmlReader.skipCurrentElement();
         }
-        else  if (m_xml.name() == ARGUMENTS_TAG){
-            processArguments();
+        else if (m_xmlReader.name() == ARGUMENTS_TAG) {
+            result &= processArguments();
         }
-        else  if (m_xml.name() == DOWNLOADS_TAG){
-            processDownloads();
+        else if (m_xmlReader.name() == DOWNLOADS_TAG) {
+            result &= processDownloads();
         }
-        else{
-            m_xml.skipCurrentElement();
+        else {
+            m_xmlReader.skipCurrentElement();
         }
     }
+
+    return result;
 }
 
-void DeploymentXML::processVersion() {
-    if (!m_xml.isStartElement() || m_xml.name() != VERSION_TAG){
-        return;
+bool DeploymentXML::processVersion() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != VERSION_TAG) {
+        return false;
     }
     m_version = readNextText();
+    return true;
 }
 
-void DeploymentXML::processMemory() {
-    if (!m_xml.isStartElement() || m_xml.name() != MEMORY_TAG){
-        return;
+bool DeploymentXML::processMemory() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != MEMORY_TAG) {
+        return false;
     }
     m_memory = readNextText();
+    return true;
 }
 
-void DeploymentXML::processJava() {
-    if (!m_xml.isStartElement() || m_xml.name() != JAVA_TAG){
-        return;
+bool DeploymentXML::processJava() {
+
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != JAVA_TAG) {
+        return false;
     }
 
     QString javaVersion = "";
@@ -116,107 +132,124 @@ void DeploymentXML::processJava() {
     QString javaHash = "";
     QString javaOs = "";
 
-    if(m_xml.attributes().hasAttribute(JAVA_VERSION_ATTRIBUTE)){
-        javaVersion = m_xml.attributes().value(JAVA_VERSION_ATTRIBUTE).toString();
-    }
-    if(m_xml.attributes().hasAttribute(HREF_ATTRIBUTE)){
-        javaFile = m_xml.attributes().value(HREF_ATTRIBUTE).toString();
-    }
-    if(m_xml.attributes().hasAttribute(HASH_ATTRIBUTE)){
-        javaHash = m_xml.attributes().value(HASH_ATTRIBUTE).toString();
-    }
-    if(m_xml.attributes().hasAttribute(OS_ATTRIBUTE)){
-        javaOs = m_xml.attributes().value(OS_ATTRIBUTE).toString();
+    // TODO false si les attributs n'existent pas
+    if (m_xmlReader.attributes().hasAttribute(JAVA_VERSION_ATTRIBUTE)) {
+        javaVersion = m_xmlReader.attributes().value(JAVA_VERSION_ATTRIBUTE).toString();
     }
 
-    if(!javaVersion.isEmpty() && !javaFile.isEmpty() && !javaHash.isEmpty() && !javaOs.isEmpty()){
+    if (m_xmlReader.attributes().hasAttribute(HREF_ATTRIBUTE)) {
+        javaFile = m_xmlReader.attributes().value(HREF_ATTRIBUTE).toString();
+    }
+
+    if (m_xmlReader.attributes().hasAttribute(HASH_ATTRIBUTE)) {
+        javaHash = m_xmlReader.attributes().value(HASH_ATTRIBUTE).toString();
+    }
+
+    if (m_xmlReader.attributes().hasAttribute(OS_ATTRIBUTE)) {
+        javaOs = m_xmlReader.attributes().value(OS_ATTRIBUTE).toString();
+    }
+
+    if (!javaVersion.isEmpty() && !javaFile.isEmpty() && !javaHash.isEmpty() && !javaOs.isEmpty()) {
         JavaUpdate ju(javaVersion, javaFile, javaHash);
         m_javaUpdates.insert(javaOs, ju);
     }
+
+    return true;
 }
 
-void DeploymentXML::processArguments() {
-    if (!m_xml.isStartElement() || m_xml.name() != ARGUMENTS_TAG){
-        return;
+bool DeploymentXML::processArguments() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != ARGUMENTS_TAG) {
+        return false;
     }
-    while (m_xml.readNextStartElement()) {
-        if (m_xml.name() == ARGUMENT_TAG){
-            processArgument();
+
+    bool result = true;
+    while (m_xmlReader.readNextStartElement()) {
+        if (m_xmlReader.name() == ARGUMENT_TAG) {
+            result &= processArgument();
         }
-        m_xml.skipCurrentElement();
+        m_xmlReader.skipCurrentElement();
     }
+    return result;
 }
 
-void DeploymentXML::processArgument() {
-    if (!m_xml.isStartElement() || m_xml.name() != ARGUMENT_TAG){
-        return;
+bool DeploymentXML::processArgument() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != ARGUMENT_TAG) {
+        return false;
     }
+
     QString arg = readNextText();
-    if(arg != "null"){
+    if (arg != "null"){
         m_arguments << arg;
     }
+    return true;
 }
 
-void DeploymentXML::processDownloads() {
-    if (!m_xml.isStartElement() || m_xml.name() != DOWNLOADS_TAG){
-        return;
+bool DeploymentXML::processDownloads() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != DOWNLOADS_TAG) {
+        return false;
     }
-    while (m_xml.readNextStartElement()) {
-        if (m_xml.name() == APPLICATION_TAG){
-            processApplication();
+
+    bool result = true;
+    while (m_xmlReader.readNextStartElement()) {
+        if (m_xmlReader.name() == APPLICATION_TAG) {
+            result &= processApplication();
         }
-        m_xml.skipCurrentElement();
+        m_xmlReader.skipCurrentElement();
     }
+    return result;
 }
 
-void DeploymentXML::processApplication() {
-    if (!m_xml.isStartElement() || m_xml.name() != APPLICATION_TAG){
-        return;
+bool DeploymentXML::processApplication() {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != APPLICATION_TAG) {
+        return false;
     }
 
-    //Application application("","","");
     Application *application = 0;
 
     QString name = "";
     QString version = "";
     QString downloaderExtensionClasspath = "";
 
-    if(m_xml.attributes().hasAttribute(NAME_ATTRIBUTE)){
-        name = m_xml.attributes().value(NAME_ATTRIBUTE).toString();
+    // TODO check attributes et return false
+    if (m_xmlReader.attributes().hasAttribute(NAME_ATTRIBUTE)) {
+        name = m_xmlReader.attributes().value(NAME_ATTRIBUTE).toString();
     }
-    if(m_xml.attributes().hasAttribute(VERSION_ATTRIBUTE)){
-        version = m_xml.attributes().value(VERSION_ATTRIBUTE).toString();
+    if (m_xmlReader.attributes().hasAttribute(VERSION_ATTRIBUTE)) {
+        version = m_xmlReader.attributes().value(VERSION_ATTRIBUTE).toString();
     }
-    if(m_xml.attributes().hasAttribute(DOWNLOADER_EXTENSION_CLASSPATH_ATTRIBUTE)){
-        downloaderExtensionClasspath = m_xml.attributes().value(DOWNLOADER_EXTENSION_CLASSPATH_ATTRIBUTE).toString();
+    if (m_xmlReader.attributes().hasAttribute(DOWNLOADER_EXTENSION_CLASSPATH_ATTRIBUTE)) {
+        downloaderExtensionClasspath = m_xmlReader.attributes().value(DOWNLOADER_EXTENSION_CLASSPATH_ATTRIBUTE).toString();
     }
 
-    if(name == NAME_FILE_APPLICATION){
-        application = new Application(NAME_FILE_APPLICATION,REMOTE_FILE_APPLICATION,LOCAL_FILE_APPLICATION);
+    if (name == NAME_FILE_APPLICATION) {
+        application = new Application(NAME_FILE_APPLICATION, REMOTE_FILE_APPLICATION, LOCAL_FILE_APPLICATION);
     }
-    else if(name ==  NAME_FILE_STARTER){
-        application = new Application(NAME_FILE_STARTER,REMOTE_FILE_STARTER, LOCAL_FILE_STARTER);
+    else if (name ==  NAME_FILE_STARTER) {
+        application = new Application(NAME_FILE_STARTER, REMOTE_FILE_STARTER, LOCAL_FILE_STARTER);
     }
-    else if(name ==  NAME_FILE_DOWNLOADER){
+    else if (name ==  NAME_FILE_DOWNLOADER) {
         application = new Application(NAME_FILE_DOWNLOADER, REMOTE_FILE_DOWNLOADER, LOCAL_FILE_DOWNLOADER);
     }
 
-    if(application){
+    if (application) {
         application->setVersion(version);
         application->setDownloaderExtensionClasspath(downloaderExtensionClasspath);
 
         QList<Download> downloads;
 
-        while (m_xml.readNextStartElement()) {
-            if ((m_xml.name() == JAR_TAG) || (m_xml.name() == FILE_TAG)){
+        while (m_xmlReader.readNextStartElement()) {
+            if ((m_xmlReader.name() == JAR_TAG) || (m_xmlReader.name() == FILE_TAG)) {
                 Download download = processDownload();
                 downloads << download;
             }
-            m_xml.skipCurrentElement();
+            m_xmlReader.skipCurrentElement();
         }
         m_applications.insert(*application, downloads);
         delete application;
+
+        return true;
     }
+    return false;
 }
 
 Download DeploymentXML::processDownload() {
@@ -227,30 +260,32 @@ Download DeploymentXML::processDownload() {
     bool native = false;
     bool main = false;
 
-    if(m_xml.attributes().hasAttribute(HREF_ATTRIBUTE)){
-        href = m_xml.attributes().value(HREF_ATTRIBUTE).toString();
+    if (m_xmlReader.attributes().hasAttribute(HREF_ATTRIBUTE)) {
+        href = m_xmlReader.attributes().value(HREF_ATTRIBUTE).toString();
     }
-    if(m_xml.attributes().hasAttribute(HASH_ATTRIBUTE)){
-        hashMac = m_xml.attributes().value(HASH_ATTRIBUTE).toString();
+
+    if (m_xmlReader.attributes().hasAttribute(HASH_ATTRIBUTE)) {
+        hashMac = m_xmlReader.attributes().value(HASH_ATTRIBUTE).toString();
     }
-    if(m_xml.attributes().hasAttribute(OS_ATTRIBUTE)){
-        QString osValue = m_xml.attributes().value(OS_ATTRIBUTE).toString();
+
+    if (m_xmlReader.attributes().hasAttribute(OS_ATTRIBUTE)) {
+        QString osValue = m_xmlReader.attributes().value(OS_ATTRIBUTE).toString();
         if(osValue == OS_WINDOWS_VALUE){
             os = OS_WINDOWS_VALUE;
         }
-        else if(osValue == OS_MACOSX_VALUE){
+        else if(osValue == OS_MACOSX_VALUE) {
             os = OS_MACOSX_VALUE;
         }
     }
-    if(m_xml.attributes().hasAttribute(NATIVE_ATTRIBUTE) && m_xml.attributes().value(NATIVE_ATTRIBUTE).toString() == "true"){
+
+    if (m_xmlReader.attributes().hasAttribute(NATIVE_ATTRIBUTE) && m_xmlReader.attributes().value(NATIVE_ATTRIBUTE).toString() == "true") {
         native = true;
     }
-    if(m_xml.attributes().hasAttribute(MAIN_ATTRIBUTE) && m_xml.attributes().value(MAIN_ATTRIBUTE).toString() == "true"){
+
+    if (m_xmlReader.attributes().hasAttribute(MAIN_ATTRIBUTE) && m_xmlReader.attributes().value(MAIN_ATTRIBUTE).toString() == "true") {
         main = true;
     }
 
-    Download app(href, hashMac, os, native, main);
+    return Download(href, hashMac, os, native, main);
 
-    return app;
 }
-

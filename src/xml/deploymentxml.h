@@ -5,11 +5,13 @@
 #include <QXmlStreamReader>
 #include <QList>
 #include <QMap>
+#include <QFile>
 #include <QDebug>
 #include "xml/download.h"
 #include "app/application.h"
 #include "app/javaupdate.h"
 
+// TODO sortir les constantes.
 static QString DEPLOYMENT_CNLP_FILE_EXTENSION = ".cnlp";
 
 static  QString R_DEPLOYMENT_TAG = "deployment";
@@ -19,6 +21,7 @@ static  QString JAR_TAG = "jar";
 static  QString RESOURCE_TAG = "resource";
 
 static  QString OS_ATTRIBUTE = "os";
+// TODO struct ?
 static  QString OS_MACOSX_VALUE = "MacOSX";
 static  QString OS_WINDOWS_VALUE = "Windows";
 static  QString OS_ANY_VALUE = "Any";
@@ -50,8 +53,10 @@ class DeploymentXML : public QObject
     Q_OBJECT
 
 public:
-    explicit DeploymentXML(const QString pathCnlp, QObject *_parent = 0);
+    explicit DeploymentXML(const QString &_pathCnlp, QObject *_parent = 0);
     ~DeploymentXML();
+
+    bool read();
 
     QString getVersion() const;
     QList<QString> getArguments() const;
@@ -60,19 +65,20 @@ public:
     QString getMemory() const;
 
 private:
-    void processDeployment();
-    void processVersion();
-    void processMemory();
-    void processJava();
-    void processArguments();
-    void processArgument();
-    void processDownloads();
-    void processApplication();
+    bool processDeployment();
+    bool processVersion();
+    bool processMemory();
+    bool processJava();
+    bool processArguments();
+    bool processArgument();
+    bool processDownloads();
+    bool processApplication();
     Download processDownload();
 
     QString readNextText();
 
-    QXmlStreamReader m_xml;
+    QFile m_xmlFile;
+    QXmlStreamReader m_xmlReader;
     QString m_memory;
     QString m_version;
     QList<QString> m_arguments;
@@ -80,4 +86,4 @@ private:
     QMap<QString,JavaUpdate> m_javaUpdates;
 };
 
-#endif // DEPLOYMENTXML_H
+#endif
