@@ -3,7 +3,7 @@
 
 #include <QString>
 
-
+// TODO sortir les constantes
 static QString NAME_FILE_APPLICATION = "application";
 static QString REMOTE_FILE_APPLICATION= "application.cnlp.php";
 static QString LOCAL_FILE_APPLICATION= "application.cnlp";
@@ -30,11 +30,16 @@ public:
     QString getCnlpLocalFileName() const;
     QString getDownloaderExtensionClasspath() const;
 
-    void setName(const QString &name);
-    void setVersion(const QString &version);
-    void setCnlpRemoteFileName(const QString &cnlpRemoteFileName);
-    void setCnlpLocalFileName(const QString &cnlpLocalFileName);
-    void setDownloaderExtensionClasspath(const QString &downloaderExtensionClasspath);
+    void setVersion(const QString &_version);
+    void setDownloaderExtensionClasspath(const QString &_downloaderExtensionClasspath);
+
+    operator QString() const {
+        return "Application [name=" + m_name +
+                ", version=" + m_version +
+                ", cnlpRemoteFileName=" + m_cnlpRemoteFileName +
+                ", cnlpLocalFileName=" + m_cnlpLocalFileName +
+                ", downloaderExtensionClasspath=" + m_downloaderExtensionClasspath + "]";
+    }
 
 private:
     QString m_name;
@@ -44,9 +49,9 @@ private:
     QString m_downloaderExtensionClasspath;
 };
 
-inline bool operator<(const Application &e1, const Application &e2)
+inline bool operator<(const Application &_e1, const Application &_e2)
 {
-    return e1.getName() < e2.getName();
+    return _e1.getName() < _e2.getName();
 }
 
-#endif // APPLICATION_H
+#endif
