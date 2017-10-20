@@ -6,31 +6,24 @@
 class Download
 {
 
-
-
 public:
-    Download( QString _href,
-              QString _hashMac,
-              QString _os,
-              bool _native,
-              bool _main);
 
-    QString toString();
+    Download(QString _href,
+             QString _hashMac,
+             QString _os,
+             bool _native,
+             bool _main);
 
     QString getHref() const;
-    void setHref(const QString &href);
-
     QString getHashMac() const;
-    void setHashMac(const QString &hashMac);
-
     QString getOs() const;
-    void setOs(const QString &os);
+    bool isNative() const;
+    bool isMain() const;
 
-    bool getNative() const;
-    void setNative(bool native);
-
-    bool getMain() const;
-    void setMain(bool main);
+    operator QString() const {
+        return "Download [href=" + m_href + ", hashMac=" + m_hashMac + ", os=" + m_os
+                + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
+    }
 
 private:
     QString m_href;
@@ -38,6 +31,7 @@ private:
     QString m_os;
     bool m_native;
     bool m_main;
+
 };
 
-#endif // DOWNLOAD_H
+#endif
