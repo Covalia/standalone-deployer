@@ -1,0 +1,18 @@
+#ifndef LOGGER_H
+#define LOGGER_H
+
+#include <QObject>
+
+
+
+const unsigned short LOG_FILES_MAX = 20; // max rolling files
+const unsigned short LOG_FILE_SIZE = 2000000; // size log file in byte
+
+
+class Logger
+{
+    public:
+        Logger(QString pathLog);
+};
+
+#endif // LOGGER_H

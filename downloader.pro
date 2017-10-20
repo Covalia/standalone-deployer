@@ -34,10 +34,14 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-SOURCES += src/main.cpp
+SOURCES += src/main.cpp \
+    src/log/simpleqtlogger.cpp \
+    src/log/logger.cpp
 SOURCES += src/mainwindow.cpp
 
-HEADERS += src/mainwindow.h
+HEADERS += src/mainwindow.h \
+    src/log/simpleqtlogger.h \
+    src/log/logger.h
 
 FORMS += ui/mainwindow.ui
 
