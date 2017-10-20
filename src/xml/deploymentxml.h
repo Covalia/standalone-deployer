@@ -5,12 +5,10 @@
 #include <QXmlStreamReader>
 #include <QList>
 #include <QMap>
-
 #include <QDebug>
-
-#include "download.h"
-#include "../app/application.h"
-#include "../app/javaupdate.h"
+#include "xml/download.h"
+#include "app/application.h"
+#include "app/javaupdate.h"
 
 static QString DEPLOYMENT_CNLP_FILE_EXTENSION = ".cnlp";
 

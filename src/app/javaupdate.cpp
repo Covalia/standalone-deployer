@@ -1,4 +1,4 @@
-#include "javaupdate.h"
+#include "app/javaupdate.h"
 
 JavaUpdate::JavaUpdate(QString _version,
                        QString _file,

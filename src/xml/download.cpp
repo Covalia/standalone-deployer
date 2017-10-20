@@ -1,4 +1,4 @@
-#include "download.h"
+#include "xml/download.h"
 
 Download::Download(QString _href,
                    QString _hashMac,
