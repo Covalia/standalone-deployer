@@ -8,18 +8,17 @@ class JavaUpdate
 
 public:
 
-    JavaUpdate(	QString _version,
-                QString _file,
-                QString _hash);
+    JavaUpdate(QString _version,
+               QString _file,
+               QString _hash);
 
     QString getVersion() const;
-    void setVersion(const QString &version);
-
     QString getFile() const;
-    void setFile(const QString &file);
-
     QString getHash() const;
-    void setHash(const QString &hash);
+
+    operator QString() const {
+        return "JavaUpdate [version=" + m_version + ", file=" + m_file + ", hash=" + m_hash + "]";
+    }
 
 private:
     QString m_version;
@@ -28,4 +27,4 @@ private:
 
 };
 
-#endif // JAVAUPDATE_H
+#endif

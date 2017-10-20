@@ -14,27 +14,12 @@ QString JavaUpdate::getVersion() const
     return m_version;
 }
 
-void JavaUpdate::setVersion(const QString &version)
-{
-    m_version = version;
-}
-
 QString JavaUpdate::getFile() const
 {
     return m_file;
 }
 
-void JavaUpdate::setFile(const QString &file)
-{
-    m_file = file;
-}
-
 QString JavaUpdate::getHash() const
 {
     return m_hash;
-}
-
-void JavaUpdate::setHash(const QString &hash)
-{
-    m_hash = hash;
 }
