@@ -50,7 +50,7 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _ne
 
         // lancement les requêtes head
         if (_needProgress) {
-            qDebug() << "Need progression, head requests first.";
+            qDebug() << "Need progression, head requests first";
             QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
         }
         else {
@@ -80,7 +80,7 @@ void DownloadManager::startNextDownload()
     m_currentDownload = m_manager.get(request);
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
-            SLOT(metaDataChanged()));
+            SLOT(downloadMetaDataChanged()));
     connect(m_currentDownload, SIGNAL(downloadProgress(qint64, qint64)),
             SLOT(updateProgress(qint64, qint64)));
     connect(m_currentDownload, SIGNAL(finished()),
@@ -88,13 +88,13 @@ void DownloadManager::startNextDownload()
     connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
     connect(m_currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
-			SLOT(errorOccured(QNetworkReply::NetworkError)));
+            SLOT(downloadErrorOccured(QNetworkReply::NetworkError)));
 
     m_downloadTime.start();
 
 }
 
-void DownloadManager::metaDataChanged()
+void DownloadManager::downloadMetaDataChanged()
 {
     m_currentFilename = "";
 
@@ -196,9 +196,15 @@ void DownloadManager::downloadReadyRead()
     }
 }
 
-void DownloadManager::errorOccured(QNetworkReply::NetworkError _error) {
-	qDebug() << _error;
+void DownloadManager::downloadErrorOccured(QNetworkReply::NetworkError _error) {
+    qDebug() << "Download request error occured" << _error;
 	m_saveFile->cancelWriting();
+}
+
+void DownloadManager::headErrorOccured(QNetworkReply::NetworkError _error) {
+    qDebug() << "Head request error occured" << _error;
+    QUrl url = m_downloadQueue.dequeue();
+    qDebug() << "File removed from download queue:" << url.toEncoded().constData();
 }
 
 void DownloadManager::startNextHeadRequest() {
@@ -217,6 +223,8 @@ void DownloadManager::startNextHeadRequest() {
             SLOT(headMetaDataChanged()));
     connect(m_currentHead, SIGNAL(finished()),
             SLOT(currentHeadFinished()));
+    connect(m_currentHead, SIGNAL(error(QNetworkReply::NetworkError)),
+            SLOT(headErrorOccured(QNetworkReply::NetworkError)));
 
 }
 

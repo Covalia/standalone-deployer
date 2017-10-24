@@ -32,19 +32,18 @@ class DownloadManager: public QObject
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
 	private slots:
-        void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-
-        void currentHeadFinished();
-        void currentDownloadFinished();
-
-		void downloadReadyRead();
-		void errorOccured(QNetworkReply::NetworkError);
-		void metaDataChanged();
-
-        void headMetaDataChanged();
 
         void startNextHeadRequest();
+        void headMetaDataChanged();
+        void headErrorOccured(QNetworkReply::NetworkError);
+        void currentHeadFinished();
+
         void startNextDownload();
+        void downloadMetaDataChanged();
+        void downloadErrorOccured(QNetworkReply::NetworkError);
+        void currentDownloadFinished();
+        void downloadReadyRead();
+        void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
 	private:
 
