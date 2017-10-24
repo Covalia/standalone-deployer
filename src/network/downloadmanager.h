@@ -56,6 +56,8 @@ class DownloadManager: public QObject
 
         QMap<QUrl, long> m_mapUrlContentLength;
 
+        QQueue<QUrl> m_errorQueue;
+
         QQueue<QUrl> m_headQueue;
         QNetworkReply *m_currentHead;
 

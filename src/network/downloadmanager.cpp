@@ -43,6 +43,10 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _ne
 
     // la file doit être vide !
     if (m_downloadQueue.isEmpty() && m_headQueue.isEmpty()) {
+
+        // réinitialisation des fichiers en error
+        m_errorQueue.clear();
+
         foreach (QString url, _urlList) {
             m_headQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
             m_downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
@@ -67,8 +71,19 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _ne
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
-        qDebug() << "All files downloaded successfully";
-        emit downloadsFinished();
+        if (m_errorQueue.isEmpty()) {
+            qDebug() << "All files downloaded successfully";
+            emit downloadsFinished();
+        }
+        else {
+            qDebug() << "Some files could not be downloaded";
+            QList<QUrl>::const_iterator it;
+            for (it = m_errorQueue.constBegin(); it != m_errorQueue.constEnd(); ++it) {
+                const QUrl url = *it;
+                qDebug() << "Not downloaded:" << url.toEncoded().constData();
+            }
+
+        }
         return;
     }
 
@@ -205,6 +220,7 @@ void DownloadManager::headErrorOccured(QNetworkReply::NetworkError _error) {
     qDebug() << "Head request error occured" << _error;
     QUrl url = m_downloadQueue.dequeue();
     qDebug() << "File removed from download queue:" << url.toEncoded().constData();
+    m_errorQueue.enqueue(url);
 }
 
 void DownloadManager::startNextHeadRequest() {
