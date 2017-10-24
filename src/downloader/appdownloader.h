@@ -22,6 +22,8 @@ class AppDownloader : public QObject
         void updateDownloadFileMessage(const QString &_file);
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
+        void downloadFinished();
+
 	private:
 		DownloadManager *m_downloader;
 		QString m_appUrl;

@@ -19,6 +19,8 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
         SLOT(updateDownloadFileMessage(const QString &)));
     connect(m_downloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
         SLOT(updateTotalDownloadProgress(qint64, qint64)));
+    connect(m_downloader, SIGNAL(downloadsFinished()),
+            SLOT(downloadFinished()));
 }
 
 AppDownloader::~AppDownloader()
@@ -59,4 +61,10 @@ void AppDownloader::updateDownloadFileMessage(const QString &_file) {
 
 void AppDownloader::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
     emit totalDownloadProgress(_bytesReceived, _bytesTotal);
+}
+
+void AppDownloader::downloadFinished() {
+    qDebug() << "TODO read the cnlp";
+    // TODO read xml.
+
 }
