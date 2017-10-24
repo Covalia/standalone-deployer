@@ -10,6 +10,16 @@
 #include <stdio.h>
 #include "config/global.h"
 
+// TODO : gérer les erreurs 404.
+// TODO : gérer les coupures.
+// TODO : gérer les mauvaises URLs.
+// TODO : gérer les redirections.
+// TODO : gérer les proxies.
+// TODO : gérer les authentifications HTTP.
+// TODO : gérer les certificats HTTPS invalides.
+// TODO : estimer le temps restant.
+// TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
+
 DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QObject(_parent),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
@@ -79,7 +89,6 @@ void DownloadManager::startNextDownload()
             SLOT(downloadReadyRead()));
     connect(m_currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
 			SLOT(errorOccured(QNetworkReply::NetworkError)));
-	// TODO redirect
 
     m_downloadTime.start();
 
