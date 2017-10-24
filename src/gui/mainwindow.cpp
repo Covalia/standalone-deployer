@@ -122,6 +122,8 @@ void MainWindow::buttonClicked() {
 	qDebug() << "Button clicked";
 
 	connect(m_appDownloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
+    connect(m_appDownloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
+            SLOT(updateTotalDownloadProgress(qint64, qint64)));
     connect(m_appDownloader, SIGNAL(downloadSpeedMessage(const QString &)), this, SLOT(updateDownloadSpeedMessage(const QString &)));
 
 	m_appDownloader->start();
@@ -142,4 +144,11 @@ void MainWindow::updateServerUrlMessage(const QString &_url) {
 
 void MainWindow::updateDownloadFileMessage(const QString &_file) {
     m_ui->currentFileLabel->setText(tr("Téléchargement du fichier %1").arg(_file));
+}
+
+void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
+    if (_bytesTotal > 0) {
+        m_ui->totalProgressBar->setMaximum(100);
+        m_ui->totalProgressBar->setValue(static_cast<int>(_bytesReceived * 100.0 / _bytesTotal));
+    }
 }

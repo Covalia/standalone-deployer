@@ -30,6 +30,8 @@ void AppDownloader::start()
 		SLOT(updateDownloadSpeedMessage(const QString &)));
 	connect(m_downloader, SIGNAL(downloadFileMessage(const QString &)),
 		SLOT(updateDownloadFileMessage(const QString &)));
+    connect(m_downloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
+        SLOT(updateTotalDownloadProgress(qint64, qint64)));
 
 	bool result = m_appTreeManager->makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;
@@ -39,7 +41,7 @@ void AppDownloader::start()
 	// 	"http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso";
 	QStringList urls;
 	urls << m_appUrl + Global::AppCnlpRelativePath;
-	m_downloader->setUrlListToDownload(urls);
+    m_downloader->setUrlListToDownload(urls, true);
 }
 
 void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
@@ -54,4 +56,8 @@ void AppDownloader::updateDownloadSpeedMessage(const QString &_speed)
 
 void AppDownloader::updateDownloadFileMessage(const QString &_file) {
     emit downloadFileMessage(_file);
+}
+
+void AppDownloader::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
+    emit totalDownloadProgress(_bytesReceived, _bytesTotal);
 }
