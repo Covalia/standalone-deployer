@@ -11,6 +11,14 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
     m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), this);
 	m_appUrl = _appUrl;
 
+    connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
+        SLOT(updateProgress(qint64, qint64)));
+    connect(m_downloader, SIGNAL(downloadSpeedMessage(const QString &)),
+        SLOT(updateDownloadSpeedMessage(const QString &)));
+    connect(m_downloader, SIGNAL(downloadFileMessage(const QString &)),
+        SLOT(updateDownloadFileMessage(const QString &)));
+    connect(m_downloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
+        SLOT(updateTotalDownloadProgress(qint64, qint64)));
 }
 
 AppDownloader::~AppDownloader()
@@ -23,15 +31,6 @@ void AppDownloader::start()
 {
 	qDebug() << "start app downloader";
 	emit serverUrlMessage(m_appUrl);
-
-	connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
-		SLOT(updateProgress(qint64, qint64)));
-	connect(m_downloader, SIGNAL(downloadSpeedMessage(const QString &)),
-		SLOT(updateDownloadSpeedMessage(const QString &)));
-	connect(m_downloader, SIGNAL(downloadFileMessage(const QString &)),
-		SLOT(updateDownloadFileMessage(const QString &)));
-    connect(m_downloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
-        SLOT(updateTotalDownloadProgress(qint64, qint64)));
 
 	bool result = m_appTreeManager->makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;

@@ -31,7 +31,7 @@ class MainWindow : public QMainWindow
 	private slots:
 		void updateSlideShow();
 		void buttonClicked();
-		void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateServerUrlMessage(const QString &_url);
         void updateDownloadFileMessage(const QString &_file);

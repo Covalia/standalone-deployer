@@ -26,9 +26,15 @@ MainWindow::MainWindow(QWidget *_parent) :
     connect(m_appDownloader, SIGNAL(downloadFileMessage(const QString &)),
             SLOT(updateDownloadFileMessage(const QString &)));
 
+    connect(m_appDownloader, SIGNAL(downloadProgress(qint64, qint64)),
+            SLOT(updateSingleProgress(qint64, qint64)));
+    connect(m_appDownloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
+            SLOT(updateTotalDownloadProgress(qint64, qint64)));
+    connect(m_appDownloader, SIGNAL(downloadSpeedMessage(const QString &)),
+            SLOT(updateDownloadSpeedMessage(const QString &)));
+
 	setAttribute(Qt::WA_QuitOnClose);
 	setWindowFlags(Qt::FramelessWindowHint);
-
 
 	m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de Covotem !"));
 
@@ -119,17 +125,10 @@ void MainWindow::loadSlideShowImagesFromResources() {
 }
 
 void MainWindow::buttonClicked() {
-	qDebug() << "Button clicked";
-
-	connect(m_appDownloader, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateProgress(qint64, qint64)));
-    connect(m_appDownloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
-            SLOT(updateTotalDownloadProgress(qint64, qint64)));
-    connect(m_appDownloader, SIGNAL(downloadSpeedMessage(const QString &)), this, SLOT(updateDownloadSpeedMessage(const QString &)));
-
 	m_appDownloader->start();
 }
 
-void MainWindow::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
+void MainWindow::updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
     m_ui->singleProgressBar->setMaximum(_bytesTotal);
     m_ui->singleProgressBar->setValue(_bytesReceived);
 }
