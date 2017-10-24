@@ -34,6 +34,15 @@ class Global
 		/// Chemin relatif du répertoire temp de l'application
 		static const QString TempDir;
 
+        /// User-Agent du downloader
+        static const QString UserAgentValue;
+
+        /// Header User-Agent
+        static const QString UserAgentHeader;
+
+        /// Header Content-Length
+        static const QString ContentLengthHeader;
+
 };
 
 #endif

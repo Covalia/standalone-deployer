@@ -52,7 +52,7 @@ void DownloadManager::startNextDownload()
     QUrl url = m_downloadQueue.dequeue();
 
     QNetworkRequest request(url);
-	request.setRawHeader("User-Agent", "Covalia-Downloader");
+    request.setRawHeader(Global::UserAgentHeader.toLatin1(), Global::UserAgentValue.toLatin1());
     m_currentDownload = m_manager.get(request);
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),

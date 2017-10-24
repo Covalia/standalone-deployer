@@ -11,5 +11,6 @@ const QString Global::ExtensionDir("Extension");
 const QString Global::JavaDir("Java");
 const QString Global::LogsDir("Logs");
 const QString Global::TempDir("Temp");
-
-
+const QString Global::UserAgentValue("Covalia-Downloader");
+const QString Global::UserAgentHeader("User-Agent");
+const QString Global::ContentLengthHeader("Content-Length");
