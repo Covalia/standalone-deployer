@@ -3,8 +3,11 @@
 #include "simpleQtLogger.h"
 #include <QApplication>
 
-Logger::Logger(QString pathLog)
-{
+/*!
+ * \brief Initializes application logger
+ * \param pathLog
+ */
+Logger::Logger(QString pathLog){
     // enable sinks
     simpleqtlogger::ENABLE_LOG_SINK_FILE = true;
     simpleqtlogger::ENABLE_LOG_SINK_CONSOLE = true;
@@ -33,5 +36,4 @@ Logger::Logger(QString pathLog)
     simpleqtlogger::SimpleQtLogger::getInstance()->setLogLevels_signal(enableLogLevels_signal);
 
     L_INFO("Log initialization completed");
-
 }
