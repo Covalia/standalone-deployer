@@ -47,3 +47,5 @@ FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
+DISTFILES += templateFormatCode.cfg
+
