@@ -20,7 +20,9 @@ class DownloadManager: public QObject
 		explicit DownloadManager(const QString &_saveDir, QObject *parent = 0);
 		virtual ~DownloadManager();
 
-        void setUrlListToDownload(const QStringList &_urlList, bool _needProgress = false);
+        void setUrlListToDownload(const QStringList &_urlList, bool _needGlobalProgress = false);
+
+        QQueue<QUrl> getErrorQueue() const;
 
     signals:
         void downloadsFinished();
@@ -72,7 +74,7 @@ class DownloadManager: public QObject
 		QTime m_downloadTime;
 
         /// do we need to get download progress?
-        bool m_needProgress;
+        bool m_needGlobalProgress;
 
 };
 

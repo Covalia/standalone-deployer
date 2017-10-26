@@ -146,7 +146,13 @@ void MainWindow::updateDownloadFileMessage(const QString &_file) {
 }
 
 void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal) {
-    if (_bytesTotal > 0) {
+    if (_bytesReceived ==0 && _bytesTotal == 0) {
+        // affichage d'une progressbar indéfinie
+        m_ui->totalProgressBar->setMinimum(0);
+        m_ui->totalProgressBar->setMaximum(0);
+        m_ui->totalProgressBar->setValue(0);
+    }
+    else if (_bytesTotal > 0) {
         m_ui->totalProgressBar->setMaximum(100);
         m_ui->totalProgressBar->setValue(static_cast<int>(_bytesReceived * 100.0 / _bytesTotal));
     }
