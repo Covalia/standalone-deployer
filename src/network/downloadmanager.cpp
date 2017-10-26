@@ -13,7 +13,6 @@
 // TODO : gérer les erreurs 404.
 // TODO : gérer les coupures.
 // TODO : gérer les mauvais hôtes + barre téléchargement.
-// TODO : gérer les redirections.
 // TODO : gérer les proxies.
 // TODO : gérer les authentifications HTTP.
 // TODO : gérer les certificats HTTPS invalides.
@@ -92,6 +91,7 @@ void DownloadManager::startNextDownload()
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, QVariant(true));
     m_currentDownload = m_manager.get(request);
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
@@ -146,10 +146,32 @@ void DownloadManager::downloadMetaDataChanged()
 
 void DownloadManager::headMetaDataChanged()
 {
-    qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
-    qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << "Content-Length" << contentLength;
-    m_mapUrlContentLength.insert(m_currentHead->url(), contentLength);
-    m_totalBytesToDownload += contentLength;
+    QVariant statusVariant = m_currentHead->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    int status = statusVariant.toInt();
+    QUrl currentUrl = m_currentHead->url();
+    qDebug() << "Status:" << status << "-" << currentUrl.toEncoded().constData();
+
+    QVariant urlVariant = m_currentHead->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (urlVariant.isValid()) {
+        QUrl redirectedUrl = urlVariant.toUrl();
+        qDebug() << "Redirected to:" << redirectedUrl.toEncoded().constData();
+        // on est redirigé
+        if (!m_downloadQueue.isEmpty()) {
+            // on supprime le premier élément de la file download, pour éviter d'avoir à rejouer les redirections.
+            m_downloadQueue.removeFirst();
+        }
+        m_downloadQueue.prepend(redirectedUrl);
+        m_headQueue.prepend(redirectedUrl);
+    }
+    else {
+        // ceci n'est pas une redirection, ajout de la taille du téléchargement au compteur
+        if (status == 200) {
+            qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
+            qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << "- Content-Length:" << contentLength;
+            m_mapUrlContentLength.insert(m_currentHead->url(), contentLength);
+            m_totalBytesToDownload += contentLength;
+        }
+    }
 
 }
 
