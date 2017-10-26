@@ -91,7 +91,7 @@ void DownloadManager::startNextDownload()
     qDebug() << "Downloading" << url.toEncoded().constData();
 
     QNetworkRequest request(url);
-    request.setRawHeader(Global::UserAgentHeader.toLatin1(), Global::UserAgentValue.toLatin1());
+    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
     m_currentDownload = m_manager.get(request);
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
@@ -146,8 +146,8 @@ void DownloadManager::downloadMetaDataChanged()
 
 void DownloadManager::headMetaDataChanged()
 {
-    qint64 contentLength = QString(m_currentHead->rawHeader(Global::ContentLengthHeader.toLatin1())).toLongLong();
-    qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << Global::ContentLengthHeader << contentLength;
+    qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
+    qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << "Content-Length" << contentLength;
     m_mapUrlContentLength.insert(m_currentHead->url(), contentLength);
     m_totalBytesToDownload += contentLength;
 
@@ -235,7 +235,7 @@ void DownloadManager::startNextHeadRequest() {
 
     QUrl url = m_headQueue.dequeue();
     QNetworkRequest request(url);
-    request.setRawHeader(Global::UserAgentHeader.toLatin1(), Global::UserAgentValue.toLatin1());
+    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
     m_currentHead = m_manager.head(request);
 
     connect(m_currentHead, SIGNAL(metaDataChanged()),
