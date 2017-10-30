@@ -160,7 +160,7 @@ void DownloadManager::startNextDownload()
     request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, QVariant(true));
     m_currentDownload = m_manager.get(request);
-    //m_currentDownload->ignoreSslErrors();
+    m_currentDownload->ignoreSslErrors();
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
             SLOT(downloadMetaDataChanged()));
