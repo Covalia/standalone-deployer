@@ -42,7 +42,8 @@ void AppDownloader::start()
 	// 	"http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso";
 	QStringList urls;
 	urls << m_appUrl + Global::AppCnlpRelativePath;
-    m_downloader->setUrlListToDownload(urls, true);
+
+    m_downloader->setUrlListToDownload(urls);
 }
 
 void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)

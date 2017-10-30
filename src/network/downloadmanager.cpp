@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include "config/global.h"
 
-// TODO : gérer les erreurs 404.
 // TODO : gérer les coupures.
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
@@ -25,8 +24,7 @@ DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QO
     m_currentHead(0),
     m_currentDownload(0),
     m_saveFile(0),
-    m_temporaryDir(_saveDir),
-    m_needGlobalProgress(false)
+    m_temporaryDir(_saveDir)
 {
 }
 
@@ -34,17 +32,17 @@ DownloadManager::~DownloadManager() {
 	delete m_saveFile;
 }
 
-void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _needGlobalProgress)
+void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 {
-    m_needGlobalProgress = _needGlobalProgress;
     m_totalBytesToDownload = 0;
     m_totalBytesDownloaded = 0;
 
-    // la file doit être vide !
+    // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
 
         // réinitialisation des fichiers en error
-        m_errorQueue.clear();
+        m_errorSet.clear();
+        // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
         foreach (QString url, _urlList) {
@@ -53,17 +51,12 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _ne
         }
 
         // lancement les requêtes head
-        if (_needGlobalProgress) {
-            qDebug() << "Need progression, head requests first";
-            QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
-        }
-        else {
-            QTimer::singleShot(0, this, SLOT(startNextDownload()));
-        }
+        QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
 
-
-        if (m_downloadQueue.isEmpty() && m_headQueue.isEmpty())
+        if (m_downloadQueue.isEmpty()) {
             QTimer::singleShot(0, this, SIGNAL(downloadsFinished()));
+        }
+
     }
 
 }
@@ -71,13 +64,13 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList, bool _ne
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
-        if (m_errorQueue.isEmpty()) {
+        if (m_errorSet.isEmpty()) {
             qDebug() << "All files downloaded successfully";
         }
         else {
             qDebug() << "Some files could not be downloaded";
-            QList<QUrl>::const_iterator it;
-            for (it = m_errorQueue.constBegin(); it != m_errorQueue.constEnd(); ++it) {
+            QSet<QUrl>::const_iterator it;
+            for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
                 const QUrl url = *it;
                 qDebug() << "Not downloaded:" << url.toEncoded().constData();
             }
@@ -102,8 +95,6 @@ void DownloadManager::startNextDownload()
             SLOT(currentDownloadFinished()));
     connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
-//    connect(m_currentDownload, SIGNAL(error(QNetworkReply::NetworkError)),
-//            SLOT(downloadErrorOccured(QNetworkReply::NetworkError)));
 
     m_downloadTime.start();
 
@@ -157,9 +148,12 @@ void DownloadManager::headMetaDataChanged()
         qDebug() << "Redirected to:" << redirectedUrl.toEncoded().constData();
         // on est redirigé
         if (!m_downloadQueue.isEmpty()) {
-            // on supprime le premier élément de la file download, pour éviter d'avoir à rejouer les redirections.
-            m_downloadQueue.removeFirst();
+            // on supprime l'élément de la file download, pour éviter d'avoir à rejouer les redirections.
+            if (m_downloadQueue.removeOne(currentUrl)) {
+                qDebug() << "Remove" << currentUrl.toEncoded().constData() << "from download queue because of redirection";
+            }
         }
+        qDebug() << "Adding" << redirectedUrl.toEncoded().constData() << "to download queue because of redirection";
         m_downloadQueue.prepend(redirectedUrl);
         m_headQueue.prepend(redirectedUrl);
     }
@@ -178,12 +172,7 @@ void DownloadManager::headMetaDataChanged()
 void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
     emit downloadProgress(_bytesReceived, _bytesTotal);
-    if (m_needGlobalProgress) {
-        emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
-    }
-    else {
-        emit totalDownloadProgress(0, 0);
-    }
+    emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
 
     // calculate the download speed
     double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
@@ -206,6 +195,16 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
 void DownloadManager::currentHeadFinished()
 {
+    if (m_currentHead->error()) {
+        QUrl url = m_currentHead->url();
+        // La requête head a échoué, alors inutile de démarrer le téléchargement...
+        if (m_downloadQueue.removeOne(url)) {
+            qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
+        }
+        // ajout dans la liste d'erreurs
+        m_errorSet.insert(url);
+    }
+
     m_currentHead->deleteLater();
     startNextHeadRequest();
 }
@@ -217,7 +216,10 @@ void DownloadManager::currentDownloadFinished()
     if (m_currentDownload->error()) {
         // download failed
         qDebug() << "Failed:" << qPrintable(m_currentDownload->errorString());
-        m_errorQueue.enqueue(m_currentDownload->url());
+        m_errorSet.insert(m_currentDownload->url());
+        if (m_saveFile) {
+            m_saveFile->cancelWriting();
+        }
     }
     else {
         qDebug() << "Success.";
@@ -237,17 +239,6 @@ void DownloadManager::downloadReadyRead()
     m_totalBytesDownloaded += m_saveFile->write(m_currentDownload->readAll());
 }
 
-void DownloadManager::downloadErrorOccured(QNetworkReply::NetworkError _error) {
-    qDebug() << "Download request error occured" << _error;
-}
-
-void DownloadManager::headErrorOccured(QNetworkReply::NetworkError _error) {
-    QUrl url = m_downloadQueue.dequeue();
-    qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << _error;
-    // La requête head a échoué, alors inutile de démarrer le téléchargement...
-    m_errorQueue.enqueue(url);
-}
-
 void DownloadManager::startNextHeadRequest() {
 
     if (m_headQueue.isEmpty()) {
@@ -264,8 +255,6 @@ void DownloadManager::startNextHeadRequest() {
             SLOT(headMetaDataChanged()));
     connect(m_currentHead, SIGNAL(finished()),
             SLOT(currentHeadFinished()));
-    connect(m_currentHead, SIGNAL(error(QNetworkReply::NetworkError)),
-            SLOT(headErrorOccured(QNetworkReply::NetworkError)));
 
 }
 
@@ -274,7 +263,7 @@ void DownloadManager::headsFinished() {
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
 
-QQueue<QUrl> DownloadManager::getErrorQueue() const
+QSet<QUrl> DownloadManager::getUrlsInError() const
 {
-    return m_errorQueue;
+    return m_errorSet;
 }

@@ -20,9 +20,9 @@ class DownloadManager: public QObject
 		explicit DownloadManager(const QString &_saveDir, QObject *parent = 0);
 		virtual ~DownloadManager();
 
-        void setUrlListToDownload(const QStringList &_urlList, bool _needGlobalProgress = false);
+        void setUrlListToDownload(const QStringList &_urlList);
 
-        QQueue<QUrl> getErrorQueue() const;
+        QSet<QUrl> getUrlsInError() const;
 
     signals:
         void downloadsFinished();
@@ -37,12 +37,10 @@ class DownloadManager: public QObject
 
         void startNextHeadRequest();
         void headMetaDataChanged();
-        void headErrorOccured(QNetworkReply::NetworkError);
         void currentHeadFinished();
 
         void startNextDownload();
         void downloadMetaDataChanged();
-        void downloadErrorOccured(QNetworkReply::NetworkError);
         void currentDownloadFinished();
         void downloadReadyRead();
         void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
@@ -58,7 +56,7 @@ class DownloadManager: public QObject
 
         QMap<QUrl, long> m_mapUrlContentLength;
 
-        QQueue<QUrl> m_errorQueue;
+        QSet<QUrl> m_errorSet;
 
         QQueue<QUrl> m_headQueue;
         QNetworkReply *m_currentHead;
@@ -72,9 +70,6 @@ class DownloadManager: public QObject
 
         /// download time to calculate download speed.
 		QTime m_downloadTime;
-
-        /// do we need to get download progress?
-        bool m_needGlobalProgress;
 
 };
 
