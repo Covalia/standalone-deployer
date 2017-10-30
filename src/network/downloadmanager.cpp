@@ -60,6 +60,81 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 
 }
 
+QSet<QUrl> DownloadManager::getUrlsInError() const
+{
+    return m_errorSet;
+}
+
+void DownloadManager::startNextHeadRequest() {
+
+    if (m_headQueue.isEmpty()) {
+        headsFinished();
+        return;
+    }
+
+    QUrl url = m_headQueue.dequeue();
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
+    m_currentHead = m_manager.head(request);
+    m_currentHead->ignoreSslErrors();
+
+    connect(m_currentHead, SIGNAL(metaDataChanged()),
+            SLOT(headMetaDataChanged()));
+    connect(m_currentHead, SIGNAL(finished()),
+            SLOT(currentHeadFinished()));
+
+}
+
+void DownloadManager::headMetaDataChanged()
+{
+    QVariant statusVariant = m_currentHead->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    int status = statusVariant.toInt();
+    QUrl currentUrl = m_currentHead->url();
+    qDebug() << "Status:" << status << "-" << currentUrl.toEncoded().constData();
+
+    QVariant urlVariant = m_currentHead->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (urlVariant.isValid()) {
+        QUrl redirectedUrl = urlVariant.toUrl();
+        qDebug() << "Redirected to:" << redirectedUrl.toEncoded().constData();
+        // on est redirigé
+        if (!m_downloadQueue.isEmpty()) {
+            // on supprime l'élément de la file download, pour éviter d'avoir à rejouer les redirections.
+            if (m_downloadQueue.removeOne(currentUrl)) {
+                qDebug() << "Remove" << currentUrl.toEncoded().constData() << "from download queue because of redirection";
+            }
+        }
+        qDebug() << "Adding" << redirectedUrl.toEncoded().constData() << "to download queue because of redirection";
+        m_downloadQueue.prepend(redirectedUrl);
+        m_headQueue.prepend(redirectedUrl);
+    }
+    else {
+        // ceci n'est pas une redirection, ajout de la taille du téléchargement au compteur
+        if (status == 200) {
+            qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
+            qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << "- Content-Length:" << contentLength;
+            m_mapUrlContentLength.insert(m_currentHead->url(), contentLength);
+            m_totalBytesToDownload += contentLength;
+        }
+    }
+
+}
+
+void DownloadManager::currentHeadFinished()
+{
+    if (m_currentHead->error()) {
+        QUrl url = m_currentHead->url();
+        // La requête head a échoué, alors inutile de démarrer le téléchargement...
+        if (m_downloadQueue.removeOne(url)) {
+            qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
+        }
+        // ajout dans la liste d'erreurs
+        m_errorSet.insert(url);
+    }
+
+    m_currentHead->deleteLater();
+    startNextHeadRequest();
+}
+
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
@@ -135,80 +210,6 @@ void DownloadManager::downloadMetaDataChanged()
 
 }
 
-void DownloadManager::headMetaDataChanged()
-{
-    QVariant statusVariant = m_currentHead->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    int status = statusVariant.toInt();
-    QUrl currentUrl = m_currentHead->url();
-    qDebug() << "Status:" << status << "-" << currentUrl.toEncoded().constData();
-
-    QVariant urlVariant = m_currentHead->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    if (urlVariant.isValid()) {
-        QUrl redirectedUrl = urlVariant.toUrl();
-        qDebug() << "Redirected to:" << redirectedUrl.toEncoded().constData();
-        // on est redirigé
-        if (!m_downloadQueue.isEmpty()) {
-            // on supprime l'élément de la file download, pour éviter d'avoir à rejouer les redirections.
-            if (m_downloadQueue.removeOne(currentUrl)) {
-                qDebug() << "Remove" << currentUrl.toEncoded().constData() << "from download queue because of redirection";
-            }
-        }
-        qDebug() << "Adding" << redirectedUrl.toEncoded().constData() << "to download queue because of redirection";
-        m_downloadQueue.prepend(redirectedUrl);
-        m_headQueue.prepend(redirectedUrl);
-    }
-    else {
-        // ceci n'est pas une redirection, ajout de la taille du téléchargement au compteur
-        if (status == 200) {
-            qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
-            qDebug() << "Head Request for:" << m_currentHead->url().toEncoded().constData() << "- Content-Length:" << contentLength;
-            m_mapUrlContentLength.insert(m_currentHead->url(), contentLength);
-            m_totalBytesToDownload += contentLength;
-        }
-    }
-
-}
-
-void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
-{
-    emit downloadProgress(_bytesReceived, _bytesTotal);
-    emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
-
-    // calculate the download speed
-    double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
-    QString unit;
-    if (speed < 1024) {
-        unit = "octets/s";
-    }
-    else if (speed < 1024*1024) {
-        speed /= 1024;
-        unit = "ko/s";
-    }
-    else {
-        speed /= 1024*1024;
-        unit = "Mo/s";
-    }
-
-	emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
-                            .arg(speed, 3, 'f', 1).arg(unit));
-}
-
-void DownloadManager::currentHeadFinished()
-{
-    if (m_currentHead->error()) {
-        QUrl url = m_currentHead->url();
-        // La requête head a échoué, alors inutile de démarrer le téléchargement...
-        if (m_downloadQueue.removeOne(url)) {
-            qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
-        }
-        // ajout dans la liste d'erreurs
-        m_errorSet.insert(url);
-    }
-
-    m_currentHead->deleteLater();
-    startNextHeadRequest();
-}
-
 void DownloadManager::currentDownloadFinished()
 {
     emit downloadSpeedMessage("");
@@ -239,32 +240,31 @@ void DownloadManager::downloadReadyRead()
     m_totalBytesDownloaded += m_saveFile->write(m_currentDownload->readAll());
 }
 
-void DownloadManager::startNextHeadRequest() {
+void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
+{
+    emit downloadProgress(_bytesReceived, _bytesTotal);
+    emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
 
-    if (m_headQueue.isEmpty()) {
-        headsFinished();
-        return;
+    // calculate the download speed
+    double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
+    QString unit;
+    if (speed < 1024) {
+        unit = "octets/s";
+    }
+    else if (speed < 1024*1024) {
+        speed /= 1024;
+        unit = "ko/s";
+    }
+    else {
+        speed /= 1024*1024;
+        unit = "Mo/s";
     }
 
-    QUrl url = m_headQueue.dequeue();
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
-    m_currentHead = m_manager.head(request);
-    m_currentHead->ignoreSslErrors();
-
-    connect(m_currentHead, SIGNAL(metaDataChanged()),
-            SLOT(headMetaDataChanged()));
-    connect(m_currentHead, SIGNAL(finished()),
-            SLOT(currentHeadFinished()));
-
+	emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
+                            .arg(speed, 3, 'f', 1).arg(unit));
 }
 
 void DownloadManager::headsFinished() {
     // les requêtes head sont terminées, on passe aux téléchargements
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
-}
-
-QSet<QUrl> DownloadManager::getUrlsInError() const
-{
-    return m_errorSet;
 }
