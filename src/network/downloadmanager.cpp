@@ -14,7 +14,6 @@
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
 // TODO : gérer les authentifications HTTP.
-// TODO : gérer les certificats HTTPS invalides.
 // TODO : estimer le temps restant.
 // TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
 
@@ -86,6 +85,7 @@ void DownloadManager::startNextDownload()
     request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, QVariant(true));
     m_currentDownload = m_manager.get(request);
+    //m_currentDownload->ignoreSslErrors();
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
             SLOT(downloadMetaDataChanged()));
@@ -250,6 +250,7 @@ void DownloadManager::startNextHeadRequest() {
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
     m_currentHead = m_manager.head(request);
+    m_currentHead->ignoreSslErrors();
 
     connect(m_currentHead, SIGNAL(metaDataChanged()),
             SLOT(headMetaDataChanged()));
