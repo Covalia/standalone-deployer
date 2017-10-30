@@ -249,15 +249,15 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
     double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
     QString unit;
     if (speed < 1024) {
-        unit = "octets/s";
+        unit = tr("octets/s");
     }
     else if (speed < 1024*1024) {
         speed /= 1024;
-        unit = "ko/s";
+        unit = tr("ko/s");
     }
     else {
         speed /= 1024*1024;
-        unit = "Mo/s";
+        unit = tr("Mo/s");
     }
 
 	emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
