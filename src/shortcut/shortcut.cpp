@@ -28,10 +28,12 @@ HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTarget
                                         LPSTR pszLinkfile, LPCWSTR pszDescription,
                                         int iShowmode, LPCWSTR pszCurdir,
                                         LPCWSTR pszIconfile, int iIconindex){
-    HRESULT hRes;                       /* Returned COM result code */
-    IShellLink * pShellLink;            /* IShellLink object pointer */
-    IPersistFile * pPersistFile;        /* IPersistFile object pointer */
-    WCHAR wszLinkfile[MAX_PATH];        /* pszLinkfile as Unicode string */
+    #if defined(Q_OS_WIN)
+
+    HRESULT hRes;                           /* Returned COM result code */
+    IShellLink * pShellLink;                /* IShellLink object pointer */
+    IPersistFile * pPersistFile;            /* IPersistFile object pointer */
+    WCHAR wszLinkfile[MAX_PATH];            /* pszLinkfile as Unicode string */
 
     CoInitialize(NULL);
     hRes = E_INVALIDARG;
@@ -46,11 +48,11 @@ HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTarget
         (iIconindex >= 0)
         ) {
         hRes = CoCreateInstance(
-                CLSID_ShellLink,        /* pre-defined CLSID of the IShellLink object */
-                NULL,                   /* pointer to parent interface if part of aggregate */
-                CLSCTX_INPROC_SERVER,   /* caller and called code are in same process */
-                IID_IShellLink,         /* pre-defined interface of the IShellLink object */
-                (LPVOID *)&pShellLink); /* Returns a pointer to the IShellLink object */
+                CLSID_ShellLink,            /* pre-defined CLSID of the IShellLink object */
+                NULL,                       /* pointer to parent interface if part of aggregate */
+                CLSCTX_INPROC_SERVER,       /* caller and called code are in same process */
+                IID_IShellLink,             /* pre-defined interface of the IShellLink object */
+                (LPVOID *)&pShellLink);     /* Returns a pointer to the IShellLink object */
 
         if (SUCCEEDED(hRes)) {
             /* Set the fields in the IShellLink object */
@@ -71,10 +73,10 @@ HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTarget
 
             /* Use the IPersistFile object to save the shell link */
             hRes = pShellLink->QueryInterface(
-                    IID_IPersistFile,         /* pre-defined interface of the
-                                               *  IPersistFile object */
-                    (LPVOID *)&pPersistFile); /* returns a pointer to the
-                                               * IPersistFile object */
+                    IID_IPersistFile,             /* pre-defined interface of the
+                                                   *  IPersistFile object */
+                    (LPVOID *)&pPersistFile);     /* returns a pointer to the
+                                                   * IPersistFile object */
             if (SUCCEEDED(hRes)) {
                 MultiByteToWideChar(CP_ACP, 0,
                                     pszLinkfile, -1,
@@ -87,4 +89,10 @@ HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTarget
     }
     CoUninitialize();
     return (hRes);
-} // Shortcut::Create
+
+    #elif defined(Q_OS_MAC)
+
+    return 0;
+
+    #endif // ifdef (Q_OS_WIN)
+} // Shortcut::createWindowsShortcut
