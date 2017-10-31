@@ -16,6 +16,10 @@ static QString NAME_FILE_DOWNLOADER= "downloader";
 static QString REMOTE_FILE_DOWNLOADER= "downloader.cnlp.php";
 static QString LOCAL_FILE_DOWNLOADER= "downloader.cnlp";
 
+/**
+ * @class Application
+ * \brief This class represents application informations in CNLP file. It contain application version, name etc
+ */
 class Application
 { 
 

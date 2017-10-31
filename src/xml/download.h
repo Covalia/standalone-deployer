@@ -3,9 +3,13 @@
 
 #include <QString>
 
+
+/**
+ * @class Download
+ * \brief This class represents a file to download into application into CNLP file
+ */
 class Download
 {
-
 public:
 
     Download(QString _href,
@@ -22,7 +26,7 @@ public:
 
     operator QString() const {
         return "Download [href=" + m_href + ", hashMac=" + m_hashMac + ", os=" + m_os
-                + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
+               + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
     }
 
 private:
@@ -31,7 +35,6 @@ private:
     QString m_os;
     bool m_native;
     bool m_main;
-
 };
 
-#endif
+#endif // ifndef DOWNLOAD_H

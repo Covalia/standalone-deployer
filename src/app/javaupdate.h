@@ -3,6 +3,10 @@
 
 #include<QString>
 
+/**
+ * @class JavaUpdate
+ * \brief This class represents java information into CNLP file
+ */
 class JavaUpdate
 {
 
