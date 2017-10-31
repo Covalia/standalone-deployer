@@ -51,3 +51,6 @@ FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
+TRANSLATIONS += translations/fr_FR.ts
+TRANSLATIONS += translations/en_US.ts
+
