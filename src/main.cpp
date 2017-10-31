@@ -1,14 +1,27 @@
 #include <QApplication>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include <QDebug>
 #include "gui/mainwindow.h"
 
 int main(int argc, char *argv[])
 {
 	qDebug() << "Starting application";
-	QApplication a(argc, argv);
-	MainWindow w;
-	w.show();
-	w.center();
+    QApplication app(argc, argv);
 
-	return a.exec();
+    QTranslator translator;
+    // TODO gérer langue par défaut et demander quelle langue utiliser.
+    QString locale = QLocale::system().name();
+    QString location = ":/translations";
+    qDebug() << "locale:" << locale;
+
+    qDebug() << "loading translator";
+    translator.load(locale, location);
+    app.installTranslator(&translator);
+
+    MainWindow window;
+    window.show();
+    window.center();
+
+    return app.exec();
 }

@@ -60,8 +60,6 @@
             <numerusform>%n secondes</numerusform>
         </translation>
     </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="../ui/mainwindow.ui" line="14"/>
@@ -71,7 +69,7 @@
     <message>
         <location filename="../ui/mainwindow.ui" line="97"/>
         <source>Installeur</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeur</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="334"/>
@@ -79,21 +77,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/mainwindow.cpp" line="43"/>
-        <source>Bienvenue dans l&apos;installeur de Covotem !</source>
-        <extracomment>This string refers to the installer welcome message.</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/gui/mainwindow.cpp" line="68"/>
-        <source>Attention</source>
-        <extracomment>This string refers to a quit confirmation message.</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/gui/mainwindow.cpp" line="69"/>
+        <source>Bienvenue dans l&apos;installeur de %1 !</source>
+        <extracomment>This string refers to the welcome screen.</extracomment>
+        <translation>Bienvenue dans l&apos;installeur de %1 !</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="48"/>
+        <source>Attention !</source>
+        <extracomment>This string refers to the exit message title.</extracomment>
+        <translation>Attention !</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="50"/>
         <source>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</source>
-        <translation type="unfinished"></translation>
+        <extracomment>This string refers to the exit message.</extracomment>
+        <translation>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
     </message>
     <message>
         <location filename="../src/gui/mainwindow.cpp" line="151"/>

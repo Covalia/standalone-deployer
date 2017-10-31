@@ -39,8 +39,8 @@ MainWindow::MainWindow(QWidget *_parent) :
 	setAttribute(Qt::WA_QuitOnClose);
 	setWindowFlags(Qt::FramelessWindowHint);
 
-    //: This string refers to the installer welcome message.
-	m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de Covotem !"));
+    //: This string refers to the welcome screen.
+    m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de %1 !").arg("Covotem"));
 
 	m_timer = new QTimer(this);
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
@@ -64,8 +64,9 @@ void MainWindow::closeEvent(QCloseEvent *_event) {
 		_event->accept();
 	}
 	else {
-        //: This string refers to a quit confirmation message.
-		int ret = QMessageBox::question(this, tr("Attention"),
+        //: This string refers to the exit message title.
+		int ret = QMessageBox::question(this, tr("Attention !"),
+                //: This string refers to the exit message.
 				tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
