@@ -253,14 +253,17 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
         QString unit;
         if (speed < 1024) {
+            //: This string refers to bytes per second.
             unit = tr("octets/s");
         }
         else if (speed < 1024 * 1024) {
             speed /= 1024;
+            //: This string refers to kilobytes per second.
             unit = tr("ko/s");
         }
         else {
             speed /= 1024 * 1024;
+            //: This string refers to megabytes per second.
             unit = tr("Mo/s");
         }
 
@@ -277,6 +280,7 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         int minutes = (remainingSeconds - 3600 * hours) / 60;
         int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
 
+        //: This string refers a time (hours, minutes, seconds).
         emit remainingTimeMessage(tr("%1h %2m %3s").arg(hours).arg(minutes).arg(seconds));
 
         m_lastSampleTime.restart();

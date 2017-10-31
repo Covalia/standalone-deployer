@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *_parent) :
 	setAttribute(Qt::WA_QuitOnClose);
 	setWindowFlags(Qt::FramelessWindowHint);
 
+    //: This string refers to the installer welcome message.
 	m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de Covotem !"));
 
 	m_timer = new QTimer(this);
@@ -63,6 +64,7 @@ void MainWindow::closeEvent(QCloseEvent *_event) {
 		_event->accept();
 	}
 	else {
+        //: This string refers to a quit confirmation message.
 		int ret = QMessageBox::question(this, tr("Attention"),
 				tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
@@ -145,15 +147,18 @@ void MainWindow::updateRemainingTimeMessage(const QString &_time) {
         m_ui->remainingTimeLabel->setText("");
     }
     else {
+        //: This string refers to a remaining time.
         m_ui->remainingTimeLabel->setText(tr("Temps estimé : %1").arg(_time));
     }
 }
 
 void MainWindow::updateServerUrlMessage(const QString &_url) {
+    //: This string refers to a web URL.
     m_ui->serverLabel->setText(tr("Serveur %1").arg(_url));
 }
 
 void MainWindow::updateDownloadFileMessage(const QString &_file) {
+    //: This string refers to a downloaded file.
     m_ui->currentFileLabel->setText(tr("Téléchargement de %1").arg(_file));
 }
 
