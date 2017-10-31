@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *_parent) :
             SLOT(updateTotalDownloadProgress(qint64, qint64)));
     connect(m_appDownloader, SIGNAL(downloadSpeedMessage(const QString &)),
             SLOT(updateDownloadSpeedMessage(const QString &)));
+    connect(m_appDownloader, SIGNAL(remainingTimeMessage(const QString &)),
+            SLOT(updateRemainingTimeMessage(const QString &)));
+
 
 	setAttribute(Qt::WA_QuitOnClose);
 	setWindowFlags(Qt::FramelessWindowHint);
@@ -135,6 +138,15 @@ void MainWindow::updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
 void MainWindow::updateDownloadSpeedMessage(const QString &_speed) {
     m_ui->speedLabel->setText(_speed);
+}
+
+void MainWindow::updateRemainingTimeMessage(const QString &_time) {
+    if (_time.isEmpty()) {
+        m_ui->remainingTimeLabel->setText("");
+    }
+    else {
+        m_ui->remainingTimeLabel->setText(tr("Temps estimé : %1").arg(_time));
+    }
 }
 
 void MainWindow::updateServerUrlMessage(const QString &_url) {

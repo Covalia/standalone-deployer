@@ -15,6 +15,8 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
         SLOT(updateProgress(qint64, qint64)));
     connect(m_downloader, SIGNAL(downloadSpeedMessage(const QString &)),
         SLOT(updateDownloadSpeedMessage(const QString &)));
+    connect(m_downloader, SIGNAL(remainingTimeMessage(const QString &)),
+        SLOT(updateRemainingTimeMessage(const QString &)));
     connect(m_downloader, SIGNAL(downloadFileMessage(const QString &)),
         SLOT(updateDownloadFileMessage(const QString &)));
     connect(m_downloader, SIGNAL(totalDownloadProgress(qint64, qint64)),
@@ -54,6 +56,11 @@ void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 void AppDownloader::updateDownloadSpeedMessage(const QString &_speed)
 {
     emit downloadSpeedMessage(_speed);
+}
+
+void AppDownloader::updateRemainingTimeMessage(const QString &_time)
+{
+    emit remainingTimeMessage(_time);
 }
 
 void AppDownloader::updateDownloadFileMessage(const QString &_file) {

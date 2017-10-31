@@ -28,6 +28,7 @@ class DownloadManager: public QObject
         void downloadsFinished();
 		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void downloadSpeedMessage(const QString &_speed);
+        void remainingTimeMessage(const QString &_time);
         void downloadFileMessage(const QString &_file);
 
         // progression totale
@@ -69,7 +70,9 @@ class DownloadManager: public QObject
 		QString m_temporaryDir;
 
         /// download time to calculate download speed.
-		QTime m_downloadTime;
+        QTime m_currentDownloadTime;
+        QTime m_totalDownloadTime;
+        QTime m_lastSampleTime;
 
 };
 

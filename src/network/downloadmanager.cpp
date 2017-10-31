@@ -14,7 +14,6 @@
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
 // TODO : gérer les authentifications HTTP.
-// TODO : estimer le temps restant.
 // TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
 
 DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QObject(_parent),
@@ -149,6 +148,10 @@ void DownloadManager::startNextDownload()
                 qDebug() << "Not downloaded:" << url.toEncoded().constData();
             }
         }
+
+        emit downloadSpeedMessage("");
+        emit remainingTimeMessage("");
+
         emit downloadsFinished();
         return;
     }
@@ -171,7 +174,7 @@ void DownloadManager::startNextDownload()
     connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
 
-    m_downloadTime.start();
+    m_currentDownloadTime.start();
 
 }
 
@@ -205,14 +208,12 @@ void DownloadManager::downloadMetaDataChanged()
     if (!m_saveFile->open(QIODevice::WriteOnly)) {
         qDebug() << "Error opening temporary file for URL: " << m_currentDownload->url().toEncoded().constData();
         startNextDownload();
-        return;
     }
 
 }
 
 void DownloadManager::currentDownloadFinished()
 {
-    emit downloadSpeedMessage("");
 
     if (m_currentDownload->error()) {
         // download failed
@@ -232,7 +233,6 @@ void DownloadManager::currentDownloadFinished()
 
     m_currentDownload->deleteLater();
     startNextDownload();
-    return;
 }
 
 void DownloadManager::downloadReadyRead()
@@ -245,26 +245,48 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
     emit downloadProgress(_bytesReceived, _bytesTotal);
     emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
 
-    // calculate the download speed
-    double speed = _bytesReceived * 1000 / m_downloadTime.elapsed();
-    QString unit;
-    if (speed < 1024) {
-        unit = tr("octets/s");
-    }
-    else if (speed < 1024*1024) {
-        speed /= 1024;
-        unit = tr("ko/s");
-    }
-    else {
-        speed /= 1024*1024;
-        unit = tr("Mo/s");
+    // on met à jour la vitesse et temps restant une fois par seconde, au plus
+    if (m_lastSampleTime.elapsed() > 1000) {
+
+        // calculate the download speed
+        double speed = _bytesReceived * 1000 / m_currentDownloadTime.elapsed();
+
+        QString unit;
+        if (speed < 1024) {
+            unit = tr("octets/s");
+        }
+        else if (speed < 1024 * 1024) {
+            speed /= 1024;
+            unit = tr("ko/s");
+        }
+        else {
+            speed /= 1024 * 1024;
+            unit = tr("Mo/s");
+        }
+
+        emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
+                                .arg(speed, 3, 'f', 1).arg(unit));
+
+        qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
+        qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
+
+        int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
+        qDebug() << remainingSeconds;
+
+        int hours = remainingSeconds / 3600;
+        int minutes = (remainingSeconds - 3600 * hours) / 60;
+        int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
+
+        emit remainingTimeMessage(tr("%1h %2m %3s").arg(hours).arg(minutes).arg(seconds));
+
+        m_lastSampleTime.restart();
     }
 
-	emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
-                            .arg(speed, 3, 'f', 1).arg(unit));
 }
 
 void DownloadManager::headsFinished() {
     // les requêtes head sont terminées, on passe aux téléchargements
+    m_totalDownloadTime.start();
+    m_lastSampleTime.start();
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
