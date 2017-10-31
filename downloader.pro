@@ -34,10 +34,12 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-SOURCES += src/main.cpp
+SOURCES += src/main.cpp \
+    src/shortcut/shortcut.cpp
 SOURCES += src/mainwindow.cpp
 
-HEADERS += src/mainwindow.h
+HEADERS += src/mainwindow.h \
+    src/shortcut/shortcut.h
 
 FORMS += ui/mainwindow.ui
 
