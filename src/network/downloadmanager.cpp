@@ -274,8 +274,6 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
 
         int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
-        qDebug() << remainingSeconds;
-
         int hours = remainingSeconds / 3600;
         int minutes = (remainingSeconds - 3600 * hours) / 60;
         int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
