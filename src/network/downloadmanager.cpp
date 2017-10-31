@@ -254,7 +254,7 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         QString unit;
         if (speed < 1024) {
             //: This string refers to bytes per second.
-            unit = tr("octets/s");
+            unit = tr("o/s");
         }
         else if (speed < 1024 * 1024) {
             speed /= 1024;
@@ -267,8 +267,8 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
             unit = tr("Mo/s");
         }
 
-        emit downloadSpeedMessage(QString::fromLatin1("%1 %2")
-                                .arg(speed, 3, 'f', 1).arg(unit));
+        //: This string refers to download speed as "12 ko/s".
+        emit downloadSpeedMessage(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
 
         qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
         qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
@@ -281,7 +281,10 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
 
         //: This string refers a time (hours, minutes, seconds).
-        emit remainingTimeMessage(tr("%1h %2m %3s").arg(hours).arg(minutes).arg(seconds));
+        emit remainingTimeMessage(tr("%1 %2 %3")
+                                  .arg(tr("%n heure(s)", "les heures estimées", hours))
+                                  .arg(tr("%n minute(s)", "les minutes estimées", minutes))
+                                  .arg(tr("%n seconde(s)", "les secondes estimées", seconds)));
 
         m_lastSampleTime.restart();
     }
