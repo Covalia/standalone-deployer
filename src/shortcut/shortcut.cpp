@@ -1,4 +1,7 @@
 #include "shortcut.h"
+
+#ifdef Q_OS_WIN
+
 #include <Windows.h>
 #include <shlobj.h>
 #include <winnls.h>
@@ -9,15 +12,15 @@
 #include <Shlobj.h>
 #include <QDebug>
 
-Shortcut::Shortcut(){
-}
+    Shortcut::Shortcut()
+    {
+    }
 
-HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTargetargs,
-                                        LPSTR pszLinkfile, LPCWSTR pszDescription,
-                                        int iShowmode, LPCWSTR pszCurdir,
-                                        LPCWSTR pszIconfile, int iIconindex){
-    #if defined (Q_OS_WIN)
-
+    HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTargetargs,
+                                            LPSTR pszLinkfile, LPCWSTR pszDescription,
+                                            int iShowmode, LPCWSTR pszCurdir,
+                                            LPCWSTR pszIconfile, int iIconindex)
+    {
         HRESULT hRes;                       /* Returned COM result code */
         IShellLink * pShellLink;            /* IShellLink object pointer */
         IPersistFile * pPersistFile;        /* IPersistFile object pointer */
@@ -77,38 +80,34 @@ HRESULT Shortcut::createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTarget
         }
         CoUninitialize();
         return (hRes);
+    } // Shortcut::createWindowsShortcut
 
-    #elif defined (Q_OS_MAC)
-
-        return 0;
-
-    #endif // ifdef (Q_OS_WIN)
-} // Shortcut::createWindowsShortcut
-
-QString Shortcut::findAllUserStartMenuFolder(){
-    #if defined (Q_OS_WIN)
+    QString Shortcut::findAllUserStartMenuFolder()
+    {
         WCHAR path[MAX_PATH];
         HRESULT hr = SHGetFolderPathW(NULL, CSIDL_COMMON_PROGRAMS, NULL, 0, path);
+
         hr = SHGetFolderPathW(NULL, CSIDL_COMMON_STARTMENU, NULL, 0, path);
         if (SUCCEEDED(hr)) {
             QString p = QString::fromWCharArray(path);
             return p;
         }
-    #endif
 
-    return "";
-}
+        return "";
+    }
 
-QString Shortcut::findUserStartMenuFolder(){
-    #if defined (Q_OS_WIN)
+    QString Shortcut::findUserStartMenuFolder()
+    {
         WCHAR path[MAX_PATH];
         HRESULT hr = SHGetFolderPathW(NULL, CSIDL_COMMON_PROGRAMS, NULL, 0, path);
+
         hr = SHGetFolderPathW(NULL, CSIDL_STARTMENU, NULL, 0, path);
         if (SUCCEEDED(hr)) {
             QString p = QString::fromWCharArray(path);
             return p;
         }
-    #endif
 
-    return "";
-}
+        return "";
+    }
+
+#endif // ifdef (Q_OS_WIN)
