@@ -46,6 +46,7 @@ SOURCES += src/xml/download.cpp
 SOURCES += src/xml/deploymentxml.cpp
 SOURCES += src/app/application.cpp
 SOURCES += src/app/javaupdate.cpp
+SOURCES += src/shortcut/shortcut.cpp
 
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/network/downloadmanager.h
@@ -58,12 +59,13 @@ HEADERS += src/xml/deploymentxml.h
 HEADERS += src/xml/download.h
 HEADERS += src/app/application.h
 HEADERS += src/app/javaupdate.h
+HEADERS += src/shortcut/shortcut.h
 
 FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
-DISTFILES += templateFormatCode.cfg
+DISTFILES += uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
 
