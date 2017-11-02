@@ -9,6 +9,19 @@
 #include "downloader/appdownloader.h"
 #include "config/global.h"
 
+/*!
+ * \class MainWindow
+ * \author {MP, APi}
+ * \brief This is main Frame of application.
+ *
+ * \date october 25, 2017
+ */
+
+/*!
+ *
+ * \brief Constructor
+ *
+ */
 MainWindow::MainWindow(QWidget *_parent) :
 	QMainWindow(_parent),
 	m_timer(0),
@@ -50,6 +63,9 @@ MainWindow::MainWindow(QWidget *_parent) :
 
 }
 
+/*!
+ * \brief Main application windows destructor
+ */
 MainWindow::~MainWindow() {
 	delete m_ui;
 	delete m_timer;
@@ -83,10 +99,18 @@ void MainWindow::closeEvent(QCloseEvent *_event) {
 
 }
 
+/*!
+ * \brief MainWindow::mousePressEvent
+ * \param _event
+ */
 void MainWindow::mousePressEvent(QMouseEvent *_event) {
 	m_clickedPosition = _event->pos();
 }
 
+/*!
+ * \brief MainWindow::mouseMoveEvent
+ * \param _event
+ */
 void MainWindow::mouseMoveEvent(QMouseEvent *_event) {
 	move(_event->globalPos() - m_clickedPosition);
 }
@@ -116,6 +140,7 @@ void MainWindow::updateSlideShow() {
 
 void MainWindow::loadSlideShowImagesFromResources() {
 	const QSize maxSize = m_ui->imageLabel->maximumSize();
+
 	qDebug() << maxSize;
 
 	m_imagesList.clear();
