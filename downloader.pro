@@ -58,8 +58,7 @@ FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
-DISTFILES += templateFormatCode.cfg
-
+DISTFILES += uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
 
