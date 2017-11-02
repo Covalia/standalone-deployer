@@ -1,4 +1,11 @@
+<!--
+vim:filetype=xml
+-->
 <RCC>
+	<qresource prefix="/translations">
+		<file alias="fr_FR.qm">resources/lang/fr_FR.qm</file>
+		<file alias="en_US.qm">resources/lang/en_US.qm</file>
+	</qresource>
     <qresource prefix="/">
         <file>resources/close.png</file>
         <file>resources/icon.png</file>

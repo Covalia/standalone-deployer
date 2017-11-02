@@ -34,14 +34,32 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
+    
 SOURCES += src/main.cpp \
-    src/shortcut/shortcut.cpp
-SOURCES += src/mainwindow.cpp
+	src/mainwindow.cpp \
+    src/log/simpleqtlogger.cpp \
+    src/log/logger.cpp \
+    src/xml/download.cpp \
+    src/xml/deploymentxml.cpp \
+    src/app/application.cpp \
+    src/app/javaupdate.cpp \
+	src/shortcut/shortcut.cpp
 
 HEADERS += src/mainwindow.h \
-    src/shortcut/shortcut.h
+    src/log/simpleqtlogger.h \
+    src/log/logger.h \
+    src/xml/deploymentxml.h \
+    src/xml/download.h \
+    src/app/application.h \
+    src/app/javaupdate.h \
+	src/shortcut/shortcut.h
 
 FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
+
+DISTFILES += templateFormatCode.cfg
+
+TRANSLATIONS += resources/lang/fr_FR.ts
+TRANSLATIONS += resources/lang/en_US.ts
 
