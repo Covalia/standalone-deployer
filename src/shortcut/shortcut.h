@@ -11,12 +11,16 @@ const QString PATH_LINK = "C:/Users/Alexis/Desktop/";
 class Shortcut
 {
 public:
-Shortcut();
+    Shortcut();
 
-HRESULT createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTargetargs,
-                              LPSTR pszLinkfile, LPCWSTR pszDescription,
-                              int iShowmode, LPCWSTR pszCurdir,
-                              LPCWSTR pszIconfile, int iIconindex);
+    HRESULT createWindowsShortcut(LPCWSTR pszTargetfile, LPCWSTR pszTargetargs,
+                                  LPSTR pszLinkfile, LPCWSTR pszDescription,
+                                  int iShowmode, LPCWSTR pszCurdir,
+                                  LPCWSTR pszIconfile, int iIconindex);
+
+    QString findAllUserStartMenuFolder();
+
+    QString findUserStartMenuFolder();
 };
 
 #endif // SHORTCUT_H
