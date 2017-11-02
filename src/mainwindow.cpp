@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget * _parent) :
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 
+    setAttribute(Qt::WA_QuitOnClose);
+    setWindowFlags(Qt::FramelessWindowHint);
+
     //: This string refers to the welcome screen.
     m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de %1 !").arg("Covotem"));
 

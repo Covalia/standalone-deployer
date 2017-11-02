@@ -42,7 +42,8 @@ SOURCES += src/main.cpp \
     src/xml/download.cpp \
     src/xml/deploymentxml.cpp \
     src/app/application.cpp \
-    src/app/javaupdate.cpp
+    src/app/javaupdate.cpp \
+	src/shortcut/shortcut.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -50,13 +51,15 @@ HEADERS += src/mainwindow.h \
     src/xml/deploymentxml.h \
     src/xml/download.h \
     src/app/application.h \
-    src/app/javaupdate.h
+    src/app/javaupdate.h \
+	src/shortcut/shortcut.h
 
 FORMS += ui/mainwindow.ui
 
 RESOURCES += resources.qrc
 
 DISTFILES += templateFormatCode.cfg
+
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
 
