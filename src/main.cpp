@@ -5,7 +5,7 @@
 #include <QString>
 
 #include "mainwindow.h"
-#include "log/simpleQtLogger.h"
+#include "log/simpleqtlogger.h"
 #include "log/logger.h"
 
 /*!
@@ -36,7 +36,7 @@
  */
 int main(int argc, char * argv[]){
     // logger initialization
-    Logger * log = new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
+    new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
 
