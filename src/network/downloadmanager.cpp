@@ -177,7 +177,8 @@ void DownloadManager::downloadMetaDataChanged()
 {
     m_currentFilename = "";
 
-    QString contentDisposition = "";
+    QString contentDisposition = m_currentDownload->rawHeader("Content-Disposition");
+    qDebug() << "Content-Disposition:" << contentDisposition;
     if (!contentDisposition.isEmpty()) {
         const QString searchString = "filename=";
         int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
