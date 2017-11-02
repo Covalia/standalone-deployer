@@ -50,11 +50,6 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 
         // lancement les requêtes head
         QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
-
-        if (m_downloadQueue.isEmpty()) {
-            QTimer::singleShot(0, this, SIGNAL(downloadsFinished()));
-        }
-
     }
 
 }
