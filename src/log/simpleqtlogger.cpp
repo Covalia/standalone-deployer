@@ -4,6 +4,9 @@
  * https://github.com/Mokolea/SimpleQtLogger
  * GNU Lesser General Public License v2.1
  * Copyright (C) 2017 Mario Ban
+ *
+ * TODO mettre dans le à propos.
+ *
  */
 
 #include "simpleQtLogger.h"
