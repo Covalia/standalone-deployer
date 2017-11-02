@@ -7,17 +7,26 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *_parent) :
-	QMainWindow(_parent),
-	m_timer(0),
-	m_ui(new Ui::MainWindow)
-{
-	m_ui->setupUi(this);
+/*!
+ * \class MainWindow
+ * \author {MP, APi}
+ * \brief This is main Frame of application.
+ *
+ * \date october 25, 2017
+ */
 
-	connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
+/*!
+ *
+ * \brief Constructor
+ *
+ */
+MainWindow::MainWindow(QWidget * _parent) :
+    QMainWindow(_parent),
+    m_timer(0),
+    m_ui(new Ui::MainWindow){
+    m_ui->setupUi(this);
 
-	setAttribute(Qt::WA_QuitOnClose);
-	setWindowFlags(Qt::FramelessWindowHint);
+    connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 
     //: This string refers to the welcome screen.
     m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de %1 !").arg("Covotem"));
@@ -26,14 +35,15 @@ MainWindow::MainWindow(QWidget *_parent) :
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
 	m_timer->start(5000);
 
-	updateSlideShow();
-
+    updateSlideShow();
 }
 
-MainWindow::~MainWindow()
-{
-	delete m_ui;
-	delete m_timer;
+/*!
+ * \brief Main application windows destructor
+ */
+MainWindow::~MainWindow(){
+    delete m_ui;
+    delete m_timer;
 }
 
 void MainWindow::closeEvent(QCloseEvent *_event)
@@ -50,63 +60,66 @@ void MainWindow::closeEvent(QCloseEvent *_event)
 				tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
-		if (ret == QMessageBox::Yes)
-		{
-			m_alreadyClosedOnMacOs = true;
-			_event->accept();
-		}
-		else
-		{
-			_event->ignore();
-		}
-	}
-
+        if (ret == QMessageBox::Yes) {
+            m_alreadyClosedOnMacOs = true;
+            _event->accept();
+        } else {
+            _event->ignore();
+        }
+    }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *_event) {
-	m_clickedPosition = _event->pos();
+/*!
+ * \brief MainWindow::mousePressEvent
+ * \param _event
+ */
+void MainWindow::mousePressEvent(QMouseEvent * _event){
+    m_clickedPosition = _event->pos();
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *_event) {
-	move(_event->globalPos() - m_clickedPosition);
+/*!
+ * \brief MainWindow::mouseMoveEvent
+ * \param _event
+ */
+void MainWindow::mouseMoveEvent(QMouseEvent * _event){
+    move(_event->globalPos() - m_clickedPosition);
 }
 
-void MainWindow::center() {
-	QRect geometry = frameGeometry();
-	QPoint center = QDesktopWidget().availableGeometry().center();
-	geometry.moveCenter(center);
-	move(geometry.topLeft());
+
+void MainWindow::center(){
+    QRect geometry = frameGeometry();
+    QPoint center = QDesktopWidget().availableGeometry().center();
+
+    geometry.moveCenter(center);
+    move(geometry.topLeft());
 }
 
-void MainWindow::updateSlideShow() {
+void MainWindow::updateSlideShow(){
+    if (m_imagesList.isEmpty()) {
+        loadSlideShowImagesFromResources();
+    }
 
-	if (m_imagesList.isEmpty()) {
-		loadSlideShowImagesFromResources();
-	}
+    if (!m_imagesList.isEmpty()) {
+        static int update_counter = -1;
+        update_counter++;
+        update_counter %= m_imagesList.size();
 
-	if (!m_imagesList.isEmpty()) {
-		static int update_counter = -1;
-		update_counter++;
-		update_counter %= m_imagesList.size();
-
-		m_ui->imageLabel->setPixmap(m_imagesList.at(update_counter));
-	}
-
+        m_ui->imageLabel->setPixmap(m_imagesList.at(update_counter));
+    }
 }
 
-void MainWindow::loadSlideShowImagesFromResources() {
-	const QSize maxSize = m_ui->imageLabel->maximumSize();
-	qDebug() << maxSize;
+void MainWindow::loadSlideShowImagesFromResources(){
+    const QSize maxSize = m_ui->imageLabel->maximumSize();
 
-	m_imagesList.clear();
-	QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
-	while (it.hasNext()) {
-		const QString resourcePath = it.next();
-		const QPixmap pixmap = QPixmap(resourcePath);
-		qDebug() << pixmap.width() << "x" << pixmap.height();
-		QPixmap resizedPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio);
-		m_imagesList << resizedPixmap;
-	}
+    qDebug() << maxSize;
 
+    m_imagesList.clear();
+    QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        const QString resourcePath = it.next();
+        const QPixmap pixmap = QPixmap(resourcePath);
+        qDebug() << pixmap.width() << "x" << pixmap.height();
+        QPixmap resizedPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio);
+        m_imagesList << resizedPixmap;
+    }
 }
-
