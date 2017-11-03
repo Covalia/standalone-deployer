@@ -11,6 +11,7 @@
 #include "config/global.h"
 
 // TODO : gérer les coupures.
+// TODO : gérer plusieurs tentatives de téléchargement ??
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
 // TODO : gérer les authentifications HTTP.
