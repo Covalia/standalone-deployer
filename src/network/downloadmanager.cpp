@@ -204,6 +204,10 @@ void DownloadManager::downloadMetaDataChanged()
     qDebug() << "Saving to temporary file:" << m_saveFile->fileName();
     if (!m_saveFile->open(QIODevice::WriteOnly)) {
         qDebug() << "Error opening temporary file for URL: " << m_currentDownload->url().toEncoded().constData();
+        m_errorSet.insert(m_currentDownload->url());
+        m_currentDownload->abort();
+        m_currentDownload->deleteLater();
+        m_currentDownload = 0;
         startNextDownload();
     }
 
@@ -229,6 +233,7 @@ void DownloadManager::currentDownloadFinished()
     m_saveFile = 0;
 
     m_currentDownload->deleteLater();
+    m_currentDownload = 0;
     startNextDownload();
 }
 
