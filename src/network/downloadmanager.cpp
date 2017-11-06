@@ -16,7 +16,7 @@
 // TODO : gérer les authentifications HTTP.
 // TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
 
-DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QString &_saveDir, QObject * _parent) : QObject(_parent),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
     m_currentAttempt(0),
@@ -27,8 +27,9 @@ DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QO
 {
 }
 
-DownloadManager::~DownloadManager() {
-	delete m_saveFile;
+DownloadManager::~DownloadManager()
+{
+    delete m_saveFile;
 }
 
 void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
@@ -39,13 +40,12 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
-
         // réinitialisation des fichiers en error
         m_errorSet.clear();
         // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
-        foreach (QString url, _urlList) {
+        foreach(QString url, _urlList) {
             m_headQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
             m_downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
         }
@@ -53,16 +53,15 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
         // lancement les requêtes head
         QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
     }
-
-}
+} // DownloadManager::setUrlListToDownload
 
 QSet<QUrl> DownloadManager::getUrlsInError() const
 {
     return m_errorSet;
 }
 
-void DownloadManager::startNextHeadRequest() {
-
+void DownloadManager::startNextHeadRequest()
+{
     if (m_headQueue.isEmpty()) {
         headsFinished();
         return;
@@ -78,7 +77,6 @@ void DownloadManager::startNextHeadRequest() {
             SLOT(headMetaDataChanged()));
     connect(m_currentHead, SIGNAL(finished()),
             SLOT(currentHeadFinished()));
-
 }
 
 void DownloadManager::headMetaDataChanged()
@@ -86,6 +84,7 @@ void DownloadManager::headMetaDataChanged()
     QVariant statusVariant = m_currentHead->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     int status = statusVariant.toInt();
     QUrl currentUrl = m_currentHead->url();
+
     qDebug() << "Status:" << status << "-" << currentUrl.toEncoded().constData();
 
     QVariant urlVariant = m_currentHead->attribute(QNetworkRequest::RedirectionTargetAttribute);
@@ -102,8 +101,7 @@ void DownloadManager::headMetaDataChanged()
         qDebug() << "Adding" << redirectedUrl.toEncoded().constData() << "to download queue because of redirection";
         m_downloadQueue.prepend(redirectedUrl);
         m_headQueue.prepend(redirectedUrl);
-    }
-    else {
+    } else {
         // ceci n'est pas une redirection, ajout de la taille du téléchargement au compteur
         if (status == 200) {
             qint64 contentLength = m_currentHead->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
@@ -112,8 +110,7 @@ void DownloadManager::headMetaDataChanged()
             m_totalBytesToDownload += contentLength;
         }
     }
-
-}
+} // DownloadManager::headMetaDataChanged
 
 void DownloadManager::currentHeadFinished()
 {
@@ -127,30 +124,26 @@ void DownloadManager::currentHeadFinished()
             if (m_downloadQueue.removeOne(url)) {
                 qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
             }
-        }
-        else {
+        } else {
             // on rajoute l'url dans le head pour refaire une tentative
             qDebug() << "Tried:" << url.toEncoded().constData() << "but error occured:" << m_currentHead->errorString();
             ++m_currentAttempt;
             m_headQueue.prepend(url);
         }
-
-    }
-    else {
+    } else {
         m_currentAttempt = 0;
     }
 
     m_currentHead->deleteLater();
     startNextHeadRequest();
-}
+} // DownloadManager::currentHeadFinished
 
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
         if (m_errorSet.isEmpty()) {
             qDebug() << "All files downloaded successfully";
-        }
-        else {
+        } else {
             qDebug() << "Some files could not be downloaded";
             QSet<QUrl>::const_iterator it;
             for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
@@ -177,16 +170,15 @@ void DownloadManager::startNextDownload()
 
     connect(m_currentDownload, SIGNAL(metaDataChanged()),
             SLOT(downloadMetaDataChanged()));
-    connect(m_currentDownload, SIGNAL(downloadProgress(qint64, qint64)),
-            SLOT(updateProgress(qint64, qint64)));
+    connect(m_currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
+            SLOT(updateProgress(qint64,qint64)));
     connect(m_currentDownload, SIGNAL(finished()),
             SLOT(currentDownloadFinished()));
     connect(m_currentDownload, SIGNAL(readyRead()),
             SLOT(downloadReadyRead()));
 
     m_currentDownloadTime.start();
-
-}
+} // DownloadManager::startNextDownload
 
 void DownloadManager::downloadMetaDataChanged()
 {
@@ -206,8 +198,7 @@ void DownloadManager::downloadMetaDataChanged()
         QString path = m_currentDownload->url().path();
         if (!QFileInfo(path).fileName().isEmpty()) {
             m_currentFilename = QFileInfo(path).fileName();
-        }
-        else {
+        } else {
             m_currentFilename = "download";
         }
     }
@@ -226,12 +217,10 @@ void DownloadManager::downloadMetaDataChanged()
         m_currentAttempt = 0;
         startNextDownload();
     }
-
-}
+} // DownloadManager::downloadMetaDataChanged
 
 void DownloadManager::currentDownloadFinished()
 {
-
     if (m_currentDownload->error()) {
         QUrl url = m_currentDownload->url();
 
@@ -239,8 +228,7 @@ void DownloadManager::currentDownloadFinished()
         if (m_currentAttempt >= MaxDownloadAttemptNumber - 1) {
             // download failed
             m_errorSet.insert(url);
-        }
-        else {
+        } else {
             // on rajoute l'url dans le download pour refaire une tentative
             ++m_currentAttempt;
             m_downloadQueue.prepend(url);
@@ -250,8 +238,7 @@ void DownloadManager::currentDownloadFinished()
         if (m_saveFile) {
             m_saveFile->cancelWriting();
         }
-    }
-    else {
+    } else {
         qDebug() << "Success.";
         m_saveFile->commit();
         m_currentAttempt = 0;
@@ -263,7 +250,7 @@ void DownloadManager::currentDownloadFinished()
     m_currentDownload->deleteLater();
     m_currentDownload = 0;
     startNextDownload();
-}
+} // DownloadManager::currentDownloadFinished
 
 void DownloadManager::downloadReadyRead()
 {
@@ -277,7 +264,6 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
     // on met à jour la vitesse et temps restant une fois par seconde, au plus
     if (m_lastSampleTime.elapsed() > 1000) {
-
         // calculate the download speed
         double speed = _bytesReceived * 1000 / m_currentDownloadTime.elapsed();
 
@@ -285,13 +271,11 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         if (speed < 1024) {
             //: This string refers to bytes per second.
             unit = tr("o/s");
-        }
-        else if (speed < 1024 * 1024) {
+        } else if (speed < 1024 * 1024) {
             speed /= 1024;
             //: This string refers to kilobytes per second.
             unit = tr("ko/s");
-        }
-        else {
+        } else {
             speed /= 1024 * 1024;
             //: This string refers to megabytes per second.
             unit = tr("Mo/s");
@@ -317,10 +301,10 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         }
         m_lastSampleTime.restart();
     }
+} // DownloadManager::updateProgress
 
-}
-
-void DownloadManager::headsFinished() {
+void DownloadManager::headsFinished()
+{
     // les requêtes head sont terminées, on passe aux téléchargements
     m_totalDownloadTime.start();
     m_lastSampleTime.start();

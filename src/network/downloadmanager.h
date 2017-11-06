@@ -11,73 +11,71 @@
 
 class QSaveFile;
 
-class DownloadManager: public QObject
+class DownloadManager : public QObject
 {
+    Q_OBJECT
 
-	Q_OBJECT
+public:
+    explicit DownloadManager(const QString &_saveDir, QObject * parent = 0);
+    virtual ~DownloadManager();
 
-	public:
-		explicit DownloadManager(const QString &_saveDir, QObject *parent = 0);
-		virtual ~DownloadManager();
+    void setUrlListToDownload(const QStringList &_urlList);
 
-        void setUrlListToDownload(const QStringList &_urlList);
+    QSet<QUrl> getUrlsInError() const;
 
-        QSet<QUrl> getUrlsInError() const;
+    static const short MaxDownloadAttemptNumber = 3;
 
-        static const short MaxDownloadAttemptNumber = 3;
+signals:
+    void downloadsFinished();
+    void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+    void downloadSpeedMessage(const QString &_speed);
+    void remainingTimeMessage(const QString &_time);
+    void downloadFileMessage(const QString &_file);
 
-    signals:
-        void downloadsFinished();
-		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void downloadSpeedMessage(const QString &_speed);
-        void remainingTimeMessage(const QString &_time);
-        void downloadFileMessage(const QString &_file);
+    // progression totale
+    void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
-        // progression totale
-        void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+private slots:
 
-	private slots:
+    void startNextHeadRequest();
+    void headMetaDataChanged();
+    void currentHeadFinished();
 
-        void startNextHeadRequest();
-        void headMetaDataChanged();
-        void currentHeadFinished();
+    void startNextDownload();
+    void downloadMetaDataChanged();
+    void currentDownloadFinished();
+    void downloadReadyRead();
+    void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
-        void startNextDownload();
-        void downloadMetaDataChanged();
-        void currentDownloadFinished();
-        void downloadReadyRead();
-        void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+private:
 
-	private:
+    void headsFinished();
 
-        void headsFinished();
+    QNetworkAccessManager m_manager;
 
-        QNetworkAccessManager m_manager;
+    qint64 m_totalBytesToDownload;
+    qint64 m_totalBytesDownloaded;
 
-        qint64 m_totalBytesToDownload;
-        qint64 m_totalBytesDownloaded;
+    short m_currentAttempt;
 
-        short m_currentAttempt;
+    QMap<QUrl, long> m_mapUrlContentLength;
 
-        QMap<QUrl, long> m_mapUrlContentLength;
+    QSet<QUrl> m_errorSet;
 
-        QSet<QUrl> m_errorSet;
+    QQueue<QUrl> m_headQueue;
+    QNetworkReply * m_currentHead;
 
-        QQueue<QUrl> m_headQueue;
-        QNetworkReply *m_currentHead;
+    QQueue<QUrl> m_downloadQueue;
+    QNetworkReply * m_currentDownload;
 
-		QQueue<QUrl> m_downloadQueue;
-		QNetworkReply *m_currentDownload;
+    QSaveFile * m_saveFile;
+    QString m_currentFilename;
+    QString m_temporaryDir;
 
-		QSaveFile *m_saveFile;
-		QString m_currentFilename;
-		QString m_temporaryDir;
-
-        /// download time to calculate download speed.
-        QTime m_currentDownloadTime;
-        QTime m_totalDownloadTime;
-        QTime m_lastSampleTime;
-
+    /// download time to calculate download speed.
+    QTime m_currentDownloadTime;
+    QTime m_totalDownloadTime;
+    QTime m_lastSampleTime;
 };
 
-#endif
+#endif // ifndef DOWNLOADMANAGER_H
