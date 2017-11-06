@@ -24,6 +24,8 @@ class DownloadManager: public QObject
 
         QSet<QUrl> getUrlsInError() const;
 
+        static const short MaxDownloadAttemptNumber = 3;
+
     signals:
         void downloadsFinished();
 		void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
@@ -54,6 +56,8 @@ class DownloadManager: public QObject
 
         qint64 m_totalBytesToDownload;
         qint64 m_totalBytesDownloaded;
+
+        short m_currentAttempt;
 
         QMap<QUrl, long> m_mapUrlContentLength;
 

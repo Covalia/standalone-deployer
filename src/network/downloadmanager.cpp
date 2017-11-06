@@ -7,11 +7,10 @@
 #include <QStringList>
 #include <QTimer>
 #include <QSaveFile>
-#include <stdio.h>
 #include "config/global.h"
 
-// TODO : gérer les coupures.
-// TODO : gérer plusieurs tentatives de téléchargement ??
+// TODO : gérer les coupures dans le download + head.
+// TODO : gérer plusieurs tentatives de téléchargement + réinitialiser barre globale en cas de retry ??
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
 // TODO : gérer les authentifications HTTP.
@@ -20,6 +19,7 @@
 DownloadManager::DownloadManager(const QString &_saveDir, QObject *_parent) : QObject(_parent),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
+    m_currentAttempt(0),
     m_currentHead(0),
     m_currentDownload(0),
     m_saveFile(0),
@@ -35,6 +35,7 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 {
     m_totalBytesToDownload = 0;
     m_totalBytesDownloaded = 0;
+    m_currentAttempt = 0;
 
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
@@ -118,12 +119,25 @@ void DownloadManager::currentHeadFinished()
 {
     if (m_currentHead->error()) {
         QUrl url = m_currentHead->url();
-        // La requête head a échoué, alors inutile de démarrer le téléchargement...
-        if (m_downloadQueue.removeOne(url)) {
-            qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
+
+        if (m_currentAttempt >= MaxDownloadAttemptNumber - 1) {
+            // ajout dans la liste d'erreurs
+            m_errorSet.insert(url);
+            // La requête head a échoué, alors inutile de démarrer le téléchargement...
+            if (m_downloadQueue.removeOne(url)) {
+                qDebug() << "Remove" << url.toEncoded().constData() << "from download queue because of error:" << m_currentHead->errorString();
+            }
         }
-        // ajout dans la liste d'erreurs
-        m_errorSet.insert(url);
+        else {
+            // on rajoute l'url dans le head pour refaire une tentative
+            qDebug() << "Tried:" << url.toEncoded().constData() << "but error occured:" << m_currentHead->errorString();
+            ++m_currentAttempt;
+            m_headQueue.prepend(url);
+        }
+
+    }
+    else {
+        m_currentAttempt = 0;
     }
 
     m_currentHead->deleteLater();
@@ -179,8 +193,8 @@ void DownloadManager::downloadMetaDataChanged()
     m_currentFilename = "";
 
     QString contentDisposition = m_currentDownload->rawHeader("Content-Disposition");
-    qDebug() << "Content-Disposition:" << contentDisposition;
     if (!contentDisposition.isEmpty()) {
+        qDebug() << "Content-Disposition:" << contentDisposition;
         const QString searchString = "filename=";
         int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
         if (index != -1) {
@@ -208,6 +222,8 @@ void DownloadManager::downloadMetaDataChanged()
         m_currentDownload->abort();
         m_currentDownload->deleteLater();
         m_currentDownload = 0;
+        // réinit compteur tentatives
+        m_currentAttempt = 0;
         startNextDownload();
     }
 
@@ -217,9 +233,20 @@ void DownloadManager::currentDownloadFinished()
 {
 
     if (m_currentDownload->error()) {
-        // download failed
+        QUrl url = m_currentDownload->url();
+
         qDebug() << "Failed:" << qPrintable(m_currentDownload->errorString());
-        m_errorSet.insert(m_currentDownload->url());
+        if (m_currentAttempt >= MaxDownloadAttemptNumber - 1) {
+            // download failed
+            m_errorSet.insert(url);
+        }
+        else {
+            // on rajoute l'url dans le download pour refaire une tentative
+            ++m_currentAttempt;
+            m_downloadQueue.prepend(url);
+        }
+
+        // dans tous les cas, on cancel le fichier, on va le recréer
         if (m_saveFile) {
             m_saveFile->cancelWriting();
         }
@@ -227,6 +254,7 @@ void DownloadManager::currentDownloadFinished()
     else {
         qDebug() << "Success.";
         m_saveFile->commit();
+        m_currentAttempt = 0;
     }
 
     delete m_saveFile;
@@ -275,17 +303,18 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
         qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
 
-        int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
-        int hours = remainingSeconds / 3600;
-        int minutes = (remainingSeconds - 3600 * hours) / 60;
-        int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
+        if (averageSpeed != 0) {
+            int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
+            int hours = remainingSeconds / 3600;
+            int minutes = (remainingSeconds - 3600 * hours) / 60;
+            int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
 
-        //: This string refers a time (hours, minutes, seconds).
-        emit remainingTimeMessage(tr("%1 %2 %3")
-                                  .arg(tr("%n heure(s)", "les heures estimées", hours))
-                                  .arg(tr("%n minute(s)", "les minutes estimées", minutes))
-                                  .arg(tr("%n seconde(s)", "les secondes estimées", seconds)));
-
+            //: This string refers a time (hours, minutes, seconds).
+            emit remainingTimeMessage(tr("%1 %2 %3")
+                                      .arg(tr("%n heure(s)", "les heures estimées", hours))
+                                      .arg(tr("%n minute(s)", "les minutes estimées", minutes))
+                                      .arg(tr("%n seconde(s)", "les secondes estimées", seconds)));
+        }
         m_lastSampleTime.restart();
     }
 
@@ -295,5 +324,7 @@ void DownloadManager::headsFinished() {
     // les requêtes head sont terminées, on passe aux téléchargements
     m_totalDownloadTime.start();
     m_lastSampleTime.start();
+
+    m_currentAttempt = 0;
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
