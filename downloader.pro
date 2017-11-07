@@ -62,6 +62,7 @@ HEADERS += src/app/javaupdate.h
 HEADERS += src/shortcut/shortcut.h
 
 FORMS += ui/mainwindow.ui
+FORMS += ui/authenticationdialog.ui
 
 RESOURCES += resources.qrc
 

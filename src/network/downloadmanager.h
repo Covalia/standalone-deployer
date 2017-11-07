@@ -10,6 +10,7 @@
 #include <QNetworkAccessManager>
 
 class QSaveFile;
+class QAuthenticator;
 
 class DownloadManager : public QObject
 {
@@ -23,7 +24,7 @@ public:
 
     QSet<QUrl> getUrlsInError() const;
 
-    static const short MaxDownloadAttemptNumber = 3;
+    static const short MaxAttemptNumber = 3;
 
 signals:
     void downloadsFinished();
@@ -36,6 +37,8 @@ signals:
     void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
 private slots:
+
+    void slotAuthenticationRequired(QNetworkReply *_reply, QAuthenticator *_authenticator);
 
     void startNextHeadRequest();
     void headMetaDataChanged();
@@ -57,6 +60,7 @@ private:
     qint64 m_totalBytesDownloaded;
 
     short m_currentAttempt;
+    short m_currentAuthAttempt;
 
     QMap<QUrl, long> m_mapUrlContentLength;
 
@@ -76,6 +80,8 @@ private:
     QTime m_currentDownloadTime;
     QTime m_totalDownloadTime;
     QTime m_lastSampleTime;
+
+    bool m_httpAuthCanceled;
 };
 
 #endif // ifndef DOWNLOADMANAGER_H

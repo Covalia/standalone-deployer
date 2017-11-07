@@ -3,28 +3,34 @@
 #include <QFileInfo>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QAuthenticator>
 #include <QString>
 #include <QStringList>
 #include <QTimer>
 #include <QSaveFile>
 #include "config/global.h"
+#include "ui_authenticationdialog.h"
 
 // TODO : gérer les coupures dans le download + head.
 // TODO : gérer plusieurs tentatives de téléchargement + réinitialiser barre globale en cas de retry ??
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : gérer les proxies.
-// TODO : gérer les authentifications HTTP.
 // TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
+// TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies, http auth.
 
 DownloadManager::DownloadManager(const QString &_saveDir, QObject * _parent) : QObject(_parent),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
     m_currentAttempt(0),
+    m_currentAuthAttempt(0),
     m_currentHead(0),
     m_currentDownload(0),
     m_saveFile(0),
-    m_temporaryDir(_saveDir)
+    m_temporaryDir(_saveDir),
+    m_httpAuthCanceled(0)
 {
+    connect(&m_manager, SIGNAL(authenticationRequired(QNetworkReply *,QAuthenticator *)),
+            SLOT(slotAuthenticationRequired(QNetworkReply *,QAuthenticator *)));
 }
 
 DownloadManager::~DownloadManager()
@@ -34,12 +40,14 @@ DownloadManager::~DownloadManager()
 
 void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
 {
-    m_totalBytesToDownload = 0;
-    m_totalBytesDownloaded = 0;
-    m_currentAttempt = 0;
-
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
+        m_totalBytesToDownload = 0;
+        m_totalBytesDownloaded = 0;
+        m_currentAttempt = 0;
+        m_currentAuthAttempt = 0;
+        m_httpAuthCanceled = 0;
+
         // réinitialisation des fichiers en error
         m_errorSet.clear();
         // réinitialisation de la file d'entêtes à récupérer
@@ -59,6 +67,62 @@ QSet<QUrl> DownloadManager::getUrlsInError() const
 {
     return m_errorSet;
 }
+
+void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator)
+{
+    if (!m_httpAuthCanceled) {
+        qDebug() << "HTTP Authentication required";
+        QUrl url = _reply->url();
+
+        if (m_currentAuthAttempt >= MaxAttemptNumber) {
+            // annuler tout (vider toutes les queues)
+            qDebug() << "Aborting all downloads, too many attempts.";
+            _reply->abort();
+            _reply->deleteLater();
+            _reply = 0;
+
+            // tous les fichiers restants seront en erreur, car même serveur.
+            m_errorSet += m_headQueue.toSet();
+            // on vide les files de téléchargement
+            m_downloadQueue.clear();
+            m_headQueue.clear();
+        } else {
+            QDialog authenticationDialog;
+            Ui::Dialog ui;
+            ui.setupUi(&authenticationDialog);
+            authenticationDialog.adjustSize();
+            ui.siteDescription->setText(tr("%1 at %2").arg(_authenticator->realm(), url.host()));
+
+            if (authenticationDialog.exec() == QDialog::Accepted) {
+                qDebug() << "Authentication with user:" << ui.userEdit->text();
+
+                _authenticator->setUser(ui.userEdit->text());
+                _authenticator->setPassword(ui.passwordEdit->text());
+            } else {
+                // annulation, on stoppe.
+                m_httpAuthCanceled = true;
+
+                // annuler tout (vider toutes les queues)
+                qDebug() << "Aborting all downloads, canceled by user.";
+                _reply->abort();
+                _reply->deleteLater();
+                _reply = 0;
+
+                // tous les fichiers restants seront en erreur, car même serveur.
+                m_errorSet += m_headQueue.toSet();
+                // on vide les files
+                m_downloadQueue.clear();
+                m_headQueue.clear();
+
+                // m_currentAuthAttempt = MaxAttemptNumber;
+            }
+            ++m_currentAuthAttempt;
+        }
+    }
+    else {
+        qDebug() << "HTTP Authentication required, but already canceled by user";
+    }
+} // DownloadManager::slotAuthenticationRequired
 
 void DownloadManager::startNextHeadRequest()
 {
@@ -117,7 +181,7 @@ void DownloadManager::currentHeadFinished()
     if (m_currentHead->error()) {
         QUrl url = m_currentHead->url();
 
-        if (m_currentAttempt >= MaxDownloadAttemptNumber - 1) {
+        if (m_currentAttempt >= MaxAttemptNumber - 1) {
             // ajout dans la liste d'erreurs
             m_errorSet.insert(url);
             // La requête head a échoué, alors inutile de démarrer le téléchargement...
@@ -127,14 +191,22 @@ void DownloadManager::currentHeadFinished()
         } else {
             // on rajoute l'url dans le head pour refaire une tentative
             qDebug() << "Tried:" << url.toEncoded().constData() << "but error occured:" << m_currentHead->errorString();
+            if (m_currentHead->error() != QNetworkReply::NetworkError::OperationCanceledError
+                    && m_currentHead->error() != QNetworkReply::NetworkError::AuthenticationRequiredError) {
+                qDebug() << "Prepend url:" << url << "because of error:" << m_currentHead->error();
+                // pour tout autre type d'erreur, on remet en file
+                m_headQueue.prepend(url);
+            } else {
+                m_errorSet.insert(url);
+            }
             ++m_currentAttempt;
-            m_headQueue.prepend(url);
         }
     } else {
         m_currentAttempt = 0;
     }
 
     m_currentHead->deleteLater();
+    m_currentHead = 0;
     startNextHeadRequest();
 } // DownloadManager::currentHeadFinished
 
@@ -225,7 +297,7 @@ void DownloadManager::currentDownloadFinished()
         QUrl url = m_currentDownload->url();
 
         qDebug() << "Failed:" << qPrintable(m_currentDownload->errorString());
-        if (m_currentAttempt >= MaxDownloadAttemptNumber - 1) {
+        if (m_currentAttempt >= MaxAttemptNumber - 1) {
             // download failed
             m_errorSet.insert(url);
         } else {
