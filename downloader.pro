@@ -44,6 +44,7 @@ SOURCES += src/main.cpp \
     src/app/application.cpp \
     src/app/javaupdate.cpp \
 	src/shortcut/shortcut.cpp
+SOURCES += src/utils/hashmac/hashmac512.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -53,6 +54,7 @@ HEADERS += src/mainwindow.h \
     src/app/application.h \
     src/app/javaupdate.h \
 	src/shortcut/shortcut.h
+HEADERS += src/utils/hashmac/hashmac512.h
 
 FORMS += ui/mainwindow.ui
 
