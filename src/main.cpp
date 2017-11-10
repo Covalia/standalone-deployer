@@ -43,6 +43,8 @@ int main(int argc, char * argv[]){
     L_INFO("Start Application");
 
     Settings& settings=Settings::Instance();
+    QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
+    settings.initSettings(installPath);
     settings.writeSettings();
 
     Shortcut * shorcutCreator = new Shortcut();

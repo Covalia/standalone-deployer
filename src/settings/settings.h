@@ -33,6 +33,8 @@ static QString S_DATA_LOCATION = "dataLocation";
 
 static QString S_SERVER_URL = "serverURL";
 
+enum Language { English, French };
+
 /**
  * \class Settings
  *
@@ -46,6 +48,75 @@ class Settings
 {
 public:
     static Settings& Instance();
+
+    void initSettings(QString installPath);
+
+    void writeSettings();
+
+    void readSettings();
+
+    bool getIsProxyUsing() const;
+    void setIsProxyUsing(bool isProxyUsing);
+
+    bool getProxyAuto() const;
+    void setProxyAuto(bool proxyAuto);
+
+    QString getProxyURL() const;
+    void setProxyURL(const QString &proxyURL);
+
+    int getProxyPort() const;
+    void setProxyPort(int proxyPort);
+
+    bool getProxyAuthentification() const;
+    void setProxyAuthentification(bool proxyAuthentification);
+
+    QString getProxyLogin() const;
+    void setProxyLogin(const QString &proxyLogin);
+
+    QString getProxyPassword() const;
+    void setProxyPassword(const QString &proxyPassword);
+
+    Language getLanguage() const;
+    void setLanguage(const Language &language);
+
+    QString getShortcutName() const;
+    void setShortcutName(const QString &shortcutName);
+
+    bool getShortcutAllUser() const;
+    void setShortcutAllUser(bool shortcutAllUser);
+
+    QString getClasspathExtension() const;
+    void setClasspathExtension(const QString &classpathExtension);
+
+    QString getDataLocation() const;
+    void setDataLocation(const QString &dataLocation);
+
+    QString getServerURL() const;
+    void setServerURL(const QString &serverURL);
+
+private:
+
+    /**
+     * @brief Use for singleton
+     */
+    void operator=(const Settings&){
+    }
+    Settings (const Settings&){
+    }
+
+    static Settings m_instance;
+    static QMutex sm_instanceMutex;
+    static QMutex sm_settingsMutex;
+
+    /**
+     * @brief Constructor in singleton
+     */
+    Settings();
+
+    /**
+     * @brief Destructor in singleton
+     */
+    virtual ~Settings();
 
     /**
      * @brief Add value in settings with key.
@@ -75,34 +146,6 @@ public:
      */
     void removeSetting(QString key);
 
-    void writeSettings();
-
-    void readSettings();
-
-private:
-
-    /**
-     * @brief Use for singleton
-     */
-    void operator=(const Settings&){
-    }
-    Settings (const Settings&){
-    }
-
-    static Settings m_instance;
-    static QMutex sm_instanceMutex;
-    static QMutex sm_settingsMutex;
-
-    /**
-     * @brief Constructor in singleton
-     */
-    Settings();
-
-    /**
-     * @brief Destructor in singleton
-     */
-    virtual ~Settings();
-
     /**
      * @brief QSetting instance for find and add setting
      */
@@ -118,7 +161,7 @@ private:
     QString m_proxyPassword;
 
     // language
-    QString m_language;
+    Language m_language;
 
     // shortcut
     QString m_shortcutName;
