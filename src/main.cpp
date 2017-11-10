@@ -8,6 +8,7 @@
 #include "shortcut/shortcut.h"
 #include "log/simpleQtLogger.h"
 #include "log/logger.h"
+#include "settings/settings.h"
 
 /*!
  *
@@ -40,6 +41,9 @@ int main(int argc, char * argv[]){
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
+
+    Settings& settings=Settings::Instance();
+    settings.writeSettings();
 
     Shortcut * shorcutCreator = new Shortcut();
     LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
