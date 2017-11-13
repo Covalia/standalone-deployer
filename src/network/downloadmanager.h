@@ -8,6 +8,7 @@
 #include <QUrl>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QNetworkProxy>
 
 class QSaveFile;
 class QAuthenticator;
@@ -17,7 +18,7 @@ class DownloadManager : public QObject
     Q_OBJECT
 
 public:
-    explicit DownloadManager(const QString &_saveDir, QObject * parent = 0);
+    explicit DownloadManager(const QString &_saveDir, const QNetworkProxy &_proxy, QObject * parent = 0);
     virtual ~DownloadManager();
 
     void setUrlListToDownload(const QStringList &_urlList);
@@ -39,6 +40,7 @@ signals:
 private slots:
 
     void slotAuthenticationRequired(QNetworkReply *_reply, QAuthenticator *_authenticator);
+    void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator *_authenticator);
 
     void startNextHeadRequest();
     void headMetaDataChanged();
@@ -66,11 +68,10 @@ private:
 
     QSet<QUrl> m_errorSet;
 
-    QQueue<QUrl> m_headQueue;
-    QNetworkReply * m_currentHead;
+    QNetworkReply * m_currentReply;
 
+    QQueue<QUrl> m_headQueue;
     QQueue<QUrl> m_downloadQueue;
-    QNetworkReply * m_currentDownload;
 
     QSaveFile * m_saveFile;
     QString m_currentFilename;

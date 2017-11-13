@@ -8,8 +8,12 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
 	m_appTreeManager(0)
 {
 	m_appTreeManager = new AppTreeManager(_appInstallDir, this);
-    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), this);
-	m_appUrl = _appUrl;
+
+    QNetworkProxy proxy;
+
+    // TODO récupérer ici la configuration du proxy.
+    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), proxy, this);
+    m_appUrl = _appUrl;
 
     connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));
