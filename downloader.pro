@@ -43,7 +43,8 @@ SOURCES += src/main.cpp \
     src/xml/deploymentxml.cpp \
     src/app/application.cpp \
     src/app/javaupdate.cpp \
-	src/shortcut/shortcut.cpp
+	src/shortcut/shortcut.cpp \
+    src/commandLineParser/commandlineparser.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -52,7 +53,8 @@ HEADERS += src/mainwindow.h \
     src/xml/download.h \
     src/app/application.h \
     src/app/javaupdate.h \
-	src/shortcut/shortcut.h
+	src/shortcut/shortcut.h \
+    src/commandLineParser/commandlineparser.h
 
 FORMS += ui/mainwindow.ui
 

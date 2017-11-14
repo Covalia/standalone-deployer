@@ -8,6 +8,7 @@
 #include "shortcut/shortcut.h"
 #include "log/simpleQtLogger.h"
 #include "log/logger.h"
+#include "commandLineParser/commandlineparser.h"
 
 /*!
  *
@@ -40,6 +41,10 @@ int main(int argc, char * argv[]){
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
+    QApplication app(argc, argv);
+
+    L_INFO("Start Commande Lien Parser");
+    new CommandLineParser();
 
     Shortcut * shorcutCreator = new Shortcut();
     LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
@@ -48,7 +53,6 @@ int main(int argc, char * argv[]){
     LPCWSTR description = L"This is description";
     LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
     LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
-
     shorcutCreator->createWindowsShortcut(target_file, target_args,
                                           link_file, description,
                                           1, cur_dir,
@@ -57,8 +61,6 @@ int main(int argc, char * argv[]){
     QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
 
     L_INFO(userStartMenu);
-
-    QApplication app(argc, argv);
 
     QTranslator translator;
     // TODO gérer langue par défaut et demander quelle langue utiliser.
