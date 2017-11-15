@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Personnalize</class>
+ <widget class="QWidget" name="Personnalize">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>609</width>
+    <height>443</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>15</number>
+     </property>
+     <property name="leftMargin">
+      <number>100</number>
+     </property>
+     <property name="rightMargin">
+      <number>100</number>
+     </property>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelPersonnalize">
+       <property name="font">
+        <font>
+         <family>Segoe UI Semibold</family>
+         <pointsize>16</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: @color-text-on-background ;</string>
+       </property>
+       <property name="text">
+        <string>Customize my installation</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widgetFolderInstallation" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>3</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_FolderInstallation">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelFolderInstallation">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color : @color-text-gray;</string>
+            </property>
+            <property name="text">
+             <string>Application installation directory</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widgetFolderInstallationPath" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayoutEditFolderInstallation">
+               <property name="spacing">
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="editLineFolderInstallation">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">border-radius: 3px;
+border: 1px solid #868a95;
+background : #2d364c;
+padding : 4px 10px 4px 10px;
+</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                <widget class="QPushButton" name="buttonChangeFolderInstallation">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+	border-radius: 3px;
+	border: 1px solid #868a95;
+	background : #2d364c;
+	padding : 5px 20px 5px 20px;
+	color : #4f5661;
+}
+
+
+QPushButton:hover {
+	background-color: rgb(33, 42, 63);
+}
+</string>
+                 </property>
+                 <property name="text">
+                  <string>Change</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widgetDataInstallation" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="spacing">
+         <number>3</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_DataInstallation">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QCheckBox" name="checkBoxDataInstallation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color : @color-text-gray;</string>
+            </property>
+            <property name="text">
+             <string>Data installation directory</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widgetDataInstallationPath" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayoutEditDataInstallation">
+               <property name="spacing">
+                <number>3</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="editLineDataInstallation">
+                 <property name="styleSheet">
+                  <string notr="true">border-radius: 3px;
+border: 1px solid #868a95;
+background : #2d364c;
+padding : 4px 10px 4px 10px;
+</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="buttonChangeDataInstallation">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton{
+	border-radius: 3px;
+	border: 1px solid #868a95;
+	background : #2d364c;
+	padding : 5px 20px 5px 20px;
+	color : #4f5661;
+}
+
+
+QPushButton:hover {
+	background-color: rgb(33, 42, 63);
+}
+</string>
+                 </property>
+                 <property name="text">
+                  <string>Change</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="widgetStart" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>14</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayoutStart">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelStart">
+            <property name="font">
+             <font>
+              <family>Segoe UI Semibold</family>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: @color-text-on-background ;</string>
+            </property>
+            <property name="text">
+             <string>Start-up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxOfflineShortcut">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox{
+	color : @color-text-gray;
+}
+
+QCheckBox::indicator {
+    border: 1px solid #5A5A5A;
+    background: none;
+}</string>
+            </property>
+            <property name="text">
+             <string>Add an offline launch shortcut</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxRunAtStart">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QCheckBox{
+	color : @color-text-gray;
+}
+
+QCheckBox::indicator {
+    border: 1px solid #5A5A5A;
+    background: none;
+}</string>
+            </property>
+            <property name="text">
+             <string>Launch the application at startup</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelCustomProxy">
+       <property name="font">
+        <font>
+         <family>Segoe WP Semibold</family>
+         <pointsize>9</pointsize>
+         <underline>true</underline>
+         <kerning>false</kerning>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: @color-text-on-background ;</string>
+       </property>
+       <property name="text">
+        <string>Proxy settings</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+      <widget class="QPushButton" name="buttonStartInstallation">
+       <property name="font">
+        <font>
+         <family>Segoe WP</family>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	background-color: @color-button-background;
+	color : #FFFFFF;
+	padding: 8px;
+	border: 0;
+}
+
+QPushButton:hover {
+	background-color: rgb(33, 42, 63);
+}</string>
+       </property>
+       <property name="text">
+        <string>Start installation</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

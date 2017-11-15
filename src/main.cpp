@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QString>
 
+#include "../ui/windows.h"
+#include "../ui/welcome.h"
+#include "../ui/personnalize.h"
 #include "mainwindow.h"
 #include "shortcut/shortcut.h"
 #include "log/simpleQtLogger.h"
@@ -70,9 +73,15 @@ int main(int argc, char * argv[]){
     translator.load(locale, location);
     app.installTranslator(&translator);
 
-    MainWindow window;
+    Windows window;
     window.show();
     window.center();
+
+    Welcome welcom;
+    window.changeContentWidget(&welcom);
+
+    Personnalize perso;
+    window.changeContentWidget(&perso);
 
     return app.exec();
 } // main

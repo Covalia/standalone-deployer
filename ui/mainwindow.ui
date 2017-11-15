@@ -13,9 +13,13 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background: @color-panel-background ;
+color : @color-text-white;</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background: rgb(54, 64, 88);</string>
+    <string notr="true">background: @color-panel-background ;</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="leftMargin">
@@ -215,7 +219,7 @@ background-color: rgb(33, 42, 63);
            <item row="1" column="0">
             <widget class="QWidget" name="downloaderWidget" native="true">
              <property name="styleSheet">
-              <string notr="true">background-color:#333;</string>
+              <string notr="true">background-color:#FFFFFF;</string>
              </property>
             </widget>
            </item>

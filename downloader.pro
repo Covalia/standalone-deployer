@@ -43,7 +43,11 @@ SOURCES += src/main.cpp \
     src/xml/deploymentxml.cpp \
     src/app/application.cpp \
     src/app/javaupdate.cpp \
-	src/shortcut/shortcut.cpp
+	src/shortcut/shortcut.cpp \
+    src/style/stylemanager.cpp \
+    ui/welcome.cpp \
+    ui/windows.cpp \
+    ui/personnalize.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -52,9 +56,16 @@ HEADERS += src/mainwindow.h \
     src/xml/download.h \
     src/app/application.h \
     src/app/javaupdate.h \
-	src/shortcut/shortcut.h
+        src/shortcut/shortcut.h \
+    src/style/stylemanager.h \
+    ui/welcome.h \
+    ui/windows.h \
+    ui/personnalize.h
 
-FORMS += ui/mainwindow.ui
+FORMS += ui/mainwindow.ui \
+    ui/welcome.ui \
+    ui/windows.ui \
+    ui/personnalize.ui
 
 RESOURCES += resources.qrc
 

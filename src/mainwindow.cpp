@@ -6,6 +6,7 @@
 #include <QDirIterator>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "style/stylemanager.h"
 
 /*!
  * \class MainWindow
@@ -25,6 +26,10 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_timer(0),
     m_ui(new Ui::MainWindow){
     m_ui->setupUi(this);
+
+    this->setStyleSheet(StyleManager::transformStyle(this->styleSheet()));
+    this->centralWidget()->setStyleSheet(StyleManager::transformStyle(this->centralWidget()->styleSheet()));
+
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 
