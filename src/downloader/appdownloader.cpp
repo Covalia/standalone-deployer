@@ -8,12 +8,13 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
 	m_appTreeManager(0)
 {
 	m_appTreeManager = new AppTreeManager(_appInstallDir, this);
+    m_appUrl = _appUrl;
 
     QNetworkProxy proxy;
 
     // TODO récupérer ici la configuration du proxy.
-    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), proxy, this);
-    m_appUrl = _appUrl;
+
+    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), QUrl(_appUrl), proxy, this);
 
     connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));
@@ -43,13 +44,19 @@ void AppDownloader::start()
 	bool result = m_appTreeManager->makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;
 
-	// QStringList urls;
-	// urls << "http://dev.covalia.fr/lanceur_covotem.php" <<
-	// 	"http://ftp.nl.debian.org/debian/dists/stretch/main/installer-amd64/current/images/netboot/mini.iso";
-	QStringList urls;
-	urls << m_appUrl + Global::AppCnlpRelativePath;
+    QList<QUrl> urls;
 
-    m_downloader->setUrlListToDownload(urls);
+    urls << QUrl("lib/covotem-macosx-native.jar");
+    urls << QUrl("lib/covotemLoader.jar");
+    urls << QUrl("lib/covotem.jar");
+    urls << QUrl("lib/external/annotations.jar");
+    urls << QUrl("lib/external/balloontip-1.2.4.1.jar");
+
+
+    // urls << m_appUrl + Global::AppCnlpRelativePath;
+
+    // TODO transmettre le nom de l'application avec les url des fichiers, il s'agit du sous dossier
+    m_downloader->setUrlListToDownload("Application", urls);
 }
 
 void AppDownloader::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)

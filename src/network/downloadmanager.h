@@ -18,10 +18,10 @@ class DownloadManager : public QObject
     Q_OBJECT
 
 public:
-    explicit DownloadManager(const QString &_saveDir, const QNetworkProxy &_proxy, QObject * parent = 0);
+    explicit DownloadManager(const QString &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
     virtual ~DownloadManager();
 
-    void setUrlListToDownload(const QStringList &_urlList);
+    void setUrlListToDownload(const QString &_appName, const QList<QUrl> &_urlList);
 
     QSet<QUrl> getUrlsInError() const;
 
@@ -39,8 +39,8 @@ signals:
 
 private slots:
 
-    void slotAuthenticationRequired(QNetworkReply *_reply, QAuthenticator *_authenticator);
-    void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator *_authenticator);
+    void slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator);
+    void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
 
     void startNextHeadRequest();
     void headMetaDataChanged();
@@ -56,6 +56,10 @@ private:
 
     void headsFinished();
 
+    static bool createDirIfNotExists(const QDir &_dir);
+    static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir, const QString &_appName);
+
+    QUrl m_baseUrl;
     QNetworkAccessManager m_manager;
 
     qint64 m_totalBytesToDownload;
@@ -70,11 +74,11 @@ private:
 
     QNetworkReply * m_currentReply;
 
+    QString m_appName;
     QQueue<QUrl> m_headQueue;
     QQueue<QUrl> m_downloadQueue;
 
     QSaveFile * m_saveFile;
-    QString m_currentFilename;
     QString m_temporaryDir;
 
     /// download time to calculate download speed.

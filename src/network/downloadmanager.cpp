@@ -8,6 +8,7 @@
 #include <QStringList>
 #include <QTimer>
 #include <QSaveFile>
+#include <QDir>
 #include "config/global.h"
 #include "ui_authenticationdialog.h"
 
@@ -16,17 +17,19 @@
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : détecter authentification proxy réussie.
 // TODO : tester auth proxy + auth http simultanée
-// TODO : gérer l'écriture des fichiers dans une arborescence temporaire plutôt qu'à la racine.
+// TODO : gérer les redirections sur l'URL de base
 // TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies, http auth.
 
-DownloadManager::DownloadManager(const QString &_saveDir, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QString &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
+    m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
     m_currentAttempt(0),
     m_currentAuthAttempt(0),
     m_currentReply(0),
+    m_appName(""),
     m_saveFile(0),
-    m_temporaryDir(_saveDir),
+    m_temporaryDir(_temporaryDir),
     m_httpAuthCanceled(0)
 {
     // définition du proxy si host et port définis
@@ -46,10 +49,11 @@ DownloadManager::~DownloadManager()
     delete m_saveFile;
 }
 
-void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
+void DownloadManager::setUrlListToDownload(const QString &_appName, const QList<QUrl> &_urlList)
 {
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
+        m_appName = _appName;
         m_totalBytesToDownload = 0;
         m_totalBytesDownloaded = 0;
         m_currentAttempt = 0;
@@ -61,9 +65,11 @@ void DownloadManager::setUrlListToDownload(const QStringList &_urlList)
         // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
-        foreach(QString url, _urlList) {
-            m_headQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
-            m_downloadQueue.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
+        foreach(QUrl url, _urlList) {
+            // concatenation base avec url
+            qDebug() << "Build URL:" << m_baseUrl.resolved(url).toString();
+            m_headQueue.enqueue(m_baseUrl.resolved(url));
+            m_downloadQueue.enqueue(m_baseUrl.resolved(url));
         }
 
         // lancement les requêtes head
@@ -297,33 +303,15 @@ void DownloadManager::startNextDownload()
 
 void DownloadManager::downloadMetaDataChanged()
 {
-    m_currentFilename = "";
+    QString currentFilename = getFilenameAndCreateRequiredDirectories(m_baseUrl, m_currentReply, m_temporaryDir, m_appName);
 
-    QString contentDisposition = m_currentReply->rawHeader("Content-Disposition");
-    if (!contentDisposition.isEmpty()) {
-        qDebug() << "Content-Disposition:" << contentDisposition;
-        const QString searchString = "filename=";
-        int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
-        if (index != -1) {
-            m_currentFilename = contentDisposition.mid(index + searchString.length());
-        }
-    }
+    emit downloadFileMessage(QFileInfo(currentFilename).fileName());
 
-    if (m_currentFilename.isEmpty()) {
-        QString path = m_currentReply->url().path();
-        if (!QFileInfo(path).fileName().isEmpty()) {
-            m_currentFilename = QFileInfo(path).fileName();
-        } else {
-            m_currentFilename = "download";
-        }
-    }
-
-    emit downloadFileMessage(m_currentFilename);
-    m_saveFile = new QSaveFile(m_temporaryDir + "/" + m_currentFilename);
+    m_saveFile = new QSaveFile(currentFilename);
 
     qDebug() << "Saving to temporary file:" << m_saveFile->fileName();
-    if (!m_saveFile->open(QIODevice::WriteOnly)) {
-        qDebug() << "Error opening temporary file for URL: " << m_currentReply->url().toEncoded().constData();
+    if (currentFilename.isEmpty() || !m_saveFile->open(QIODevice::WriteOnly)) {
+        qDebug() << "Error opening temporary file for URL:" << m_currentReply->url().toEncoded().constData();
         m_errorSet.insert(m_currentReply->url());
         m_currentReply->abort();
         m_currentReply->deleteLater();
@@ -459,3 +447,56 @@ void DownloadManager::headsFinished()
     m_currentAttempt = 0;
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
+
+bool DownloadManager::createDirIfNotExists(const QDir &_dir)
+{
+    if (_dir.exists()) {
+        return true;
+    } else {
+        bool created = QDir().mkpath(_dir.path());
+        if (created) {
+            qDebug() << "Success while creating parent directory:" << _dir.path();
+        } else {
+            qDebug() << "Error while creating parent directory:" << _dir.path();
+        }
+        return created;
+    }
+}
+
+QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir, const QString &_appName)
+{
+    const QUrl url = _reply->url();
+
+    QString relativePath = url.toString().remove(0, _baseUrl.toString().size());
+
+    QFileInfo fileInfo(_tempDir.absolutePath() + "/" + _appName + "/" + relativePath);
+    QDir parentDir = fileInfo.dir();
+    bool created = createDirIfNotExists(parentDir);
+
+    if (created) {
+        QString filename = "";
+
+        QString contentDisposition = _reply->rawHeader("Content-Disposition");
+        if (!contentDisposition.isEmpty()) {
+            qDebug() << "Content-Disposition:" << contentDisposition;
+            const QString searchString = "filename=";
+            int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
+            if (index != -1) {
+                filename = contentDisposition.mid(index + searchString.length());
+            }
+        }
+
+        if (filename.isEmpty()) {
+            QString path = _reply->url().path();
+            if (!QFileInfo(path).fileName().isEmpty()) {
+                filename = QFileInfo(path).fileName();
+            } else {
+                filename = "download";
+            }
+        }
+
+        return parentDir.absoluteFilePath(filename);
+    }
+
+    return "";
+} // DownloadManager::getFilenameAndCreateRequiredDirectories
