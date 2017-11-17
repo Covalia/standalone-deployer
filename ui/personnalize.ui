@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -169,7 +169,7 @@ color: @color-text-on-background;
 
 
 QPushButton:hover {
-	background-color: rgb(33, 42, 63);
+	color : white;
 }
 </string>
                  </property>
@@ -300,7 +300,7 @@ color: @color-text-on-background;</string>
 
 
 QPushButton:hover {
-	background-color: rgb(33, 42, 63);
+	color : white;
 }
 </string>
                  </property>
@@ -431,24 +431,23 @@ QCheckBox::indicator:checked{
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="labelCustomProxy">
-       <property name="font">
-        <font>
-         <family>Segoe WP Semibold</family>
-         <pointsize>9</pointsize>
-         <underline>true</underline>
-         <kerning>false</kerning>
-        </font>
-       </property>
+     <item alignment="Qt::AlignRight">
+      <widget class="QPushButton" name="buttonProxySetting">
        <property name="styleSheet">
-        <string notr="true">color: @color-text-on-background ;</string>
+        <string notr="true">QPushButton {
+	background-color: transparent;
+	color : white;
+	padding: 8px;
+	border: px0;
+	text-decoration: underline;
+}
+
+QPushButton:hover {
+	color : gray;
+}</string>
        </property>
        <property name="text">
         <string>Proxy settings</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -473,7 +472,7 @@ QCheckBox::indicator:checked{
 }
 
 QPushButton:hover {
-	background-color: rgb(33, 42, 63);
+	background-color: @color-button-background-over;
 }</string>
        </property>
        <property name="text">

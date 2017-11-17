@@ -35,11 +35,6 @@
 <context>
     <name>Personnalize</name>
     <message>
-        <location filename="../../ui/personnalize.ui" line="14"/>
-        <source>Form</source>
-        <translation>Personnaliser mon installation</translation>
-    </message>
-    <message>
         <location filename="../../ui/personnalize.ui" line="55"/>
         <source>Customize my installation</source>
         <translation>Personnaliser mon installation</translation>
@@ -76,47 +71,98 @@
         <translation>Lancer l&apos;application au démarrage de l&apos;ordinateur</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="448"/>
+        <location filename="../../ui/personnalize.ui" line="450"/>
         <source>Proxy settings</source>
         <translation>Configuration du proxy</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="480"/>
+        <location filename="../../ui/personnalize.ui" line="479"/>
         <source>Start installation</source>
         <translation>Lancer l&apos;installation</translation>
     </message>
 </context>
 <context>
-    <name>Welcome</name>
+    <name>Proxy</name>
     <message>
-        <location filename="../../ui/welcome.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../ui/proxy.ui" line="55"/>
+        <source>Proxy configuration</source>
+        <translation>Configuration du proxy</translation>
     </message>
     <message>
+        <location filename="../../ui/proxy.ui" line="83"/>
+        <source>No proxy configuration</source>
+        <translation>Pas de configuration de proxy</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="113"/>
+        <source>Automatic proxy configuration</source>
+        <translation>Configuration automatique du proxy</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="141"/>
+        <source>Manual proxy configuration</source>
+        <translation>Configuration manuel du proxy</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="159"/>
+        <source>URL</source>
+        <translation>Url</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="209"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="265"/>
+        <source>Login</source>
+        <translation>Identifiant</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="327"/>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
+    </message>
+    <message>
+        <location filename="../../ui/proxy.ui" line="400"/>
+        <source>OK</source>
+        <translation>Valider</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../src/main.cpp" line="65"/>
+        <source>Stand-alone deployment</source>
+        <translation>Déploiement autonome</translation>
+    </message>
+</context>
+<context>
+    <name>Welcome</name>
+    <message>
         <location filename="../../ui/welcome.ui" line="49"/>
-        <source>Welcom to installation of @Application</source>
-        <translation type="unfinished"></translation>
+        <source>Welcome to installation of @Application</source>
+        <translation>Bienvenue dans l&apos;installation de l&apos;application</translation>
     </message>
     <message>
         <location filename="../../ui/welcome.ui" line="76"/>
         <source>By installing this product, you agree</source>
-        <translation type="unfinished"></translation>
+        <translation>En installant  ce produit, vous acceptez</translation>
     </message>
     <message>
         <location filename="../../ui/welcome.ui" line="96"/>
         <source>User contract</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrat d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../../ui/welcome.ui" line="133"/>
         <source>Simple installation</source>
-        <translation type="unfinished"></translation>
+        <translation>Installation simple</translation>
     </message>
     <message>
-        <location filename="../../ui/welcome.ui" line="151"/>
+        <location filename="../../ui/welcome.ui" line="162"/>
         <source>Custom installation</source>
-        <translation type="unfinished"></translation>
+        <translation>Installation personnalisée</translation>
     </message>
 </context>
 <context>
@@ -137,14 +183,19 @@
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../../ui/windows.cpp" line="72"/>
-        <source>Attention !</source>
-        <translation type="unfinished">Attention !</translation>
+        <location filename="../../src/gui/windows.cpp" line="20"/>
+        <source>Stand-alone deployment</source>
+        <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../ui/windows.cpp" line="74"/>
+        <location filename="../../src/gui/windows.cpp" line="75"/>
+        <source>Attention !</source>
+        <translation>Attention !</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/windows.cpp" line="77"/>
         <source>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</source>
-        <translation type="unfinished">Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
+        <translation>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
     </message>
 </context>
 </TS>

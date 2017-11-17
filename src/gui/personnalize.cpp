@@ -12,7 +12,7 @@ Personnalize::Personnalize(QWidget *parent) :
 
     StyleManager::transformStyle(this);
 
-//    connect(Windows, SIGNAL(Windows::changeLanguageSignal()), this, SLOT(changeLanguage()));
+    connect(ui->buttonProxySetting, SIGNAL(clicked()), this, SLOT(proxySettingEvent()));
 }
 
 Personnalize::~Personnalize()
@@ -24,4 +24,8 @@ Personnalize::~Personnalize()
 void Personnalize::changeLanguage()
 {
    ui->retranslateUi(this);
+}
+
+void Personnalize::proxySettingEvent() {
+    proxySettingSignal();
 }

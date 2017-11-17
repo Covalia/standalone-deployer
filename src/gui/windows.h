@@ -29,12 +29,12 @@ private:
 
 signals:
     void changeLanguageSignal();
+    void aboutSignal();
 
 private slots:
     void comboBoxLanguageEvent(int index);
-
-public slots:
     void changeLanguage();
+    void aboutEvent();
 };
 
 #endif // WINDOWS_H

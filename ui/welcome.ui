@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -46,7 +46,7 @@
         <string notr="true">color: @color-text-on-background ;</string>
        </property>
        <property name="text">
-        <string>Welcom to installation of @Application</string>
+        <string>Welcome to installation of @Application</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -126,7 +126,7 @@
 }
 
 QPushButton:hover {
-	background-color: rgb(33, 42, 63);
+	background-color: @color-button-background-over;
 }</string>
        </property>
        <property name="text">
@@ -134,24 +134,32 @@ QPushButton:hover {
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="labelCustomInstall">
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="buttonCustomInstall">
        <property name="font">
         <font>
          <family>Segoe WP Semibold</family>
          <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
          <underline>true</underline>
-         <kerning>false</kerning>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: @color-text-on-background ;</string>
+        <string notr="true">QPushButton {
+	background-color: transparent;
+	color : white;
+	padding: 8px;
+	border: px0;
+	text-decoration: underline;
+}
+
+QPushButton:hover {
+	color : gray;
+}</string>
        </property>
        <property name="text">
         <string>Custom installation</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

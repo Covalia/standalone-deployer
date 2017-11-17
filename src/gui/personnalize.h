@@ -18,8 +18,12 @@ public:
 private:
     Ui::Personnalize * ui;
 
+signals:
+    void proxySettingSignal();
+
 public slots:
     void changeLanguage();
+    void proxySettingEvent();
 };
 
 #endif // PERSONNALIZE_H

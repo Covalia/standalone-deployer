@@ -4,10 +4,8 @@
 #include <QDebug>
 #include <QString>
 
-#include "../ui/windows.h"
-#include "../ui/welcome.h"
-#include "../ui/personnalize.h"
 #include "mainwindow.h"
+#include "uiManager/uimanager.h"
 #include "shortcut/shortcut.h"
 #include "log/simpleQtLogger.h"
 #include "log/logger.h"
@@ -63,23 +61,13 @@ int main(int argc, char * argv[]){
     L_INFO(userStartMenu);
 
     QApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/resources/icon.png"));
+    app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
 
     LanguageManager::initLanguage();
-//    LanguageManager::updateLanguage("en_US");
-//    LanguageManager::updateLanguage("fr_FR");
 
-    Windows window;
-    window.show();
-    window.center();
-
-//    Welcome welcom;
-//    window.changeContentWidget(&welcom);
-
-    Personnalize perso;
-    window.changeContentWidget(&perso);
-
-   QObject::connect(&window, &Windows::changeLanguageSignal, &window, &Windows::changeLanguage);
-   QObject::connect(&window, &Windows::changeLanguageSignal, &perso, &Personnalize::changeLanguage);
+    UIManager * uiManager = new UIManager();
+    uiManager->changeWelcome();
 
     return app.exec();
 } // main

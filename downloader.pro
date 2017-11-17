@@ -45,10 +45,13 @@ SOURCES += src/main.cpp \
     src/app/javaupdate.cpp \
 	src/shortcut/shortcut.cpp \
     src/style/stylemanager.cpp \
-    ui/welcome.cpp \
-    ui/windows.cpp \
-    ui/personnalize.cpp \
-    src/language/languagemanager.cpp
+    src/gui/welcome.cpp \
+    src/gui/windows.cpp \
+    src/gui/personnalize.cpp \
+    src/language/languagemanager.cpp \
+    src/uiManager/uimanager.cpp \
+    src/gui/proxy.cpp \
+    src/gui/about.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -57,17 +60,22 @@ HEADERS += src/mainwindow.h \
     src/xml/download.h \
     src/app/application.h \
     src/app/javaupdate.h \
-        src/shortcut/shortcut.h \
+    src/shortcut/shortcut.h \
     src/style/stylemanager.h \
-    ui/welcome.h \
-    ui/windows.h \
-    ui/personnalize.h \
-    src/language/languagemanager.h
+    src/gui/welcome.h \
+    src/gui/windows.h \
+    src/gui/personnalize.h \
+    src/language/languagemanager.h \
+    src/uiManager/uimanager.h \
+    src/gui/proxy.h \
+    src/gui/about.h
 
 FORMS += ui/mainwindow.ui \
     ui/welcome.ui \
     ui/windows.ui \
-    ui/personnalize.ui
+    ui/personnalize.ui \
+    ui/proxy.ui \
+    ui/about.ui
 
 RESOURCES += resources.qrc
 
