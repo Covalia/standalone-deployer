@@ -6,7 +6,7 @@
 
 #include "mainwindow.h"
 #include "shortcut/shortcut.h"
-#include "log/simpleQtLogger.h"
+#include "log/simpleqtlogger.h"
 #include "log/logger.h"
 
 /*!
@@ -35,28 +35,31 @@
  * \param argv
  * \return
  */
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[])
+{
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
 
-    Shortcut * shorcutCreator = new Shortcut();
-    LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
-    LPCWSTR target_args = L"";
-    LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
-    LPCWSTR description = L"This is description";
-    LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
-    LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
+#ifdef Q_OS_WIN
+        Shortcut * shorcutCreator = new Shortcut();
+        LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
+        LPCWSTR target_args = L"";
+        LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
+        LPCWSTR description = L"This is description";
+        LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
+        LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
 
-    shorcutCreator->createWindowsShortcut(target_file, target_args,
-                                          link_file, description,
-                                          1, cur_dir,
-                                          icon_file, 0);
-    QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
-    QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
+        shorcutCreator->createWindowsShortcut(target_file, target_args,
+                                              link_file, description,
+                                              1, cur_dir,
+                                              icon_file, 0);
+        QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
+        QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
 
-    L_INFO(userStartMenu);
+        L_INFO(userStartMenu);
+ #endif
 
     QApplication app(argc, argv);
 

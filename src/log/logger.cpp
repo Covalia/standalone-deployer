@@ -1,6 +1,6 @@
 #include "logger.h"
 
-#include "simpleQtLogger.h"
+#include "simpleqtlogger.h"
 #include <QApplication>
 
 /*!
