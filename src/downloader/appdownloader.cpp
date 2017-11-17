@@ -3,7 +3,7 @@
 #include "config/global.h"
 #include <QDebug>
 
-AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallDir, QObject *_parent) : QObject(_parent),
+AppDownloader::AppDownloader(const QUrl &_appUrl, const QDir &_appInstallDir, QObject *_parent) : QObject(_parent),
 	m_downloader(0),
 	m_appTreeManager(0)
 {
@@ -14,7 +14,7 @@ AppDownloader::AppDownloader(const QString &_appUrl, const QString &_appInstallD
 
     // TODO récupérer ici la configuration du proxy.
 
-    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), QUrl(_appUrl), proxy, this);
+    m_downloader = new DownloadManager(m_appTreeManager->getTempDirPath(), _appUrl, proxy, this);
 
     connect(m_downloader, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));

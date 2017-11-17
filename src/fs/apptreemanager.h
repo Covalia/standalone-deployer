@@ -2,27 +2,29 @@
 #define APPTREEMANAGER_H
 
 #include <QObject>
+#include <QDir>
 
-class AppTreeManager: public QObject
+class AppTreeManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-        AppTreeManager(const QString &_installationDir, QObject *_parent = 0);
-		virtual ~AppTreeManager();
+public:
+    AppTreeManager(const QDir &_installationDir, QObject * _parent = 0);
+    virtual ~AppTreeManager();
 
-		bool makeAppDirectories();
-        static bool makeDirectoryIfNotExists(const QString &_directoryPath);
+    bool makeAppDirectories();
 
-		QString getAppDirPath();
-		QString getConfigurationDirPath();
-		QString getExtensionDirPath();
-		QString getJavaDirPath();
-		QString getLogsDirPath();
-		QString getTempDirPath();
+    QDir getAppDirPath();
+    QDir getConfigurationDirPath();
+    QDir getExtensionDirPath();
+    QDir getJavaDirPath();
+    QDir getLogsDirPath();
+    QDir getTempDirPath();
 
-	private:
-		const QString m_installationDir;
+private:
+    static bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
+
+    const QDir m_installationDir;
 };
 
-#endif
+#endif // ifndef APPTREEMANAGER_H

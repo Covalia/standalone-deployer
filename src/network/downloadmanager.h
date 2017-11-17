@@ -6,6 +6,7 @@
 #include <QQueue>
 #include <QTime>
 #include <QUrl>
+#include <QDir>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
@@ -18,7 +19,7 @@ class DownloadManager : public QObject
     Q_OBJECT
 
 public:
-    explicit DownloadManager(const QString &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
+    explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
     virtual ~DownloadManager();
 
     void setUrlListToDownload(const QString &_appName, const QList<QUrl> &_urlList);
@@ -79,7 +80,7 @@ private:
     QQueue<QUrl> m_downloadQueue;
 
     QSaveFile * m_saveFile;
-    QString m_temporaryDir;
+    QDir m_temporaryDir;
 
     /// download time to calculate download speed.
     QTime m_currentDownloadTime;

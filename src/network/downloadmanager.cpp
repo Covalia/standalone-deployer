@@ -20,7 +20,7 @@
 // TODO : gérer les redirections sur l'URL de base
 // TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies, http auth.
 
-DownloadManager::DownloadManager(const QString &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
     m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),

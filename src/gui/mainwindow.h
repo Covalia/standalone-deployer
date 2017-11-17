@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QPixmap>
+#include <QUrl>
 
 class QCloseEvent;
 class QMouseEvent;
@@ -34,7 +35,7 @@ class MainWindow : public QMainWindow
         void updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateRemainingTimeMessage(const QString &_time);
-        void updateServerUrlMessage(const QString &_url);
+        void updateServerUrlMessage(const QUrl &_url);
         void updateDownloadFileMessage(const QString &_file);
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 

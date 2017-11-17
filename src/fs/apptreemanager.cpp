@@ -4,69 +4,74 @@
 #include <QFile>
 #include "config/global.h"
 
-
-AppTreeManager::AppTreeManager(const QString &_installationDir, QObject *_parent) :
-	QObject(_parent),
-	m_installationDir(_installationDir)
+AppTreeManager::AppTreeManager(const QDir &_installationDir, QObject * _parent) :
+    QObject(_parent),
+    m_installationDir(_installationDir)
 {
-	qDebug() << "installation directory" << m_installationDir;
+    qDebug() << "installation directory" << m_installationDir.absolutePath();
 }
 
-AppTreeManager::~AppTreeManager() {
+AppTreeManager::~AppTreeManager()
+{
 }
 
-bool AppTreeManager::makeAppDirectories() {
-	bool result = true;
+bool AppTreeManager::makeAppDirectories()
+{
+    bool result = true;
 
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::AppDir);
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::ConfigurationDir);
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::ExtensionDir);
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::JavaDir);
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::LogsDir);
-	result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir + "/" + Global::TempDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::AppDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::ConfigurationDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::ExtensionDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::JavaDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::LogsDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, Global::TempDir);
 
-	return result;
+    return result;
 }
 
-bool AppTreeManager::makeDirectoryIfNotExists(const QString &_directoryPath) {
+bool AppTreeManager::makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir)
+{
+    QDir directory(_directoryPath.filePath(_subDir));
 
-	if (QFile(_directoryPath).exists()) {
-		// si le répertoire est en réalité un fichier, pas bon, il faut nettoyer
-		// TODO check les répertoires parent ??
-		QFile(_directoryPath).remove();
-	}
+    if (_directoryPath.exists(_subDir)) {
+        // si le répertoire est en réalité un fichier, pas bon, il faut nettoyer
+        // TODO check les répertoires parent ??
+        _directoryPath.remove(_subDir);
+    }
 
-	if (!QDir(_directoryPath).exists()) {
-		return QDir().mkpath(_directoryPath);
-	}
-	else {
-		return true;
-	}
-
+    if (!directory.exists()) {
+        return QDir().mkpath(directory.path());
+    } else {
+        return true;
+    }
 }
 
-QString AppTreeManager::getAppDirPath() {
-	return m_installationDir + "/" + Global::AppDir;
+QDir AppTreeManager::getAppDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::AppDir));
 }
 
-QString AppTreeManager::getConfigurationDirPath() {
-	return m_installationDir + "/" + Global::ConfigurationDir;
+QDir AppTreeManager::getConfigurationDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::ConfigurationDir));
 }
 
-QString AppTreeManager::getExtensionDirPath() {
-	return m_installationDir + "/" + Global::ExtensionDir;
+QDir AppTreeManager::getExtensionDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::ExtensionDir));
 }
 
-QString AppTreeManager::getJavaDirPath() {
-	return m_installationDir + "/" + Global::JavaDir;
+QDir AppTreeManager::getJavaDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::JavaDir));
 }
 
-QString AppTreeManager::getLogsDirPath() {
-	return m_installationDir + "/" + Global::LogsDir;
+QDir AppTreeManager::getLogsDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::LogsDir));
 }
 
-QString AppTreeManager::getTempDirPath() {
-    return m_installationDir + "/" + Global::TempDir;
+QDir AppTreeManager::getTempDirPath()
+{
+    return QDir(m_installationDir.filePath(Global::TempDir));
 }
-
-

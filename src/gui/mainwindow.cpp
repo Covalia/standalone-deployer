@@ -34,8 +34,8 @@ MainWindow::MainWindow(QWidget *_parent) :
 
 	connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 	connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    connect(m_appDownloader, SIGNAL(serverUrlMessage(const QString &)),
-            SLOT(updateServerUrlMessage(const QString &)));
+    connect(m_appDownloader, SIGNAL(serverUrlMessage(const QUrl &)),
+            SLOT(updateServerUrlMessage(const QUrl &)));
     connect(m_appDownloader, SIGNAL(downloadFileMessage(const QString &)),
             SLOT(updateDownloadFileMessage(const QString &)));
 
@@ -181,9 +181,9 @@ void MainWindow::updateRemainingTimeMessage(const QString &_time) {
     }
 }
 
-void MainWindow::updateServerUrlMessage(const QString &_url) {
+void MainWindow::updateServerUrlMessage(const QUrl &_url) {
     //: This string refers to a web URL.
-    m_ui->serverLabel->setText(tr("Serveur %1").arg(_url));
+    m_ui->serverLabel->setText(tr("Serveur %1").arg(_url.toString()));
 }
 
 void MainWindow::updateDownloadFileMessage(const QString &_file) {
