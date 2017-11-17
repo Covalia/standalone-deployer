@@ -12,11 +12,14 @@ class Personnalize : public QWidget
     Q_OBJECT
 
 public:
-    explicit Personnalize(QWidget *parent = 0);
+    explicit Personnalize(QWidget * parent = 0);
     ~Personnalize();
 
 private:
-    Ui::Personnalize *ui;
+    Ui::Personnalize * ui;
+
+public slots:
+    void changeLanguage();
 };
 
 #endif // PERSONNALIZE_H

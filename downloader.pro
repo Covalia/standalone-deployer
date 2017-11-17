@@ -47,7 +47,8 @@ SOURCES += src/main.cpp \
     src/style/stylemanager.cpp \
     ui/welcome.cpp \
     ui/windows.cpp \
-    ui/personnalize.cpp
+    ui/personnalize.cpp \
+    src/language/languagemanager.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -60,7 +61,8 @@ HEADERS += src/mainwindow.h \
     src/style/stylemanager.h \
     ui/welcome.h \
     ui/windows.h \
-    ui/personnalize.h
+    ui/personnalize.h \
+    src/language/languagemanager.h
 
 FORMS += ui/mainwindow.ui \
     ui/welcome.ui \

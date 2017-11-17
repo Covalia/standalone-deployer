@@ -145,6 +145,7 @@
 border: 1px solid #868a95;
 background : #2d364c;
 padding : 4px 10px 4px 10px;
+color: @color-text-on-background;
 </string>
                  </property>
                 </widget>
@@ -208,7 +209,7 @@ QPushButton:hover {
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_DataInstallation">
           <property name="spacing">
-           <number>0</number>
+           <number>3</number>
           </property>
           <item alignment="Qt::AlignHCenter">
            <widget class="QCheckBox" name="checkBoxDataInstallation">
@@ -227,7 +228,22 @@ QPushButton:hover {
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="styleSheet">
-             <string notr="true">color : @color-text-gray;</string>
+             <string notr="true">QCheckBox{
+	color : @color-text-gray;
+}
+
+QCheckBox::indicator {
+    border: 1px solid #5A5A5A;
+    background: none;
+}
+
+QCheckBox::indicator:hover {
+	background: @color-button-background;
+}
+
+QCheckBox::indicator:checked{
+	background: @color-button-background;
+}</string>
             </property>
             <property name="text">
              <string>Data installation directory</string>
@@ -267,7 +283,7 @@ QPushButton:hover {
 border: 1px solid #868a95;
 background : #2d364c;
 padding : 4px 10px 4px 10px;
-</string>
+color: @color-text-on-background;</string>
                  </property>
                 </widget>
                </item>
@@ -362,6 +378,14 @@ QPushButton:hover {
 QCheckBox::indicator {
     border: 1px solid #5A5A5A;
     background: none;
+}
+
+QCheckBox::indicator:hover {
+	background: @color-button-background;
+}
+
+QCheckBox::indicator:checked{
+	background: @color-button-background;
 }</string>
             </property>
             <property name="text">
@@ -387,6 +411,14 @@ QCheckBox::indicator {
 QCheckBox::indicator {
     border: 1px solid #5A5A5A;
     background: none;
+}
+
+QCheckBox::indicator:hover {
+	background: @color-button-background;
+}
+
+QCheckBox::indicator:checked{
+	background: @color-button-background;
 }</string>
             </property>
             <property name="text">

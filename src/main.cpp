@@ -11,6 +11,7 @@
 #include "shortcut/shortcut.h"
 #include "log/simpleQtLogger.h"
 #include "log/logger.h"
+#include "language/languagemanager.h"
 
 /*!
  *
@@ -63,25 +64,22 @@ int main(int argc, char * argv[]){
 
     QApplication app(argc, argv);
 
-    QTranslator translator;
-    // TODO gérer langue par défaut et demander quelle langue utiliser.
-    QString locale = QLocale::system().name();
-    QString location = ":/translations";
-    qDebug() << "locale:" << locale;
-
-    qDebug() << "loading translator";
-    translator.load(locale, location);
-    app.installTranslator(&translator);
+    LanguageManager::initLanguage();
+//    LanguageManager::updateLanguage("en_US");
+//    LanguageManager::updateLanguage("fr_FR");
 
     Windows window;
     window.show();
     window.center();
 
-    Welcome welcom;
-    window.changeContentWidget(&welcom);
+//    Welcome welcom;
+//    window.changeContentWidget(&welcom);
 
     Personnalize perso;
     window.changeContentWidget(&perso);
+
+   QObject::connect(&window, &Windows::changeLanguageSignal, &window, &Windows::changeLanguage);
+   QObject::connect(&window, &Windows::changeLanguageSignal, &perso, &Personnalize::changeLanguage);
 
     return app.exec();
 } // main

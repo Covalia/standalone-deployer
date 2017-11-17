@@ -1,10 +1,16 @@
 #include "windows.h"
 #include "ui_windows.h"
+
 #include "../src/style/stylemanager.h"
+#include "../src/language/languagemanager.h"
+#include "../src/log/simpleqtlogger.h"
+#include "personnalize.h"
+
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QLayoutItem>
+#include <QStyledItemDelegate>
 
 Windows::Windows(QWidget * parent) :
     QMainWindow(parent),
@@ -14,10 +20,20 @@ Windows::Windows(QWidget * parent) :
     this->setAttribute(Qt::WA_QuitOnClose);
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-
     StyleManager::transformStyle(this);
 
     connect(ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
+
+    // combobox init
+    QStyledItemDelegate * itemDelegate = new QStyledItemDelegate();
+    ui->comboBoxLanguage->setItemDelegate(itemDelegate);
+    ui->comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
+    ui->comboBoxLanguage->addItem("English", QVariant("en_US"));
+
+    connect(ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
+    //connect(this, SIGNAL(changeLanguageSignal()), this, SLOT(changeLanguage()));
+    //connect(Personnalize, SIGNAL(changeLanguageSignal()), this, SLOT(changeLanguage());
+
 }
 
 Windows::~Windows(){
@@ -69,3 +85,19 @@ void Windows::closeEvent(QCloseEvent * _event){
         }
     }
 }
+
+void Windows::comboBoxLanguageEvent(int index){
+    L_INFO("Detect language change in language combobox");
+    QString dateValue = ui->comboBoxLanguage->itemData(index).toString();
+    if(!dateValue.isNull() && !dateValue.isEmpty()){
+         LanguageManager::updateLanguage(dateValue);
+         changeLanguageSignal();
+    }
+}
+
+
+void Windows::changeLanguage()
+{
+   ui->retranslateUi(this);
+}
+

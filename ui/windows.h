@@ -12,7 +12,7 @@ class Windows : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Windows(QWidget *parent = 0);
+    explicit Windows(QWidget * parent = 0);
     ~Windows();
 
     void center();
@@ -20,12 +20,21 @@ public:
     void changeContentWidget(QWidget * widget);
 
 private:
-    Ui::Windows *ui;
+    Ui::Windows * ui;
 
     bool m_alreadyClosedOnMacOs = false;
 
-    void clearLayout(QLayout* layout, bool deleteWidgets);
+    void clearLayout(QLayout * layout, bool deleteWidgets);
     virtual void closeEvent(QCloseEvent *);
+
+signals:
+    void changeLanguageSignal();
+
+private slots:
+    void comboBoxLanguageEvent(int index);
+
+public slots:
+    void changeLanguage();
 };
 
 #endif // WINDOWS_H

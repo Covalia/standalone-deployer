@@ -140,12 +140,79 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelLanguage">
+            <widget class="QComboBox" name="comboBoxLanguage">
              <property name="styleSheet">
-              <string notr="true">color : @color-text-gray;</string>
+              <string notr="true">QComboBox
+{
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    selection-background-color: gray;
+    background-color: transparent;
+    border-style: solid;
+    padding: 1px 0px 1px 20px;
+	text-align: center;
+}
+
+
+QComboBox:hover, QPushButton:hover
+{
+	color: @color-text-gray;
+	background-color: @color-panel-background;
+}
+
+
+
+QComboBox:!on
+{
+    color:  @color-text-gray;
+    background-color: transparent;
+}
+
+QComboBox QAbstractItemView{
+	padding : 10px;
+	background-color: #2d364c;
+	text-align: center;
+}
+
+QComboBox QAbstractItemView::item 
+{
+	min-height: 25px; 
+	min-width: 50px;
+	color : gray;
+	background-color: #2d364c;
+	border:0px;
+	text-align: center;
+}
+
+QListView::item:selected { 
+	border-radius: 5px;
+	border: 1px solid #FFFFFF;
+	color : white;
+}
+
+QListView {
+    outline: 0;
+	text-align: center;
+}
+
+QComboBox::drop-down
+{
+	subcontrol-origin: padding;
+     subcontrol-position: top right;
+     width: 10px;
+     border: 0px;
+	padding-left: 5px;
+ }
+
+QComboBox::down-arrow
+{
+     image: url(:/resources/down.png) ;
+     width: 10px;
+     height: 7px;
+}</string>
              </property>
-             <property name="text">
-              <string>Francais</string>
+             <property name="currentText">
+              <string/>
              </property>
             </widget>
            </item>
