@@ -3,19 +3,6 @@
 
 #include <QString>
 
-// TODO sortir les constantes
-static QString NAME_FILE_APPLICATION = "application";
-static QString REMOTE_FILE_APPLICATION = "application.cnlp.php";
-static QString LOCAL_FILE_APPLICATION = "application.cnlp";
-
-static QString NAME_FILE_STARTER = "starter";
-static QString REMOTE_FILE_STARTER = "starter.cnlp.php";
-static QString LOCAL_FILE_STARTER = "starter.cnlp";
-
-static QString NAME_FILE_DOWNLOADER = "downloader";
-static QString REMOTE_FILE_DOWNLOADER = "downloader.cnlp.php";
-static QString LOCAL_FILE_DOWNLOADER = "downloader.cnlp";
-
 /**
  * @class Application
  * \brief This class represents application informations in CNLP file. It contain application version, name etc

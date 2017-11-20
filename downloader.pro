@@ -34,27 +34,29 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-    
-SOURCES += src/main.cpp \
-	src/mainwindow.cpp \
-    src/log/simpleqtlogger.cpp \
-    src/log/logger.cpp \
-    src/xml/download.cpp \
-    src/xml/deploymentxml.cpp \
-    src/app/application.cpp \
-    src/app/javaupdate.cpp \
-	src/shortcut/shortcut.cpp
-SOURCES += src/utils/hashmac/hashmac512.cpp
 
-HEADERS += src/mainwindow.h \
-    src/log/simpleqtlogger.h \
-    src/log/logger.h \
-    src/xml/deploymentxml.h \
-    src/xml/download.h \
-    src/app/application.h \
-    src/app/javaupdate.h \
-	src/shortcut/shortcut.h
+SOURCES += src/main.cpp
+SOURCES += src/mainwindow.cpp
+SOURCES += src/log/simpleqtlogger.cpp
+SOURCES += src/log/logger.cpp
+SOURCES += src/xml/download.cpp
+SOURCES += src/xml/deploymentxml.cpp
+SOURCES += src/app/application.cpp
+SOURCES += src/app/javaupdate.cpp
+SOURCES += src/shortcut/shortcut.cpp
+SOURCES += src/utils/hashmac/hashmac512.cpp
+SOURCES += src/config/global.cpp
+
+HEADERS += src/mainwindow.h
+HEADERS += src/log/simpleqtlogger.h
+HEADERS += src/log/logger.h
+HEADERS += src/xml/deploymentxml.h
+HEADERS += src/xml/download.h
+HEADERS += src/app/application.h
+HEADERS += src/app/javaupdate.h
+HEADERS += src/shortcut/shortcut.h
 HEADERS += src/utils/hashmac/hashmac512.h
+HEADERS += src/config/global.h
 
 FORMS += ui/mainwindow.ui
 
