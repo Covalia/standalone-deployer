@@ -53,7 +53,7 @@ void AppDownloader::start()
     urls << QUrl("lib/external/balloontip-1.2.4.1.jar");
 
 
-    // urls << m_appUrl + Global::AppCnlpRelativePath;
+    // urls << m_appUrl + Global::AppCnlpRemoteFilename;
 
     // TODO transmettre le nom de l'application avec les url des fichiers, il s'agit du sous dossier
     m_downloader->setUrlListToDownload("Application", urls);

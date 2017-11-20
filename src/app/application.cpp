@@ -43,6 +43,3 @@ void Application::setDownloaderExtensionClasspath(const QString &_downloaderExte
 {
     m_downloaderExtensionClasspath = _downloaderExtensionClasspath;
 }
-
-
-

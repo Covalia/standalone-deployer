@@ -5,38 +5,54 @@
 
 class Global
 {
+public:
+    /// URL de l'application
+    static const QString AppUrl;
 
-	public:
-		/// URL de l'application
-		static const QString AppUrl;
+    /// Chemin de l'installation
+    static const QString InstallationDir;
 
-		/// Chemin de l'installation
-		static const QString InstallationDir;
+    /// Chemin relatif d'installation de l'application
+    static const QString AppDir;
 
-		/// Chemin relatif pour trouver le fichier cnlp
-		static const QString AppCnlpRelativePath;
+    /// Chemin relatif de la configuration de l'application
+    static const QString ConfigurationDir;
 
-		/// Chemin relatif d'installation de l'application
-		static const QString AppDir;
+    /// Chemin relatif des extensions de l'application
+    static const QString ExtensionDir;
 
-		/// Chemin relatif de la configuration de l'application
-		static const QString ConfigurationDir;
+    /// Chemin relatif de Java
+    static const QString JavaDir;
 
-		/// Chemin relatif des extensions de l'application
-		static const QString ExtensionDir;
+    /// Chemin relatif des logs de l'application
+    static const QString LogsDir;
 
-		/// Chemin relatif de Java
-		static const QString JavaDir;
+    /// Chemin relatif du répertoire temp de l'application
+    static const QString TempDir;
 
-		/// Chemin relatif des logs de l'application
-		static const QString LogsDir;
+    /// User-Agent du downloader
+    static const QString UserAgentValue;
 
-		/// Chemin relatif du répertoire temp de l'application
-		static const QString TempDir;
+    /// Nom application.
+    static const QString AppName;
+    /// Nom fichier application distant.
+    static const QString AppCnlpRemoteFilename;
+    /// Nom fichier application local.
+    static const QString AppCnlpLocalFilename;
 
-        /// User-Agent du downloader
-        static const QString UserAgentValue;
+    /// Nom starter.
+    static const QString StarterName;
+    /// Nom fichier starter distant.
+    static const QString StarterCnlpRemoteFilename;
+    /// Nom fichier starter local.
+    static const QString StarterCnlpLocalFilename;
 
+    /// Nom downloader.
+    static const QString DownloaderName;
+    /// Nom fichier downloader distant.
+    static const QString DownloaderCnlpRemoteFilename;
+    /// Nom fichier downloader local.
+    static const QString DownloaderCnlpLocalFilename;
 };
 
-#endif
+#endif // ifndef CONFIG__GLOBAL_H

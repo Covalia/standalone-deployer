@@ -58,9 +58,9 @@ MainWindow::MainWindow(QWidget *_parent) :
     //: This string refers to the welcome screen.
     m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de %1 !").arg("Covotem"));
 
-	m_timer = new QTimer(this);
-	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
-	m_timer->start(5000);
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
+    m_timer->start(5000);
 
 	updateSlideShow();
 

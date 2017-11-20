@@ -12,7 +12,6 @@
 #include "app/javaupdate.h"
 
 // TODO sortir les constantes.
-static QString DEPLOYMENT_CNLP_FILE_EXTENSION = ".cnlp";
 
 static QString R_DEPLOYMENT_TAG = "deployment";
 static QString DOWNLOADS_TAG = "downloads";
