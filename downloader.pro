@@ -47,6 +47,7 @@ SOURCES += src/xml/deploymentxml.cpp
 SOURCES += src/app/application.cpp
 SOURCES += src/app/javaupdate.cpp
 SOURCES += src/shortcut/shortcut.cpp
+SOURCES += src/utils/hashmac/hashmac512.cpp
 
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/network/downloadmanager.h
@@ -60,6 +61,7 @@ HEADERS += src/xml/download.h
 HEADERS += src/app/application.h
 HEADERS += src/app/javaupdate.h
 HEADERS += src/shortcut/shortcut.h
+HEADERS += src/utils/hashmac/hashmac512.h
 
 FORMS += ui/mainwindow.ui
 FORMS += ui/authenticationdialog.ui
