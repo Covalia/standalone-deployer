@@ -3,7 +3,8 @@
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
-    m_xmlFile(_pathCnlp){
+    m_xmlFile(_pathCnlp)
+{
     m_memory = "512";
     m_version = "";
     m_applications = QMap<Application, QList<Download> >();
@@ -11,10 +12,12 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     m_arguments = QList<QString>();
 }
 
-DeploymentXML::~DeploymentXML(){
+DeploymentXML::~DeploymentXML()
+{
 }
 
-bool DeploymentXML::read() {
+bool DeploymentXML::read()
+{
     if (!m_xmlFile.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Cannot read file" << m_xmlFile.errorString();
         return false;
@@ -30,32 +33,39 @@ bool DeploymentXML::read() {
     return result;
 }
 
-QString DeploymentXML::readNextText() {
+QString DeploymentXML::readNextText()
+{
     m_xmlReader.readNext();
     return m_xmlReader.text().toString();
 }
 
-QMap<QString, JavaUpdate> DeploymentXML::getJavaUpdates() const {
+QMap<QString, JavaUpdate> DeploymentXML::getJavaUpdates() const
+{
     return m_javaUpdates;
 }
 
-QMap<Application, QList<Download> > DeploymentXML::getApplications() const {
+QMap<Application, QList<Download> > DeploymentXML::getApplications() const
+{
     return m_applications;
 }
 
-QString DeploymentXML::getMemory() const {
+QString DeploymentXML::getMemory() const
+{
     return m_memory;
 }
 
-QList<QString> DeploymentXML::getArguments() const {
+QList<QString> DeploymentXML::getArguments() const
+{
     return m_arguments;
 }
 
-QString DeploymentXML::getVersion() const {
+QString DeploymentXML::getVersion() const
+{
     return m_version;
 }
 
-bool DeploymentXML::processDeployment() {
+bool DeploymentXML::processDeployment()
+{
     if (!m_xmlReader.readNextStartElement()) {
         return false;
     }
@@ -88,7 +98,8 @@ bool DeploymentXML::processDeployment() {
     return result;
 } // DeploymentXML::processDeployment
 
-bool DeploymentXML::processVersion() {
+bool DeploymentXML::processVersion()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != VERSION_TAG) {
         return false;
     }
@@ -96,7 +107,8 @@ bool DeploymentXML::processVersion() {
     return true;
 }
 
-bool DeploymentXML::processMemory() {
+bool DeploymentXML::processMemory()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != MEMORY_TAG) {
         return false;
     }
@@ -104,7 +116,8 @@ bool DeploymentXML::processMemory() {
     return true;
 }
 
-bool DeploymentXML::processJava() {
+bool DeploymentXML::processJava()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != JAVA_TAG) {
         return false;
     }
@@ -139,7 +152,8 @@ bool DeploymentXML::processJava() {
     return true;
 } // DeploymentXML::processJava
 
-bool DeploymentXML::processArguments() {
+bool DeploymentXML::processArguments()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != ARGUMENTS_TAG) {
         return false;
     }
@@ -154,7 +168,8 @@ bool DeploymentXML::processArguments() {
     return result;
 }
 
-bool DeploymentXML::processArgument() {
+bool DeploymentXML::processArgument()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != ARGUMENT_TAG) {
         return false;
     }
@@ -166,7 +181,8 @@ bool DeploymentXML::processArgument() {
     return true;
 }
 
-bool DeploymentXML::processDownloads() {
+bool DeploymentXML::processDownloads()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != DOWNLOADS_TAG) {
         return false;
     }
@@ -181,7 +197,8 @@ bool DeploymentXML::processDownloads() {
     return result;
 }
 
-bool DeploymentXML::processApplication() {
+bool DeploymentXML::processApplication()
+{
     if (!m_xmlReader.isStartElement() || m_xmlReader.name() != APPLICATION_TAG) {
         return false;
     }
@@ -232,7 +249,8 @@ bool DeploymentXML::processApplication() {
     return false;
 } // DeploymentXML::processApplication
 
-Download DeploymentXML::processDownload() {
+Download DeploymentXML::processDownload()
+{
     QString href = "";
     QString hashMac = "";
     QString os = OS_ANY_VALUE;

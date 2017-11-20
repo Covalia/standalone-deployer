@@ -3,7 +3,6 @@
 
 #include <QString>
 
-
 /**
  * @class Download
  * \brief This class represents a file to download into application into CNLP file

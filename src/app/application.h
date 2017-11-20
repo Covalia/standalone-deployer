@@ -5,24 +5,23 @@
 
 // TODO sortir les constantes
 static QString NAME_FILE_APPLICATION = "application";
-static QString REMOTE_FILE_APPLICATION= "application.cnlp.php";
-static QString LOCAL_FILE_APPLICATION= "application.cnlp";
+static QString REMOTE_FILE_APPLICATION = "application.cnlp.php";
+static QString LOCAL_FILE_APPLICATION = "application.cnlp";
 
-static QString NAME_FILE_STARTER= "starter";
-static QString REMOTE_FILE_STARTER= "starter.cnlp.php";
-static QString LOCAL_FILE_STARTER= "starter.cnlp";
+static QString NAME_FILE_STARTER = "starter";
+static QString REMOTE_FILE_STARTER = "starter.cnlp.php";
+static QString LOCAL_FILE_STARTER = "starter.cnlp";
 
-static QString NAME_FILE_DOWNLOADER= "downloader";
-static QString REMOTE_FILE_DOWNLOADER= "downloader.cnlp.php";
-static QString LOCAL_FILE_DOWNLOADER= "downloader.cnlp";
+static QString NAME_FILE_DOWNLOADER = "downloader";
+static QString REMOTE_FILE_DOWNLOADER = "downloader.cnlp.php";
+static QString LOCAL_FILE_DOWNLOADER = "downloader.cnlp";
 
 /**
  * @class Application
  * \brief This class represents application informations in CNLP file. It contain application version, name etc
  */
 class Application
-{ 
-
+{
 public:
     Application(QString _name,
                 QString _cnlpRemoteFileName,
@@ -39,10 +38,10 @@ public:
 
     operator QString() const {
         return "Application [name=" + m_name +
-                ", version=" + m_version +
-                ", cnlpRemoteFileName=" + m_cnlpRemoteFileName +
-                ", cnlpLocalFileName=" + m_cnlpLocalFileName +
-                ", downloaderExtensionClasspath=" + m_downloaderExtensionClasspath + "]";
+               ", version=" + m_version +
+               ", cnlpRemoteFileName=" + m_cnlpRemoteFileName +
+               ", cnlpLocalFileName=" + m_cnlpLocalFileName +
+               ", downloaderExtensionClasspath=" + m_downloaderExtensionClasspath + "]";
     }
 
 private:
@@ -58,4 +57,4 @@ inline bool operator<(const Application &_e1, const Application &_e2)
     return _e1.getName() < _e2.getName();
 }
 
-#endif
+#endif // ifndef APPLICATION_H

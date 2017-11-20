@@ -7,7 +7,8 @@
  * \brief Initializes application logger
  * \param pathLog
  */
-Logger::Logger(QString pathLog){
+Logger::Logger(QString pathLog)
+{
     // enable sinks
     simpleqtlogger::ENABLE_LOG_SINK_FILE = true;
     simpleqtlogger::ENABLE_LOG_SINK_CONSOLE = true;

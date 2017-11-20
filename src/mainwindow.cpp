@@ -23,7 +23,8 @@
 MainWindow::MainWindow(QWidget * _parent) :
     QMainWindow(_parent),
     m_timer(0),
-    m_ui(new Ui::MainWindow){
+    m_ui(new Ui::MainWindow)
+{
     m_ui->setupUi(this);
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
@@ -34,9 +35,9 @@ MainWindow::MainWindow(QWidget * _parent) :
     //: This string refers to the welcome screen.
     m_ui->descriptionLabel->setText(tr("Bienvenue dans l'installeur de %1 !").arg("Covotem"));
 
-	m_timer = new QTimer(this);
-	connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
-	m_timer->start(5000);
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
+    m_timer->start(5000);
 
     updateSlideShow();
 }
@@ -44,24 +45,24 @@ MainWindow::MainWindow(QWidget * _parent) :
 /*!
  * \brief Main application windows destructor
  */
-MainWindow::~MainWindow(){
+MainWindow::~MainWindow()
+{
     delete m_ui;
     delete m_timer;
 }
 
-void MainWindow::closeEvent(QCloseEvent *_event)
+void MainWindow::closeEvent(QCloseEvent * _event)
 {
-	qDebug() << "closeEvent";
-	// sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.
-	if (m_alreadyClosedOnMacOs) {
-		_event->accept();
-	}
-	else {
+    qDebug() << "closeEvent";
+    // sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.
+    if (m_alreadyClosedOnMacOs) {
+        _event->accept();
+    } else {
         //: This string refers to the exit message title.
         int ret = QMessageBox::question(this, tr("Attention !"),
-                //: This string refers to the exit message.
-				tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
-				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+                                        //: This string refers to the exit message.
+                                        tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
+                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
         if (ret == QMessageBox::Yes) {
             m_alreadyClosedOnMacOs = true;
@@ -76,7 +77,8 @@ void MainWindow::closeEvent(QCloseEvent *_event)
  * \brief MainWindow::mousePressEvent
  * \param _event
  */
-void MainWindow::mousePressEvent(QMouseEvent * _event){
+void MainWindow::mousePressEvent(QMouseEvent * _event)
+{
     m_clickedPosition = _event->pos();
 }
 
@@ -84,12 +86,13 @@ void MainWindow::mousePressEvent(QMouseEvent * _event){
  * \brief MainWindow::mouseMoveEvent
  * \param _event
  */
-void MainWindow::mouseMoveEvent(QMouseEvent * _event){
+void MainWindow::mouseMoveEvent(QMouseEvent * _event)
+{
     move(_event->globalPos() - m_clickedPosition);
 }
 
-
-void MainWindow::center(){
+void MainWindow::center()
+{
     QRect geometry = frameGeometry();
     QPoint center = QDesktopWidget().availableGeometry().center();
 
@@ -97,7 +100,8 @@ void MainWindow::center(){
     move(geometry.topLeft());
 }
 
-void MainWindow::updateSlideShow(){
+void MainWindow::updateSlideShow()
+{
     if (m_imagesList.isEmpty()) {
         loadSlideShowImagesFromResources();
     }
@@ -111,7 +115,8 @@ void MainWindow::updateSlideShow(){
     }
 }
 
-void MainWindow::loadSlideShowImagesFromResources(){
+void MainWindow::loadSlideShowImagesFromResources()
+{
     const QSize maxSize = m_ui->imageLabel->maximumSize();
 
     qDebug() << maxSize;

@@ -1,7 +1,7 @@
 #ifndef JAVAUPDATE_H
 #define JAVAUPDATE_H
 
-#include<QString>
+#include <QString>
 
 /**
  * @class JavaUpdate
@@ -9,7 +9,6 @@
  */
 class JavaUpdate
 {
-
 public:
 
     JavaUpdate(QString _version,
@@ -28,7 +27,6 @@ private:
     QString m_version;
     QString m_file;
     QString m_hash;
-
 };
 
-#endif
+#endif // ifndef JAVAUPDATE_H
