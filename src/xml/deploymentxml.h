@@ -11,40 +11,6 @@
 #include "app/application.h"
 #include "app/javaupdate.h"
 
-// TODO sortir les constantes.
-
-static QString R_DEPLOYMENT_TAG = "deployment";
-static QString DOWNLOADS_TAG = "downloads";
-static QString JAR_TAG = "jar";
-
-static QString RESOURCE_TAG = "resource";
-
-static QString OS_ATTRIBUTE = "os";
-// TODO struct ?
-static QString OS_MACOSX_VALUE = "MacOSX";
-static QString OS_WINDOWS_VALUE = "Windows";
-static QString OS_ANY_VALUE = "Any";
-static QString NATIVE_ATTRIBUTE = "native";
-static QString HREF_ATTRIBUTE = "href";
-static QString HASH_ATTRIBUTE = "hash";
-static QString MAIN_ATTRIBUTE = "main";
-
-static QString APPLICATION_TAG = "application";
-static QString FILE_TAG = "file";
-
-static QString VERSION_ATTRIBUTE = "version";
-static QString NAME_ATTRIBUTE = "name";
-
-static QString DOWNLOADER_EXTENSION_CLASSPATH_ATTRIBUTE = "downloaderExtensionClasspath";
-
-static QString ARGUMENTS_TAG = "arguments";
-static QString ARGUMENT_TAG = "argument";
-
-static QString MEMORY_TAG = "memory";
-static QString VERSION_TAG = "version";
-
-static QString JAVA_TAG = "java";
-static QString JAVA_VERSION_ATTRIBUTE = "version";
 
 /**
  * @class DeploymentXML
@@ -76,8 +42,41 @@ public:
     QString getVersion() const;
     QList<QString> getArguments() const;
     QMap<Application, QList<Download> > getApplications() const;
+    QList<Download> getDownloads(const Application &_application, const QString &_os) const;
     QMap<QString, JavaUpdate> getJavaUpdates() const;
     QString getMemory() const;
+
+    static const QString RDeploymentTag;
+    static const QString DownloadsTag;
+    static const QString JarTag;
+
+    static const QString ResourceTag;
+
+    static const QString OsAttribute;
+    static const QString OsMacOsValue;
+    static const QString OsWindowsValue;
+    static const QString OsAnyValue;
+    static const QString NativeAttribute;
+    static const QString HrefAttribute;
+    static const QString HashAttribute;
+    static const QString MainAttribute;
+
+    static const QString ApplicationTag;
+    static const QString FileTag;
+
+    static const QString VersionAttribute;
+    static const QString NameAttribute;
+
+    static const QString DownloaderExtensionClasspathAttribute;
+
+    static const QString ArgumentsTag;
+    static const QString ArgumentTag;
+
+    static const QString MemoryTag;
+    static const QString VersionTag;
+
+    static const QString JavaTag;
+    static const QString JavaVersionAttribute;
 
 private:
 
