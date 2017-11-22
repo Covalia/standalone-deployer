@@ -51,7 +51,8 @@ SOURCES += src/main.cpp \
     src/language/languagemanager.cpp \
     src/uiManager/uimanager.cpp \
     src/gui/proxy.cpp \
-    src/gui/about.cpp
+    src/gui/about.cpp \
+    src/gui/downloadui.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -68,14 +69,16 @@ HEADERS += src/mainwindow.h \
     src/language/languagemanager.h \
     src/uiManager/uimanager.h \
     src/gui/proxy.h \
-    src/gui/about.h
+    src/gui/about.h \
+    src/gui/downloadui.h
 
 FORMS += ui/mainwindow.ui \
     ui/welcome.ui \
     ui/windows.ui \
     ui/personnalize.ui \
     ui/proxy.ui \
-    ui/about.ui
+    ui/about.ui \
+    ui/downloadui.ui
 
 RESOURCES += resources.qrc
 

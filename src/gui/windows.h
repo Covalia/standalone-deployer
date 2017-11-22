@@ -2,6 +2,7 @@
 #define WINDOWS_H
 
 #include <QMainWindow>
+#include <QWidget>
 
 namespace Ui {
 class Windows;
@@ -17,14 +18,17 @@ public:
 
     void center();
 
-    void changeContentWidget(QWidget * widget);
+    void changeContentWidget(QWidget * widget, bool deleteWidgets = true);
+
+    QWidget *currentWidgetCentral() const;
 
 private:
     Ui::Windows * ui;
 
     bool m_alreadyClosedOnMacOs = false;
 
-    void clearLayout(QLayout * layout, bool deleteWidgets);
+
+    void clearLayout(QLayout * layout, bool deleteWidgets = true);
     virtual void closeEvent(QCloseEvent *);
 
 signals:

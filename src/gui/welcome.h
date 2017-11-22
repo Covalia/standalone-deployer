@@ -16,11 +16,15 @@ public:
     virtual ~Welcome();
 
 signals:
+    void simpleInstallationSignal();
     void customInstallationSignal();
+    void contractSignal();
 
 public slots:
     void changeLanguage();
+    void simpleInstallationEvent();
     void customInstallationEvent();
+    void customContractEvent();
 
 private:
     Ui::Welcome * ui;

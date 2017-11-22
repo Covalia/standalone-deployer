@@ -62,6 +62,9 @@
         </size>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>3</number>
+        </property>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="spacing">
@@ -81,22 +84,21 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="labelContract">
-            <property name="font">
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-              <underline>true</underline>
-             </font>
-            </property>
+           <widget class="QPushButton" name="buttonContract">
             <property name="styleSheet">
-             <string notr="true">color : @color-text-gray;</string>
+             <string notr="true">QPushButton {
+	background-color: transparent;
+	color : @color-text-gray;
+	border: px0;
+	text-decoration: underline;
+}
+
+QPushButton:hover {
+	color : white;
+}</string>
             </property>
             <property name="text">
              <string>User contract</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>

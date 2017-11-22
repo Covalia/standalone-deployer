@@ -9,6 +9,7 @@
         <file>resources/logo_title.png</file>
         <file>resources/minus.png</file>
         <file>resources/down.png</file>
+        <file>resources/contract.txt</file>
     </qresource>
     <qresource prefix="/slideshow">
         <file alias="montage.jpg">resources/slideshow/montage.jpg</file>

@@ -4,6 +4,7 @@ StyleManager::StyleManager(){
 }
 
 QString StyleManager::transformStyle(QString styleSheet){
+    styleSheet.replace("@color-panel-background-border", "#364058");
     styleSheet.replace("@color-panel-background", "#2d364c");
     styleSheet.replace("@color-button-background-over", "#2a7d7d");
     styleSheet.replace("@color-button-background", "#339999");

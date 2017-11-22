@@ -2,6 +2,7 @@
 #include "ui_welcome.h"
 #include "../src/style/stylemanager.h"
 #include <QDebug>
+#include <QPropertyAnimation>
 
 Welcome::Welcome(QWidget * parent) :
     QWidget(parent),
@@ -10,8 +11,9 @@ Welcome::Welcome(QWidget * parent) :
 
     StyleManager::transformStyle(this);
 
+    connect(ui->buttonSimpleInstallation, SIGNAL(clicked()), this, SLOT(simpleInstallationEvent()));
     connect(ui->buttonCustomInstall, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
-    //connect label to slot
+    connect(ui->buttonContract, SIGNAL(clicked()), this, SLOT(customContractEvent()));
 }
 
 Welcome::~Welcome(){
@@ -24,6 +26,14 @@ void Welcome::changeLanguage() {
 
 void Welcome::customInstallationEvent() {
     customInstallationSignal();
+}
+
+void Welcome::simpleInstallationEvent() {
+    simpleInstallationSignal();
+}
+
+void Welcome::customContractEvent() {
+    contractSignal();
 }
 
 //dans slot -> signal

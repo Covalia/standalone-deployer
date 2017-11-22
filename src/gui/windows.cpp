@@ -48,21 +48,28 @@ void Windows::center(){
     move(geometry.topLeft());
 }
 
-void Windows::changeContentWidget(QWidget * widget){
+void Windows::changeContentWidget(QWidget * widget, bool deleteWidgets){
     // delete all old widget
-    clearLayout(ui->contentLayout, true);
-
+    clearLayout(ui->contentLayout, deleteWidgets);
     ui->contentLayout->addWidget(widget);
 }
 
+
 void Windows::clearLayout(QLayout * layout, bool deleteWidgets){
     while (QLayoutItem * item = layout->takeAt(0)) {
-        if (deleteWidgets) {
-            if (QWidget * widget = item->widget())
+        if (QWidget * widget = item->widget()){
+            //layout->removeWidget(widget);
+            if (deleteWidgets) {
                 widget->deleteLater();
+            }
+            else{
+                widget->setParent(this);
+            }
         }
+
         if (QLayout * childLayout = item->layout())
             clearLayout(childLayout, deleteWidgets);
+
         delete item;
     }
 }

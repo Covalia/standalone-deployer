@@ -2,6 +2,7 @@
 #define PERSONNALIZE_H
 
 #include <QWidget>
+#include <QString>
 
 namespace Ui {
 class Personnalize;
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::Personnalize * ui;
+    QString fileChooserDialog(QString openFolder);
 
 signals:
     void proxySettingSignal();
@@ -24,6 +26,8 @@ signals:
 public slots:
     void changeLanguage();
     void proxySettingEvent();
+    void fileChooserInstallEvent();
+    void fileChooserDataEvent();
 };
 
 #endif // PERSONNALIZE_H

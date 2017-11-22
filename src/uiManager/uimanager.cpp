@@ -6,13 +6,16 @@
 #include "gui/personnalize.h"
 #include "gui/proxy.h"
 #include "gui/about.h"
+#include "gui/downloadui.h"
 
 UIManager::UIManager() : QObject(),
     m_window(0),
     m_welcome(0),
     m_personnalize(0),
     m_proxy(0),
-    m_about(0){
+    m_about(0),
+    m_download(0),
+    m_saveWidget(0){
     m_window = new Windows();
     m_window->show();
     m_window->center();
@@ -25,31 +28,42 @@ UIManager::UIManager() : QObject(),
 }
 
 UIManager::~UIManager(){
+    delete m_saveWidget;
     delete m_window;
     delete m_welcome;
     delete m_personnalize;
     delete m_proxy;
     delete m_about;
+    delete m_download;
 }
-
 
 void UIManager::aboutEvent(){
     changeAbout();
 }
 
+void UIManager::changeTo(QWidget * widget) {
+    m_window->changeContentWidget(widget);
+}
+
 void UIManager::changeWelcome() {
     m_welcome = new Welcome(m_window);
     m_window->changeContentWidget(m_welcome);
+    m_saveWidget = m_welcome;
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_welcome, SLOT(changeLanguage()));
 
     connect(m_welcome, SIGNAL(customInstallationSignal()),
             this, SLOT(switchWelcomToPersonnalize()));
+    connect(m_welcome, SIGNAL(contractSignal()),
+            this, SLOT(aboutEvent()));
+    connect(m_welcome, SIGNAL(simpleInstallationSignal()),
+            this, SLOT(switchWelcomToDownload()));
 }
 
 void UIManager::changePersonnalize(){
     m_personnalize = new Personnalize(m_window);
     m_window->changeContentWidget(m_personnalize);
+    m_saveWidget = m_personnalize;
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_personnalize, SLOT(changeLanguage()));
 
@@ -60,6 +74,7 @@ void UIManager::changePersonnalize(){
 void UIManager::changeProxy(){
     m_proxy = new Proxy(m_window);
     m_window->changeContentWidget(m_proxy);
+    m_saveWidget = m_proxy;
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_proxy, SLOT(changeLanguage()));
 
@@ -69,12 +84,19 @@ void UIManager::changeProxy(){
 
 void UIManager::changeAbout(){
     m_about = new About(m_window);
-    m_window->changeContentWidget(m_about);
+    m_window->changeContentWidget(m_about, false);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_about, SLOT(changeLanguage()));
 
-//    connect(m_proxy, SIGNAL(validateSettingsSignal()),
-//            this, SLOT(switchProxyToPersonnalize()));
+    connect(m_about, SIGNAL(validateAboutSignal()),
+            this, SLOT(switchAboutTo()));
+}
+
+void UIManager::changeDownload(){
+    m_download = new DownloadUI(m_window);
+    m_window->changeContentWidget(m_download, false);
+    connect(m_window, SIGNAL(changeLanguageSignal()),
+            m_download, SLOT(changeLanguage()));
 }
 
 void UIManager::removeWelcome() {
@@ -92,9 +114,24 @@ void UIManager::removeProxy(){
     delete m_proxy;
 }
 
+void UIManager::removeAbout(){
+    m_about->disconnect();
+    delete m_about;
+}
+
+void UIManager::removeDownload(){
+    m_download->disconnect();
+    delete m_download;
+}
+
 void UIManager::switchWelcomToPersonnalize() {
     removeWelcome();
     changePersonnalize();
+}
+
+void UIManager::switchWelcomToDownload() {
+    removeWelcome();
+    changeDownload();
 }
 
 void UIManager::switchPersonnalizeToProxy() {
@@ -105,4 +142,9 @@ void UIManager::switchPersonnalizeToProxy() {
 void UIManager::switchProxyToPersonnalize() {
     removeProxy();
     changePersonnalize();
+}
+
+void UIManager::switchAboutTo() {
+    removeAbout();
+    changeTo(m_saveWidget);
 }
