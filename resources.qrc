@@ -12,9 +12,9 @@
         <file>resources/contract.txt</file>
     </qresource>
     <qresource prefix="/slideshow">
-        <file alias="montage.jpg">resources/slideshow/montage.jpg</file>
-        <file alias="outils.jpg">resources/slideshow/outils.jpg</file>
-        <file alias="tournevis.jpg">resources/slideshow/tournevis.jpg</file>
-        <file alias="trousse.jpg">resources/slideshow/trousse.jpg</file>
+        <file>resources/slideshow/mockup.png</file>
+        <file>resources/slideshow/mockup1.png</file>
+        <file>resources/slideshow/mockup2.png</file>
+        <file>resources/slideshow/mockup3.png</file>
     </qresource>
 </RCC>

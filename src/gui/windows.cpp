@@ -5,6 +5,7 @@
 #include "../src/language/languagemanager.h"
 #include "../src/log/simpleqtlogger.h"
 #include "personnalize.h"
+#include "askpopup.h"
 
 #include <QDesktopWidget>
 #include <QMessageBox>
@@ -43,9 +44,27 @@ Windows::~Windows(){
 void Windows::center(){
     QRect geometry = frameGeometry();
     QPoint center = QDesktopWidget().availableGeometry().center();
-
     geometry.moveCenter(center);
+    m_position = center;
     move(geometry.topLeft());
+}
+
+void Windows::mousePressEvent(QMouseEvent *e) {
+    m_position = QPoint(e->globalX()-geometry().x(), e->globalY()-geometry().y());
+    this->setCursor(QCursor(Qt::SizeAllCursor));
+}
+
+void Windows::mouseReleaseEvent(QMouseEvent *e) {
+    this->setCursor(QCursor(Qt::ArrowCursor));
+}
+
+void Windows::mouseMoveEvent(QMouseEvent *e) {
+    QWidget::mouseMoveEvent(e);
+    if (e->buttons() && Qt::LeftButton) {
+        QPoint toMove = e->globalPos() - m_position;
+        move(toMove);
+        this->repaint();
+    }
 }
 
 void Windows::changeContentWidget(QWidget * widget, bool deleteWidgets){
@@ -54,6 +73,10 @@ void Windows::changeContentWidget(QWidget * widget, bool deleteWidgets){
     ui->contentLayout->addWidget(widget);
 }
 
+void Windows::setVisibleButton(bool about, bool changeLanguage){
+    ui->buttonAbout->setVisible(about);
+    ui->comboBoxLanguage->setVisible(changeLanguage);
+}
 
 void Windows::clearLayout(QLayout * layout, bool deleteWidgets){
     while (QLayoutItem * item = layout->takeAt(0)) {
@@ -79,15 +102,13 @@ void Windows::closeEvent(QCloseEvent * _event){
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        // : This string refers to the exit message title.
-        int ret = QMessageBox::question(this, tr("Attention !"),
-                                        // : This string refers to the exit message.
-                                        tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-        if (ret == QMessageBox::Yes) {
-            m_alreadyClosedOnMacOs = true;
+        AskPopup * popupClose = new AskPopup(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        popupClose->show();
+        if(popupClose->exec() == QDialog::Accepted){
             _event->accept();
-        } else {
+            m_alreadyClosedOnMacOs = true;
+        }
+        else{
             _event->ignore();
         }
     }

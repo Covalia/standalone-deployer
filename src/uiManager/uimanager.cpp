@@ -43,12 +43,14 @@ void UIManager::aboutEvent(){
 
 void UIManager::changeTo(QWidget * widget) {
     m_window->changeContentWidget(widget);
+    m_window->setVisibleButton(true, true);
 }
 
 void UIManager::changeWelcome() {
     m_welcome = new Welcome(m_window);
     m_window->changeContentWidget(m_welcome);
     m_saveWidget = m_welcome;
+    m_window->setVisibleButton(true, true);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_welcome, SLOT(changeLanguage()));
 
@@ -64,17 +66,21 @@ void UIManager::changePersonnalize(){
     m_personnalize = new Personnalize(m_window);
     m_window->changeContentWidget(m_personnalize);
     m_saveWidget = m_personnalize;
+    m_window->setVisibleButton(true, true);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_personnalize, SLOT(changeLanguage()));
 
     connect(m_personnalize, SIGNAL(proxySettingSignal()),
             this, SLOT(switchPersonnalizeToProxy()));
+    connect(m_personnalize, SIGNAL(customInstallationSignal()),
+            this, SLOT(switchWelcomToDownload()));
 }
 
 void UIManager::changeProxy(){
     m_proxy = new Proxy(m_window);
     m_window->changeContentWidget(m_proxy);
     m_saveWidget = m_proxy;
+    m_window->setVisibleButton(true, true);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_proxy, SLOT(changeLanguage()));
 
@@ -85,6 +91,7 @@ void UIManager::changeProxy(){
 void UIManager::changeAbout(){
     m_about = new About(m_window);
     m_window->changeContentWidget(m_about, false);
+    m_window->setVisibleButton(false, true);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_about, SLOT(changeLanguage()));
 
@@ -95,6 +102,7 @@ void UIManager::changeAbout(){
 void UIManager::changeDownload(){
     m_download = new DownloadUI(m_window);
     m_window->changeContentWidget(m_download, false);
+    m_window->setVisibleButton(false, false);
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_download, SLOT(changeLanguage()));
 }
@@ -137,6 +145,11 @@ void UIManager::switchWelcomToDownload() {
 void UIManager::switchPersonnalizeToProxy() {
     removePersonnalize();
     changeProxy();
+}
+
+void UIManager::switchPersonnalizeToDownload() {
+    removePersonnalize();
+    changeDownload();
 }
 
 void UIManager::switchProxyToPersonnalize() {

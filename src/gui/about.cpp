@@ -15,6 +15,14 @@ About::About(QWidget * parent) :
 
     connect(ui->buttonValidateAbout, SIGNAL(clicked()), this, SLOT(validateAbout()));
 
+    initTextContract();
+}
+
+About::~About(){
+    delete ui;
+}
+
+void About::initTextContract(){
     QFile f(":/resources/contract.txt");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
@@ -24,12 +32,9 @@ About::About(QWidget * parent) :
     ui->plainTextEdit->ensureCursorVisible();
 }
 
-About::~About(){
-    delete ui;
-}
-
 void About::changeLanguage(){
     ui->retranslateUi(this);
+    initTextContract();
 }
 
 void About::validateAbout(){

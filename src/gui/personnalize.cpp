@@ -16,6 +16,7 @@ Personnalize::Personnalize(QWidget * parent) :
     connect(ui->buttonProxySetting, SIGNAL(clicked()), this, SLOT(proxySettingEvent()));
     connect(ui->buttonChangeFolderInstallation, SIGNAL(clicked()), this, SLOT(fileChooserInstallEvent()));
     connect(ui->buttonChangeDataInstallation, SIGNAL(clicked()), this, SLOT(fileChooserDataEvent()));
+    connect(ui->buttonStartInstallation, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
 }
 
 Personnalize::~Personnalize(){
@@ -59,5 +60,9 @@ void Personnalize::fileChooserDataEvent() {
          }
      }
      return "";
+ }
+
+ void Personnalize::customInstallationEvent(){
+     customInstallationSignal();
  }
 

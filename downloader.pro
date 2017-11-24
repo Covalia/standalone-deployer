@@ -43,7 +43,7 @@ SOURCES += src/main.cpp \
     src/xml/deploymentxml.cpp \
     src/app/application.cpp \
     src/app/javaupdate.cpp \
-	src/shortcut/shortcut.cpp \
+    src/shortcut/shortcut.cpp \
     src/style/stylemanager.cpp \
     src/gui/welcome.cpp \
     src/gui/windows.cpp \
@@ -52,7 +52,8 @@ SOURCES += src/main.cpp \
     src/uiManager/uimanager.cpp \
     src/gui/proxy.cpp \
     src/gui/about.cpp \
-    src/gui/downloadui.cpp
+    src/gui/downloadui.cpp \
+    src/gui/askpopup.cpp
 
 HEADERS += src/mainwindow.h \
     src/log/simpleqtlogger.h \
@@ -70,7 +71,8 @@ HEADERS += src/mainwindow.h \
     src/uiManager/uimanager.h \
     src/gui/proxy.h \
     src/gui/about.h \
-    src/gui/downloadui.h
+    src/gui/downloadui.h \
+    src/gui/askpopup.h
 
 FORMS += ui/mainwindow.ui \
     ui/welcome.ui \
@@ -78,7 +80,8 @@ FORMS += ui/mainwindow.ui \
     ui/personnalize.ui \
     ui/proxy.ui \
     ui/about.ui \
-    ui/downloadui.ui
+    ui/downloadui.ui \
+    ui/askpopup.ui
 
 RESOURCES += resources.qrc
 

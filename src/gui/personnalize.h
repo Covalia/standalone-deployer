@@ -22,10 +22,12 @@ private:
 
 signals:
     void proxySettingSignal();
+    void customInstallationSignal();
 
 public slots:
     void changeLanguage();
     void proxySettingEvent();
+    void customInstallationEvent();
     void fileChooserInstallEvent();
     void fileChooserDataEvent();
 };

@@ -47,6 +47,7 @@ private slots:
     void switchWelcomToPersonnalize();
     void switchWelcomToDownload();
     void switchPersonnalizeToProxy();
+    void switchPersonnalizeToDownload();
     void switchProxyToPersonnalize();
     void switchAboutTo();
 

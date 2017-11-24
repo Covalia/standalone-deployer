@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::About * ui;
+    void initTextContract();
 
 signals:
     void validateAboutSignal();
