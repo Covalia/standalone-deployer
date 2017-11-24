@@ -8,6 +8,10 @@ namespace Ui {
 class AskPopup;
 }
 
+/**
+ * @class AskPopup
+ * @brief AskPopup dialog windows
+ */
 class AskPopup : public QDialog
 {
     Q_OBJECT

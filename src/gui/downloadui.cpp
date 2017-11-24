@@ -102,3 +102,19 @@ void DownloadUI::updateSlideShow(){
     update_counter %= m_imagesList.size();
     updateSlideShow(update_counter);
 }
+
+void DownloadUI::setTextGlobalDownload(QString text){
+    ui->labelProgresseBarGlobal->setText(text);
+}
+
+void DownloadUI::setTextParticularDownload(QString text){
+    ui->labelProgressBarFile->setText(text);
+}
+
+void DownloadUI::setTextPercentDownload(int value){
+    ui->progressBarGlobal->setValue(value);
+}
+
+void DownloadUI::setPercentParticularDownload(int value){
+    ui->progressBarFile->setValue(value);
+}

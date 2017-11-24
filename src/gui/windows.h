@@ -8,6 +8,13 @@ namespace Ui {
 class Windows;
 }
 
+/**
+ * @class Windows
+ * @brief Windows frame.
+ * This windows is the enveloppe of application. It contain, close button, change language button, about button.
+ * This windows is movable.
+ * It's possible to add widget in content of this windows.
+ */
 class Windows : public QMainWindow
 {
     Q_OBJECT

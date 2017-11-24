@@ -8,6 +8,10 @@ namespace Ui {
 class Personnalize;
 }
 
+/**
+ * @class Personnalize
+ * @brief Personnalize widget
+ */
 class Personnalize : public QWidget
 {
     Q_OBJECT

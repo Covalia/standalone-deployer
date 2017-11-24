@@ -7,6 +7,10 @@ namespace Ui {
 class Proxy;
 }
 
+/**
+ * @class Proxy
+ * @brief Proxy widget
+ */
 class Proxy : public QWidget
 {
     Q_OBJECT

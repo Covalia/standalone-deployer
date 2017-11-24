@@ -7,6 +7,10 @@ namespace Ui {
 class Welcome;
 }
 
+/**
+ * @class Welcome
+ * @brief Welcome widget
+ */
 class Welcome : public QWidget
 {
     Q_OBJECT
