@@ -18,27 +18,27 @@ class DownloadUI : public QWidget
 {
     Q_OBJECT
 
-public:
-    explicit DownloadUI(QWidget * parent = 0);
-    ~DownloadUI();
-    void setTextGlobalDownload(QString text);
-    void setTextParticularDownload(QString text);
-    void setTextPercentDownload(int value);
-    void setPercentParticularDownload(int value);
+    public:
+        explicit DownloadUI(QWidget * parent = 0);
+        ~DownloadUI();
+        void setTextGlobalDownload(QString text);
+        void setTextParticularDownload(QString text);
+        void setTextPercentDownload(int value);
+        void setPercentParticularDownload(int value);
 
-private:
-    Ui::DownloadUI * ui;
-    QList<QPixmap> m_imagesList;
-    QList<QPushButton *> m_buttonsList;
-    QTimer * m_timer;
-    void showEvent(QShowEvent * event);
-    void loadSlideShowImagesFromResources();
+    private:
+        Ui::DownloadUI * ui;
+        QList<QPixmap> m_imagesList;
+        QList<QPushButton *> m_buttonsList;
+        QTimer * m_timer;
+        void showEvent(QShowEvent * event);
+        void loadSlideShowImagesFromResources();
 
-public slots:
-    void changeLanguage();
-    void updateSlideShow();
-    void updateSlideShow(int index);
-    void buttonSlideEvent();
+    public slots:
+        void changeLanguage();
+        void updateSlideShow();
+        void updateSlideShow(int index);
+        void buttonSlideEvent();
 };
 
 #endif // DOWNLOAD_H

@@ -15,7 +15,8 @@
 
 Windows::Windows(QWidget * parent) :
     QMainWindow(parent),
-    ui(new Ui::Windows){
+    ui(new Ui::Windows)
+{
     ui->setupUi(this);
 
     this->setWindowTitle(tr("Stand-alone deployment"));
@@ -34,31 +35,36 @@ Windows::Windows(QWidget * parent) :
     ui->comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
     ui->comboBoxLanguage->addItem("English", QVariant("en_US"));
     connect(ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
-
 }
 
-Windows::~Windows(){
+Windows::~Windows()
+{
     delete ui;
 }
 
-void Windows::center(){
+void Windows::center()
+{
     QRect geometry = frameGeometry();
     QPoint center = QDesktopWidget().availableGeometry().center();
+
     geometry.moveCenter(center);
     m_position = center;
     move(geometry.topLeft());
 }
 
-void Windows::mousePressEvent(QMouseEvent *e) {
-    m_position = QPoint(e->globalX()-geometry().x(), e->globalY()-geometry().y());
+void Windows::mousePressEvent(QMouseEvent * e)
+{
+    m_position = QPoint(e->globalX() - geometry().x(), e->globalY() - geometry().y());
     this->setCursor(QCursor(Qt::SizeAllCursor));
 }
 
-void Windows::mouseReleaseEvent(QMouseEvent *e) {
+void Windows::mouseReleaseEvent(QMouseEvent * e)
+{
     this->setCursor(QCursor(Qt::ArrowCursor));
 }
 
-void Windows::mouseMoveEvent(QMouseEvent *e) {
+void Windows::mouseMoveEvent(QMouseEvent * e)
+{
     QWidget::mouseMoveEvent(e);
     if (e->buttons() && Qt::LeftButton) {
         QPoint toMove = e->globalPos() - m_position;
@@ -67,48 +73,51 @@ void Windows::mouseMoveEvent(QMouseEvent *e) {
     }
 }
 
-void Windows::changeContentWidget(QWidget * widget, bool deleteWidgets){
+void Windows::changeContentWidget(QWidget * widget, bool deleteWidgets)
+{
     // delete all old widget
     clearLayout(ui->contentLayout, deleteWidgets);
     ui->contentLayout->addWidget(widget);
 }
 
-void Windows::setVisibleButton(bool about, bool changeLanguage){
+void Windows::setVisibleButton(bool about, bool changeLanguage)
+{
     ui->buttonAbout->setVisible(about);
     ui->comboBoxLanguage->setVisible(changeLanguage);
 }
 
-void Windows::clearLayout(QLayout * layout, bool deleteWidgets){
+void Windows::clearLayout(QLayout * layout, bool deleteWidgets)
+{
     while (QLayoutItem * item = layout->takeAt(0)) {
-        if (QWidget * widget = item->widget()){
-            //layout->removeWidget(widget);
+        if (QWidget * widget = item->widget()) {
+            // layout->removeWidget(widget);
             if (deleteWidgets) {
                 widget->deleteLater();
-            }
-            else{
+            } else {
                 widget->setParent(this);
             }
         }
 
-        if (QLayout * childLayout = item->layout())
+        if (QLayout * childLayout = item->layout()) {
             clearLayout(childLayout, deleteWidgets);
+        }
 
         delete item;
     }
 }
 
-void Windows::closeEvent(QCloseEvent * _event){
+void Windows::closeEvent(QCloseEvent * _event)
+{
     // sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
         AskPopup * popupClose = new AskPopup(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
         popupClose->show();
-        if(popupClose->exec() == QDialog::Accepted){
+        if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();
             m_alreadyClosedOnMacOs = true;
-        }
-        else{
+        } else {
             _event->ignore();
         }
     }
@@ -116,24 +125,20 @@ void Windows::closeEvent(QCloseEvent * _event){
 
 void Windows::aboutEvent()
 {
-   aboutSignal();
+    aboutSignal();
 }
 
-void Windows::comboBoxLanguageEvent(int index){
+void Windows::comboBoxLanguageEvent(int index)
+{
     L_INFO("Detect language change in language combobox");
     QString dateValue = ui->comboBoxLanguage->itemData(index).toString();
-    if(!dateValue.isNull() && !dateValue.isEmpty()){
-         LanguageManager::updateLanguage(dateValue);
-         changeLanguageSignal();
+    if (!dateValue.isNull() && !dateValue.isEmpty()) {
+        LanguageManager::updateLanguage(dateValue);
+        changeLanguageSignal();
     }
 }
 
-
 void Windows::changeLanguage()
 {
-   ui->retranslateUi(this);
+    ui->retranslateUi(this);
 }
-
-
-
-

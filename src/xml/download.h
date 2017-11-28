@@ -9,31 +9,31 @@
  */
 class Download
 {
-public:
+    public:
 
-    Download(QString _href,
-             QString _hashMac,
-             QString _os,
-             bool _native,
-             bool _main);
+        Download(QString _href,
+                 QString _hashMac,
+                 QString _os,
+                 bool _native,
+                 bool _main);
 
-    QString getHref() const;
-    QString getHashMac() const;
-    QString getOs() const;
-    bool isNative() const;
-    bool isMain() const;
+        QString getHref() const;
+        QString getHashMac() const;
+        QString getOs() const;
+        bool isNative() const;
+        bool isMain() const;
 
-    operator QString() const {
-        return "Download [href=" + m_href + ", hashMac=" + m_hashMac + ", os=" + m_os
-               + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
-    }
+        operator QString() const {
+            return "Download [href=" + m_href + ", hashMac=" + m_hashMac + ", os=" + m_os
+                   + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
+        }
 
-private:
-    QString m_href;
-    QString m_hashMac;
-    QString m_os;
-    bool m_native;
-    bool m_main;
+    private:
+        QString m_href;
+        QString m_hashMac;
+        QString m_os;
+        bool m_native;
+        bool m_main;
 };
 
 #endif // ifndef DOWNLOAD_H

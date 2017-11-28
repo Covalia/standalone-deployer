@@ -4,7 +4,8 @@
 
 Proxy::Proxy(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::Proxy){
+    ui(new Ui::Proxy)
+{
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -12,14 +13,17 @@ Proxy::Proxy(QWidget * parent) :
     connect(ui->buttonValidateProxy, SIGNAL(clicked()), this, SLOT(validateSettings()));
 }
 
-Proxy::~Proxy(){
+Proxy::~Proxy()
+{
     delete ui;
 }
 
-void Proxy::changeLanguage(){
+void Proxy::changeLanguage()
+{
     ui->retranslateUi(this);
 }
 
-void Proxy::validateSettings(){
+void Proxy::validateSettings()
+{
     validateSettingsSignal();
 }

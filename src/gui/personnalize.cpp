@@ -8,7 +8,8 @@
 
 Personnalize::Personnalize(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::Personnalize){
+    ui(new Ui::Personnalize)
+{
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -19,50 +20,59 @@ Personnalize::Personnalize(QWidget * parent) :
     connect(ui->buttonStartInstallation, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
 }
 
-Personnalize::~Personnalize(){
+Personnalize::~Personnalize()
+{
     delete ui;
 }
 
-void Personnalize::changeLanguage(){
+void Personnalize::changeLanguage()
+{
     ui->retranslateUi(this);
 }
 
-void Personnalize::proxySettingEvent() {
+void Personnalize::proxySettingEvent()
+{
     proxySettingSignal();
 }
 
-void Personnalize::fileChooserInstallEvent() {
+void Personnalize::fileChooserInstallEvent()
+{
     QString opendFolder = ui->editLineFolderInstallation->text();
     QString folderPath = fileChooserDialog(opendFolder);
-    if(!folderPath.isEmpty()){
+
+    if (!folderPath.isEmpty()) {
         ui->editLineFolderInstallation->setText(folderPath);
     }
 }
 
-void Personnalize::fileChooserDataEvent() {
+void Personnalize::fileChooserDataEvent()
+{
     QString opendFolder = ui->editLineDataInstallation->text();
     QString folderPath = fileChooserDialog(opendFolder);
-    if(!folderPath.isEmpty()){
+
+    if (!folderPath.isEmpty()) {
         ui->editLineDataInstallation->setText(folderPath);
     }
 }
 
- QString Personnalize::fileChooserDialog(QString openFolder){
-     QFileDialog dialog(this);
-     dialog.setFileMode(QFileDialog::Directory);
-     dialog.setOption(QFileDialog::DontUseNativeDialog, false);
-     QStringList fileNames;
-     if (dialog.exec()){
-         fileNames = dialog.selectedFiles();
-         if(fileNames.size() > 0){
-             L_INFO("Selected file = " + fileNames.at(0));
-             return fileNames.at(0);
-         }
-     }
-     return "";
- }
+QString Personnalize::fileChooserDialog(QString openFolder)
+{
+    QFileDialog dialog(this);
 
- void Personnalize::customInstallationEvent(){
-     customInstallationSignal();
- }
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::DontUseNativeDialog, false);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+        if (fileNames.size() > 0) {
+            L_INFO("Selected file = " + fileNames.at(0));
+            return fileNames.at(0);
+        }
+    }
+    return "";
+}
 
+void Personnalize::customInstallationEvent()
+{
+    customInstallationSignal();
+}

@@ -15,7 +15,8 @@ UIManager::UIManager() : QObject(),
     m_proxy(0),
     m_about(0),
     m_download(0),
-    m_saveWidget(0){
+    m_saveWidget(0)
+{
     m_window = new Windows();
     m_window->show();
     m_window->center();
@@ -27,7 +28,8 @@ UIManager::UIManager() : QObject(),
             this, SLOT(aboutEvent()));
 }
 
-UIManager::~UIManager(){
+UIManager::~UIManager()
+{
     delete m_saveWidget;
     delete m_window;
     delete m_welcome;
@@ -37,16 +39,19 @@ UIManager::~UIManager(){
     delete m_download;
 }
 
-void UIManager::aboutEvent(){
+void UIManager::aboutEvent()
+{
     changeAbout();
 }
 
-void UIManager::changeTo(QWidget * widget) {
+void UIManager::changeTo(QWidget * widget)
+{
     m_window->changeContentWidget(widget);
     m_window->setVisibleButton(true, true);
 }
 
-void UIManager::changeWelcome() {
+void UIManager::changeWelcome()
+{
     m_welcome = new Welcome(m_window);
     m_window->changeContentWidget(m_welcome);
     m_saveWidget = m_welcome;
@@ -62,7 +67,8 @@ void UIManager::changeWelcome() {
             this, SLOT(switchWelcomToDownload()));
 }
 
-void UIManager::changePersonnalize(){
+void UIManager::changePersonnalize()
+{
     m_personnalize = new Personnalize(m_window);
     m_window->changeContentWidget(m_personnalize);
     m_saveWidget = m_personnalize;
@@ -76,7 +82,8 @@ void UIManager::changePersonnalize(){
             this, SLOT(switchWelcomToDownload()));
 }
 
-void UIManager::changeProxy(){
+void UIManager::changeProxy()
+{
     m_proxy = new Proxy(m_window);
     m_window->changeContentWidget(m_proxy);
     m_saveWidget = m_proxy;
@@ -88,7 +95,8 @@ void UIManager::changeProxy(){
             this, SLOT(switchProxyToPersonnalize()));
 }
 
-void UIManager::changeAbout(){
+void UIManager::changeAbout()
+{
     m_about = new About(m_window);
     m_window->changeContentWidget(m_about, false);
     m_window->setVisibleButton(false, true);
@@ -99,7 +107,8 @@ void UIManager::changeAbout(){
             this, SLOT(switchAboutTo()));
 }
 
-void UIManager::changeDownload(){
+void UIManager::changeDownload()
+{
     m_download = new DownloadUI(m_window);
     m_window->changeContentWidget(m_download, false);
     m_window->setVisibleButton(false, false);
@@ -107,57 +116,68 @@ void UIManager::changeDownload(){
             m_download, SLOT(changeLanguage()));
 }
 
-void UIManager::removeWelcome() {
+void UIManager::removeWelcome()
+{
     m_welcome->disconnect();
     delete m_welcome;
 }
 
-void UIManager::removePersonnalize(){
+void UIManager::removePersonnalize()
+{
     m_personnalize->disconnect();
     delete m_personnalize;
 }
 
-void UIManager::removeProxy(){
+void UIManager::removeProxy()
+{
     m_proxy->disconnect();
     delete m_proxy;
 }
 
-void UIManager::removeAbout(){
+void UIManager::removeAbout()
+{
     m_about->disconnect();
     delete m_about;
 }
 
-void UIManager::removeDownload(){
+void UIManager::removeDownload()
+{
     m_download->disconnect();
     delete m_download;
 }
 
-void UIManager::switchWelcomToPersonnalize() {
+void UIManager::switchWelcomToPersonnalize()
+{
     removeWelcome();
     changePersonnalize();
 }
 
-void UIManager::switchWelcomToDownload() {
+void UIManager::switchWelcomToDownload()
+{
     removeWelcome();
     changeDownload();
 }
 
-void UIManager::switchPersonnalizeToProxy() {
+void UIManager::switchPersonnalizeToProxy()
+{
     removePersonnalize();
     changeProxy();
 }
 
-void UIManager::switchPersonnalizeToDownload() {
+void UIManager::switchPersonnalizeToDownload()
+{
     removePersonnalize();
     changeDownload();
 }
 
-void UIManager::switchProxyToPersonnalize() {
+void UIManager::switchProxyToPersonnalize()
+{
     removeProxy();
     changePersonnalize();
 }
 
-void UIManager::switchAboutTo() {
+void UIManager::switchAboutTo()
+{
     removeAbout();
     changeTo(m_saveWidget);
 }

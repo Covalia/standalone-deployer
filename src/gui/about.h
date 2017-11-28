@@ -15,20 +15,20 @@ class About : public QWidget
 {
     Q_OBJECT
 
-public:
-    explicit About(QWidget * parent = 0);
-    ~About();
+    public:
+        explicit About(QWidget * parent = 0);
+        ~About();
 
-private:
-    Ui::About * ui;
-    void initTextContract();
+    private:
+        Ui::About * ui;
+        void initTextContract();
 
-signals:
-    void validateAboutSignal();
+    signals:
+        void validateAboutSignal();
 
-public slots:
-    void changeLanguage();
-    void validateAbout();
+    public slots:
+        void changeLanguage();
+        void validateAbout();
 };
 
 #endif // ABOUT_H

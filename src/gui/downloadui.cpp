@@ -11,7 +11,8 @@ static int update_counter = -1;
 
 DownloadUI::DownloadUI(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::DownloadUI){
+    ui(new Ui::DownloadUI)
+{
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -21,28 +22,33 @@ DownloadUI::DownloadUI(QWidget * parent) :
     m_timer->start(5000);
 }
 
-DownloadUI::~DownloadUI(){
+DownloadUI::~DownloadUI()
+{
     delete ui;
     delete m_timer;
 }
 
-void DownloadUI::showEvent( QShowEvent* event ) {
-    QWidget::showEvent( event );
+void DownloadUI::showEvent(QShowEvent * event)
+{
+    QWidget::showEvent(event);
     updateSlideShow();
 }
 
-void DownloadUI::changeLanguage(){
+void DownloadUI::changeLanguage()
+{
     ui->retranslateUi(this);
 }
 
-void DownloadUI::loadSlideShowImagesFromResources(){
+void DownloadUI::loadSlideShowImagesFromResources()
+{
     m_imagesList.clear();
     QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
     while (it.hasNext()) {
         const QString resourcePath = it.next();
         const QPixmap pixmap = QPixmap(resourcePath);
-        if (!pixmap.isNull())
+        if (!pixmap.isNull()) {
             m_imagesList << pixmap;
+        }
     }
     std::random_shuffle(m_imagesList.begin(), m_imagesList.end());
 
@@ -51,7 +57,7 @@ void DownloadUI::loadSlideShowImagesFromResources(){
     m_buttonsList.clear();
     for (int i = 0; i < m_imagesList.size(); i++) {
         QPushButton * button = new QPushButton("", this);
-        button->setMaximumSize(QSize(10,10));
+        button->setMaximumSize(QSize(10, 10));
         button->setCheckable(true);
         button->setStyleSheet(" QPushButton{                            \
                                     border-radius: 2px;                 \
@@ -73,8 +79,10 @@ void DownloadUI::loadSlideShowImagesFromResources(){
     }
 } // DownloadUI::loadSlideShowImagesFromResources
 
-void DownloadUI::buttonSlideEvent(){
+void DownloadUI::buttonSlideEvent()
+{
     QPushButton * button = qobject_cast<QPushButton *>(sender());
+
     if (button) {
         m_timer->stop();
         m_timer->start();
@@ -84,7 +92,8 @@ void DownloadUI::buttonSlideEvent(){
     }
 }
 
-void DownloadUI::updateSlideShow(int index){
+void DownloadUI::updateSlideShow(int index)
+{
     if (!m_imagesList.isEmpty()) {
         const QSize maxSize = ui->labelImage->size();
         QPixmap pixmap = m_imagesList.at(index);
@@ -94,7 +103,8 @@ void DownloadUI::updateSlideShow(int index){
     }
 }
 
-void DownloadUI::updateSlideShow(){
+void DownloadUI::updateSlideShow()
+{
     if (m_imagesList.isEmpty()) {
         loadSlideShowImagesFromResources();
     }
@@ -103,18 +113,22 @@ void DownloadUI::updateSlideShow(){
     updateSlideShow(update_counter);
 }
 
-void DownloadUI::setTextGlobalDownload(QString text){
+void DownloadUI::setTextGlobalDownload(QString text)
+{
     ui->labelProgresseBarGlobal->setText(text);
 }
 
-void DownloadUI::setTextParticularDownload(QString text){
+void DownloadUI::setTextParticularDownload(QString text)
+{
     ui->labelProgressBarFile->setText(text);
 }
 
-void DownloadUI::setTextPercentDownload(int value){
+void DownloadUI::setTextPercentDownload(int value)
+{
     ui->progressBarGlobal->setValue(value);
 }
 
-void DownloadUI::setPercentParticularDownload(int value){
+void DownloadUI::setPercentParticularDownload(int value)
+{
     ui->progressBarFile->setValue(value);
 }

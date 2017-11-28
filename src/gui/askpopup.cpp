@@ -9,7 +9,8 @@
 
 AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
     QDialog(parent),
-    ui(new Ui::AskPopup){
+    ui(new Ui::AskPopup)
+{
     ui->setupUi(this);
 
 //    this->setAttribute(Qt::WA_QuitOnClose);
@@ -29,7 +30,8 @@ AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
     m_parent->setWindowOpacity(0.95);
 }
 
-AskPopup::~AskPopup(){
+AskPopup::~AskPopup()
+{
     delete ui;
     delete m_parent;
 }
@@ -37,7 +39,7 @@ AskPopup::~AskPopup(){
 int AskPopup::exec()
 {
     this->setWindowOpacity(0.0);
-    QPropertyAnimation* anim = new QPropertyAnimation(this, "windowOpacity");
+    QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
     anim->setDuration(500);
     anim->setEasingCurve(QEasingCurve::OutBack);
     anim->setStartValue(0.0);
@@ -46,8 +48,8 @@ int AskPopup::exec()
     return QDialog::exec();
 }
 
-
-void AskPopup::center(){
+void AskPopup::center()
+{
     QRect geometry = frameGeometry();
     QPoint center = QDesktopWidget().availableGeometry().center();
 
@@ -55,12 +57,14 @@ void AskPopup::center(){
     move(geometry.topLeft());
 }
 
-void AskPopup::yesEvent(){
+void AskPopup::yesEvent()
+{
     m_parent->setWindowOpacity(1);
     accept();
 }
 
-void AskPopup::noEvent(){
+void AskPopup::noEvent()
+{
     m_parent->setWindowOpacity(1);
     reject();
 }

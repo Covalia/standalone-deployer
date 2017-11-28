@@ -46,135 +46,137 @@ enum Language { English, French };
  */
 class Settings
 {
-public:
-    static Settings& Instance();
+    public:
+        static Settings& Instance();
 
-    void initSettings(QString installPath);
+        void initSettings(QString installPath);
 
-    void writeSettings();
+        void writeSettings();
 
-    void readSettings();
+        void readSettings();
 
-    bool getIsProxyUsing() const;
-    void setIsProxyUsing(bool isProxyUsing);
+        bool getIsProxyUsing() const;
+        void setIsProxyUsing(bool isProxyUsing);
 
-    bool getProxyAuto() const;
-    void setProxyAuto(bool proxyAuto);
+        bool getProxyAuto() const;
+        void setProxyAuto(bool proxyAuto);
 
-    QString getProxyURL() const;
-    void setProxyURL(const QString &proxyURL);
+        QString getProxyURL() const;
+        void setProxyURL(const QString &proxyURL);
 
-    int getProxyPort() const;
-    void setProxyPort(int proxyPort);
+        int getProxyPort() const;
+        void setProxyPort(int proxyPort);
 
-    bool getProxyAuthentification() const;
-    void setProxyAuthentification(bool proxyAuthentification);
+        bool getProxyAuthentification() const;
+        void setProxyAuthentification(bool proxyAuthentification);
 
-    QString getProxyLogin() const;
-    void setProxyLogin(const QString &proxyLogin);
+        QString getProxyLogin() const;
+        void setProxyLogin(const QString &proxyLogin);
 
-    QString getProxyPassword() const;
-    void setProxyPassword(const QString &proxyPassword);
+        QString getProxyPassword() const;
+        void setProxyPassword(const QString &proxyPassword);
 
-    Language getLanguage() const;
-    void setLanguage(const Language &language);
+        Language getLanguage() const;
+        void setLanguage(const Language &language);
 
-    QString getShortcutName() const;
-    void setShortcutName(const QString &shortcutName);
+        QString getShortcutName() const;
+        void setShortcutName(const QString &shortcutName);
 
-    bool getShortcutAllUser() const;
-    void setShortcutAllUser(bool shortcutAllUser);
+        bool getShortcutAllUser() const;
+        void setShortcutAllUser(bool shortcutAllUser);
 
-    QString getClasspathExtension() const;
-    void setClasspathExtension(const QString &classpathExtension);
+        QString getClasspathExtension() const;
+        void setClasspathExtension(const QString &classpathExtension);
 
-    QString getDataLocation() const;
-    void setDataLocation(const QString &dataLocation);
+        QString getDataLocation() const;
+        void setDataLocation(const QString &dataLocation);
 
-    QString getServerURL() const;
-    void setServerURL(const QString &serverURL);
+        QString getServerURL() const;
+        void setServerURL(const QString &serverURL);
 
-private:
+    private:
 
-    /**
-     * @brief Use for singleton
-     */
-    void operator=(const Settings&){
-    }
-    Settings (const Settings&){
-    }
+        /**
+         * @brief Use for singleton
+         */
+        void operator=(const Settings&)
+        {
+        }
+        Settings (const Settings&)
+        {
+        }
 
-    static Settings m_instance;
-    static QMutex sm_instanceMutex;
-    static QMutex sm_settingsMutex;
+        static Settings m_instance;
+        static QMutex sm_instanceMutex;
+        static QMutex sm_settingsMutex;
 
-    /**
-     * @brief Constructor in singleton
-     */
-    Settings();
+        /**
+         * @brief Constructor in singleton
+         */
+        Settings();
 
-    /**
-     * @brief Destructor in singleton
-     */
-    virtual ~Settings();
+        /**
+         * @brief Destructor in singleton
+         */
+        virtual ~Settings();
 
-    /**
-     * @brief Add value in settings with key.
-     * @param key
-     * @param value
-     */
-    void putSetting(QString key, QVariant value);
+        /**
+         * @brief Add value in settings with key.
+         * @param key
+         * @param value
+         */
+        void putSetting(QString key, QVariant value);
 
-    /**
-     * @brief Find setting value with key
-     * @param key
-     * @return
-     */
-    QVariant getSetting(QString key);
+        /**
+         * @brief Find setting value with key
+         * @param key
+         * @return
+         */
+        QVariant getSetting(QString key);
 
-    /**
-     * @brief Find setting value with key, and return default value if key not find
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    QVariant getSetting(QString key, QVariant defaultValue);
+        /**
+         * @brief Find setting value with key, and return default value if key not find
+         * @param key
+         * @param defaultValue
+         * @return
+         */
+        QVariant getSetting(QString key, QVariant defaultValue);
 
-    /**
-     * @brief Remove a setting with key
-     * @param key
-     */
-    void removeSetting(QString key);
+        /**
+         * @brief Remove a setting with key
+         * @param key
+         */
+        void removeSetting(QString key);
 
-    /**
-     * @brief QSetting instance for find and add setting
-     */
-    QSettings * m_settings;
+        /**
+         * @brief QSetting instance for find and add setting
+         */
+        QSettings * m_settings;
 
-    // proxy
-    bool m_isProxyUsing;
-    bool m_proxyAuto;
-    QString m_proxyURL;
-    int m_proxyPort;
-    bool m_proxyAuthentification;
-    QString m_proxyLogin;
-    QString m_proxyPassword;
+        // proxy
+        bool m_isProxyUsing;
+        bool m_proxyAuto;
+        QString m_proxyURL;
+        int m_proxyPort;
+        bool m_proxyAuthentification;
+        QString m_proxyLogin;
+        QString m_proxyPassword;
 
-    // language
-    Language m_language;
+        // language
+        Language m_language;
 
-    // shortcut
-    QString m_shortcutName;
-    bool m_shortcutAllUser;
+        // shortcut
+        QString m_shortcutName;
+        bool m_shortcutAllUser;
 
-    // classpath downloader
-    QString m_classpathExtension;
+        // classpath downloader
+        QString m_classpathExtension;
 
-    // data
-    QString m_dataLocation;
+        // data
+        QString m_dataLocation;
 
-    // server
-    QString m_serverURL;
+        // server
+        QString m_serverURL;
 };
 
 #endif // SETTINGS_H

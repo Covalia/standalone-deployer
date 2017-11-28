@@ -2,15 +2,15 @@
 
 #ifdef Q_OS_WIN
 
-#include <Windows.h>
-#include <shlobj.h>
-#include <winnls.h>
-#include <shobjidl.h>
-#include <objbase.h>
-#include <objidl.h>
-#include <shlguid.h>
-#include <Shlobj.h>
-#include <QDebug>
+    #include <Windows.h>
+    #include <shlobj.h>
+    #include <winnls.h>
+    #include <shobjidl.h>
+    #include <objbase.h>
+    #include <objidl.h>
+    #include <shlguid.h>
+    #include <Shlobj.h>
+    #include <QDebug>
 
     Shortcut::Shortcut()
     {

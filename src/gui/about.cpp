@@ -8,7 +8,8 @@
 
 About::About(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::About){
+    ui(new Ui::About)
+{
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -18,12 +19,15 @@ About::About(QWidget * parent) :
     initTextContract();
 }
 
-About::~About(){
+About::~About()
+{
     delete ui;
 }
 
-void About::initTextContract(){
+void About::initTextContract()
+{
     QFile f(":/resources/contract.txt");
+
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
         ui->plainTextEdit->appendPlainText(in.readAll());
@@ -32,11 +36,13 @@ void About::initTextContract(){
     ui->plainTextEdit->ensureCursorVisible();
 }
 
-void About::changeLanguage(){
+void About::changeLanguage()
+{
     ui->retranslateUi(this);
     initTextContract();
 }
 
-void About::validateAbout(){
+void About::validateAbout()
+{
     validateAboutSignal();
 }

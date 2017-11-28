@@ -4,7 +4,8 @@
 #include <QCommandLineOption>
 #include "../log/simpleqtlogger.h"
 
-CommandLineParser::CommandLineParser(){
+CommandLineParser::CommandLineParser()
+{
     // silence mode
     QCommandLineOption silent_opt({ "s", "silent" }, "Silent mode : no configuration interface [--silent]", "false");
 
@@ -75,11 +76,13 @@ CommandLineParser::CommandLineParser(){
     L_INFO("End to read command line arguments with parse data");
 }
 
-bool CommandLineParser::isExistingBooleanArg(QCommandLineParser & parser, QCommandLineOption & commandOption){
+bool CommandLineParser::isExistingBooleanArg(QCommandLineParser & parser, QCommandLineOption & commandOption)
+{
     return (parser.isSet(commandOption) && (parser.value(commandOption) == "" || parser.value(commandOption) == "true"));
 }
 
-QString CommandLineParser::getValueArg(QCommandLineParser & parser, QCommandLineOption & commandOption){
+QString CommandLineParser::getValueArg(QCommandLineParser & parser, QCommandLineOption & commandOption)
+{
     QString value = parser.value(commandOption);
 
     if (value == "EMPTY") {
@@ -88,114 +91,142 @@ QString CommandLineParser::getValueArg(QCommandLineParser & parser, QCommandLine
     return value;
 }
 
-bool CommandLineParser::getAllUserShortcut() const {
+bool CommandLineParser::getAllUserShortcut() const
+{
     return allUserShortcut;
 }
 
-void CommandLineParser::setAllUserShortcut(bool value){
+void CommandLineParser::setAllUserShortcut(bool value)
+{
     allUserShortcut = value;
 }
 
-bool CommandLineParser::getShortcut() const {
+bool CommandLineParser::getShortcut() const
+{
     return shortcut;
 }
 
-void CommandLineParser::setShortcut(bool value){
+void CommandLineParser::setShortcut(bool value)
+{
     shortcut = value;
 }
 
-bool CommandLineParser::getOffshort() const {
+bool CommandLineParser::getOffshort() const
+{
     return offshort;
 }
 
-void CommandLineParser::setOffshort(bool value){
+void CommandLineParser::setOffshort(bool value)
+{
     offshort = value;
 }
 
-bool CommandLineParser::getRunAtStart() const {
+bool CommandLineParser::getRunAtStart() const
+{
     return runAtStart;
 }
 
-void CommandLineParser::setRunAtStart(bool value){
+void CommandLineParser::setRunAtStart(bool value)
+{
     runAtStart = value;
 }
 
-QString CommandLineParser::getLanguage() const {
+QString CommandLineParser::getLanguage() const
+{
     return language;
 }
 
-void CommandLineParser::setLanguage(const QString &value){
+void CommandLineParser::setLanguage(const QString &value)
+{
     language = value;
 }
 
-QString CommandLineParser::getProxyPassword() const {
+QString CommandLineParser::getProxyPassword() const
+{
     return proxyPassword;
 }
 
-void CommandLineParser::setProxyPassword(const QString &value){
+void CommandLineParser::setProxyPassword(const QString &value)
+{
     proxyPassword = value;
 }
 
-QString CommandLineParser::getProxyLogin() const {
+QString CommandLineParser::getProxyLogin() const
+{
     return proxyLogin;
 }
 
-void CommandLineParser::setProxyLogin(const QString &value){
+void CommandLineParser::setProxyLogin(const QString &value)
+{
     proxyLogin = value;
 }
 
-QString CommandLineParser::getProxyPort() const {
+QString CommandLineParser::getProxyPort() const
+{
     return proxyPort;
 }
 
-void CommandLineParser::setProxyPort(const QString &value){
+void CommandLineParser::setProxyPort(const QString &value)
+{
     proxyPort = value;
 }
 
-QString CommandLineParser::getProxyURL() const {
+QString CommandLineParser::getProxyURL() const
+{
     return proxyURL;
 }
 
-void CommandLineParser::setProxyURL(const QString &value){
+void CommandLineParser::setProxyURL(const QString &value)
+{
     proxyURL = value;
 }
 
-bool CommandLineParser::getProxyAuto() const {
+bool CommandLineParser::getProxyAuto() const
+{
     return proxyAuto;
 }
 
-void CommandLineParser::setProxyAuto(bool value){
+void CommandLineParser::setProxyAuto(bool value)
+{
     proxyAuto = value;
 }
 
-bool CommandLineParser::getProxyUse() const {
+bool CommandLineParser::getProxyUse() const
+{
     return proxyUse;
 }
 
-void CommandLineParser::setProxyUse(bool value){
+void CommandLineParser::setProxyUse(bool value)
+{
     proxyUse = value;
 }
 
-QString CommandLineParser::getDataLocation() const {
+QString CommandLineParser::getDataLocation() const
+{
     return dataLocation;
 }
 
-void CommandLineParser::setDataLocation(const QString &value){
+void CommandLineParser::setDataLocation(const QString &value)
+{
     dataLocation = value;
 }
 
-QString CommandLineParser::getIntallLocation() const {
+QString CommandLineParser::getIntallLocation() const
+{
     return intallLocation;
 }
 
-void CommandLineParser::setIntallLocation(const QString &value){
+void CommandLineParser::setIntallLocation(const QString &value)
+{
     intallLocation = value;
 }
 
-bool CommandLineParser::getSilent() const {
+bool CommandLineParser::getSilent() const
+{
     return silent;
 }
 
-void CommandLineParser::setSilent(bool value){
+void CommandLineParser::setSilent(bool value)
+{
     silent = value;
 }

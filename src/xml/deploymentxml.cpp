@@ -95,7 +95,6 @@ QList<Download> DeploymentXML::getDownloads(const Application &_application, con
     return downloads;
 }
 
-
 QString DeploymentXML::getMemory() const
 {
     return m_memory;

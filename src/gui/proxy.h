@@ -15,19 +15,19 @@ class Proxy : public QWidget
 {
     Q_OBJECT
 
-public:
-    explicit Proxy(QWidget *parent = 0);
-    ~Proxy();
+    public:
+        explicit Proxy(QWidget * parent = 0);
+        ~Proxy();
 
-private:
-    Ui::Proxy *ui;
+    private:
+        Ui::Proxy * ui;
 
-signals:
-    void validateSettingsSignal();
+    signals:
+        void validateSettingsSignal();
 
-public slots:
-    void changeLanguage();
-    void validateSettings();
+    public slots:
+        void changeLanguage();
+        void validateSettings();
 };
 
 #endif // PROXY_H

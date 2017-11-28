@@ -6,7 +6,8 @@
 
 Welcome::Welcome(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::Welcome){
+    ui(new Ui::Welcome)
+{
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -16,24 +17,29 @@ Welcome::Welcome(QWidget * parent) :
     connect(ui->buttonContract, SIGNAL(clicked()), this, SLOT(customContractEvent()));
 }
 
-Welcome::~Welcome(){
+Welcome::~Welcome()
+{
     delete ui;
 }
 
-void Welcome::changeLanguage() {
+void Welcome::changeLanguage()
+{
     ui->retranslateUi(this);
 }
 
-void Welcome::customInstallationEvent() {
+void Welcome::customInstallationEvent()
+{
     customInstallationSignal();
 }
 
-void Welcome::simpleInstallationEvent() {
+void Welcome::simpleInstallationEvent()
+{
     simpleInstallationSignal();
 }
 
-void Welcome::customContractEvent() {
+void Welcome::customContractEvent()
+{
     contractSignal();
 }
 
-//dans slot -> signal
+// dans slot -> signal

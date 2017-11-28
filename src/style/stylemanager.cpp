@@ -1,9 +1,11 @@
 #include "stylemanager.h"
 
-StyleManager::StyleManager(){
+StyleManager::StyleManager()
+{
 }
 
-QString StyleManager::transformStyle(QString styleSheet){
+QString StyleManager::transformStyle(QString styleSheet)
+{
     styleSheet.replace("@color-panel-background-border", "#364058");
     styleSheet.replace("@color-panel-background", "#2d364c");
     styleSheet.replace("@color-button-background-over", "#2a7d7d");
@@ -14,8 +16,9 @@ QString StyleManager::transformStyle(QString styleSheet){
     return styleSheet;
 }
 
-void StyleManager::transformStyle(QWidget * parentWidget){
-    for(auto *widget : parentWidget->findChildren<QWidget *>()) {
+void StyleManager::transformStyle(QWidget * parentWidget)
+{
+    for (auto * widget : parentWidget->findChildren<QWidget *>()) {
         widget->setStyleSheet(StyleManager::transformStyle(widget->styleSheet()));
     }
 }

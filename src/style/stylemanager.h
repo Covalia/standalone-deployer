@@ -6,10 +6,10 @@
 
 class StyleManager
 {
-public:
-    StyleManager();
-    static QString transformStyle(QString styleSheet);
-    static void transformStyle(QWidget * widget);
+    public:
+        StyleManager();
+        static QString transformStyle(QString styleSheet);
+        static void transformStyle(QWidget * widget);
 };
 
 #endif // STYLEMANAGER_H

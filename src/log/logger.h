@@ -8,8 +8,8 @@ const unsigned int LOG_FILE_SIZE = 2000; // size log file in byte
 
 class Logger
 {
-public:
-    Logger(QString pathLog);
+    public:
+        Logger(QString pathLog);
 };
 
 #endif // LOGGER_H

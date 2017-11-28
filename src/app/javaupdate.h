@@ -9,24 +9,24 @@
  */
 class JavaUpdate
 {
-public:
+    public:
 
-    JavaUpdate(QString _version,
-               QString _file,
-               QString _hash);
+        JavaUpdate(QString _version,
+                   QString _file,
+                   QString _hash);
 
-    QString getVersion() const;
-    QString getFile() const;
-    QString getHash() const;
+        QString getVersion() const;
+        QString getFile() const;
+        QString getHash() const;
 
-    operator QString() const {
-        return "JavaUpdate [version=" + m_version + ", file=" + m_file + ", hash=" + m_hash + "]";
-    }
+        operator QString() const {
+            return "JavaUpdate [version=" + m_version + ", file=" + m_file + ", hash=" + m_hash + "]";
+        }
 
-private:
-    QString m_version;
-    QString m_file;
-    QString m_hash;
+    private:
+        QString m_version;
+        QString m_file;
+        QString m_hash;
 };
 
 #endif // ifndef JAVAUPDATE_H

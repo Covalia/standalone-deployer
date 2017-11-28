@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
     L_INFO("Start Commande Lien Parser");
     new CommandLineParser();
 
-    Settings& settings=Settings::Instance();
+    Settings& settings = Settings::Instance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
     settings.initSettings(installPath);
     settings.writeSettings();
@@ -70,13 +70,13 @@ int main(int argc, char * argv[])
                                               icon_file, 0);
         QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
         QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
-		
+
         L_INFO(userStartMenu);
 #endif
 
     app.setWindowIcon(QIcon(":/resources/icon.png"));
     app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
-	
+
     LanguageManager::initLanguage();
 
     UIManager * uiManager = new UIManager();

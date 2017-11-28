@@ -16,19 +16,19 @@ class AskPopup : public QDialog
 {
     Q_OBJECT
 
-public:
-    explicit AskPopup(QWidget * m_parent = 0, QString title = "", QString description = "");
-    ~AskPopup();
-    int exec();
+    public:
+        explicit AskPopup(QWidget * m_parent = 0, QString title = "", QString description = "");
+        ~AskPopup();
+        int exec();
 
-private:
-    Ui::AskPopup * ui;
-    QWidget * m_parent;
-    void center();
+    private:
+        Ui::AskPopup * ui;
+        QWidget * m_parent;
+        void center();
 
-private slots:
-    void yesEvent();
-    void noEvent();
+    private slots:
+        void yesEvent();
+        void noEvent();
 };
 
 #endif // ASKPOPUP_H

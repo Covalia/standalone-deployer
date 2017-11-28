@@ -5,14 +5,14 @@
 
 class LanguageManager
 {
-public:
-    LanguageManager();
+    public:
+        LanguageManager();
 
-    static void initLanguage();
-    static void updateLanguage(QString locale);
+        static void initLanguage();
+        static void updateLanguage(QString locale);
 
-private:
-    static QTranslator translator;
+    private:
+        static QTranslator translator;
 };
 
 #endif // LANGUAGEMANAGER_H

@@ -10,16 +10,19 @@
 
 QTranslator LanguageManager::translator;
 
-LanguageManager::LanguageManager(){
+LanguageManager::LanguageManager()
+{
 }
 
-void LanguageManager::initLanguage(){
+void LanguageManager::initLanguage()
+{
     QString locale = QLocale::system().name();
 
     updateLanguage(locale);
 }
 
-void LanguageManager::updateLanguage(QString locale) {
+void LanguageManager::updateLanguage(QString locale)
+{
     L_INFO("Language init : locale=" + locale);
     qApp->removeTranslator(&translator);
     QString location = ":/translations";
