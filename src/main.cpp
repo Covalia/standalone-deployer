@@ -9,6 +9,7 @@
 #include "log/simpleqtlogger.h"
 #include "log/logger.h"
 #include "settings/settings.h"
+#include "commandLineParser/commandlineparser.h"
 
 /*!
  *
@@ -42,6 +43,10 @@ int main(int argc, char * argv[])
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
+    QApplication app(argc, argv);
+
+    L_INFO("Start Commande Lien Parser");
+    new CommandLineParser();
 
     Settings& settings=Settings::Instance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
@@ -66,8 +71,6 @@ int main(int argc, char * argv[])
 
         L_INFO(userStartMenu);
  #endif
-
-    QApplication app(argc, argv);
 
     QTranslator translator;
     // TODO gérer langue par défaut et demander quelle langue utiliser.

@@ -46,6 +46,7 @@ SOURCES += src/shortcut/shortcut.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/config/global.cpp
 SOURCES += src/settings/settings.cpp
+SOURCES += src/commandLineParser/commandlineparser.cpp
 
 HEADERS += src/mainwindow.h
 HEADERS += src/log/simpleqtlogger.h
@@ -58,6 +59,7 @@ HEADERS += src/shortcut/shortcut.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/config/global.h
 HEADERS += src/settings/settings.h
+HEADERS += src/commandLineParser/commandlineparser.h
 
 FORMS += ui/mainwindow.ui
 
