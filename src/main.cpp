@@ -8,6 +8,7 @@
 #include "shortcut/shortcut.h"
 #include "log/simpleqtlogger.h"
 #include "log/logger.h"
+#include "settings/settings.h"
 
 /*!
  *
@@ -41,6 +42,11 @@ int main(int argc, char * argv[])
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
     L_INFO("Start Application");
+
+    Settings& settings=Settings::Instance();
+    QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
+    settings.initSettings(installPath);
+    settings.writeSettings();
 
 #ifdef Q_OS_WIN
         Shortcut * shorcutCreator = new Shortcut();

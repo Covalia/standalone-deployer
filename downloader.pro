@@ -34,7 +34,6 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-
 SOURCES += src/main.cpp
 SOURCES += src/mainwindow.cpp
 SOURCES += src/log/simpleqtlogger.cpp
@@ -46,6 +45,7 @@ SOURCES += src/app/javaupdate.cpp
 SOURCES += src/shortcut/shortcut.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/config/global.cpp
+SOURCES += src/settings/settings.cpp
 
 HEADERS += src/mainwindow.h
 HEADERS += src/log/simpleqtlogger.h
@@ -57,6 +57,7 @@ HEADERS += src/app/javaupdate.h
 HEADERS += src/shortcut/shortcut.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/config/global.h
+HEADERS += src/settings/settings.h
 
 FORMS += ui/mainwindow.ui
 

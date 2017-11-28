@@ -10,8 +10,13 @@
     const QString FILE_NAME = "test.exe";
     const QString PATH_LINK = "C:/Users/Alexis/Desktop/";
 
-    class Shortcut
-    {
+/**
+ * \class Shortcut
+ *
+ * @brief Shortcut création class
+ */
+class Shortcut
+{
 public:
         Shortcut();
 
