@@ -2,11 +2,42 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR" sourcelanguage="fr_FR">
 <context>
+    <name>About</name>
+    <message>
+        <location filename="../../ui/about.ui" line="55"/>
+        <source>About</source>
+        <translation>A propos</translation>
+    </message>
+    <message>
+        <location filename="../../ui/about.ui" line="151"/>
+        <source>OK</source>
+        <translation>Valider</translation>
+    </message>
+</context>
+<context>
+    <name>AskPopup</name>
+    <message>
+        <location filename="../../ui/askpopup.ui" line="74"/>
+        <source>Question</source>
+        <translation>Question</translation>
+    </message>
+    <message>
+        <location filename="../../ui/askpopup.ui" line="184"/>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <location filename="../../ui/askpopup.ui" line="219"/>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../../ui/mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeur</translation>
     </message>
     <message>
         <location filename="../../ui/mainwindow.ui" line="101"/>
@@ -14,19 +45,19 @@
         <translation>Installeur</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="40"/>
+        <location filename="../../src/mainwindow.cpp" line="36"/>
         <source>Bienvenue dans l&apos;installeur de %1 !</source>
         <extracomment>This string refers to the welcome screen.</extracomment>
         <translation>Bienvenue dans l&apos;installeur de %1 !</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="66"/>
+        <location filename="../../src/mainwindow.cpp" line="62"/>
         <source>Attention !</source>
         <extracomment>This string refers to the exit message title.</extracomment>
         <translation>Attention !</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="68"/>
+        <location filename="../../src/mainwindow.cpp" line="64"/>
         <source>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</source>
         <extracomment>This string refers to the exit message.</extracomment>
         <translation>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
@@ -145,22 +176,22 @@
         <translation>Bienvenue dans l&apos;installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/welcome.ui" line="76"/>
+        <location filename="../../ui/welcome.ui" line="79"/>
         <source>By installing this product, you agree</source>
         <translation>En installant  ce produit, vous acceptez</translation>
     </message>
     <message>
-        <location filename="../../ui/welcome.ui" line="96"/>
+        <location filename="../../ui/welcome.ui" line="101"/>
         <source>User contract</source>
         <translation>Contrat d&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../ui/welcome.ui" line="133"/>
+        <location filename="../../ui/welcome.ui" line="135"/>
         <source>Simple installation</source>
         <translation>Installation simple</translation>
     </message>
     <message>
-        <location filename="../../ui/welcome.ui" line="162"/>
+        <location filename="../../ui/welcome.ui" line="164"/>
         <source>Custom installation</source>
         <translation>Installation personnalisée</translation>
     </message>
@@ -168,34 +199,29 @@
 <context>
     <name>Windows</name>
     <message>
-        <location filename="../../ui/windows.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/windows.ui" line="115"/>
+        <location filename="../../ui/windows.ui" line="121"/>
         <source>@Application installation</source>
         <translation>Installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/windows.ui" line="138"/>
+        <location filename="../../ui/windows.ui" line="154"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="20"/>
+        <location filename="../../src/gui/windows.cpp" line="21"/>
         <source>Stand-alone deployment</source>
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="75"/>
-        <source>Attention !</source>
-        <translation>Attention !</translation>
+        <location filename="../../src/gui/windows.cpp" line="105"/>
+        <source>Do you want to exit the application?</source>
+        <translation>Voulez-vous quitter l&apos;application?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="77"/>
-        <source>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</source>
-        <translation>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
+        <location filename="../../src/gui/windows.cpp" line="105"/>
+        <source>The installation will be stopped</source>
+        <translation>L&apos;installation sera arrêtée</translation>
     </message>
 </context>
 </TS>

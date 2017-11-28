@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -52,7 +52,7 @@
         <string notr="true">color: @color-text-on-background ;</string>
        </property>
        <property name="text">
-        <string>A propos</string>
+        <string>About</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

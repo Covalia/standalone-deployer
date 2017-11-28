@@ -198,6 +198,9 @@ background-color: rgb(33, 42, 63);
           <height>10</height>
          </size>
         </property>
+        <property name="statusTip">
+         <string notr="true"/>
+        </property>
         <property name="styleSheet">
          <string notr="true"/>
         </property>

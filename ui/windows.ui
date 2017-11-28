@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string notr="true"/>
+  </property>
+  <property name="statusTip">
+   <string notr="true"/>
   </property>
   <property name="styleSheet">
    <string notr="true">background : @color-panel-background;</string>
