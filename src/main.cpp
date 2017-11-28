@@ -44,6 +44,9 @@ int main(int argc, char * argv[])
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
+    L_INFO("Start Application");
+    QApplication app(argc, argv);
+
     L_INFO("Start Commande Lien Parser");
     new CommandLineParser();
 
@@ -69,10 +72,8 @@ int main(int argc, char * argv[])
         QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
 		
         L_INFO(userStartMenu);
- #endif
+#endif
 
-	L_INFO("Start Application");
-    QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/resources/icon.png"));
     app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
 	
