@@ -47,6 +47,16 @@ SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/config/global.cpp
 SOURCES += src/settings/settings.cpp
 SOURCES += src/commandLineParser/commandlineparser.cpp
+SOURCES += src/style/stylemanager.cpp
+SOURCES += src/gui/welcome.cpp
+SOURCES += src/gui/windows.cpp
+SOURCES += src/gui/personnalize.cpp
+SOURCES += src/language/languagemanager.cpp
+SOURCES += src/uiManager/uimanager.cpp
+SOURCES += src/gui/proxy.cpp
+SOURCES += src/gui/about.cpp
+SOURCES += src/gui/downloadui.cpp
+SOURCES += src/gui/askpopup.cpp
 
 HEADERS += src/mainwindow.h
 HEADERS += src/log/simpleqtlogger.h
@@ -60,8 +70,25 @@ HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/config/global.h
 HEADERS += src/settings/settings.h
 HEADERS += src/commandLineParser/commandlineparser.h
+HEADERS += src/style/stylemanager.h
+HEADERS += src/gui/welcome.h
+HEADERS += src/gui/windows.h
+HEADERS += src/gui/personnalize.h
+HEADERS += src/language/languagemanager.h
+HEADERS += src/uiManager/uimanager.h
+HEADERS += src/gui/proxy.h
+HEADERS += src/gui/about.h
+HEADERS += src/gui/askpopup.h
+HEADERS += src/gui/downloadui.h 
 
-FORMS += ui/mainwindow.ui
+FORMS += ui/mainwindow.ui \
+    ui/welcome.ui \
+    ui/windows.ui \
+    ui/personnalize.ui \
+    ui/proxy.ui \
+    ui/about.ui \
+    ui/downloadui.ui \
+    ui/askpopup.ui
 
 RESOURCES += resources.qrc
 

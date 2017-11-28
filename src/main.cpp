@@ -5,11 +5,13 @@
 #include <QString>
 
 #include "mainwindow.h"
+#include "uiManager/uimanager.h"
 #include "shortcut/shortcut.h"
 #include "log/simpleqtlogger.h"
 #include "log/logger.h"
 #include "settings/settings.h"
 #include "commandLineParser/commandlineparser.h"
+#include "language/languagemanager.h"
 
 /*!
  *
@@ -42,9 +44,6 @@ int main(int argc, char * argv[])
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
-    L_INFO("Start Application");
-    QApplication app(argc, argv);
-
     L_INFO("Start Commande Lien Parser");
     new CommandLineParser();
 
@@ -68,23 +67,19 @@ int main(int argc, char * argv[])
                                               icon_file, 0);
         QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
         QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
-
+		
         L_INFO(userStartMenu);
  #endif
 
-    QTranslator translator;
-    // TODO gérer langue par défaut et demander quelle langue utiliser.
-    QString locale = QLocale::system().name();
-    QString location = ":/translations";
-    qDebug() << "locale:" << locale;
+	L_INFO("Start Application");
+    QApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/resources/icon.png"));
+    app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
+	
+    LanguageManager::initLanguage();
 
-    qDebug() << "loading translator";
-    translator.load(locale, location);
-    app.installTranslator(&translator);
-
-    MainWindow window;
-    window.show();
-    window.center();
+    UIManager * uiManager = new UIManager();
+    uiManager->changeWelcome();
 
     return app.exec();
 } // main

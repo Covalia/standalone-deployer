@@ -6,6 +6,7 @@
 #include <QDirIterator>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "style/stylemanager.h"
 
 /*!
  * \class MainWindow
