@@ -71,7 +71,7 @@
         <string notr="true">QPlainTextEdit {
 	background-color: transparent;
 	border: 1px solid @color-panel-background-border;
-	color: white;
+	color: @color-text-on-background;
 	
 }
 

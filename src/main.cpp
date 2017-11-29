@@ -41,6 +41,7 @@
  */
 int main(int argc, char * argv[])
 {
+    // TODO set path installation? Must be init before installation to log
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
@@ -50,11 +51,13 @@ int main(int argc, char * argv[])
     L_INFO("Start Commande Lien Parser");
     new CommandLineParser();
 
+    // TODO set path of installation, and remove in installation manager
     Settings& settings = Settings::Instance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
     settings.initSettings(installPath);
     settings.writeSettings();
 
+    // TODO remove this in end of installation manager
 #ifdef Q_OS_WIN
         Shortcut * shorcutCreator = new Shortcut();
         LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
@@ -63,14 +66,12 @@ int main(int argc, char * argv[])
         LPCWSTR description = L"This is description";
         LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
         LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
-
         shorcutCreator->createWindowsShortcut(target_file, target_args,
                                               link_file, description,
                                               1, cur_dir,
                                               icon_file, 0);
         QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
         QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
-
         L_INFO(userStartMenu);
 #endif
 

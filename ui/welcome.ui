@@ -94,7 +94,7 @@
 }
 
 QPushButton:hover {
-	color : white;
+	color : @color-text-on-background;
 }</string>
             </property>
             <property name="text">
@@ -150,14 +150,14 @@ QPushButton:hover {
        <property name="styleSheet">
         <string notr="true">QPushButton {
 	background-color: transparent;
-	color : white;
+	color : @color-text-on-background;
 	padding: 8px;
 	border: px0;
 	text-decoration: underline;
 }
 
 QPushButton:hover {
-	color : gray;
+	color : @color-text-gray;
 }</string>
        </property>
        <property name="text">

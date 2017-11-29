@@ -60,14 +60,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox">
+      <widget class="QCheckBox" name="checkBoxProxy">
        <property name="styleSheet">
         <string notr="true">QCheckBox{
-	color : @color-text-on-background;
+	color : @color-text-gray;
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -93,11 +93,11 @@ QCheckBox::indicator:checked{
        </property>
        <property name="styleSheet">
         <string notr="true">QCheckBox{
-	color : @color-text-on-background;
+	color : @color-text-gray;
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -118,14 +118,14 @@ QCheckBox::indicator:checked{
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBox_2">
+      <widget class="QCheckBox" name="checkBoxProxyManual">
        <property name="styleSheet">
         <string notr="true">QCheckBox{
-	color : @color-text-on-background;
+	color : @color-text-gray;
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -153,7 +153,13 @@ QCheckBox::indicator:checked{
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">color : @color-text-gray;</string>
+          <string notr="true">QLabel{
+	color : @color-text-gray;
+}
+QLabel::disabled{
+	color : @color-disabled;
+}
+</string>
          </property>
          <property name="text">
           <string>URL</string>
@@ -162,6 +168,9 @@ QCheckBox::indicator:checked{
        </item>
        <item>
         <widget class="QLineEdit" name="lineEditURL">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -169,11 +178,20 @@ QCheckBox::indicator:checked{
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;</string>
+          <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
          </property>
         </widget>
        </item>
@@ -203,7 +221,12 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">color : @color-text-gray;</string>
+          <string notr="true">QLabel{
+	color : @color-text-gray;
+}
+QLabel::disabled{
+	color : @color-disabled;
+}</string>
          </property>
          <property name="text">
           <string>Port</string>
@@ -225,11 +248,20 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;</string>
+          <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
          </property>
         </widget>
        </item>
@@ -259,7 +291,12 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">color : @color-text-gray;</string>
+          <string notr="true">QLabel{
+	color : @color-text-gray;
+}
+QLabel::disabled{
+	color : @color-disabled;
+}</string>
          </property>
          <property name="text">
           <string>Login</string>
@@ -267,7 +304,7 @@ color: @color-text-on-background;</string>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="lineEditLogin">
          <property name="minimumSize">
           <size>
            <width>100</width>
@@ -281,11 +318,20 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;</string>
+          <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
          </property>
         </widget>
        </item>
@@ -321,7 +367,12 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">color : @color-text-gray;</string>
+          <string notr="true">QLabel{
+	color : @color-text-gray;
+}
+QLabel::disabled{
+	color : @color-disabled;
+}</string>
          </property>
          <property name="text">
           <string>Password</string>
@@ -343,11 +394,20 @@ color: @color-text-on-background;</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;</string>
+          <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
          </property>
         </widget>
        </item>

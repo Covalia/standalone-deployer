@@ -35,6 +35,9 @@ Windows::Windows(QWidget * parent) :
     ui->comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
     ui->comboBoxLanguage->addItem("English", QVariant("en_US"));
     connect(ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
+
+    // bug combobox style
+    StyleManager::transformStyle(this);
 }
 
 Windows::~Windows()

@@ -67,8 +67,8 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background : #2d364c;
-color : #bebebe;</string>
+        <string notr="true">background : @color-panel-background-border;
+color : @color-text-gray;</string>
        </property>
        <property name="text">
         <string>Question</string>

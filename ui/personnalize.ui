@@ -141,12 +141,20 @@
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;
-</string>
+                  <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
                  </property>
                 </widget>
                </item>
@@ -161,15 +169,15 @@ color: @color-text-on-background;
                  <property name="styleSheet">
                   <string notr="true">QPushButton{
 	border-radius: 3px;
-	border: 1px solid #868a95;
-	background : #2d364c;
+	border: 1px solid @color-text-gray;
+	background : transparent;
 	padding : 5px 20px 5px 20px;
-	color : #4f5661;
+	color : @color-text-gray;
 }
 
 
 QPushButton:hover {
-	color : white;
+	color : @color-text-on-background;
 }
 </string>
                  </property>
@@ -233,7 +241,7 @@ QPushButton:hover {
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -279,11 +287,20 @@ QCheckBox::indicator:checked{
                <item>
                 <widget class="QLineEdit" name="editLineDataInstallation">
                  <property name="styleSheet">
-                  <string notr="true">border-radius: 3px;
-border: 1px solid #868a95;
-background : #2d364c;
-padding : 4px 10px 4px 10px;
-color: @color-text-on-background;</string>
+                  <string notr="true">QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border-radius: 3px;
+	border: 1px solid @color-disabled;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-disabled;
+}</string>
                  </property>
                 </widget>
                </item>
@@ -292,15 +309,15 @@ color: @color-text-on-background;</string>
                  <property name="styleSheet">
                   <string notr="true">QPushButton{
 	border-radius: 3px;
-	border: 1px solid #868a95;
-	background : #2d364c;
+	border: 1px solid @color-text-gray;
+	background : transparent;
 	padding : 5px 20px 5px 20px;
-	color : #4f5661;
+	color : @color-text-gray;
 }
 
 
 QPushButton:hover {
-	color : white;
+	color : @color-text-on-background;
 }
 </string>
                  </property>
@@ -376,7 +393,7 @@ QPushButton:hover {
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -409,7 +426,7 @@ QCheckBox::indicator:checked{
 }
 
 QCheckBox::indicator {
-    border: 1px solid #5A5A5A;
+    border: 1px solid @color-text-gray;
     background: none;
 }
 
@@ -436,14 +453,14 @@ QCheckBox::indicator:checked{
        <property name="styleSheet">
         <string notr="true">QPushButton {
 	background-color: transparent;
-	color : white;
+	color : @color-text-on-background;
 	padding: 8px;
 	border: px0;
 	text-decoration: underline;
 }
 
 QPushButton:hover {
-	color : gray;
+	color : @color-text-gray;
 }</string>
        </property>
        <property name="text">

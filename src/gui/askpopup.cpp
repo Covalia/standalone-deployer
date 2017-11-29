@@ -13,7 +13,8 @@ AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
 {
     ui->setupUi(this);
 
-//    this->setAttribute(Qt::WA_QuitOnClose);
+    m_parent = parent;
+
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
     StyleManager::transformStyle(this);
@@ -24,10 +25,9 @@ AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
     connect(ui->buttonYes, SIGNAL(clicked()), this, SLOT(yesEvent()));
     connect(ui->buttonNo, SIGNAL(clicked()), this, SLOT(noEvent()));
 
-    center();
-
-    m_parent = parent;
     m_parent->setWindowOpacity(0.95);
+
+    center();
 }
 
 AskPopup::~AskPopup()
@@ -51,7 +51,7 @@ int AskPopup::exec()
 void AskPopup::center()
 {
     QRect geometry = frameGeometry();
-    QPoint center = QDesktopWidget().availableGeometry().center();
+    QPoint center = m_parent->geometry().center();
 
     geometry.moveCenter(center);
     move(geometry.topLeft());
