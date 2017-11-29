@@ -13,9 +13,11 @@ static QString GROUP_SHORTCUT = "SHORTCUT";
 static QString GROUP_CLASSPATH = "CLASSPATH";
 static QString GROUP_DATA = "DATA";
 static QString GROUP_SERVER = "SERVER";
+static QString GROUP_START = "START";
 
-static QString S_PROXY_USING = "isProxyUsing";
+static QString S_PROXY_USE = "proxyUse";
 static QString S_PROXY_AUTO = "proxyAuto";
+static QString S_PROXY_MANUAL = "proxyManual";
 static QString S_PROXY_URL = "proxyURL";
 static QString S_PROXY_PORT = "proxyPort";
 static QString S_PROXY_AUTHENTICATION = "proxyAuthentication";
@@ -25,13 +27,19 @@ static QString S_PROXY_PASSWORD = "proxyPassword";
 static QString S_LANGUAGE_LANGUAGE = "language";
 
 static QString S_SHORTCUT_NAME = "shortcutName";
+static QString S_SHORTCUT_OFFLINE = "shortcutOffline";
+static QString S_SHORTCUT_ONLINE = "shortcutOnline";
 static QString S_SHORTCUT_ALL_USER = "shortcutAllUser";
 
 static QString S_CLASSPATH_EXTENSION = "classpathExtension";
 
+static QString S_INSTALL_LOCATION = "installLocation";
 static QString S_DATA_LOCATION = "dataLocation";
 
+
 static QString S_SERVER_URL = "serverURL";
+
+static QString S_RUN_AT_START = "runAtStart";
 
 enum Language { English, French };
 
@@ -55,11 +63,14 @@ class Settings
 
         void readSettings();
 
-        bool getIsProxyUsing() const;
-        void setIsProxyUsing(bool isProxyUsing);
+        bool getProxyUse() const;
+        void setProxyUse(bool proxyUse);
 
         bool getProxyAuto() const;
         void setProxyAuto(bool proxyAuto);
+
+        bool getProxyManual() const;
+        void setProxyManual(bool proxyManual);
 
         QString getProxyURL() const;
         void setProxyURL(const QString &proxyURL);
@@ -93,6 +104,18 @@ class Settings
 
         QString getServerURL() const;
         void setServerURL(const QString &serverURL);
+
+        bool getRunAtStart() const;
+        void setRunAtStart(const bool &runAtStart);
+
+        QString getInstallLocation() const;
+        void setInstallLocation(const QString &installLocation);
+
+        bool getShortcutOffline() const;
+        void setShortcutOffline(bool shortcutOffline);
+
+        bool getShortcutOnline() const;
+        void setShortcutOnline(bool shortcutOnline);
 
     private:
 
@@ -154,8 +177,9 @@ class Settings
         QSettings * m_settings;
 
         // proxy
-        bool m_isProxyUsing;
+        bool m_proxyUse;
         bool m_proxyAuto;
+        bool m_proxyManual;
         QString m_proxyURL;
         int m_proxyPort;
         bool m_proxyAuthentification;
@@ -167,6 +191,8 @@ class Settings
 
         // shortcut
         QString m_shortcutName;
+        bool m_shortcutOffline;
+        bool m_shortcutOnline;
         bool m_shortcutAllUser;
 
         // classpath downloader
@@ -174,9 +200,13 @@ class Settings
 
         // data
         QString m_dataLocation;
+        QString m_installLocation;
 
         // server
         QString m_serverURL;
+
+        // start
+        bool m_runAtStart;
 };
 
 #endif // SETTINGS_H
