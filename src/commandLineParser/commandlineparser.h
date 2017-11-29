@@ -3,6 +3,9 @@
 
 #include <QCommandLineParser>
 
+
+const QString EMPTY = "EMPTY";
+
 /**
  * @class QCommandLineParser
  *
@@ -13,49 +16,48 @@ class CommandLineParser
     public:
         CommandLineParser();
 
-        bool getSilent() const;
-        void setSilent(bool value);
+        void sendToSettings();
+
+        QString getSilent() const;
+        void setSilent(const QString &silent);
 
         QString getIntallLocation() const;
-        void setIntallLocation(const QString &value);
+        void setIntallLocation(const QString &intallLocation);
 
         QString getDataLocation() const;
-        void setDataLocation(const QString &value);
+        void setDataLocation(const QString &dataLocation);
 
-        bool getProxyUse() const;
-        void setProxyUse(bool value);
-
-        bool getProxyAuto() const;
-        void setProxyAuto(bool value);
+        QString getProxyAuto() const;
+        void setProxyAuto(const QString &proxyAuto);
 
         QString getProxyURL() const;
-        void setProxyURL(const QString &value);
+        void setProxyURL(const QString &proxyURL);
 
         QString getProxyPort() const;
-        void setProxyPort(const QString &value);
+        void setProxyPort(const QString &proxyPort);
 
         QString getProxyLogin() const;
-        void setProxyLogin(const QString &value);
+        void setProxyLogin(const QString &proxyLogin);
 
         QString getProxyPassword() const;
-        void setProxyPassword(const QString &value);
+        void setProxyPassword(const QString &proxyPassword);
 
         QString getLanguage() const;
-        void setLanguage(const QString &value);
+        void setLanguage(const QString &language);
 
-        bool getRunAtStart() const;
-        void setRunAtStart(bool value);
+        QString getRunAtStart() const;
+        void setRunAtStart(const QString &runAtStart);
 
-        bool getOffshort() const;
-        void setOffshort(bool value);
+        QString getOffshort() const;
+        void setOffshort(const QString &offshort);
 
-        bool getShortcut() const;
-        void setShortcut(bool value);
+        QString getShortcut() const;
+        void setShortcut(const QString &shortcut);
 
-        bool getAllUserShortcut() const;
-        void setAllUserShortcut(bool value);
+        QString getAllUserShortcut() const;
+        void setAllUserShortcut(const QString &allUserShortcut);
 
-    private:
+private:
 
         /**
          * @brief Method used to read boolean arguments
@@ -63,7 +65,7 @@ class CommandLineParser
          * @param commandOption
          * @return true if argument exist and have no value or true value. Example : --arg OR--arg=true
          */
-        bool isExistingBooleanArg(QCommandLineParser & parser, QCommandLineOption & commandOption);
+        QString getValueBool(QCommandLineParser & parser, QCommandLineOption & commandOption);
 
         /**
          * @brief Method used to read string arguments
@@ -71,22 +73,35 @@ class CommandLineParser
          * @param commandOption
          * @return value unless the value is "EMPTY" (defaut arg value) return empty value ("").
          */
-        QString getValueArg(QCommandLineParser & parser, QCommandLineOption & commandOption);
+        QString getValueString(QCommandLineParser & parser, QCommandLineOption & commandOption);
 
-        bool silent;
-        QString intallLocation;
-        QString dataLocation;
-        bool proxyUse;
-        bool proxyAuto;
-        QString proxyURL;
-        QString proxyPort;
-        QString proxyLogin;
-        QString proxyPassword;
-        QString language;
-        bool runAtStart;
-        bool offshort;
-        bool shortcut;
-        bool allUserShortcut;
+        /**
+         * @brief Return true is value is empty : not definid in arg of parser line
+         * @param value
+         * @return
+         */
+        bool isEmptyValue(QString value);
+
+        /**
+         * @brief Parse bool value
+         * @param value
+         * @return
+         */
+        bool parseBool(QString value);
+
+        QString m_silent;
+        QString m_intallLocation;
+        QString m_dataLocation;
+        QString m_proxyAuto;
+        QString m_proxyURL;
+        QString m_proxyPort;
+        QString m_proxyLogin;
+        QString m_proxyPassword;
+        QString m_language;
+        QString m_runAtStart;
+        QString m_offshort;
+        QString m_shortcut;
+        QString m_allUserShortcut;
 };
 
 #endif // COMMANDLINEPARSER_H

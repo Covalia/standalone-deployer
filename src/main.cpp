@@ -49,7 +49,8 @@ int main(int argc, char * argv[])
     QApplication app(argc, argv);
 
     L_INFO("Start Commande Lien Parser");
-    new CommandLineParser();
+    CommandLineParser * lineParser = new CommandLineParser();
+    lineParser->sendToSettings();
 
     // TODO set path of installation, and remove in installation manager
     Settings& settings = Settings::Instance();
