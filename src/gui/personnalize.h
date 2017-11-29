@@ -22,7 +22,8 @@ class Personnalize : public QWidget
 
     private:
         Ui::Personnalize * ui;
-        QString fileChooserDialog(QString openFolder);
+        QString fileChooserDialog();
+        void saveElementsInSetting();
 
     signals:
         void proxySettingSignal();

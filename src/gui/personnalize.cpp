@@ -2,6 +2,7 @@
 #include "ui_personnalize.h"
 #include "src/style/stylemanager.h"
 #include "src/log/simpleqtlogger.h"
+#include "src/settings/settings.h"
 
 #include <QStringList>
 #include <QFileDialog>
@@ -13,6 +14,12 @@ Personnalize::Personnalize(QWidget * parent) :
     ui->setupUi(this);
 
     StyleManager::transformStyle(this);
+
+    Settings& settings = Settings::Instance();
+    ui->editLineFolderInstallation->setText(settings.getInstallLocation());
+    ui->editLineDataInstallation->setText(settings.getDataLocation());
+    ui->checkBoxOfflineShortcut->setChecked(settings.getShortcutOffline());
+    ui->checkBoxRunAtStart->setChecked(settings.getRunAtStart());
 
     connect(ui->buttonProxySetting, SIGNAL(clicked()), this, SLOT(proxySettingEvent()));
     connect(ui->buttonChangeFolderInstallation, SIGNAL(clicked()), this, SLOT(fileChooserInstallEvent()));
@@ -32,13 +39,13 @@ void Personnalize::changeLanguage()
 
 void Personnalize::proxySettingEvent()
 {
+    saveElementsInSetting();
     proxySettingSignal();
 }
 
 void Personnalize::fileChooserInstallEvent()
 {
-    QString opendFolder = ui->editLineFolderInstallation->text();
-    QString folderPath = fileChooserDialog(opendFolder);
+    QString folderPath = fileChooserDialog();
 
     if (!folderPath.isEmpty()) {
         ui->editLineFolderInstallation->setText(folderPath);
@@ -47,15 +54,14 @@ void Personnalize::fileChooserInstallEvent()
 
 void Personnalize::fileChooserDataEvent()
 {
-    QString opendFolder = ui->editLineDataInstallation->text();
-    QString folderPath = fileChooserDialog(opendFolder);
+    QString dataPath = fileChooserDialog();
 
-    if (!folderPath.isEmpty()) {
-        ui->editLineDataInstallation->setText(folderPath);
+    if (!dataPath.isEmpty()) {
+        ui->editLineDataInstallation->setText(dataPath);
     }
 }
 
-QString Personnalize::fileChooserDialog(QString openFolder)
+QString Personnalize::fileChooserDialog()
 {
     QFileDialog dialog(this);
 
@@ -72,7 +78,31 @@ QString Personnalize::fileChooserDialog(QString openFolder)
     return "";
 }
 
+void Personnalize::saveElementsInSetting(){
+    Settings& settings = Settings::Instance();
+
+    //install folder
+    settings.setInstallLocation(ui->editLineFolderInstallation->text());
+    //data folder
+    if(ui->checkBoxDataInstallation->isVisible() && ui->checkBoxDataInstallation->isChecked()){
+        settings.setDataLocation(ui->editLineDataInstallation->text());
+    }
+    else{
+        settings.setDataLocation(ui->editLineFolderInstallation->text() + "/Data");
+    }
+    // offline shortcut
+    if(ui->checkBoxOfflineShortcut->isVisible()){
+        settings.setShortcutOffline(ui->checkBoxOfflineShortcut->isChecked());
+    }
+    // run at start
+    if(ui->checkBoxRunAtStart->isVisible()){
+        settings.setRunAtStart(ui->checkBoxRunAtStart->isChecked());
+    }
+}
+
 void Personnalize::customInstallationEvent()
 {
+    saveElementsInSetting();
+
     customInstallationSignal();
 }
