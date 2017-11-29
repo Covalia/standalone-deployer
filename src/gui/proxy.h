@@ -28,6 +28,9 @@ class Proxy : public QWidget
     public slots:
         void changeLanguage();
         void validateSettings();
+
+    private slots:
+        void updateVisibleField();
 };
 
 #endif // PROXY_H
