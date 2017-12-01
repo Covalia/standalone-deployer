@@ -1,7 +1,7 @@
 #ifndef SHORTCUT_H
 #define SHORTCUT_H
 
-
+#ifdef Q_OS_WIN
 
 #include <QString>
 #include <Windows.h>
@@ -9,8 +9,6 @@
 const QString PATH = "C:/Users/Alexis/Desktop/";
 const QString FILE_NAME = "test.exe";
 const QString PATH_LINK = "C:/Users/Alexis/Desktop/";
-
-#ifdef Q_OS_WIN
 
 /**
  * \class Shortcut

@@ -1,4 +1,4 @@
-#include "stylemanager.h"
+#include "style/stylemanager.h"
 
 StyleManager::StyleManager()
 {

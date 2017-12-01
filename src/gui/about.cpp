@@ -1,4 +1,4 @@
-#include "about.h"
+#include "gui/about.h"
 #include "ui_about.h"
 #include "style/stylemanager.h"
 

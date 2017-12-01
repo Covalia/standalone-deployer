@@ -9,7 +9,7 @@
  *
  */
 
-#include "simpleqtlogger.h"
+#include "log/simpleqtlogger.h"
 
 #include <QCoreApplication>
 #include <QTimer>

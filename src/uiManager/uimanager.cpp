@@ -1,6 +1,6 @@
 #include "uimanager.h"
 
-#include "log/simpleqtlogger.h"
+#include "log/logger.h"
 #include "gui/windows.h"
 #include "gui/welcome.h"
 #include "gui/personnalize.h"

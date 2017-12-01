@@ -1,12 +1,11 @@
-#include "languagemanager.h"
+#include "language/languagemanager.h"
+#include "log/logger.h"
 
 #include <QString>
 #include <QLocale>
 #include <QDebug>
 #include <QApplication>
 #include <QTranslator>
-
-#include "../log/simpleqtlogger.h"
 
 QTranslator LanguageManager::translator;
 

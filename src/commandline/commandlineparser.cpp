@@ -1,9 +1,9 @@
-#include "commandlineparser.h"
+#include "commandline/commandlineparser.h"
 
 #include <QCommandLineParser>
 #include <QCommandLineOption>
-#include "src/log/simpleqtlogger.h"
-#include "src/settings/settings.h"
+#include "log/logger.h"
+#include "settings/settings.h"
 
 CommandLineParser::CommandLineParser()
 {
@@ -76,28 +76,28 @@ CommandLineParser::CommandLineParser()
 
 void CommandLineParser::sendToSettings()
 {
-    Settings& settings = Settings::Instance();
+    Settings * settings = Settings::getInstance();
 
     if (!isEmptyValue(m_intallLocation)) {
-        settings.setInstallLocation(m_intallLocation);
-        settings.setDataLocation(m_intallLocation + "/Data");
+        settings->setInstallLocation(m_intallLocation);
+        settings->setDataLocation(m_intallLocation + "/Data");
     }
     if (!isEmptyValue(m_dataLocation)) {
-        settings.setDataLocation(m_dataLocation);
+        settings->setDataLocation(m_dataLocation);
     }
 
     if (!isEmptyValue(m_proxyAuto)) {
-        settings.setProxyAuto(parseBool(m_proxyAuto));
+        settings->setProxyAuto(parseBool(m_proxyAuto));
         // activate proxy automatically
         if (parseBool(m_proxyAuto)) {
-            settings.setProxyUse(true);
+            settings->setProxyUse(true);
         }
     }
     if (!isEmptyValue(m_proxyURL)) {
-        settings.setProxyUse(true);
-        settings.setProxyURL(m_proxyURL);
-        settings.setProxyAuto(false);
-        settings.setProxyManual(true);
+        settings->setProxyUse(true);
+        settings->setProxyURL(m_proxyURL);
+        settings->setProxyAuto(false);
+        settings->setProxyManual(true);
     }
 
     // port to int
@@ -105,30 +105,30 @@ void CommandLineParser::sendToSettings()
         bool okParsePort = false;
         int port = m_proxyPort.toInt(&okParsePort, 10);
         if (okParsePort) {
-            settings.setProxyPort(port);
+            settings->setProxyPort(port);
         }
     }
 
     if (!isEmptyValue(m_proxyLogin)) {
-        settings.setProxyLogin(m_proxyLogin);
-        settings.setProxyAuthentification(true);
+        settings->setProxyLogin(m_proxyLogin);
+        settings->setProxyAuthentification(true);
     }
     if (!isEmptyValue(m_proxyPassword)) {
-        settings.setProxyPassword(m_proxyPassword);
+        settings->setProxyPassword(m_proxyPassword);
     }
 
     if (!isEmptyValue(m_offshort)) {
-        settings.setShortcutOffline(parseBool(m_offshort));
+        settings->setShortcutOffline(parseBool(m_offshort));
     }
     if (!isEmptyValue(m_shortcut)) {
-        settings.setShortcutOnline(parseBool(m_shortcut));
+        settings->setShortcutOnline(parseBool(m_shortcut));
     }
     if (!isEmptyValue(m_allUserShortcut)) {
-        settings.setShortcutAllUser(parseBool(m_allUserShortcut));
+        settings->setShortcutAllUser(parseBool(m_allUserShortcut));
     }
 
     if (!isEmptyValue(m_runAtStart)) {
-        settings.setRunAtStart(parseBool(m_runAtStart));
+        settings->setRunAtStart(parseBool(m_runAtStart));
     }
 } // CommandLineParser::sendToSettings
 

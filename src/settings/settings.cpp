@@ -1,41 +1,37 @@
-#include "settings.h"
-#include "src/log/simpleQtLogger.h"
-#include "src/utils/crypt/cryptmanager.h"
+#include "settings/settings.h"
+#include "log/logger.h"
+#include "utils/crypt/cryptmanager.h"
 
 #include <QMutexLocker>
+#include <QSettings>
 
-Settings Settings::m_instance = Settings();
+Settings *Settings::sm_instance = 0;
 QMutex Settings::sm_instanceMutex;
 QMutex Settings::sm_settingsMutex;
 
-Settings::Settings()
-{
+Settings::Settings() :
+    m_settings(0),
+    m_proxyUse(false),
+    m_proxyAuto(false),
+    m_proxyManual(false),
+    m_proxyURL(""),
+    m_proxyPort(-1),
+    m_proxyAuthentification(false),
+    m_proxyLogin(""),
+    m_proxyPassword(""),
+    m_language(Language::English),
+    m_shortcutName(""),
+    m_shortcutOffline(false),
+    m_shortcutOnline(false),
+    m_shortcutAllUser(false),
+    m_classpathExtension(""),
+    m_dataLocation(""),
+    m_installLocation(""),
+    m_serverURL(""),
+    m_runAtStart(true) {
+
     L_INFO("Initialise Setting singleton instance");
 
-    m_proxyUse = false;
-    m_proxyAuto = false;
-    m_proxyManual = false;
-    m_proxyURL = "";
-    m_proxyPort = -1;
-    m_proxyAuthentification = false;
-    m_proxyLogin = "";
-    m_proxyPassword = "";
-
-    m_language = Language::English;
-
-    m_shortcutName = "";
-    m_shortcutOffline = false;
-    m_shortcutOnline = false;
-    m_shortcutAllUser = false;
-
-    m_classpathExtension = "";
-
-    m_installLocation = "";
-    m_dataLocation = "";
-
-    m_serverURL = "";
-
-    m_runAtStart = true;
 }
 
 Settings::~Settings()
@@ -43,14 +39,33 @@ Settings::~Settings()
     delete m_settings;
 }
 
-Settings& Settings::Instance()
-{
-    return m_instance;
+Settings * Settings::getInstance(){
+    if (Settings::sm_instance == 0) {
+        Settings::sm_instanceMutex.lock();
+        if (Settings::sm_instance == 0) {
+            Settings::sm_instance = new Settings();
+        }
+        Settings::sm_instanceMutex.unlock();
+    }
+    return Settings::sm_instance;
 }
 
-void Settings::initSettings(QString installPath)
-{
-    m_settings = new QSettings(installPath, QSettings::IniFormat);
+void Settings::kill() {
+    if (Settings::sm_instance) {
+        Settings::sm_instanceMutex.lock();
+        if (Settings::sm_instance) {
+            delete Settings::sm_instance;
+            Settings::sm_instance = 0;
+        }
+        Settings::sm_instanceMutex.unlock();
+    }
+}
+
+void Settings::initSettings(QString _installPath){
+    if (m_settings == 0) {
+        m_settings = new QSettings(_installPath, QSettings::IniFormat);
+        m_settings->setFallbacksEnabled(false);
+    }
 }
 
 void Settings::putSetting(QString key, QVariant value)

@@ -1,7 +1,7 @@
-#include "proxy.h"
+#include "gui/proxy.h"
 #include "ui_proxy.h"
 #include "style/stylemanager.h"
-#include "src/settings/settings.h"
+#include "settings/settings.h"
 
 Proxy::Proxy(QWidget * parent) :
     QWidget(parent),
@@ -18,20 +18,20 @@ Proxy::Proxy(QWidget * parent) :
     group->addButton(ui->checkBoxProxyManual);
 
     // init with actual settings
-    Settings& settings = Settings::Instance();
-    if (!settings.getProxyUse()) {
+    Settings * settings = Settings::getInstance();
+    if (!settings->getProxyUse()) {
         ui->checkBoxProxy->setChecked(true);
-    } else if (settings.getProxyAuto()) {
+    } else if (settings->getProxyAuto()) {
         ui->checkBoxProxyAuto->setChecked(true);
-    } else if (settings.getProxyManual()) {
+    } else if (settings->getProxyManual()) {
         ui->checkBoxProxyManual->setChecked(true);
     }
-    ui->lineEditURL->setText(settings.getProxyURL());
-    if (settings.getProxyPort() > 0) {
-        ui->lineEditPort->setText(QString::number(settings.getProxyPort()));
+    ui->lineEditURL->setText(settings->getProxyURL());
+    if (settings->getProxyPort() > 0) {
+        ui->lineEditPort->setText(QString::number(settings->getProxyPort()));
     }
-    ui->lineEditLogin->setText(settings.getProxyLogin());
-    ui->lineEditPassword->setText(settings.getProxyPassword());
+    ui->lineEditLogin->setText(settings->getProxyLogin());
+    ui->lineEditPassword->setText(settings->getProxyPassword());
 
     updateVisibleField();
 
@@ -66,24 +66,24 @@ void Proxy::changeLanguage()
 
 void Proxy::validateSettings()
 {
-    Settings& settings = Settings::Instance();
+    Settings * settings = Settings::getInstance();
 
-    settings.setProxyUse(!ui->checkBoxProxy->isChecked());
-    settings.setProxyAuto(ui->checkBoxProxyAuto->isChecked());
-    settings.setProxyManual(ui->checkBoxProxyManual->isChecked());
+    settings->setProxyUse(!ui->checkBoxProxy->isChecked());
+    settings->setProxyAuto(ui->checkBoxProxyAuto->isChecked());
+    settings->setProxyManual(ui->checkBoxProxyManual->isChecked());
 
-    settings.setProxyURL(ui->lineEditURL->text());
+    settings->setProxyURL(ui->lineEditURL->text());
 
     // port parsing to int
     if (!ui->lineEditPort->text().isEmpty()) {
         bool okParsePort = false;
         int port = ui->lineEditPort->text().toInt(&okParsePort, 10);
         if (okParsePort) {
-            settings.setProxyPort(port);
+            settings->setProxyPort(port);
         }
     }
-    settings.setProxyLogin(ui->lineEditLogin->text());
-    settings.setProxyPassword(ui->lineEditPassword->text());
+    settings->setProxyLogin(ui->lineEditLogin->text());
+    settings->setProxyPassword(ui->lineEditPassword->text());
 
     validateSettingsSignal();
 } // Proxy::validateSettings

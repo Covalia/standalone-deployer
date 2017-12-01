@@ -1,6 +1,6 @@
-#include "askpopup.h"
+#include "gui/askpopup.h"
 #include "ui_askpopup.h"
-#include "src/style/stylemanager.h"
+#include "style/stylemanager.h"
 
 #include <QPoint>
 #include <QRect>

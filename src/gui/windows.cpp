@@ -1,11 +1,11 @@
-#include "windows.h"
+#include "gui/windows.h"
 #include "ui_windows.h"
 
-#include "../src/style/stylemanager.h"
-#include "../src/language/languagemanager.h"
-#include "../src/log/simpleqtlogger.h"
-#include "personnalize.h"
-#include "askpopup.h"
+#include "style/stylemanager.h"
+#include "language/languagemanager.h"
+#include "log/logger.h"
+#include "gui/personnalize.h"
+#include "gui/askpopup.h"
 
 #include <QDesktopWidget>
 #include <QMessageBox>
@@ -61,7 +61,7 @@ void Windows::mousePressEvent(QMouseEvent * e)
     this->setCursor(QCursor(Qt::SizeAllCursor));
 }
 
-void Windows::mouseReleaseEvent(QMouseEvent * e)
+void Windows::mouseReleaseEvent(QMouseEvent *)
 {
     this->setCursor(QCursor(Qt::ArrowCursor));
 }

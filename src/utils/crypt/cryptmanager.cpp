@@ -1,6 +1,6 @@
 #include "cryptmanager.h"
 
-#include "src/utils/crypt/simplecrypt.h"
+#include "utils/crypt/simplecrypt.h"
 
 CryptManager::CryptManager()
 {

@@ -1,4 +1,4 @@
-#include "shortcut.h"
+#include "shortcut/shortcut.h"
 
 #ifdef Q_OS_WIN
 

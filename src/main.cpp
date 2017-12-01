@@ -5,12 +5,11 @@
 #include <QString>
 
 #include "mainwindow.h"
-#include "uiManager/uimanager.h"
+#include "uimanager/uimanager.h"
 #include "shortcut/shortcut.h"
-#include "log/simpleqtlogger.h"
 #include "log/logger.h"
 #include "settings/settings.h"
-#include "commandLineParser/commandlineparser.h"
+#include "commandline/commandlineparser.h"
 #include "language/languagemanager.h"
 
 /*!
@@ -53,20 +52,20 @@ int main(int argc, char * argv[])
     lineParser->sendToSettings();
 
     // TODO set path of installation, and remove in installation manager
-    Settings& settings = Settings::Instance();
+    Settings * settings = Settings::getInstance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
-    settings.initSettings(installPath);
-    settings.setProxyPassword("hello@password!étoile?*");
-    settings.writeSettings();
-    settings.readSettings();
-    L_INFO("Password = " + settings.getProxyPassword());
+    settings->initSettings(installPath);
+    settings->setProxyPassword("hello@password!étoile?*");
+    settings->writeSettings();
+    settings->readSettings();
+    L_INFO("Password = " + settings->getProxyPassword());
 
     // TODO remove this in end of installation manager
 #ifdef Q_OS_WIN
         Shortcut * shorcutCreator = new Shortcut();
         LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
         LPCWSTR target_args = L"";
-        LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
+        LPSTR link_file = "C:/Users/Alexis/Desktop/ covotem.lnk";
         LPCWSTR description = L"This is description";
         LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
         LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
@@ -88,4 +87,5 @@ int main(int argc, char * argv[])
     uiManager->changeWelcome();
 
     return app.exec();
+
 } // main

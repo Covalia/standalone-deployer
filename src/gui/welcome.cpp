@@ -1,6 +1,6 @@
-#include "welcome.h"
+#include "gui/welcome.h"
 #include "ui_welcome.h"
-#include "../src/style/stylemanager.h"
+#include "style/stylemanager.h"
 #include <QDebug>
 #include <QPropertyAnimation>
 

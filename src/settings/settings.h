@@ -1,11 +1,11 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QSettings>
 #include <QString>
 #include <QVariant>
-#include <QObject>
 #include <QMutex>
+
+class QSettings;
 
 static QString GROUP_PROXY = "PROXY";
 static QString GROUP_LANGUAGE = "LANGUAGE";
@@ -55,7 +55,8 @@ enum Language { English, French };
 class Settings
 {
     public:
-        static Settings& Instance();
+        static Settings *getInstance();
+        static void kill();
 
         void initSettings(QString installPath);
 
@@ -129,7 +130,7 @@ class Settings
         {
         }
 
-        static Settings m_instance;
+        static Settings * sm_instance;
         static QMutex sm_instanceMutex;
         static QMutex sm_settingsMutex;
 

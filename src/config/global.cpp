@@ -1,4 +1,4 @@
-#include "global.h"
+#include "config/global.h"
 
 const QString Global::AppName("application");
 const QString Global::AppCnlpRemoteFilename("application.cnlp.php");
