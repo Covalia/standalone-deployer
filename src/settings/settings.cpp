@@ -1,5 +1,6 @@
 #include "settings.h"
-#include "../log/simpleQtLogger.h"
+#include "src/log/simpleQtLogger.h"
+#include "src/utils/crypt/cryptmanager.h"
 
 #include <QMutexLocker>
 
@@ -86,7 +87,10 @@ void Settings::writeSettings()
     putSetting(S_PROXY_PORT, m_proxyPort);
     putSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification);
     putSetting(S_PROXY_LOGIN, m_proxyLogin);
-    putSetting(S_PROXY_PASSWORD, m_proxyPassword);
+    // encrypt password
+    CryptManager * crypt = new CryptManager();
+    QString encryptedPwd = crypt->encryptToString(m_proxyPassword);
+    putSetting(S_PROXY_PASSWORD, encryptedPwd);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);
@@ -131,7 +135,10 @@ void Settings::readSettings()
     m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
     m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, false).toBool();
     m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
-    m_proxyPassword = getSetting(S_PROXY_PASSWORD, "").toString();
+    // decrypt password
+    CryptManager * crypt = new CryptManager();
+    QString encryptedPwd = getSetting(S_PROXY_PASSWORD, "").toString();
+    m_proxyPassword = crypt->decryptToString(encryptedPwd);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);

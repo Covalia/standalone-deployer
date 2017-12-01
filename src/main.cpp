@@ -56,7 +56,10 @@ int main(int argc, char * argv[])
     Settings& settings = Settings::Instance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
     settings.initSettings(installPath);
+    settings.setProxyPassword("hello@password!étoile?*");
     settings.writeSettings();
+    settings.readSettings();
+    L_INFO("Password = " + settings.getProxyPassword());
 
     // TODO remove this in end of installation manager
 #ifdef Q_OS_WIN
