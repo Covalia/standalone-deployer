@@ -87,5 +87,4 @@ int main(int argc, char * argv[])
     uiManager->init();
 
     return app.exec();
-
 } // main

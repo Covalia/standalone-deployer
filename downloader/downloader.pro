@@ -93,7 +93,7 @@ FORMS += ui/askpopup.ui
 
 RESOURCES += resources.qrc
 
-DISTFILES += uncrustify.cfg
+DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
 
