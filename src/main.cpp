@@ -61,11 +61,11 @@ int main(int argc, char * argv[])
     L_INFO("Password = " + settings->getProxyPassword());
 
     // TODO remove this in end of installation manager
-#ifdef Q_OS_WIN
+#ifdef _WIN32
         Shortcut * shorcutCreator = new Shortcut();
         LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
         LPCWSTR target_args = L"";
-        LPSTR link_file = "C:/Users/Alexis/Desktop/ covotem.lnk";
+        LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
         LPCWSTR description = L"This is description";
         LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
         LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";

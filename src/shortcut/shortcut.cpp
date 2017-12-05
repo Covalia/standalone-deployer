@@ -1,6 +1,6 @@
 #include "shortcut/shortcut.h"
 
-#ifdef Q_OS_WIN
+#ifdef _WIN32
 
     #include <Windows.h>
     #include <shlobj.h>
@@ -110,4 +110,4 @@
         return "";
     }
 
-#endif // ifdef (Q_OS_WIN)
+#endif // ifdef (_WIN32)

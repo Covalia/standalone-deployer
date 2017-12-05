@@ -5,7 +5,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QDesktopWidget>
-#if Q_OS_WIN
+#ifdef _WIN32
 #include <QPropertyAnimation>
 #endif
 
@@ -40,7 +40,7 @@ AskPopup::~AskPopup()
 
 int AskPopup::exec()
 {
-#if Q_OS_WIN
+#ifdef _WIN32
     this->setWindowOpacity(0.0);
     QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
     anim->setDuration(500);
