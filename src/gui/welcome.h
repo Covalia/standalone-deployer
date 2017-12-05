@@ -16,7 +16,7 @@ class Welcome : public QWidget
     Q_OBJECT
 
     public:
-        explicit Welcome(QWidget * parent = 0);
+        explicit Welcome(QWidget * _parent = 0);
         virtual ~Welcome();
 
     signals:
@@ -31,7 +31,7 @@ class Welcome : public QWidget
         void customContractEvent();
 
     private:
-        Ui::Welcome * ui;
+        Ui::Welcome * m_ui;
 };
 
 #endif // WELCOME_H

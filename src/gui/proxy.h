@@ -16,11 +16,11 @@ class Proxy : public QWidget
     Q_OBJECT
 
     public:
-        explicit Proxy(QWidget * parent = 0);
-        ~Proxy();
+        explicit Proxy(QWidget * _parent = 0);
+        virtual ~Proxy();
 
     private:
-        Ui::Proxy * ui;
+        Ui::Proxy * m_ui;
 
     signals:
         void validateSettingsSignal();

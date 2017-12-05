@@ -64,50 +64,50 @@
     </message>
 </context>
 <context>
-    <name>Personnalize</name>
+    <name>Personalize</name>
     <message>
-        <location filename="../../ui/personnalize.ui" line="55"/>
+        <location filename="../../ui/personalize.ui" line="55"/>
         <source>Customize my installation</source>
         <translation>Personnaliser mon installation</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="102"/>
+        <location filename="../../ui/personalize.ui" line="102"/>
         <source>Application installation directory</source>
         <translation>Répertoire d&apos;installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="177"/>
-        <location filename="../../ui/personnalize.ui" line="308"/>
+        <location filename="../../ui/personalize.ui" line="177"/>
+        <location filename="../../ui/personalize.ui" line="308"/>
         <source>Change</source>
         <translation>Changer</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="249"/>
+        <location filename="../../ui/personalize.ui" line="249"/>
         <source>Data installation directory</source>
         <translation>Répertoire d&apos;installation des données</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="362"/>
+        <location filename="../../ui/personalize.ui" line="362"/>
         <source>Start-up</source>
         <translation>Démarrage</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="392"/>
+        <location filename="../../ui/personalize.ui" line="392"/>
         <source>Add an offline launch shortcut</source>
         <translation>Ajout un raccourci de lancement hors ligne</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="425"/>
+        <location filename="../../ui/personalize.ui" line="425"/>
         <source>Launch the application at startup</source>
         <translation>Lancer l&apos;application au démarrage de l&apos;ordinateur</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="450"/>
+        <location filename="../../ui/personalize.ui" line="450"/>
         <source>Proxy settings</source>
         <translation>Configuration du proxy</translation>
     </message>
     <message>
-        <location filename="../../ui/personnalize.ui" line="479"/>
+        <location filename="../../ui/personalize.ui" line="479"/>
         <source>Start installation</source>
         <translation>Lancer l&apos;installation</translation>
     </message>
@@ -197,29 +197,29 @@
     </message>
 </context>
 <context>
-    <name>Windows</name>
+    <name>Window</name>
     <message>
-        <location filename="../../ui/windows.ui" line="121"/>
+        <location filename="../../ui/window.ui" line="121"/>
         <source>@Application installation</source>
         <translation>Installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/windows.ui" line="154"/>
+        <location filename="../../ui/window.ui" line="154"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="21"/>
+        <location filename="../../src/gui/window.cpp" line="21"/>
         <source>Stand-alone deployment</source>
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="105"/>
+        <location filename="../../src/gui/window.cpp" line="105"/>
         <source>Do you want to exit the application?</source>
         <translation>Voulez-vous quitter l&apos;application?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/windows.cpp" line="105"/>
+        <location filename="../../src/gui/window.cpp" line="105"/>
         <source>The installation will be stopped</source>
         <translation>L&apos;installation sera arrêtée</translation>
     </message>

@@ -5,25 +5,28 @@
 #include <QPoint>
 #include <QRect>
 #include <QDesktopWidget>
+#if Q_OS_WIN
 #include <QPropertyAnimation>
+#endif
 
-AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
-    QDialog(parent),
-    ui(new Ui::AskPopup)
+AskPopup::AskPopup(QWidget * _parent, QString _title, QString _description) :
+    QDialog(_parent),
+    m_ui(new Ui::AskPopup),
+    m_parent(0)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    m_parent = parent;
+    m_parent = _parent;
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
     StyleManager::transformStyle(this);
 
-    ui->labelTitle->setText(title);
-    ui->labelDescription->setText(description);
+    m_ui->labelTitle->setText(_title);
+    m_ui->labelDescription->setText(_description);
 
-    connect(ui->buttonYes, SIGNAL(clicked()), this, SLOT(yesEvent()));
-    connect(ui->buttonNo, SIGNAL(clicked()), this, SLOT(noEvent()));
+    connect(m_ui->buttonYes, SIGNAL(clicked()), this, SLOT(yesEvent()));
+    connect(m_ui->buttonNo, SIGNAL(clicked()), this, SLOT(noEvent()));
 
     m_parent->setWindowOpacity(0.95);
 
@@ -32,12 +35,12 @@ AskPopup::AskPopup(QWidget * parent, QString title, QString description) :
 
 AskPopup::~AskPopup()
 {
-    delete ui;
-    delete m_parent;
+    delete m_ui;
 }
 
 int AskPopup::exec()
 {
+#if Q_OS_WIN
     this->setWindowOpacity(0.0);
     QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
     anim->setDuration(500);
@@ -45,6 +48,7 @@ int AskPopup::exec()
     anim->setStartValue(0.0);
     anim->setEndValue(1.0);
     anim->start(QAbstractAnimation::DeleteWhenStopped);
+#endif
     return QDialog::exec();
 }
 

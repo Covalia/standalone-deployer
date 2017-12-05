@@ -1,27 +1,27 @@
-#ifndef PERSONNALIZE_H
-#define PERSONNALIZE_H
+#ifndef PERSONALIZE_H
+#define PERSONALIZE_H
 
 #include <QWidget>
 #include <QString>
 
 namespace Ui {
-class Personnalize;
+class Personalize;
 }
 
 /**
- * @class Personnalize
- * @brief Personnalize widget
+ * @class Personalize
+ * @brief Personalize widget
  */
-class Personnalize : public QWidget
+class Personalize : public QWidget
 {
     Q_OBJECT
 
     public:
-        explicit Personnalize(QWidget * parent = 0);
-        ~Personnalize();
+        explicit Personalize(QWidget * _parent = 0);
+        virtual ~Personalize();
 
     private:
-        Ui::Personnalize * ui;
+        Ui::Personalize * m_ui;
         QString fileChooserDialog();
         void saveElementsInSetting();
 
@@ -37,4 +37,4 @@ class Personnalize : public QWidget
         void fileChooserDataEvent();
 };
 
-#endif // PERSONNALIZE_H
+#endif // PERSONALIZE_H

@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget * _parent) :
 }
 
 /*!
- * \brief Main application windows destructor
+ * \brief Main application window destructor
  */
 MainWindow::~MainWindow()
 {

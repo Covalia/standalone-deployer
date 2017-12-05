@@ -5,15 +5,15 @@
 
 #include <QString>
 #include <QDirIterator>
-#include <algorithm>
 
 static int update_counter = -1;
 
-DownloadUI::DownloadUI(QWidget * parent) :
-    QWidget(parent),
-    ui(new Ui::DownloadUI)
+DownloadUI::DownloadUI(QWidget * _parent) :
+    QWidget(_parent),
+    m_ui(new Ui::DownloadUI),
+    m_timer(0)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     StyleManager::transformStyle(this);
 
@@ -24,19 +24,19 @@ DownloadUI::DownloadUI(QWidget * parent) :
 
 DownloadUI::~DownloadUI()
 {
-    delete ui;
+    delete m_ui;
     delete m_timer;
 }
 
-void DownloadUI::showEvent(QShowEvent * event)
+void DownloadUI::showEvent(QShowEvent * _event)
 {
-    QWidget::showEvent(event);
+    QWidget::showEvent(_event);
     updateSlideShow();
 }
 
 void DownloadUI::changeLanguage()
 {
-    ui->retranslateUi(this);
+    m_ui->retranslateUi(this);
 }
 
 void DownloadUI::loadSlideShowImagesFromResources()
@@ -73,7 +73,7 @@ void DownloadUI::loadSlideShowImagesFromResources()
         ");
         button->setCursor(Qt::PointingHandCursor);
         connect(button, SIGNAL(clicked(bool)), this, SLOT(buttonSlideEvent()));
-        ui->horizontalLayoutButtonSlider->addWidget(button);
+        m_ui->horizontalLayoutButtonSlider->addWidget(button);
         m_buttonsList << button;
         group->addButton(button);
     }
@@ -92,14 +92,14 @@ void DownloadUI::buttonSlideEvent()
     }
 }
 
-void DownloadUI::updateSlideShow(int index)
+void DownloadUI::updateSlideShow(int _index)
 {
     if (!m_imagesList.isEmpty()) {
-        const QSize maxSize = ui->labelImage->size();
-        QPixmap pixmap = m_imagesList.at(index);
+        const QSize maxSize = m_ui->labelImage->size();
+        QPixmap pixmap = m_imagesList.at(_index);
         QPixmap resizedPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        ui->labelImage->setPixmap(resizedPixmap);
-        m_buttonsList.at(index)->setChecked(true);
+        m_ui->labelImage->setPixmap(resizedPixmap);
+        m_buttonsList.at(_index)->setChecked(true);
     }
 }
 
@@ -113,22 +113,22 @@ void DownloadUI::updateSlideShow()
     updateSlideShow(update_counter);
 }
 
-void DownloadUI::setTextGlobalDownload(QString text)
+void DownloadUI::setTextGlobalDownload(QString _text)
 {
-    ui->labelProgresseBarGlobal->setText(text);
+    m_ui->labelProgresseBarGlobal->setText(_text);
 }
 
-void DownloadUI::setTextParticularDownload(QString text)
+void DownloadUI::setTextParticularDownload(QString _text)
 {
-    ui->labelProgressBarFile->setText(text);
+    m_ui->labelProgressBarFile->setText(_text);
 }
 
-void DownloadUI::setTextPercentDownload(int value)
+void DownloadUI::setTextPercentDownload(int _value)
 {
-    ui->progressBarGlobal->setValue(value);
+    m_ui->progressBarGlobal->setValue(_value);
 }
 
-void DownloadUI::setPercentParticularDownload(int value)
+void DownloadUI::setPercentParticularDownload(int _value)
 {
-    ui->progressBarFile->setValue(value);
+    m_ui->progressBarFile->setValue(_value);
 }

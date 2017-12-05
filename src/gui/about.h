@@ -16,11 +16,11 @@ class About : public QWidget
     Q_OBJECT
 
     public:
-        explicit About(QWidget * parent = 0);
-        ~About();
+        explicit About(QWidget * _parent = 0);
+        virtual ~About();
 
     private:
-        Ui::About * ui;
+        Ui::About * m_ui;
         void initTextContract();
 
     signals:

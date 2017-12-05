@@ -50,8 +50,8 @@ SOURCES += src/settings/settings.cpp
 SOURCES += src/commandline/commandlineparser.cpp
 SOURCES += src/style/stylemanager.cpp
 SOURCES += src/gui/welcome.cpp
-SOURCES += src/gui/windows.cpp
-SOURCES += src/gui/personnalize.cpp
+SOURCES += src/gui/window.cpp
+SOURCES += src/gui/personalize.cpp
 SOURCES += src/language/languagemanager.cpp
 SOURCES += src/uimanager/uimanager.cpp
 SOURCES += src/gui/proxy.cpp
@@ -75,8 +75,8 @@ HEADERS += src/settings/settings.h
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/style/stylemanager.h
 HEADERS += src/gui/welcome.h
-HEADERS += src/gui/windows.h
-HEADERS += src/gui/personnalize.h
+HEADERS += src/gui/window.h
+HEADERS += src/gui/personalize.h
 HEADERS += src/language/languagemanager.h
 HEADERS += src/uimanager/uimanager.h
 HEADERS += src/gui/proxy.h
@@ -87,8 +87,8 @@ HEADERS += src/utils/crypt/simplecrypt.h
 
 FORMS += ui/mainwindow.ui \
     ui/welcome.ui \
-    ui/windows.ui \
-    ui/personnalize.ui \
+    ui/window.ui \
+    ui/personalize.ui \
     ui/proxy.ui \
     ui/about.ui \
     ui/downloadui.ui \

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Personnalize</class>
- <widget class="QWidget" name="Personnalize">
+ <class>Personalize</class>
+ <widget class="QWidget" name="Personalize">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -39,7 +39,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="labelPersonnalize">
+      <widget class="QLabel" name="labelPersonalize">
        <property name="font">
         <font>
          <family>Segoe UI Semibold</family>

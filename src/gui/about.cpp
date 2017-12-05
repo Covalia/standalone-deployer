@@ -6,22 +6,22 @@
 #include <QScrollBar>
 #include <QTextCursor>
 
-About::About(QWidget * parent) :
-    QWidget(parent),
-    ui(new Ui::About)
+About::About(QWidget * _parent) :
+    QWidget(_parent),
+    m_ui(new Ui::About)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     StyleManager::transformStyle(this);
 
-    connect(ui->buttonValidateAbout, SIGNAL(clicked()), this, SLOT(validateAbout()));
+    connect(m_ui->buttonValidateAbout, SIGNAL(clicked()), this, SLOT(validateAbout()));
 
     initTextContract();
 }
 
 About::~About()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void About::initTextContract()
@@ -30,19 +30,22 @@ void About::initTextContract()
 
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
-        ui->plainTextEdit->appendPlainText(in.readAll());
+        m_ui->plainTextEdit->appendPlainText(in.readAll());
     }
-    ui->plainTextEdit->moveCursor(QTextCursor::Start);
-    ui->plainTextEdit->ensureCursorVisible();
+
+    m_ui->plainTextEdit->moveCursor(QTextCursor::Start);
+    m_ui->plainTextEdit->ensureCursorVisible();
+
+    f.close();
 }
 
 void About::changeLanguage()
 {
-    ui->retranslateUi(this);
+    m_ui->retranslateUi(this);
     initTextContract();
 }
 
 void About::validateAbout()
 {
-    validateAboutSignal();
+    emit validateAboutSignal();
 }

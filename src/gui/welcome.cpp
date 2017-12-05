@@ -2,29 +2,28 @@
 #include "ui_welcome.h"
 #include "style/stylemanager.h"
 #include <QDebug>
-#include <QPropertyAnimation>
 
-Welcome::Welcome(QWidget * parent) :
-    QWidget(parent),
-    ui(new Ui::Welcome)
+Welcome::Welcome(QWidget * _parent) :
+    QWidget(_parent),
+    m_ui(new Ui::Welcome)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     StyleManager::transformStyle(this);
 
-    connect(ui->buttonSimpleInstallation, SIGNAL(clicked()), this, SLOT(simpleInstallationEvent()));
-    connect(ui->buttonCustomInstall, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
-    connect(ui->buttonContract, SIGNAL(clicked()), this, SLOT(customContractEvent()));
+    connect(m_ui->buttonSimpleInstallation, SIGNAL(clicked()), this, SLOT(simpleInstallationEvent()));
+    connect(m_ui->buttonCustomInstall, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
+    connect(m_ui->buttonContract, SIGNAL(clicked()), this, SLOT(customContractEvent()));
 }
 
 Welcome::~Welcome()
 {
-    delete ui;
+    delete m_ui;
 }
 
 void Welcome::changeLanguage()
 {
-    ui->retranslateUi(this);
+    m_ui->retranslateUi(this);
 }
 
 void Welcome::customInstallationEvent()

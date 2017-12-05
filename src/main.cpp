@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
     LanguageManager::initLanguage();
 
     UIManager * uiManager = new UIManager();
-    uiManager->changeWelcome();
+    uiManager->init();
 
     return app.exec();
 

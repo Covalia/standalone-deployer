@@ -10,19 +10,19 @@ class AskPopup;
 
 /**
  * @class AskPopup
- * @brief AskPopup dialog windows
+ * @brief AskPopup dialog window
  */
 class AskPopup : public QDialog
 {
     Q_OBJECT
 
     public:
-        explicit AskPopup(QWidget * m_parent = 0, QString title = "", QString description = "");
-        ~AskPopup();
+        explicit AskPopup(QWidget * _parent = 0, QString _title = "", QString _description = "");
+        virtual ~AskPopup();
         int exec();
 
     private:
-        Ui::AskPopup * ui;
+        Ui::AskPopup * m_ui;
         QWidget * m_parent;
         void center();
 
