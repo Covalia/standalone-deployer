@@ -1,7 +1,3 @@
-macx {
-QMAKE_MAC_SDK = macosx10.13
-}
-
 QT += core
 QT += gui
 QT += widgets
@@ -80,7 +76,7 @@ HEADERS += src/uimanager/uimanager.h
 HEADERS += src/gui/proxy.h
 HEADERS += src/gui/about.h
 HEADERS += src/gui/askpopup.h
-HEADERS += src/gui/downloadui.h 
+HEADERS += src/gui/downloadui.h
 HEADERS += src/utils/crypt/simplecrypt.h
 
 FORMS += ui/welcome.ui

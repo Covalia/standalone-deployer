@@ -33,37 +33,6 @@
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../../ui/mainwindow.ui" line="14"/>
-        <source>MainWindow</source>
-        <translation>Installeur</translation>
-    </message>
-    <message>
-        <location filename="../../ui/mainwindow.ui" line="101"/>
-        <source>Installeur</source>
-        <translation>Installeur</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindow.cpp" line="36"/>
-        <source>Bienvenue dans l&apos;installeur de %1 !</source>
-        <extracomment>This string refers to the welcome screen.</extracomment>
-        <translation>Bienvenue dans l&apos;installeur de %1 !</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindow.cpp" line="62"/>
-        <source>Attention !</source>
-        <extracomment>This string refers to the exit message title.</extracomment>
-        <translation>Attention !</translation>
-    </message>
-    <message>
-        <location filename="../../src/mainwindow.cpp" line="64"/>
-        <source>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</source>
-        <extracomment>This string refers to the exit message.</extracomment>
-        <translation>Vous êtes sur le point de quitter l&apos;application, voulez vous continuer ?</translation>
-    </message>
-</context>
-<context>
     <name>Personalize</name>
     <message>
         <location filename="../../ui/personalize.ui" line="55"/>
@@ -76,38 +45,38 @@
         <translation>Répertoire d&apos;installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="177"/>
-        <location filename="../../ui/personalize.ui" line="308"/>
+        <location filename="../../ui/personalize.ui" line="185"/>
+        <location filename="../../ui/personalize.ui" line="325"/>
         <source>Change</source>
         <translation>Changer</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="249"/>
+        <location filename="../../ui/personalize.ui" line="257"/>
         <source>Data installation directory</source>
         <translation>Répertoire d&apos;installation des données</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="362"/>
+        <location filename="../../ui/personalize.ui" line="379"/>
         <source>Start-up</source>
         <translation>Démarrage</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="392"/>
+        <location filename="../../ui/personalize.ui" line="409"/>
         <source>Add an offline launch shortcut</source>
         <translation>Ajout un raccourci de lancement hors ligne</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="425"/>
+        <location filename="../../ui/personalize.ui" line="442"/>
         <source>Launch the application at startup</source>
         <translation>Lancer l&apos;application au démarrage de l&apos;ordinateur</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="450"/>
+        <location filename="../../ui/personalize.ui" line="467"/>
         <source>Proxy settings</source>
         <translation>Configuration du proxy</translation>
     </message>
     <message>
-        <location filename="../../ui/personalize.ui" line="479"/>
+        <location filename="../../ui/personalize.ui" line="496"/>
         <source>Start installation</source>
         <translation>Lancer l&apos;installation</translation>
     </message>
@@ -135,27 +104,27 @@
         <translation>Configuration manuel du proxy</translation>
     </message>
     <message>
-        <location filename="../../ui/proxy.ui" line="159"/>
+        <location filename="../../ui/proxy.ui" line="165"/>
         <source>URL</source>
         <translation>Url</translation>
     </message>
     <message>
-        <location filename="../../ui/proxy.ui" line="209"/>
+        <location filename="../../ui/proxy.ui" line="232"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../ui/proxy.ui" line="265"/>
+        <location filename="../../ui/proxy.ui" line="302"/>
         <source>Login</source>
         <translation>Identifiant</translation>
     </message>
     <message>
-        <location filename="../../ui/proxy.ui" line="327"/>
+        <location filename="../../ui/proxy.ui" line="378"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../ui/proxy.ui" line="400"/>
+        <location filename="../../ui/proxy.ui" line="460"/>
         <source>OK</source>
         <translation>Valider</translation>
     </message>
@@ -163,7 +132,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/main.cpp" line="65"/>
+        <location filename="../../src/main.cpp" line="82"/>
         <source>Stand-alone deployment</source>
         <translation>Déploiement autonome</translation>
     </message>
@@ -199,27 +168,27 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../../ui/window.ui" line="121"/>
+        <location filename="../../ui/window.ui" line="126"/>
         <source>@Application installation</source>
         <translation>Installation de l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../ui/window.ui" line="154"/>
+        <location filename="../../ui/window.ui" line="158"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/window.cpp" line="21"/>
+        <location filename="../../src/gui/window.cpp" line="23"/>
         <source>Stand-alone deployment</source>
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/window.cpp" line="105"/>
+        <location filename="../../src/gui/window.cpp" line="113"/>
         <source>Do you want to exit the application?</source>
         <translation>Voulez-vous quitter l&apos;application?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/window.cpp" line="105"/>
+        <location filename="../../src/gui/window.cpp" line="113"/>
         <source>The installation will be stopped</source>
         <translation>L&apos;installation sera arrêtée</translation>
     </message>
