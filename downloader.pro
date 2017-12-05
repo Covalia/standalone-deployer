@@ -36,7 +36,6 @@ DEPENDPATH += src
 
 SOURCES += src/main.cpp
 SOURCES += src/utils/crypt/cryptmanager.cpp
-SOURCES += src/mainwindow.cpp
 SOURCES += src/log/simpleqtlogger.cpp
 SOURCES += src/log/logger.cpp
 SOURCES += src/xml/download.cpp
@@ -60,7 +59,6 @@ SOURCES += src/gui/downloadui.cpp
 SOURCES += src/gui/askpopup.cpp
 SOURCES += src/utils/crypt/simplecrypt.cpp
 
-HEADERS += src/mainwindow.h
 HEADERS += src/utils/crypt/cryptmanager.h
 HEADERS += src/log/simpleqtlogger.h
 HEADERS += src/log/logger.h
@@ -85,14 +83,13 @@ HEADERS += src/gui/askpopup.h
 HEADERS += src/gui/downloadui.h 
 HEADERS += src/utils/crypt/simplecrypt.h
 
-FORMS += ui/mainwindow.ui \
-    ui/welcome.ui \
-    ui/window.ui \
-    ui/personalize.ui \
-    ui/proxy.ui \
-    ui/about.ui \
-    ui/downloadui.ui \
-    ui/askpopup.ui
+FORMS += ui/welcome.ui
+FORMS += ui/window.ui
+FORMS += ui/personalize.ui
+FORMS += ui/proxy.ui
+FORMS += ui/about.ui
+FORMS += ui/downloadui.ui
+FORMS += ui/askpopup.ui
 
 RESOURCES += resources.qrc
 

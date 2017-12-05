@@ -3,8 +3,8 @@
 #include <QLibraryInfo>
 #include <QDebug>
 #include <QString>
+#include <QIcon>
 
-#include "mainwindow.h"
 #include "uimanager/uimanager.h"
 #include "shortcut/shortcut.h"
 #include "log/logger.h"
