@@ -3,6 +3,8 @@
 
 #include <QTranslator>
 
+enum Language { English, French };
+
 class LanguageManager
 {
     public:
@@ -10,6 +12,8 @@ class LanguageManager
 
         static void initLanguage();
         static void updateLanguage(QString locale);
+
+        static Language getLanguageFromLocal(QString locale);
 
     private:
         static QTranslator translator;

@@ -11,13 +11,13 @@ CONFIG += warn_on
 CONFIG += debug_and_release
 
 CONFIG(debug, release|debug) {
-	CONFIG -= app_bundle
-	CONFIG += console
+    CONFIG -= app_bundle
+    CONFIG += console
 }
 
 CONFIG(release, debug|release) {
-	CONFIG += app_bundle
-	CONFIG -= console
+    CONFIG += app_bundle
+    CONFIG -= console
 }
 
 TARGET = downloader
@@ -35,6 +35,7 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 SOURCES += src/main.cpp
+SOURCES += src/settings/resourcessettings.cpp
 SOURCES += src/utils/crypt/cryptmanager.cpp
 SOURCES += src/log/simpleqtlogger.cpp
 SOURCES += src/log/logger.cpp
@@ -60,6 +61,7 @@ SOURCES += src/gui/askpopup.cpp
 SOURCES += src/utils/crypt/simplecrypt.cpp
 
 HEADERS += src/utils/crypt/cryptmanager.h
+HEADERS += src/settings/resourcessettings.h
 HEADERS += src/log/simpleqtlogger.h
 HEADERS += src/log/logger.h
 HEADERS += src/xml/deploymentxml.h
@@ -80,7 +82,7 @@ HEADERS += src/uimanager/uimanager.h
 HEADERS += src/gui/proxy.h
 HEADERS += src/gui/about.h
 HEADERS += src/gui/askpopup.h
-HEADERS += src/gui/downloadui.h 
+HEADERS += src/gui/downloadui.h
 HEADERS += src/utils/crypt/simplecrypt.h
 
 FORMS += ui/welcome.ui

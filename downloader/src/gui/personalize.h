@@ -22,7 +22,7 @@ class Personalize : public QWidget
 
     private:
         Ui::Personalize * m_ui;
-        QString fileChooserDialog();
+        QString fileChooserDialog(QString directory);
         void saveElementsInSetting();
 
     signals:

@@ -3,6 +3,7 @@
 #include "style/stylemanager.h"
 #include "log/logger.h"
 #include "settings/settings.h"
+#include "settings/resourcessettings.h"
 
 #include <QStringList>
 #include <QFileDialog>
@@ -21,6 +22,9 @@ Personalize::Personalize(QWidget * _parent) :
     m_ui->editLineDataInstallation->setText(settings->getDataLocation());
     m_ui->checkBoxOfflineShortcut->setChecked(settings->getShortcutOffline());
     m_ui->checkBoxRunAtStart->setChecked(settings->getRunAtStart());
+
+    ResourcesSettings * resource = ResourcesSettings::getInstance();
+    m_ui->widgetDataInstallation->setVisible(resource->getPossible_change_data_location());
 
     connect(m_ui->buttonProxySetting, SIGNAL(clicked()), this, SLOT(proxySettingEvent()));
     connect(m_ui->buttonChangeFolderInstallation, SIGNAL(clicked()), this, SLOT(fileChooserInstallEvent()));
@@ -46,7 +50,7 @@ void Personalize::proxySettingEvent()
 
 void Personalize::fileChooserInstallEvent()
 {
-    QString folderPath = fileChooserDialog();
+    QString folderPath = fileChooserDialog(m_ui->editLineFolderInstallation->text());
 
     if (!folderPath.isEmpty()) {
         m_ui->editLineFolderInstallation->setText(folderPath);
@@ -55,19 +59,20 @@ void Personalize::fileChooserInstallEvent()
 
 void Personalize::fileChooserDataEvent()
 {
-    QString dataPath = fileChooserDialog();
+    QString dataPath = fileChooserDialog(m_ui->editLineDataInstallation->text());
 
     if (!dataPath.isEmpty()) {
         m_ui->editLineDataInstallation->setText(dataPath);
     }
 }
 
-QString Personalize::fileChooserDialog()
+QString Personalize::fileChooserDialog(QString directory)
 {
     QFileDialog dialog(this);
 
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setOption(QFileDialog::DontUseNativeDialog, false);
+    dialog.setDirectory(directory);
     QStringList fileNames;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
@@ -79,24 +84,24 @@ QString Personalize::fileChooserDialog()
     return "";
 }
 
-void Personalize::saveElementsInSetting(){
+void Personalize::saveElementsInSetting()
+{
     Settings * settings = Settings::getInstance();
 
-    //install folder
+    // install folder
     settings->setInstallLocation(m_ui->editLineFolderInstallation->text());
-    //data folder
-    if(m_ui->checkBoxDataInstallation->isVisible() && m_ui->checkBoxDataInstallation->isChecked()){
+    // data folder
+    if (m_ui->checkBoxDataInstallation->isVisible() && m_ui->checkBoxDataInstallation->isChecked()) {
         settings->setDataLocation(m_ui->editLineDataInstallation->text());
-    }
-    else{
+    } else {
         settings->setDataLocation(m_ui->editLineFolderInstallation->text() + "/Data");
     }
     // offline shortcut
-    if(m_ui->checkBoxOfflineShortcut->isVisible()){
+    if (m_ui->checkBoxOfflineShortcut->isVisible()) {
         settings->setShortcutOffline(m_ui->checkBoxOfflineShortcut->isChecked());
     }
     // run at start
-    if(m_ui->checkBoxRunAtStart->isVisible()){
+    if (m_ui->checkBoxRunAtStart->isVisible()) {
         settings->setRunAtStart(m_ui->checkBoxRunAtStart->isChecked());
     }
 }

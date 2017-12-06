@@ -28,7 +28,7 @@ Settings::Settings() :
     m_dataLocation(""),
     m_installLocation(""),
     m_serverURL(""),
-    m_runAtStart(true) {
+    m_runAtStart(false) {
 
     L_INFO("Initialise Setting singleton instance");
 
@@ -133,7 +133,7 @@ void Settings::writeSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_START);
-    putSetting(S_SERVER_URL, m_runAtStart);
+    putSetting(S_RUN_AT_START, m_runAtStart);
     m_settings->endGroup();
 } // Settings::writeSettings
 
@@ -143,12 +143,12 @@ void Settings::readSettings()
     QMutexLocker locker(&sm_settingsMutex);
 
     m_settings->beginGroup(GROUP_PROXY);
-    m_proxyUse = getSetting(S_PROXY_USE, false).toBool();
-    m_proxyAuto = getSetting(S_PROXY_AUTO, false).toBool();
-    m_proxyManual = getSetting(S_PROXY_MANUAL, false).toBool();
+    m_proxyUse = getSetting(S_PROXY_USE, m_proxyUse).toBool();
+    m_proxyAuto = getSetting(S_PROXY_AUTO, m_proxyAuto).toBool();
+    m_proxyManual = getSetting(S_PROXY_MANUAL, m_proxyManual).toBool();
     m_proxyURL = getSetting(S_PROXY_URL, "").toString();
     m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
-    m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, false).toBool();
+    m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification).toBool();
     m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
     // decrypt password
     CryptManager * crypt = new CryptManager();
@@ -162,9 +162,9 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GROUP_SHORTCUT);
     m_shortcutName = getSetting(S_SHORTCUT_NAME, "").toString();
-    m_shortcutOffline = getSetting(S_SHORTCUT_OFFLINE, false).toBool();
-    m_shortcutOnline = getSetting(S_SHORTCUT_ONLINE, false).toBool();
-    m_shortcutAllUser = getSetting(S_SHORTCUT_ALL_USER, false).toBool();
+    m_shortcutOffline = getSetting(S_SHORTCUT_OFFLINE, m_shortcutOffline).toBool();
+    m_shortcutOnline = getSetting(S_SHORTCUT_ONLINE, m_shortcutOnline).toBool();
+    m_shortcutAllUser = getSetting(S_SHORTCUT_ALL_USER, m_shortcutAllUser).toBool();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_CLASSPATH);
@@ -181,7 +181,7 @@ void Settings::readSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_START);
-    m_runAtStart = getSetting(S_RUN_AT_START, true).toBool();
+    m_runAtStart = getSetting(S_RUN_AT_START, m_runAtStart).toBool();
     m_settings->endGroup();
 } // Settings::readSettings
 

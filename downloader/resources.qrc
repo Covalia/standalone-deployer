@@ -4,17 +4,20 @@
         <file alias="en_US.qm">resources/lang/en_US.qm</file>
     </qresource>
     <qresource prefix="/">
-        <file>resources/close.png</file>
-        <file>resources/icon.png</file>
-        <file>resources/logo_title.png</file>
-        <file>resources/minus.png</file>
-        <file>resources/down.png</file>
         <file>resources/contract.txt</file>
+        <file>resources/project.ini</file>
     </qresource>
     <qresource prefix="/slideshow">
         <file>resources/slideshow/mockup.png</file>
         <file>resources/slideshow/mockup1.png</file>
         <file>resources/slideshow/mockup2.png</file>
         <file>resources/slideshow/mockup3.png</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>resources/images/close.png</file>
+        <file>resources/images/down.png</file>
+        <file>resources/images/icon.png</file>
+        <file>resources/images/logo_title.png</file>
+        <file>resources/images/minus.png</file>
     </qresource>
 </RCC>

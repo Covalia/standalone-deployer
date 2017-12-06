@@ -34,3 +34,17 @@ void LanguageManager::updateLanguage(QString locale)
         L_INFO("COULD NOT INSTALL TRANSLATIONS " + locale);
     }
 }
+
+Language LanguageManager::getLanguageFromLocal(QString locale)
+{
+    if(locale == "en_US"){
+        return Language::English;
+    }
+    else if(locale == "fr_FR"){
+        return Language::French;
+    }
+    else{
+        L_WARN("Language witch locale " + locale + " is not supported by application");
+        return Language::English;
+    }
+}

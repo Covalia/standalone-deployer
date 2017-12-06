@@ -9,6 +9,7 @@
 #include "shortcut/shortcut.h"
 #include "log/logger.h"
 #include "settings/settings.h"
+#include "settings/resourcessettings.h"
 #include "commandline/commandlineparser.h"
 #include "language/languagemanager.h"
 
@@ -44,6 +45,12 @@ int main(int argc, char * argv[])
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
+    ResourcesSettings * projectSetting = ResourcesSettings::getInstance();
+    projectSetting->initSettings(":/resources/project.ini");
+    projectSetting->readSettings();
+    projectSetting->sendToSettings();
+    L_INFO("Ip=" + projectSetting->getIp_server());
+
     L_INFO("Start Application");
     QApplication app(argc, argv);
 
@@ -78,7 +85,7 @@ int main(int argc, char * argv[])
         L_INFO(userStartMenu);
 #endif
 
-    app.setWindowIcon(QIcon(":/resources/icon.png"));
+    app.setWindowIcon(QIcon(":/resources/images/icon.png"));
     app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
 
     LanguageManager::initLanguage();

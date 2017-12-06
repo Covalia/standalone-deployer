@@ -1,6 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include <language/languagemanager.h>
+
 #include <QString>
 #include <QVariant>
 #include <QMutex>
@@ -41,7 +43,7 @@ static QString S_SERVER_URL = "serverURL";
 
 static QString S_RUN_AT_START = "runAtStart";
 
-enum Language { English, French };
+
 
 /**
  * \class Settings

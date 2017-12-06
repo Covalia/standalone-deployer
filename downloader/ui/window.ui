@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string notr="true"/>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/images/resources/images/icon.png</normaloff>:/images/resources/images/icon.png</iconset>
+  </property>
   <property name="statusTip">
    <string notr="true"/>
   </property>
@@ -93,7 +97,7 @@
               <string notr="true"/>
              </property>
              <property name="pixmap">
-              <pixmap resource="../resources.qrc">:/resources/logo_title.png</pixmap>
+              <pixmap resource="../resources.qrc">:/images/resources/images/logo_title.png</pixmap>
              </property>
             </widget>
            </item>
@@ -223,7 +227,7 @@ QComboBox::drop-down
 
 QComboBox::down-arrow
 {
-     image: url(:/resources/down.png) ;
+     image: url(:/resources/images/down.png) ;
      width: 10px;
      height: 7px;
 }</string>
@@ -260,7 +264,7 @@ QPushButton:hover {
              </property>
              <property name="icon">
               <iconset>
-               <normalon>:/resources/close.png</normalon>
+               <normalon>:/images/resources/images/close.png</normalon>
               </iconset>
              </property>
             </widget>
