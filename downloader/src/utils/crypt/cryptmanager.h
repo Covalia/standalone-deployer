@@ -10,6 +10,8 @@ public:
 
     QString encryptToString(const QString& text);
     QString decryptToString(const QString& text);
+
+    quint64 getKey();
 };
 
 #endif // CRYPTMANAGER_H

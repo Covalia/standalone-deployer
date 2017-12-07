@@ -23,6 +23,8 @@ ResourcesSettings::ResourcesSettings() :
     m_default_data_path_simple_install("$HOME/Application/Data"),
     m_default_data_path_custom_install("$HOME/Application/Data"),
     m_possible_change_data_location(false),
+    m_hash_key(""),
+    m_encrypted_password_key("0x0c2cd4a4bcb9f023"),
     m_color_panel_background_border("#364058"),
     m_color_panel_background("#2d364c"),
     m_color_button_background_over("#2a7d7d"),
@@ -92,6 +94,9 @@ void ResourcesSettings::readSettings()
     m_default_data_path_custom_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_CUSTOM_INSTALL, m_default_data_path_custom_install).toString());
     m_possible_change_data_location = m_settings->value(P_POSSIBLE_CHANGE_DATA_LOCATION, m_possible_change_data_location).toBool();
 
+    m_hash_key = m_settings->value(P_HASH_KEY, m_hash_key).toString();
+    m_encrypted_password_key = m_settings->value(P_ENCRYPTED_PASSWORD_KEY, m_encrypted_password_key).toString();
+
     m_color_panel_background_border = m_settings->value(P_COLOR_PANEL_BACKGROUND_BORDER, m_color_panel_background_border).toString();
     m_color_panel_background = m_settings->value(P_COLOR_PANEL_BACKGROUND, m_color_panel_background).toString();
     m_color_button_background_over = m_settings->value(P_COLOR_BUTTON_BACKGROUND_OVER, m_color_button_background_over).toString();
@@ -124,6 +129,26 @@ QString ResourcesSettings::getTransformedVariablePath(QString path)
 {
     path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     return path;
+}
+
+QString ResourcesSettings::getEncrypted_password_key() const
+{
+    return m_encrypted_password_key;
+}
+
+void ResourcesSettings::setEncrypted_password_key(const QString &encrypted_password_key)
+{
+    m_encrypted_password_key = encrypted_password_key;
+}
+
+QString ResourcesSettings::getHash_key() const
+{
+    return m_hash_key;
+}
+
+void ResourcesSettings::setHash_key(const QString &hash_key)
+{
+    m_hash_key = hash_key;
 }
 
 QString ResourcesSettings::getIp_server() const
