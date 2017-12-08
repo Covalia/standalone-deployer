@@ -120,16 +120,7 @@ QPushButton:hover {
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-	background-color: @color-button-background;
-	color : #FFFFFF;
-	padding: 8px;
-	border: 0;
-}
-
-QPushButton:hover {
-	background-color: @color-button-background-over;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Simple installation</string>

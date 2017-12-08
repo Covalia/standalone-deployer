@@ -141,20 +141,7 @@
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QLineEdit{
-	border-radius: 3px;
-	border: 1px solid @color-text-gray;
-	background : transparent;
-	padding : 4px 10px 4px 10px;
-	color: @color-text-on-background;
-}
-QLineEdit::disabled{
-	border-radius: 3px;
-	border: 1px solid @color-disabled;
-	background : transparent;
-	padding : 4px 10px 4px 10px;
-	color: @color-disabled;
-}</string>
+                  <string notr="true"/>
                  </property>
                 </widget>
                </item>
@@ -236,22 +223,7 @@ QPushButton:hover {
              <enum>Qt::LeftToRight</enum>
             </property>
             <property name="styleSheet">
-             <string notr="true">QCheckBox{
-	color : @color-text-gray;
-}
-
-QCheckBox::indicator {
-    border: 1px solid @color-text-gray;
-    background: none;
-}
-
-QCheckBox::indicator:hover {
-	background: @color-button-background;
-}
-
-QCheckBox::indicator:checked{
-	background: @color-button-background;
-}</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Data installation directory</string>
@@ -287,20 +259,7 @@ QCheckBox::indicator:checked{
                <item>
                 <widget class="QLineEdit" name="editLineDataInstallation">
                  <property name="styleSheet">
-                  <string notr="true">QLineEdit{
-	border-radius: 3px;
-	border: 1px solid @color-text-gray;
-	background : transparent;
-	padding : 4px 10px 4px 10px;
-	color: @color-text-on-background;
-}
-QLineEdit::disabled{
-	border-radius: 3px;
-	border: 1px solid @color-disabled;
-	background : transparent;
-	padding : 4px 10px 4px 10px;
-	color: @color-disabled;
-}</string>
+                  <string notr="true"/>
                  </property>
                 </widget>
                </item>
@@ -388,22 +347,7 @@ QPushButton:hover {
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QCheckBox{
-	color : @color-text-gray;
-}
-
-QCheckBox::indicator {
-    border: 1px solid @color-text-gray;
-    background: none;
-}
-
-QCheckBox::indicator:hover {
-	background: @color-button-background;
-}
-
-QCheckBox::indicator:checked{
-	background: @color-button-background;
-}</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Add an offline launch shortcut</string>
@@ -421,22 +365,7 @@ QCheckBox::indicator:checked{
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QCheckBox{
-	color : @color-text-gray;
-}
-
-QCheckBox::indicator {
-    border: 1px solid @color-text-gray;
-    background: none;
-}
-
-QCheckBox::indicator:hover {
-	background: @color-button-background;
-}
-
-QCheckBox::indicator:checked{
-	background: @color-button-background;
-}</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string>Launch the application at startup</string>
@@ -481,16 +410,7 @@ QPushButton:hover {
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-	background-color: @color-button-background;
-	color : #FFFFFF;
-	padding: 8px;
-	border: 0;
-}
-
-QPushButton:hover {
-	background-color: @color-button-background-over;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Start installation</string>

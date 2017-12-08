@@ -12,6 +12,9 @@ About::About(QWidget * _parent) :
 {
     m_ui->setupUi(this);
 
+    // link style
+    m_ui->buttonValidateAbout->setAccessibleName("pageButton");
+
     StyleManager::transformStyle(this);
 
     connect(m_ui->buttonValidateAbout, SIGNAL(clicked()), this, SLOT(validateAbout()));

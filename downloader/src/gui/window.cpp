@@ -6,6 +6,7 @@
 #include "log/logger.h"
 #include "gui/personalize.h"
 #include "gui/askpopup.h"
+#include "settings/resourcessettings.h"
 
 #include <QDesktopWidget>
 #include <QMessageBox>
@@ -29,6 +30,10 @@ Window::Window(QWidget * _parent) :
 
     connect(m_ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
     connect(m_ui->buttonAbout, SIGNAL(clicked()), this, SLOT(aboutEvent()));
+
+    //windows title
+    ResourcesSettings * resource = ResourcesSettings::getInstance();
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
 
     // combobox init
     m_itemDelegate = new QStyledItemDelegate();

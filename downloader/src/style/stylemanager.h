@@ -10,6 +10,7 @@ class StyleManager
         StyleManager();
         static QString transformStyle(QString styleSheet);
         static void transformStyle(QWidget * widget);
+        static void setGeneralStyle();
 };
 
 #endif // STYLEMANAGER_H

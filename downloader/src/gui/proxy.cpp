@@ -9,6 +9,9 @@ Proxy::Proxy(QWidget * _parent) :
 {
     m_ui->setupUi(this);
 
+    // link style
+    m_ui->buttonValidateProxy->setAccessibleName("pageButton");
+
     StyleManager::transformStyle(this);
 
     QButtonGroup * group = new QButtonGroup(this);

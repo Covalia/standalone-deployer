@@ -9,6 +9,9 @@ Welcome::Welcome(QWidget * _parent) :
 {
     m_ui->setupUi(this);
 
+    // link style
+    m_ui->buttonSimpleInstallation->setAccessibleName("pageButton");
+
     StyleManager::transformStyle(this);
 
     connect(m_ui->buttonSimpleInstallation, SIGNAL(clicked()), this, SLOT(simpleInstallationEvent()));

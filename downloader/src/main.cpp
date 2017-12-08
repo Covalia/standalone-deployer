@@ -12,6 +12,7 @@
 #include "settings/resourcessettings.h"
 #include "commandline/commandlineparser.h"
 #include "language/languagemanager.h"
+#include "style/stylemanager.h"
 
 /*!
  *
@@ -45,6 +46,7 @@ int main(int argc, char * argv[])
     // logger initialization
     new Logger(QString("C:\\Users\\Alexis\\Desktop\\test logs\\logDeploiment.log"));
 
+    //init project resources
     ResourcesSettings * projectSetting = ResourcesSettings::getInstance();
     projectSetting->initSettings(":/resources/project.ini");
     projectSetting->readSettings();
@@ -53,6 +55,9 @@ int main(int argc, char * argv[])
 
     L_INFO("Start Application");
     QApplication app(argc, argv);
+
+    // init style
+    StyleManager::setGeneralStyle();
 
     L_INFO("Start Commande Lien Parser");
     CommandLineParser * lineParser = new CommandLineParser();
@@ -75,7 +80,7 @@ int main(int argc, char * argv[])
         LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
         LPCWSTR description = L"This is description";
         LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
-        LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
+        LPCWSTR icon_file = L":/resources/images/icon.png";
         shorcutCreator->createWindowsShortcut(target_file, target_args,
                                               link_file, description,
                                               1, cur_dir,

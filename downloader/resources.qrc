@@ -6,6 +6,7 @@
     <qresource prefix="/">
         <file>resources/contract.txt</file>
         <file>resources/project.ini</file>
+        <file>resources/style.css</file>
     </qresource>
     <qresource prefix="/slideshow">
         <file>resources/slideshow/mockup.png</file>
@@ -19,5 +20,6 @@
         <file>resources/images/icon.png</file>
         <file>resources/images/logo_title.png</file>
         <file>resources/images/minus.png</file>
+        <file>resources/images/shortcut.ico</file>
     </qresource>
 </RCC>

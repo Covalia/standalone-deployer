@@ -1,6 +1,11 @@
 #include "style/stylemanager.h"
 #include "settings/resourcessettings.h"
 
+#include <QApplication>
+#include <QTextStream>
+#include <QTextCursor>
+#include <QFile>
+
 StyleManager::StyleManager()
 {
 }
@@ -25,5 +30,18 @@ void StyleManager::transformStyle(QWidget * parentWidget)
 {
     for (auto * widget : parentWidget->findChildren<QWidget *>()) {
         widget->setStyleSheet(StyleManager::transformStyle(widget->styleSheet()));
+    }
+}
+
+void StyleManager::setGeneralStyle(){
+    QFile f(":/resources/style.css");
+
+    if (f.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream in(&f);
+        QString sytle = in.readAll();
+        if(!sytle.isNull() && !sytle.isEmpty()){
+            QString transformeSytle = transformStyle(sytle);
+            qApp->setStyleSheet(transformeSytle);
+        }
     }
 }
