@@ -1,7 +1,7 @@
 #include "gui/downloadui.h"
 #include "ui_downloadui.h"
 #include "style/stylemanager.h"
-#include "log/logger.h"
+//#include "log/logger.h"
 
 #include <QString>
 #include <QDirIterator>

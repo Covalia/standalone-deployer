@@ -19,6 +19,10 @@ TEMPLATE = app
 DESTDIR = bin
 OBJECTS_DIR = build/objects
 RCC_DIR = build/rcc
+UI_DIR = build/ui
+
+SHARED_FOLDER_CORE = ../commoncore
+include($$SHARED_FOLDER_CORE/commoncore.pri)
 
 INCLUDEPATH += .
 INCLUDEPATH += src
@@ -30,6 +34,6 @@ SOURCES += src/main.cpp
 
 # HEADERS += src/
 
-RESOURCES += resources.qrc
+# RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg

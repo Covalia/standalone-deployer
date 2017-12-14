@@ -1,6 +1,6 @@
 #include "log/logger.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 
 /*!
  * \brief Initializes application logger

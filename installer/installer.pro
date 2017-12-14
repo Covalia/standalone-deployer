@@ -23,6 +23,11 @@ OBJECTS_DIR = build/objects
 RCC_DIR = build/rcc
 UI_DIR = build/ui
 
+SHARED_FOLDER_GUI = ../commongui
+include($$SHARED_FOLDER_GUI/commongui.pri)
+SHARED_FOLDER_CORE = ../commoncore
+include($$SHARED_FOLDER_CORE/commoncore.pri)
+
 INCLUDEPATH += .
 INCLUDEPATH += src
 
@@ -30,8 +35,11 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 SOURCES += src/main.cpp
+SOURCES += src/commandline/commandlineparser.cpp
+SOURCES += src/shortcut/shortcut.cpp
 
-# HEADERS += src/
+HEADERS += src/commandline/commandlineparser.h
+HEADERS += src/shortcut/shortcut.h
 
 # FORMS += ui/
 

@@ -6,10 +6,8 @@
 #include <QIcon>
 
 #include "uimanager/uimanager.h"
-#include "shortcut/shortcut.h"
 #include "log/logger.h"
 #include "settings/settings.h"
-#include "commandline/commandlineparser.h"
 #include "language/languagemanager.h"
 
 /*!
@@ -47,10 +45,6 @@ int main(int argc, char * argv[])
     L_INFO("Start Application");
     QApplication app(argc, argv);
 
-    L_INFO("Start Commande Lien Parser");
-    CommandLineParser * lineParser = new CommandLineParser();
-    lineParser->sendToSettings();
-
     // TODO set path of installation, and remove in installation manager
     Settings * settings = Settings::getInstance();
     QString installPath("P:/DEV/Workspace_downloader/downloader/test.ini");
@@ -59,24 +53,6 @@ int main(int argc, char * argv[])
     settings->writeSettings();
     settings->readSettings();
     L_INFO("Password = " + settings->getProxyPassword());
-
-    // TODO remove this in end of installation manager
-#ifdef _WIN32
-        Shortcut * shorcutCreator = new Shortcut();
-        LPCWSTR target_file = L"C:/Program Files (x86)/Opera/launcher.exe";
-        LPCWSTR target_args = L"";
-        LPSTR link_file = "C:/Users/Alexis/Desktop/covotem.lnk";
-        LPCWSTR description = L"This is description";
-        LPCWSTR cur_dir = L"C:/Users/Alexis/Desktop/";
-        LPCWSTR icon_file = L"C:/Users/Alexis/Desktop/ido.ico";
-        shorcutCreator->createWindowsShortcut(target_file, target_args,
-                                              link_file, description,
-                                              1, cur_dir,
-                                              icon_file, 0);
-        QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
-        QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
-        L_INFO(userStartMenu);
-#endif
 
     app.setWindowIcon(QIcon(":/resources/icon.png"));
     app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
