@@ -26,7 +26,7 @@ Proxy::Proxy(QWidget * _parent) :
     } else if (settings->getProxyManual()) {
         m_ui->checkBoxProxyManual->setChecked(true);
     }
-    m_ui->lineEditURL->setText(settings->getProxyURL());
+    m_ui->lineEditHostname->setText(settings->getProxyHostname());
     if (settings->getProxyPort() > 0) {
         m_ui->lineEditPort->setText(QString::number(settings->getProxyPort()));
     }
@@ -48,12 +48,12 @@ Proxy::~Proxy()
 
 void Proxy::updateVisibleField()
 {
-    m_ui->labelURL->setEnabled(m_ui->checkBoxProxyManual->isChecked());
+    m_ui->labelHostname->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->labelPort->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->labelLogin->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->labelPassword->setEnabled(m_ui->checkBoxProxyManual->isChecked());
 
-    m_ui->lineEditURL->setEnabled(m_ui->checkBoxProxyManual->isChecked());
+    m_ui->lineEditHostname->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->lineEditPort->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->lineEditLogin->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->lineEditPassword->setEnabled(m_ui->checkBoxProxyManual->isChecked());
@@ -72,7 +72,7 @@ void Proxy::validateSettings()
     settings->setProxyAuto(m_ui->checkBoxProxyAuto->isChecked());
     settings->setProxyManual(m_ui->checkBoxProxyManual->isChecked());
 
-    settings->setProxyURL(m_ui->lineEditURL->text());
+    settings->setProxyHostname(m_ui->lineEditHostname->text());
 
     // port parsing to int
     if (!m_ui->lineEditPort->text().isEmpty()) {

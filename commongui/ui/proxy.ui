@@ -143,9 +143,9 @@ QCheckBox::indicator:checked{
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayoutURL">
+      <layout class="QHBoxLayout" name="horizontalLayoutHostname">
        <item>
-        <widget class="QLabel" name="labelURL">
+        <widget class="QLabel" name="labelHostname">
          <property name="minimumSize">
           <size>
            <width>65</width>
@@ -162,12 +162,12 @@ QLabel::disabled{
 </string>
          </property>
          <property name="text">
-          <string>URL</string>
+          <string>Hostname</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEditURL">
+        <widget class="QLineEdit" name="lineEditHostname">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -196,7 +196,7 @@ QLineEdit::disabled{
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacerURL">
+        <spacer name="horizontalSpacerHostname">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>

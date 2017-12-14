@@ -4,5 +4,6 @@
         <file alias="en_US.qm">resources/lang/en_US.qm</file>
     </qresource>
     <qresource prefix="/">
+        <file>resources/contract.txt</file>
     </qresource>
 </RCC>

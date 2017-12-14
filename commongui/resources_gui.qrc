@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources_gui/close.png</file>
+        <file>resources_gui/icon.png</file>
+        <file>resources_gui/logo_title.png</file>
+        <file>resources_gui/down.png</file>
+    </qresource>
+    <qresource prefix="/slideshow">
+        <file>resources_gui/slideshow/mockup.png</file>
+        <file>resources_gui/slideshow/mockup1.png</file>
+        <file>resources_gui/slideshow/mockup2.png</file>
+        <file>resources_gui/slideshow/mockup3.png</file>
+    </qresource>
+</RCC>

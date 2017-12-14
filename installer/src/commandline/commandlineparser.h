@@ -30,8 +30,8 @@ class CommandLineParser
         QString getProxyAuto() const;
         void setProxyAuto(const QString &proxyAuto);
 
-        QString getProxyURL() const;
-        void setProxyURL(const QString &proxyURL);
+        QString getProxyHostname() const;
+        void setProxyHostname(const QString &proxyHostname);
 
         QString getProxyPort() const;
         void setProxyPort(const QString &proxyPort);
@@ -93,7 +93,7 @@ private:
         QString m_intallLocation;
         QString m_dataLocation;
         QString m_proxyAuto;
-        QString m_proxyURL;
+        QString m_proxyHostname;
         QString m_proxyPort;
         QString m_proxyLogin;
         QString m_proxyPassword;

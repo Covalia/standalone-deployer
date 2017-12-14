@@ -93,7 +93,7 @@
               <string notr="true"/>
              </property>
              <property name="pixmap">
-              <pixmap resource="../resources.qrc">:/resources/logo_title.png</pixmap>
+              <pixmap resource="../resources.qrc">:/resources_gui/logo_title.png</pixmap>
              </property>
             </widget>
            </item>
@@ -223,7 +223,7 @@ QComboBox::drop-down
 
 QComboBox::down-arrow
 {
-     image: url(:/resources/down.png) ;
+     image: url(:/resources_gui/down.png) ;
      width: 10px;
      height: 7px;
 }</string>
@@ -260,7 +260,7 @@ QPushButton:hover {
              </property>
              <property name="icon">
               <iconset>
-               <normalon>:/resources/close.png</normalon>
+               <normalon>:/resources_gui/close.png</normalon>
               </iconset>
              </property>
             </widget>

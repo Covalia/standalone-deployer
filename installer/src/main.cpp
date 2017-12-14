@@ -1,16 +1,24 @@
 #include <QApplication>
 #include <QDebug>
+#include <QIcon>
 
 #include "log/logger.h"
 #include "shortcut/shortcut.h"
 #include "commandline/commandlineparser.h"
+#include "settings/settings.h"
+#include "language/languagemanager.h"
+#include "uimanager/uimanager.h"
 
 int main(int argc, char * argv[])
 {
-	qDebug() << "installer started";
+    // TODO set path installation? Must be init before installation to log
+    // logger initialization
+    new Logger("installer.log");
+
+    L_INFO("Installer started");
     QApplication app(argc, argv);
 
-    L_INFO("Start Commande Lien Parser");
+    L_INFO("Parsing command line");
     CommandLineParser * lineParser = new CommandLineParser();
     lineParser->sendToSettings();
 
@@ -32,5 +40,22 @@ int main(int argc, char * argv[])
         L_INFO(userStartMenu);
 #endif
 
+    // TODO set path of installation, and remove in installation manager
+    Settings * settings = Settings::getInstance();
+    QString installPath("autonomous-deployer.ini");
+    settings->initSettings(installPath);
+    settings->setProxyPassword("hello@password!étoile?*");
+    settings->writeSettings();
+    settings->readSettings();
+    L_INFO("Password = " + settings->getProxyPassword());
+
+    app.setWindowIcon(QIcon(":/resources_gui/icon.png"));
+    app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
+
+    LanguageManager::initLanguage();
+
+    UIManager * uiManager = new UIManager();
+    uiManager->init();
+
     return app.exec();
-}
+} // main

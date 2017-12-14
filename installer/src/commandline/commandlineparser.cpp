@@ -16,7 +16,7 @@ CommandLineParser::CommandLineParser()
 
     // proxy configuration
     QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse --proxyAuto]", "true", EMPTY);
-    QCommandLineOption proxyURL_opt("proxyURL", "Proxy URL [--proxyURL=XXXX]", "true", EMPTY);
+    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "true", EMPTY);
     QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "true", EMPTY);
     QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "true", EMPTY);
     QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "true", EMPTY);
@@ -40,7 +40,7 @@ CommandLineParser::CommandLineParser()
     parser.addOption(intallLocation_opt);
     parser.addOption(dataLocation_opt);
     parser.addOption(proxyAuto_opt);
-    parser.addOption(proxyURL_opt);
+    parser.addOption(proxyHostname_opt);
     parser.addOption(proxyPort_opt);
     parser.addOption(proxyLogin_opt);
     parser.addOption(proxyPassword_opt);
@@ -61,7 +61,7 @@ CommandLineParser::CommandLineParser()
     m_intallLocation = getValueString(parser, intallLocation_opt);
     m_dataLocation = getValueString(parser, dataLocation_opt);
     m_proxyAuto = getValueBool(parser, proxyAuto_opt);
-    m_proxyURL = getValueString(parser, proxyURL_opt);
+    m_proxyHostname = getValueString(parser, proxyHostname_opt);
     m_proxyPort = getValueString(parser, proxyPort_opt);
     m_proxyLogin = getValueString(parser, proxyLogin_opt);
     m_proxyPassword = getValueString(parser, proxyPassword_opt);
@@ -93,9 +93,9 @@ void CommandLineParser::sendToSettings()
             settings->setProxyUse(true);
         }
     }
-    if (!isEmptyValue(m_proxyURL)) {
+    if (!isEmptyValue(m_proxyHostname)) {
         settings->setProxyUse(true);
-        settings->setProxyURL(m_proxyURL);
+        settings->setProxyHostname(m_proxyHostname);
         settings->setProxyAuto(false);
         settings->setProxyManual(true);
     }
@@ -240,14 +240,14 @@ void CommandLineParser::setProxyPort(const QString &proxyPort)
     m_proxyPort = proxyPort;
 }
 
-QString CommandLineParser::getProxyURL() const
+QString CommandLineParser::getProxyHostname() const
 {
-    return m_proxyURL;
+    return m_proxyHostname;
 }
 
-void CommandLineParser::setProxyURL(const QString &proxyURL)
+void CommandLineParser::setProxyHostname(const QString &proxyHostname)
 {
-    m_proxyURL = proxyURL;
+    m_proxyHostname = proxyHostname;
 }
 
 QString CommandLineParser::getProxyAuto() const

@@ -38,3 +38,5 @@ HEADERS += $$PWD/src/gui/window.h
 HEADERS += $$PWD/src/language/languagemanager.h
 HEADERS += $$PWD/src/style/stylemanager.h
 HEADERS += $$PWD/src/uimanager/uimanager.h
+
+RESOURCES += $$PWD/resources_gui.qrc

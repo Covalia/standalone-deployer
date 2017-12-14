@@ -41,8 +41,6 @@ SOURCES += src/shortcut/shortcut.cpp
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/shortcut/shortcut.h
 
-# FORMS += ui/
-
 RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg

@@ -14,7 +14,7 @@ Settings::Settings() :
     m_proxyUse(false),
     m_proxyAuto(false),
     m_proxyManual(false),
-    m_proxyURL(""),
+    m_proxyHostname(""),
     m_proxyPort(-1),
     m_proxyAuthentification(false),
     m_proxyLogin(""),
@@ -98,7 +98,7 @@ void Settings::writeSettings()
     putSetting(S_PROXY_USE, m_proxyUse);
     putSetting(S_PROXY_AUTO, m_proxyAuto);
     putSetting(S_PROXY_MANUAL, m_proxyManual);
-    putSetting(S_PROXY_URL, m_proxyURL);
+    putSetting(S_PROXY_HOSTNAME, m_proxyHostname);
     putSetting(S_PROXY_PORT, m_proxyPort);
     putSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification);
     putSetting(S_PROXY_LOGIN, m_proxyLogin);
@@ -146,7 +146,7 @@ void Settings::readSettings()
     m_proxyUse = getSetting(S_PROXY_USE, false).toBool();
     m_proxyAuto = getSetting(S_PROXY_AUTO, false).toBool();
     m_proxyManual = getSetting(S_PROXY_MANUAL, false).toBool();
-    m_proxyURL = getSetting(S_PROXY_URL, "").toString();
+    m_proxyHostname = getSetting(S_PROXY_HOSTNAME, "").toString();
     m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
     m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, false).toBool();
     m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
@@ -325,14 +325,14 @@ void Settings::setProxyPort(int proxyPort)
     m_proxyPort = proxyPort;
 }
 
-QString Settings::getProxyURL() const
+QString Settings::getProxyHostname() const
 {
-    return m_proxyURL;
+    return m_proxyHostname;
 }
 
-void Settings::setProxyURL(const QString &proxyURL)
+void Settings::setProxyHostname(const QString &proxyHostname)
 {
-    m_proxyURL = proxyURL;
+    m_proxyHostname = proxyHostname;
 }
 
 bool Settings::getProxyManual() const

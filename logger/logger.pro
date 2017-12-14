@@ -1,3 +1,5 @@
+# this project is required by common-core and common-gui
+# so it is build as staticlib to be used in both common projects.
 QT += core
 
 CONFIG += warn_on

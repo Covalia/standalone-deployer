@@ -18,7 +18,7 @@ static QString GROUP_START = "START";
 static QString S_PROXY_USE = "proxyUse";
 static QString S_PROXY_AUTO = "proxyAuto";
 static QString S_PROXY_MANUAL = "proxyManual";
-static QString S_PROXY_URL = "proxyURL";
+static QString S_PROXY_HOSTNAME = "proxyHostname";
 static QString S_PROXY_PORT = "proxyPort";
 static QString S_PROXY_AUTHENTICATION = "proxyAuthentication";
 static QString S_PROXY_LOGIN = "proxyLogin";
@@ -46,11 +46,7 @@ enum Language { English, French };
 /**
  * \class Settings
  *
- * @brief  This class use QSettings of QT for mange settings in application.
- * Data settings are stored defferently depending on the OS :
- *  - register on windows
- *  - system preference on mac OS
- *  - text file in Unix
+ * @brief  This class use QSettings of QT for manage settings in application.
  */
 class Settings
 {
@@ -73,8 +69,8 @@ class Settings
         bool getProxyManual() const;
         void setProxyManual(bool proxyManual);
 
-        QString getProxyURL() const;
-        void setProxyURL(const QString &proxyURL);
+        QString getProxyHostname() const;
+        void setProxyHostname(const QString &proxyHostname);
 
         int getProxyPort() const;
         void setProxyPort(int proxyPort);
@@ -181,7 +177,7 @@ class Settings
         bool m_proxyUse;
         bool m_proxyAuto;
         bool m_proxyManual;
-        QString m_proxyURL;
+        QString m_proxyHostname;
         int m_proxyPort;
         bool m_proxyAuthentification;
         QString m_proxyLogin;
