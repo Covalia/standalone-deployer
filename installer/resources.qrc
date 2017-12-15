@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/translations">
+        <file alias="fr_FR.qm">resources/lang/fr_FR.qm</file>
+        <file alias="en_US.qm">resources/lang/en_US.qm</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>resources/contract.txt</file>
+        <file>resources/project.ini</file>
+        <file>resources/style.css</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>resources/images/close.png</file>
+        <file>resources/images/down.png</file>
+        <file>resources/images/icon.png</file>
+        <file>resources/images/logo_title.png</file>
+        <file>resources/images/shortcut.ico</file>
+    </qresource>
+    <qresource prefix="/slideshow">
+        <file>resources/slideshow/mockup.png</file>
+        <file>resources/slideshow/mockup1.png</file>
+        <file>resources/slideshow/mockup2.png</file>
+        <file>resources/slideshow/mockup3.png</file>
+    </qresource>
+</RCC>

@@ -130,6 +130,14 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../src/main.cpp" line="53"/>
+        <source>Stand-alone deployment</source>
+        <translation>Stand-alone deployment</translation>
+    </message>
+</context>
+<context>
     <name>Welcome</name>
     <message>
         <location filename="../../../commongui/ui/welcome.ui" line="49"/>

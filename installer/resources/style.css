@@ -1,0 +1,98 @@
+
+
+
+
+
+/* --------------------CHECK BOX -------------------*/
+
+QCheckBox{
+	color : @color-text-gray;
+}
+QCheckBox::indicator {
+    border: 1px solid @color-text-gray;
+	width: 12px;
+	height: 12px;
+    background: none;
+}
+QCheckBox::indicator:checked{
+	background: @color-button-background;
+}
+
+
+/* --------------------LINE EDIT -------------------*/
+QLineEdit{
+	border-radius: 3px;
+	border: 1px solid @color-text-gray;
+	background : transparent;
+	padding : 4px 10px 4px 10px;
+	color: @color-text-on-background;
+}
+QLineEdit::disabled{
+	border: 1px solid @color-disabled;
+	color: @color-disabled;
+}
+
+
+/* --------------------COMBO BOX AND LIST VIEW -------------------*/
+QComboBox{
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    selection-background-color: @color-text-gray;
+    background-color: transparent;
+    border-style: solid;
+    padding: 1px 0px 1px 20px;
+}
+QComboBox:hover, QPushButton:hover{
+	color: @color-text-gray;
+	background-color: @color-panel-background;
+}
+QComboBox:!on{
+    color:  @color-text-gray;
+    background-color: transparent;
+}
+QComboBox QAbstractItemView{
+	padding : 10px;
+	background-color: @color-panel-background;
+}
+QComboBox QAbstractItemView::item {
+	min-height: 25px; 
+	color : @color-text-gray;
+	background-color: @color-panel-background;
+	border:0px;
+	text-align: center; 
+}
+QListView::item:selected { 
+	border-radius: 5px;
+	border: 1px solid @color-text-on-background;
+	color : @color-text-on-background;
+}
+QListView {
+    outline: 0;
+	text-align: center;
+}
+QComboBox::drop-down{
+	subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 10px;
+    border: 0px;
+	padding-left: 5px;
+ }
+QComboBox::down-arrow{
+    image: url(:/images/resources/images/down.png) ;
+    width: 10px;
+    height: 7px;
+}
+
+
+
+/* --------------------PAGE BUTTON -------------------*/
+QPushButton[accessibleName="pageButton"]{
+	background-color: @color-button-background;
+	color : #FFFFFF;
+	padding: 8px;
+	border: 0;
+}
+
+QPushButton:hover[accessibleName="pageButton"]{
+	background-color: @color-button-background-over;
+}
