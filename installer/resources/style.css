@@ -78,7 +78,7 @@ QComboBox::drop-down{
 	padding-left: 5px;
  }
 QComboBox::down-arrow{
-    image: url(:/images/resources/images/down.png) ;
+    image: url(:/images/down.png) ;
     width: 10px;
     height: 7px;
 }

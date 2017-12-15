@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
 	// TODO ne pas logger le mdp
     L_INFO("Password = " + settings->getProxyPassword());
 
-    app.setWindowIcon(QIcon(":/images/resources/images/icon.png"));
+    app.setWindowIcon(QIcon(":/images/icon.png"));
     app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
 
     LanguageManager::initLanguage();

@@ -9,11 +9,11 @@
         <file>resources/style.css</file>
     </qresource>
     <qresource prefix="/images">
-        <file>resources/images/close.png</file>
-        <file>resources/images/down.png</file>
-        <file>resources/images/icon.png</file>
-        <file>resources/images/logo_title.png</file>
-        <file>resources/images/shortcut.ico</file>
+        <file alias="close.png">resources/images/close.png</file>
+        <file alias="down.png">resources/images/down.png</file>
+        <file alias="icon.png">resources/images/icon.png</file>
+        <file alias="logo_title.png">resources/images/logo_title.png</file>
+        <file alias="shortcut.ico">resources/images/shortcut.ico</file>
     </qresource>
     <qresource prefix="/slideshow">
         <file>resources/slideshow/mockup.png</file>
