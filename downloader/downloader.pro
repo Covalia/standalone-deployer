@@ -23,6 +23,7 @@ DESTDIR = bin
 OBJECTS_DIR = build/objects
 RCC_DIR = build/rcc
 UI_DIR = build/ui
+MOC_DIR = build/moc
 
 INCLUDEPATH += .
 INCLUDEPATH += src
