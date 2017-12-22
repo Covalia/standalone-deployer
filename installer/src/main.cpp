@@ -54,7 +54,7 @@ int main(int argc, char * argv[])
 
     // TODO set path of installation, and remove in installation manager
     Settings * settings = Settings::getInstance();
-    QString installPath("autonomous-deployer.ini");
+    QString installPath("standalone-deployer.ini");
     settings->initSettings(installPath);
     settings->setProxyPassword("hello@password!étoile?*");
     settings->writeSettings();
