@@ -68,7 +68,15 @@ HEADERS += src/shortcut/shortcut.h
 HEADERS += src/style/stylemanager.h
 HEADERS += src/uimanager/uimanager.h
 
-RESOURCES += resources.qrc
+RESOURCES += fixed_resources.qrc
+
+defined(OVERRIDABLE_INSTALLER_RESOURCES, var) {
+    RESOURCES += $$OVERRIDABLE_INSTALLER_RESOURCES
+    message("Using installer resources from file: $$OVERRIDABLE_INSTALLER_RESOURCES")
+}
+else {
+    RESOURCES += overridable_resources.qrc
+}
 
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
