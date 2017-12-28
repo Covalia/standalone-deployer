@@ -1,6 +1,8 @@
 #include <QApplication>
+#include <QTranslator>
 #include <QDebug>
 
+#include "gui/mainwindow.h"
 #include "log/logger.h"
 
 /*!
@@ -36,8 +38,22 @@ int main(int argc, char * argv[])
     new Logger("downloader.log");
 
 
-    L_INFO("Start Application");
+    L_INFO("Downlaoder started.");
     QApplication app(argc, argv);
+
+    QTranslator translator;
+    // TODO gérer langue par défaut et demander quelle langue utiliser.
+    QString locale = QLocale::system().name();
+    QString location = ":/translations";
+    qDebug() << "locale:" << locale;
+
+    qDebug() << "loading translator";
+    translator.load(locale, location);
+    app.installTranslator(&translator);
+
+    MainWindow window;
+    window.show();
+    window.center();
 
     return app.exec();
 } // main
