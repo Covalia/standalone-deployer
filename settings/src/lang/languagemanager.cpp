@@ -1,4 +1,4 @@
-#include "language/languagemanager.h"
+#include "lang/languagemanager.h"
 #include "log/logger.h"
 
 #include <QString>

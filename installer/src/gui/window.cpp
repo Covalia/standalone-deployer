@@ -2,7 +2,7 @@
 #include "ui_window.h"
 
 #include "style/stylemanager.h"
-#include "language/languagemanager.h"
+#include "lang/languagemanager.h"
 #include "log/logger.h"
 #include "gui/personalize.h"
 #include "gui/askpopup.h"

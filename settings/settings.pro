@@ -23,13 +23,13 @@ DEPENDPATH += src
 INCLUDEPATH += ../logger/src
 LIBS += -L../logger/bin -llogger
 
-SOURCES += src/language/languagemanager.cpp
+SOURCES += src/lang/languagemanager.cpp
 SOURCES += src/utils/crypt/cryptmanager.cpp
 SOURCES += src/utils/crypt/simplecrypt.cpp
 SOURCES += src/settings/resourcessettings.cpp
 SOURCES += src/settings/settings.cpp
 
-HEADERS += src/language/languagemanager.h
+HEADERS += src/lang/languagemanager.h
 HEADERS += src/utils/crypt/cryptmanager.h
 HEADERS += src/utils/crypt/simplecrypt.h
 HEADERS += src/settings/resourcessettings.h

@@ -7,7 +7,7 @@
 #include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "settings/resourcessettings.h"
-#include "language/languagemanager.h"
+#include "lang/languagemanager.h"
 #include "uimanager/uimanager.h"
 #include "style/stylemanager.h"
 

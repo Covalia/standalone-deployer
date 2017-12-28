@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <language/languagemanager.h>
+#include "lang/languagemanager.h"
 
 #include <QString>
 #include <QVariant>

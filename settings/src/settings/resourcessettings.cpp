@@ -1,7 +1,7 @@
 #include "settings/resourcessettings.h"
 #include "log/logger.h"
 #include "settings/settings.h"
-#include "language/languagemanager.h"
+#include "lang/languagemanager.h"
 
 #include <QSettings>
 #include <QStandardPaths>
