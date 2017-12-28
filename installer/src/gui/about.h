@@ -1,5 +1,5 @@
-#ifndef ABOUT_H
-#define ABOUT_H
+#ifndef INSTALLER__ABOUT_H
+#define INSTALLER__ABOUT_H
 
 #include <QWidget>
 

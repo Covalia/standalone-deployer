@@ -1,5 +1,5 @@
-#ifndef APP_DOWNLOADER_H
-#define APP_DOWNLOADER_H
+#ifndef DOWNLOADER__APPDOWNLOADER_H
+#define DOWNLOADER__APPDOWNLOADER_H
 
 #include <QObject>
 #include <QUrl>

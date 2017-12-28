@@ -1,5 +1,5 @@
-#ifndef STYLEMANAGER_H
-#define STYLEMANAGER_H
+#ifndef INSTALLER__STYLEMANAGER_H
+#define INSTALLER__STYLEMANAGER_H
 
 #include <QString>
 #include <QWidget>

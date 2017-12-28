@@ -1,5 +1,5 @@
-#ifndef PERSONALIZE_H
-#define PERSONALIZE_H
+#ifndef INSTALLER__PERSONALIZE_H
+#define INSTALLER__PERSONALIZE_H
 
 #include <QWidget>
 #include <QString>

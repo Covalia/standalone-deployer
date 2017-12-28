@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DOWNLOADER__MAINWINDOW_H
+#define DOWNLOADER__MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QUrl>

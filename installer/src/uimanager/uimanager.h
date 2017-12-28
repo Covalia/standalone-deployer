@@ -1,5 +1,5 @@
-#ifndef UIMANAGER_H
-#define UIMANAGER_H
+#ifndef INSTALLER__UIMANAGER_H
+#define INSTALLER__UIMANAGER_H
 
 #include <QObject>
 #include <QWidget>

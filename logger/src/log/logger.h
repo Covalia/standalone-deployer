@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LOGGER__LOGGER_H
+#define LOGGER__LOGGER_H
 
 #include "log/simpleqtlogger.h"
 

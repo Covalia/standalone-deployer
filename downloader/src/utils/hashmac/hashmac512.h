@@ -1,5 +1,5 @@
-#ifndef HASHMAC512_H
-#define HASHMAC512_H
+#ifndef DOWNLOADER__HASHMAC512_H
+#define DOWNLOADER__HASHMAC512_H
 
 #include <QString>
 

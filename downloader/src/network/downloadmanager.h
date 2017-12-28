@@ -1,5 +1,5 @@
-#ifndef DOWNLOADMANAGER_H
-#define DOWNLOADMANAGER_H
+#ifndef DOWNLOADER__DOWNLOADMANAGER_H
+#define DOWNLOADER__DOWNLOADMANAGER_H
 
 #include <QFile>
 #include <QObject>

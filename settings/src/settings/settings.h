@@ -1,5 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef SETTINGS__SETTINGS_H
+#define SETTINGS__SETTINGS_H
 
 #include "lang/languagemanager.h"
 

@@ -1,5 +1,5 @@
-#ifndef WELCOME_H
-#define WELCOME_H
+#ifndef INSTALLER__WELCOME_H
+#define INSTALLER__WELCOME_H
 
 #include <QWidget>
 

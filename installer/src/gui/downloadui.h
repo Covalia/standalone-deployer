@@ -1,5 +1,5 @@
-#ifndef DOWNLOAD_H
-#define DOWNLOAD_H
+#ifndef INSTALLER__DOWNLOAD_H
+#define INSTALLER__DOWNLOAD_H
 
 #include <QWidget>
 #include <QPixmap>

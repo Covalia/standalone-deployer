@@ -1,5 +1,5 @@
-#ifndef JAVAUPDATE_H
-#define JAVAUPDATE_H
+#ifndef DOWNLOADER__JAVAUPDATE_H
+#define DOWNLOADER__JAVAUPDATE_H
 
 #include <QString>
 

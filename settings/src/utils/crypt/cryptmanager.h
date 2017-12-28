@@ -1,5 +1,5 @@
-#ifndef CRYPTMANAGER_H
-#define CRYPTMANAGER_H
+#ifndef SETTINGS__CRYPTMANAGER_H
+#define SETTINGS__CRYPTMANAGER_H
 
 #include <QString>
 

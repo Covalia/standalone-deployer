@@ -1,5 +1,5 @@
-#ifndef APPTREEMANAGER_H
-#define APPTREEMANAGER_H
+#ifndef DOWNLOADER__APPTREEMANAGER_H
+#define DOWNLOADER__APPTREEMANAGER_H
 
 #include <QObject>
 #include <QDir>

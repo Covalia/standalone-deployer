@@ -1,5 +1,5 @@
-#ifndef DOWNLOAD_H
-#define DOWNLOAD_H
+#ifndef DOWNLOADER__DOWNLOAD_H
+#define DOWNLOADER__DOWNLOAD_H
 
 #include <QString>
 

@@ -1,5 +1,5 @@
-#ifndef DEPLOYMENTXML_H
-#define DEPLOYMENTXML_H
+#ifndef DOWNLOADER__DEPLOYMENTXML_H
+#define DOWNLOADER__DEPLOYMENTXML_H
 
 #include <QString>
 #include <QXmlStreamReader>

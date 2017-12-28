@@ -1,5 +1,5 @@
-#ifndef SHORTCUT_H
-#define SHORTCUT_H
+#ifndef INSTALLER__SHORTCUT_H
+#define INSTALLER__SHORTCUT_H
 
 #ifdef _WIN32
 

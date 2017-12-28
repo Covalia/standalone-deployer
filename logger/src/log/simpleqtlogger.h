@@ -91,8 +91,8 @@
   Copyright (C) 2017 Mario Ban
 */
 
-#ifndef _SIMPLE_QT_LOGGER_H
-#define _SIMPLE_QT_LOGGER_H
+#ifndef LOGGER__SIMPLEQTLOGGER_H
+#define LOGGER__SIMPLEQTLOGGER_H
 
 #include <QObject>
 #include <QString>

@@ -1,5 +1,5 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef INSTALLER__WINDOW_H
+#define INSTALLER__WINDOW_H
 
 #include <QMainWindow>
 #include <QWidget>

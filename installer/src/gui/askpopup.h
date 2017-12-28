@@ -1,5 +1,5 @@
-#ifndef ASKPOPUP_H
-#define ASKPOPUP_H
+#ifndef INSTALLER__ASKPOPUP_H
+#define INSTALLER__ASKPOPUP_H
 
 #include <QDialog>
 #include <QString>

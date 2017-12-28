@@ -1,5 +1,5 @@
-#ifndef RESOURCESSETTINGS_H
-#define RESOURCESSETTINGS_H
+#ifndef SETTINGS__RESOURCESSETTINGS_H
+#define SETTINGS__RESOURCESSETTINGS_H
 
 #include <QString>
 #include <QSettings>

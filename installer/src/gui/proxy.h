@@ -1,5 +1,5 @@
-#ifndef PROXY_H
-#define PROXY_H
+#ifndef INSTALLER__PROXY_H
+#define INSTALLER__PROXY_H
 
 #include <QWidget>
 
