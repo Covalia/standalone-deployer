@@ -7,9 +7,9 @@
 #include <QMap>
 #include <QFile>
 #include <QDebug>
-#include "xml/download.h"
-#include "app/application.h"
-#include "app/javaupdate.h"
+#include "xml/data/download.h"
+#include "xml/data/application.h"
+#include "xml/data/javaupdate.h"
 
 /**
  * @class DeploymentXML

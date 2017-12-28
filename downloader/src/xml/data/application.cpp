@@ -1,4 +1,4 @@
-#include "app/application.h"
+#include "xml/data/application.h"
 
 Application::Application(QString _name,
                          QString _cnlpRemoteFileName,
