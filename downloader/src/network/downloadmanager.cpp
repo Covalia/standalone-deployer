@@ -1,4 +1,4 @@
-#include "downloadmanager.h"
+#include "network/downloadmanager.h"
 #include <QDebug>
 #include <QFileInfo>
 #include <QNetworkRequest>

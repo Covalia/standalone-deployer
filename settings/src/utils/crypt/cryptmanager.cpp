@@ -1,4 +1,4 @@
-#include "cryptmanager.h"
+#include "utils/crypt/cryptmanager.h"
 
 #include "utils/crypt/simplecrypt.h"
 #include "settings/resourcessettings.h"

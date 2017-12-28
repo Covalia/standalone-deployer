@@ -1,4 +1,4 @@
-#include "appdownloader.h"
+#include "downloader/appdownloader.h"
 #include "network/downloadmanager.h"
 #include "config/global.h"
 #include <QDebug>

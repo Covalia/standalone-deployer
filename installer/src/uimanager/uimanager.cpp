@@ -1,4 +1,4 @@
-#include "uimanager.h"
+#include "uimanager/uimanager.h"
 
 #include "log/logger.h"
 #include "gui/window.h"

@@ -4,7 +4,7 @@
 #include <QDesktopWidget>
 #include <QDirIterator>
 #include "ui_mainwindow.h"
-#include "mainwindow.h"
+#include "gui/mainwindow.h"
 #include "downloader/appdownloader.h"
 #include "config/global.h"
 

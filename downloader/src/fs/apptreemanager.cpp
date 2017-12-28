@@ -1,4 +1,4 @@
-#include "apptreemanager.h"
+#include "fs/apptreemanager.h"
 #include <QDebug>
 #include <QDir>
 #include <QFile>
