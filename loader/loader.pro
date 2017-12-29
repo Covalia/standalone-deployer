@@ -28,10 +28,10 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../logger/src
-LIBS += -L../logger/bin -llogger
-INCLUDEPATH += ../settings/src
-LIBS += -L../settings/bin -lsettings
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
+INCLUDEPATH += ../_settings/src
+LIBS += -L../_settings/bin -lsettings
 
 SOURCES += src/main.cpp
 

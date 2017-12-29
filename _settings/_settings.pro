@@ -20,8 +20,8 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../logger/src
-LIBS += -L../logger/bin -llogger
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 SOURCES += src/lang/languagemanager.cpp
 SOURCES += src/utils/crypt/cryptmanager.cpp

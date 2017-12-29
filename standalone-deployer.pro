@@ -2,8 +2,8 @@ TEMPLATE = subdirs
 
 CONFIG += ordered
 
-SUBDIRS += logger
-SUBDIRS += settings
+SUBDIRS += _logger
+SUBDIRS += _settings
 SUBDIRS += loader
 SUBDIRS += downloader
 SUBDIRS += installer
