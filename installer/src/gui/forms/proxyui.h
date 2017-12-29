@@ -4,23 +4,23 @@
 #include <QWidget>
 
 namespace Ui {
-class Proxy;
+class ProxyUI;
 }
 
 /**
- * @class Proxy
+ * @class ProxyUI
  * @brief Proxy widget
  */
-class Proxy : public QWidget
+class ProxyUI : public QWidget
 {
     Q_OBJECT
 
     public:
-        explicit Proxy(QWidget * _parent = 0);
-        virtual ~Proxy();
+        explicit ProxyUI(QWidget * _parent = 0);
+        virtual ~ProxyUI();
 
     private:
-        Ui::Proxy * m_ui;
+        Ui::ProxyUI * m_ui;
 
     signals:
         void validateSettingsSignal();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Welcome</class>
- <widget class="QWidget" name="Welcome">
+ <class>WelcomeUI</class>
+ <widget class="QWidget" name="WelcomeUI">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -46,7 +46,7 @@
         <string notr="true">color: @color-text-on-background ;</string>
        </property>
        <property name="text">
-        <string>Welcome to installation of @Application</string>
+        <string>Welcome to the installation of @Application</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

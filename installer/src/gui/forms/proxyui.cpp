@@ -1,11 +1,12 @@
-#include "gui/proxy.h"
+#include "gui/forms/proxyui.h"
 #include "ui_proxy.h"
-#include "style/stylemanager.h"
+
+#include "gui/style/stylemanager.h"
 #include "settings/settings.h"
 
-Proxy::Proxy(QWidget * _parent) :
+ProxyUI::ProxyUI(QWidget * _parent) :
     QWidget(_parent),
-    m_ui(new Ui::Proxy)
+    m_ui(new Ui::ProxyUI)
 {
     m_ui->setupUi(this);
 
@@ -44,12 +45,12 @@ Proxy::Proxy(QWidget * _parent) :
     connect(m_ui->checkBoxProxyManual, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
 }
 
-Proxy::~Proxy()
+ProxyUI::~ProxyUI()
 {
     delete m_ui;
 }
 
-void Proxy::updateVisibleField()
+void ProxyUI::updateVisibleField()
 {
     m_ui->labelHostname->setEnabled(m_ui->checkBoxProxyManual->isChecked());
     m_ui->labelPort->setEnabled(m_ui->checkBoxProxyManual->isChecked());
@@ -62,12 +63,12 @@ void Proxy::updateVisibleField()
     m_ui->lineEditPassword->setEnabled(m_ui->checkBoxProxyManual->isChecked());
 }
 
-void Proxy::changeLanguage()
+void ProxyUI::changeLanguage()
 {
     m_ui->retranslateUi(this);
 }
 
-void Proxy::validateSettings()
+void ProxyUI::validateSettings()
 {
     Settings * settings = Settings::getInstance();
 

@@ -32,7 +32,7 @@ CommandLineParser::CommandLineParser()
 
     QCommandLineParser parser;
 
-    parser.setApplicationDescription("Stand-alone deployment. Set --help option to display help");
+    parser.setApplicationDescription("Standalone deployment. Set --help option to display help");
     parser.addHelpOption();
     parser.addVersionOption();
 

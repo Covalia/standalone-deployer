@@ -1,17 +1,18 @@
-#include "gui/personalize.h"
+#include "gui/forms/personalizeui.h"
 #include "ui_personalize.h"
-#include "style/stylemanager.h"
+
+#include "gui/style/stylemanager.h"
 #include "log/logger.h"
-#include "settings/settings.h"
 #include "settings/resourcessettings.h"
+#include "settings/settings.h"
 
-#include <QStringList>
-#include <QFileDialog>
 #include <QDebug>
+#include <QFileDialog>
+#include <QStringList>
 
-Personalize::Personalize(QWidget * _parent) :
+PersonalizeUI::PersonalizeUI(QWidget * _parent) :
     QWidget(_parent),
-    m_ui(new Ui::Personalize)
+    m_ui(new Ui::PersonalizeUI)
 {
     m_ui->setupUi(this);
 
@@ -40,23 +41,23 @@ Personalize::Personalize(QWidget * _parent) :
     connect(m_ui->buttonStartInstallation, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));
 }
 
-Personalize::~Personalize()
+PersonalizeUI::~PersonalizeUI()
 {
     delete m_ui;
 }
 
-void Personalize::changeLanguage()
+void PersonalizeUI::changeLanguage()
 {
     m_ui->retranslateUi(this);
 }
 
-void Personalize::proxySettingEvent()
+void PersonalizeUI::proxySettingEvent()
 {
     saveElementsInSetting();
     proxySettingSignal();
 }
 
-void Personalize::fileChooserInstallEvent()
+void PersonalizeUI::fileChooserInstallEvent()
 {
     QString folderPath = fileChooserDialog(m_ui->editLineFolderInstallation->text());
 
@@ -65,7 +66,7 @@ void Personalize::fileChooserInstallEvent()
     }
 }
 
-void Personalize::fileChooserDataEvent()
+void PersonalizeUI::fileChooserDataEvent()
 {
     QString dataPath = fileChooserDialog(m_ui->editLineDataInstallation->text());
 
@@ -74,7 +75,7 @@ void Personalize::fileChooserDataEvent()
     }
 }
 
-QString Personalize::fileChooserDialog(QString directory)
+QString PersonalizeUI::fileChooserDialog(QString directory)
 {
     QFileDialog dialog(this);
 
@@ -92,7 +93,7 @@ QString Personalize::fileChooserDialog(QString directory)
     return "";
 }
 
-void Personalize::saveElementsInSetting()
+void PersonalizeUI::saveElementsInSetting()
 {
     Settings * settings = Settings::getInstance();
 
@@ -114,7 +115,7 @@ void Personalize::saveElementsInSetting()
     }
 }
 
-void Personalize::customInstallationEvent()
+void PersonalizeUI::customInstallationEvent()
 {
     saveElementsInSetting();
 

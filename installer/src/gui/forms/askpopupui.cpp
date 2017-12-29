@@ -1,17 +1,18 @@
-#include "gui/askpopup.h"
+#include "gui/forms/askpopupui.h"
 #include "ui_askpopup.h"
-#include "style/stylemanager.h"
 
+#include "gui/style/stylemanager.h"
+
+#include <QDesktopWidget>
 #include <QPoint>
 #include <QRect>
-#include <QDesktopWidget>
 #ifdef _WIN32
 #include <QPropertyAnimation>
 #endif
 
-AskPopup::AskPopup(QWidget * _parent, QString _title, QString _description) :
+AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) :
     QDialog(_parent),
-    m_ui(new Ui::AskPopup),
+    m_ui(new Ui::AskPopupUI),
     m_parent(0)
 {
     m_ui->setupUi(this);
@@ -33,12 +34,12 @@ AskPopup::AskPopup(QWidget * _parent, QString _title, QString _description) :
     center();
 }
 
-AskPopup::~AskPopup()
+AskPopupUI::~AskPopupUI()
 {
     delete m_ui;
 }
 
-int AskPopup::exec()
+int AskPopupUI::exec()
 {
 #ifdef _WIN32
     this->setWindowOpacity(0.0);
@@ -52,7 +53,7 @@ int AskPopup::exec()
     return QDialog::exec();
 }
 
-void AskPopup::center()
+void AskPopupUI::center()
 {
     QRect geometry = frameGeometry();
     QPoint center = m_parent->geometry().center();
@@ -61,13 +62,13 @@ void AskPopup::center()
     move(geometry.topLeft());
 }
 
-void AskPopup::yesEvent()
+void AskPopupUI::yesEvent()
 {
     m_parent->setWindowOpacity(1);
     accept();
 }
 
-void AskPopup::noEvent()
+void AskPopupUI::noEvent()
 {
     m_parent->setWindowOpacity(1);
     reject();

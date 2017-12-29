@@ -4,23 +4,23 @@
 #include <QWidget>
 
 namespace Ui {
-class About;
+class AboutUI;
 }
 
 /**
- * @class About
+ * @class AboutUI
  * @brief About widget
  */
-class About : public QWidget
+class AboutUI : public QWidget
 {
     Q_OBJECT
 
     public:
-        explicit About(QWidget * _parent = 0);
-        virtual ~About();
+        explicit AboutUI(QWidget * _parent = 0);
+        virtual ~AboutUI();
 
     private:
-        Ui::About * m_ui;
+        Ui::AboutUI * m_ui;
         void initTextContract();
 
     signals:

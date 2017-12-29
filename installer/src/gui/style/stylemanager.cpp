@@ -1,4 +1,4 @@
-#include "style/stylemanager.h"
+#include "gui/style/stylemanager.h"
 #include "settings/resourcessettings.h"
 
 #include <QApplication>

@@ -8,8 +8,8 @@
 #include "settings/settings.h"
 #include "settings/resourcessettings.h"
 #include "lang/languagemanager.h"
-#include "uimanager/uimanager.h"
-#include "style/stylemanager.h"
+#include "gui/manager/uimanager.h"
+#include "gui/style/stylemanager.h"
 
 int main(int argc, char * argv[])
 {
@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
     L_INFO("Password = " + settings->getProxyPassword());
 
     app.setWindowIcon(QIcon(":/images/icon.png"));
-    app.setApplicationName(QString(QObject::tr("Stand-alone deployment")));
+    app.setApplicationName(QString(QObject::tr("Standalone deployment")));
 
     LanguageManager::initLanguage();
 

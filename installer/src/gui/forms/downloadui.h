@@ -1,10 +1,10 @@
 #ifndef INSTALLER__DOWNLOAD_H
 #define INSTALLER__DOWNLOAD_H
 
-#include <QWidget>
 #include <QPixmap>
-#include <QTimer>
 #include <QPushButton>
+#include <QTimer>
+#include <QWidget>
 
 namespace Ui {
 class DownloadUI;

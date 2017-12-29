@@ -5,32 +5,32 @@
 #include <QWidget>
 
 namespace Ui {
-class Window;
+class WindowUI;
 }
 
 class QStyledItemDelegate;
 
 /**
- * @class Window
+ * @class WindowUI
  * @brief Window frame.
  * This window is the enveloppe of application. It contain, close button, change language button, about button.
  * This window is movable.
  * It's possible to add widget in content of this window.
  */
-class Window : public QMainWindow
+class WindowUI : public QMainWindow
 {
     Q_OBJECT
 
     public:
-        explicit Window(QWidget * _parent = 0);
-        virtual ~Window();
+        explicit WindowUI(QWidget * _parent = 0);
+        virtual ~WindowUI();
         void center();
         void changeContentWidget(QWidget * _widget);
         void setVisibleButton(bool _about, bool _changeLanguage);
         QWidget * currentWidgetCentral() const;
 
     private:
-        Ui::Window * m_ui;
+        Ui::WindowUI * m_ui;
         QStyledItemDelegate * m_itemDelegate;
         bool m_alreadyClosedOnMacOs = false;
         QPoint m_position;

@@ -1,12 +1,12 @@
-#include "uimanager/uimanager.h"
+#include "gui/manager/uimanager.h"
 
 #include "log/logger.h"
-#include "gui/window.h"
-#include "gui/welcome.h"
-#include "gui/personalize.h"
-#include "gui/proxy.h"
-#include "gui/about.h"
-#include "gui/downloadui.h"
+#include "gui/forms/windowui.h"
+#include "gui/forms/welcomeui.h"
+#include "gui/forms/personalizeui.h"
+#include "gui/forms/proxyui.h"
+#include "gui/forms/aboutui.h"
+#include "gui/forms/downloadui.h"
 
 UIManager::UIManager() : QObject(),
     m_window(0),
@@ -16,12 +16,12 @@ UIManager::UIManager() : QObject(),
     m_about(0),
     m_download(0)
 {
-    m_window = new Window();
+    m_window = new WindowUI();
 
-    m_welcome = new Welcome();
-    m_personalize = new Personalize();
-    m_proxy = new Proxy();
-    m_about = new About();
+    m_welcome = new WelcomeUI();
+    m_personalize = new PersonalizeUI();
+    m_proxy = new ProxyUI();
+    m_about = new AboutUI();
     m_download = new DownloadUI();
 
     connect(m_window, SIGNAL(changeLanguageSignal()),

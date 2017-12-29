@@ -5,24 +5,24 @@
 #include <QString>
 
 namespace Ui {
-class AskPopup;
+class AskPopupUI;
 }
 
 /**
- * @class AskPopup
+ * @class AskPopupUI
  * @brief AskPopup dialog window
  */
-class AskPopup : public QDialog
+class AskPopupUI : public QDialog
 {
     Q_OBJECT
 
     public:
-        explicit AskPopup(QWidget * _parent = 0, QString _title = "", QString _description = "");
-        virtual ~AskPopup();
+        explicit AskPopupUI(QWidget * _parent = 0, QString _title = "", QString _description = "");
+        virtual ~AskPopupUI();
         int exec();
 
     private:
-        Ui::AskPopup * m_ui;
+        Ui::AskPopupUI * m_ui;
         QWidget * m_parent;
         void center();
 

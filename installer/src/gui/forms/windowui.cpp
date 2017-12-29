@@ -1,27 +1,27 @@
-#include "gui/window.h"
+#include "gui/forms/windowui.h"
 #include "ui_window.h"
 
-#include "style/stylemanager.h"
+#include "gui/forms/askpopupui.h"
+#include "gui/forms/personalizeui.h"
+#include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
-#include "gui/personalize.h"
-#include "gui/askpopup.h"
 #include "settings/resourcessettings.h"
 
-#include <QDesktopWidget>
-#include <QMessageBox>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include <QLayoutItem>
+#include <QMessageBox>
 #include <QStyledItemDelegate>
 
-Window::Window(QWidget * _parent) :
+WindowUI::WindowUI(QWidget * _parent) :
     QMainWindow(_parent),
-    m_ui(new Ui::Window),
+    m_ui(new Ui::WindowUI),
     m_itemDelegate(0)
 {
     m_ui->setupUi(this);
 
-    setWindowTitle(tr("Stand-alone deployment"));
+    setWindowTitle(tr("Standalone deployment"));
 
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
@@ -46,13 +46,13 @@ Window::Window(QWidget * _parent) :
     StyleManager::transformStyle(this);
 }
 
-Window::~Window()
+WindowUI::~WindowUI()
 {
     delete m_ui;
     delete m_itemDelegate;
 }
 
-void Window::center()
+void WindowUI::center()
 {
     QRect geometry = frameGeometry();
     QPoint center = QDesktopWidget().availableGeometry().center();
@@ -62,18 +62,18 @@ void Window::center()
     move(geometry.topLeft());
 }
 
-void Window::mousePressEvent(QMouseEvent * _e)
+void WindowUI::mousePressEvent(QMouseEvent * _e)
 {
     m_position = QPoint(_e->globalX() - geometry().x(), _e->globalY() - geometry().y());
     setCursor(QCursor(Qt::SizeAllCursor));
 }
 
-void Window::mouseReleaseEvent(QMouseEvent *)
+void WindowUI::mouseReleaseEvent(QMouseEvent *)
 {
     setCursor(QCursor(Qt::ArrowCursor));
 }
 
-void Window::mouseMoveEvent(QMouseEvent * _e)
+void WindowUI::mouseMoveEvent(QMouseEvent * _e)
 {
     QWidget::mouseMoveEvent(_e);
     if (_e->buttons() && Qt::LeftButton) {
@@ -83,7 +83,7 @@ void Window::mouseMoveEvent(QMouseEvent * _e)
     }
 }
 
-void Window::changeContentWidget(QWidget * _widget)
+void WindowUI::changeContentWidget(QWidget * _widget)
 {
     // hide all old widgets
     hideLayoutContent(m_ui->contentLayout);
@@ -91,13 +91,13 @@ void Window::changeContentWidget(QWidget * _widget)
     _widget->setVisible(true);
 }
 
-void Window::setVisibleButton(bool _about, bool _changeLanguage)
+void WindowUI::setVisibleButton(bool _about, bool _changeLanguage)
 {
     m_ui->buttonAbout->setVisible(_about);
     m_ui->comboBoxLanguage->setVisible(_changeLanguage);
 }
 
-void Window::hideLayoutContent(QLayout * _layout)
+void WindowUI::hideLayoutContent(QLayout * _layout)
 {
     QLayoutItem * i = _layout->takeAt(0);
 
@@ -109,13 +109,13 @@ void Window::hideLayoutContent(QLayout * _layout)
     }
 }
 
-void Window::closeEvent(QCloseEvent * _event)
+void WindowUI::closeEvent(QCloseEvent * _event)
 {
     // sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        AskPopup * popupClose = new AskPopup(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        AskPopupUI * popupClose = new AskPopupUI(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
         popupClose->show();
         if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();
@@ -126,12 +126,12 @@ void Window::closeEvent(QCloseEvent * _event)
     }
 }
 
-void Window::aboutEvent()
+void WindowUI::aboutEvent()
 {
     emit aboutSignal();
 }
 
-void Window::comboBoxLanguageEvent(int _index)
+void WindowUI::comboBoxLanguageEvent(int _index)
 {
     L_INFO("Detect language change in language combobox");
     QString dateValue = m_ui->comboBoxLanguage->itemData(_index).toString();
@@ -141,7 +141,7 @@ void Window::comboBoxLanguageEvent(int _index)
     }
 }
 
-void Window::changeLanguage()
+void WindowUI::changeLanguage()
 {
     m_ui->retranslateUi(this);
 }

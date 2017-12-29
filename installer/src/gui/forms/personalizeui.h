@@ -1,27 +1,27 @@
 #ifndef INSTALLER__PERSONALIZE_H
 #define INSTALLER__PERSONALIZE_H
 
-#include <QWidget>
 #include <QString>
+#include <QWidget>
 
 namespace Ui {
-class Personalize;
+class PersonalizeUI;
 }
 
 /**
- * @class Personalize
+ * @class PersonalizeUI
  * @brief Personalize widget
  */
-class Personalize : public QWidget
+class PersonalizeUI : public QWidget
 {
     Q_OBJECT
 
     public:
-        explicit Personalize(QWidget * _parent = 0);
-        virtual ~Personalize();
+        explicit PersonalizeUI(QWidget * _parent = 0);
+        virtual ~PersonalizeUI();
 
     private:
-        Ui::Personalize * m_ui;
+        Ui::PersonalizeUI * m_ui;
         QString fileChooserDialog(QString directory);
         void saveElementsInSetting();
 

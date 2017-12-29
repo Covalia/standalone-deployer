@@ -1,14 +1,15 @@
-#include "gui/about.h"
+#include "gui/forms/aboutui.h"
 #include "ui_about.h"
-#include "style/stylemanager.h"
 
-#include <QTextStream>
+#include "gui/style/stylemanager.h"
+
 #include <QScrollBar>
 #include <QTextCursor>
+#include <QTextStream>
 
-About::About(QWidget * _parent) :
+AboutUI::AboutUI(QWidget * _parent) :
     QWidget(_parent),
-    m_ui(new Ui::About)
+    m_ui(new Ui::AboutUI)
 {
     m_ui->setupUi(this);
 
@@ -22,12 +23,12 @@ About::About(QWidget * _parent) :
     initTextContract();
 }
 
-About::~About()
+AboutUI::~AboutUI()
 {
     delete m_ui;
 }
 
-void About::initTextContract()
+void AboutUI::initTextContract()
 {
     QFile f(":/resources/contract.txt");
 
@@ -42,13 +43,13 @@ void About::initTextContract()
     f.close();
 }
 
-void About::changeLanguage()
+void AboutUI::changeLanguage()
 {
     m_ui->retranslateUi(this);
     initTextContract();
 }
 
-void About::validateAbout()
+void AboutUI::validateAbout()
 {
     emit validateAboutSignal();
 }

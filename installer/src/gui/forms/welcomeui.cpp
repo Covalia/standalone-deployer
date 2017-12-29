@@ -1,11 +1,13 @@
-#include "gui/welcome.h"
+#include "gui/forms/welcomeui.h"
 #include "ui_welcome.h"
-#include "style/stylemanager.h"
+
+#include "gui/style/stylemanager.h"
+
 #include <QDebug>
 
-Welcome::Welcome(QWidget * _parent) :
+WelcomeUI::WelcomeUI(QWidget * _parent) :
     QWidget(_parent),
-    m_ui(new Ui::Welcome)
+    m_ui(new Ui::WelcomeUI)
 {
     m_ui->setupUi(this);
 
@@ -19,27 +21,27 @@ Welcome::Welcome(QWidget * _parent) :
     connect(m_ui->buttonContract, SIGNAL(clicked()), this, SLOT(customContractEvent()));
 }
 
-Welcome::~Welcome()
+WelcomeUI::~WelcomeUI()
 {
     delete m_ui;
 }
 
-void Welcome::changeLanguage()
+void WelcomeUI::changeLanguage()
 {
     m_ui->retranslateUi(this);
 }
 
-void Welcome::customInstallationEvent()
+void WelcomeUI::customInstallationEvent()
 {
     customInstallationSignal();
 }
 
-void Welcome::simpleInstallationEvent()
+void WelcomeUI::simpleInstallationEvent()
 {
     simpleInstallationSignal();
 }
 
-void Welcome::customContractEvent()
+void WelcomeUI::customContractEvent()
 {
     contractSignal();
 }

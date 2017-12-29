@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AskPopup</class>
- <widget class="QDialog" name="AskPopup">
+ <class>AskPopupUI</class>
+ <widget class="QDialog" name="AskPopupUI">
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>

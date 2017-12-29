@@ -4,20 +4,20 @@
 #include <QWidget>
 
 namespace Ui {
-class Welcome;
+class WelcomeUI;
 }
 
 /**
- * @class Welcome
+ * @class WelcomeUI
  * @brief Welcome widget
  */
-class Welcome : public QWidget
+class WelcomeUI : public QWidget
 {
     Q_OBJECT
 
     public:
-        explicit Welcome(QWidget * _parent = 0);
-        virtual ~Welcome();
+        explicit WelcomeUI(QWidget * _parent = 0);
+        virtual ~WelcomeUI();
 
     signals:
         void simpleInstallationSignal();
@@ -31,7 +31,7 @@ class Welcome : public QWidget
         void customContractEvent();
 
     private:
-        Ui::Welcome * m_ui;
+        Ui::WelcomeUI * m_ui;
 };
 
 #endif // WELCOME_H

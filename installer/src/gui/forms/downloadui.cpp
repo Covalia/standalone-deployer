@@ -1,10 +1,10 @@
-#include "gui/downloadui.h"
-#include "ui_downloadui.h"
-#include "style/stylemanager.h"
-//#include "log/logger.h"
+#include "gui/forms/downloadui.h"
+#include "ui_download.h"
 
-#include <QString>
+#include "gui/style/stylemanager.h"
+
 #include <QDirIterator>
+#include <QString>
 
 static int update_counter = -1;
 

@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QWidget>
 
-class Window;
-class Welcome;
-class Personalize;
-class Proxy;
-class About;
+class WindowUI;
+class WelcomeUI;
+class PersonalizeUI;
+class ProxyUI;
+class AboutUI;
 class DownloadUI;
 
 class UIManager : public QObject
@@ -21,11 +21,11 @@ class UIManager : public QObject
         void init();
 
     private:
-        Window * m_window;
-        Welcome * m_welcome;
-        Personalize * m_personalize;
-        Proxy * m_proxy;
-        About * m_about;
+        WindowUI * m_window;
+        WelcomeUI * m_welcome;
+        PersonalizeUI * m_personalize;
+        ProxyUI * m_proxy;
+        AboutUI * m_about;
         DownloadUI * m_download;
 
         enum Page { WelcomePage, PersonalizePage, ProxyPage, AboutPage, DownloadPage };

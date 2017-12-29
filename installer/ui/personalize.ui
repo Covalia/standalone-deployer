@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Personalize</class>
- <widget class="QWidget" name="Personalize">
+ <class>PersonalizeUI</class>
+ <widget class="QWidget" name="PersonalizeUI">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -368,7 +368,7 @@ QPushButton:hover {
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>Launch the application at startup</string>
+             <string>Launch the application at start-up</string>
             </property>
            </widget>
           </item>
@@ -413,7 +413,7 @@ QPushButton:hover {
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>Start installation</string>
+        <string>Start the installation</string>
        </property>
       </widget>
      </item>
