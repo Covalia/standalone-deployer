@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
@@ -94,7 +94,7 @@ font-family: &quot;Helvetica&quot;, Helvetica, serif;
 font-size: 17px;\n	font-weight: plain;</string>
              </property>
              <property name="text">
-              <string>Installeur</string>
+              <string>Downloader</string>
              </property>
             </widget>
            </item>
@@ -134,7 +134,7 @@ background-color: rgb(33, 42, 63);
 }</string>
              </property>
              <property name="text">
-              <string>X</string>
+              <string notr="true">X</string>
              </property>
             </widget>
            </item>
@@ -213,7 +213,7 @@ background-color: rgb(33, 42, 63);
                 <item row="0" column="0">
                  <widget class="QPushButton" name="pushButton">
                   <property name="text">
-                   <string>PushButton</string>
+                   <string>Download</string>
                   </property>
                  </widget>
                 </item>

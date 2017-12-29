@@ -72,9 +72,9 @@ void MainWindow::closeEvent(QCloseEvent *_event) {
 	}
 	else {
         //: This string refers to the exit message title.
-		int ret = QMessageBox::question(this, tr("Attention !"),
+        int ret = QMessageBox::question(this, tr("Warning!"),
                 //: This string refers to the exit message.
-				tr("Vous êtes sur le point de quitter l'application, voulez vous continuer ?"),
+                tr("You are about to quit the application, do you want to continue?"),
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
 		if (ret == QMessageBox::Yes)
@@ -132,18 +132,18 @@ void MainWindow::updateRemainingTimeMessage(const QString &_time) {
     }
     else {
         //: This string refers to a remaining time.
-        m_ui->remainingTimeLabel->setText(tr("Temps estimé : %1").arg(_time));
+        m_ui->remainingTimeLabel->setText(tr("Estimated time: %1").arg(_time));
     }
 }
 
 void MainWindow::updateServerUrlMessage(const QUrl &_url) {
     //: This string refers to a web URL.
-    m_ui->serverLabel->setText(tr("Serveur %1").arg(_url.toString()));
+    m_ui->serverLabel->setText(tr("Server %1").arg(_url.toString()));
 }
 
 void MainWindow::updateDownloadFileMessage(const QString &_file) {
     //: This string refers to a downloaded file.
-    m_ui->currentFileLabel->setText(tr("Téléchargement de %1").arg(_file));
+    m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
 }
 
 void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal) {

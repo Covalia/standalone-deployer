@@ -104,9 +104,9 @@ void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthen
             QDialog authenticationDialog;
             Ui::Dialog ui;
             ui.setupUi(&authenticationDialog);
-            authenticationDialog.setWindowTitle(tr("Authentification HTTP requise"));
+            authenticationDialog.setWindowTitle(tr("HTTP authentification required"));
             authenticationDialog.adjustSize();
-            ui.siteDescription->setText(tr("%1 sur %2", "Le domaine sur l'hôte").arg(_authenticator->realm(), url.host()));
+            ui.siteDescription->setText(tr("%1 on %2", "The realm on host").arg(_authenticator->realm(), url.host()));
 
             if (authenticationDialog.exec() == QDialog::Accepted) {
                 qDebug() << "Authentication with user:" << ui.userEdit->text();
@@ -144,9 +144,9 @@ void DownloadManager::slotProxyAuthenticationRequired(const QNetworkProxy &_prox
     QDialog authenticationDialog;
     Ui::Dialog ui;
     ui.setupUi(&authenticationDialog);
-    authenticationDialog.setWindowTitle(tr("Authentification Proxy requise"));
+    authenticationDialog.setWindowTitle(tr("Proxy authentication required"));
     authenticationDialog.adjustSize();
-    ui.siteDescription->setText(tr("%1", "Le domaine du proxy").arg(_authenticator->realm()));
+    ui.siteDescription->setText(tr("%1", "The proxy domain").arg(_authenticator->realm()));
 
     ui.userEdit->setText(_proxy.user());
     ui.passwordEdit->setText(_proxy.password());
@@ -373,15 +373,15 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         QString unit;
         if (speed < 1024) {
             //: This string refers to bytes per second.
-            unit = tr("o/s");
+            unit = tr("B/s");
         } else if (speed < 1024 * 1024) {
             speed /= 1024;
             //: This string refers to kilobytes per second.
-            unit = tr("ko/s");
+            unit = tr("kB/s");
         } else {
             speed /= 1024 * 1024;
             //: This string refers to megabytes per second.
-            unit = tr("Mo/s");
+            unit = tr("MB/s");
         }
 
         //: This string refers to download speed as "12 ko/s".
@@ -396,10 +396,9 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
             int minutes = (remainingSeconds - 3600 * hours) / 60;
             int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
 
-            //: This string refers a time (hours, minutes, seconds).
-            QString hoursStr = tr("%n heure(s)", "les heures estimées", hours);
-            QString minutesStr = tr("%n minute(s)", "les minutes estimées", minutes);
-            QString secondsStr = tr("%n seconde(s)", "les secondes estimées", seconds);
+            QString hoursStr = tr("%n hour(s)", "the estimated heures", hours);
+            QString minutesStr = tr("%n minute(s)", "the estimated minutes", minutes);
+            QString secondsStr = tr("%n second(s)", "the estimated seconds", seconds);
 
             QString time;
             if (hours == 0) {
@@ -407,27 +406,27 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
                     if (seconds == 0) {
                         time = "";
                     } else {
-                        time = tr("%1", "secondes seulement").arg(secondsStr);
+                        time = tr("%1", "seconds only").arg(secondsStr);
                     }
                 } else {
                     if (seconds == 0) {
-                        time = tr("%1", "minutes seulement").arg(minutesStr);
+                        time = tr("%1", "minutes only").arg(minutesStr);
                     } else {
-                        time = tr("%1 %2", "minutes et secondes seulement").arg(minutesStr).arg(secondsStr);
+                        time = tr("%1 %2", "minutes and seconds only").arg(minutesStr).arg(secondsStr);
                     }
                 }
             } else {
                 if (minutes == 0) {
                     if (seconds == 0) {
-                        time = tr("%1", "heures seulement").arg(hoursStr);
+                        time = tr("%1", "hours only").arg(hoursStr);
                     } else {
-                        time = tr("%1 %2", "heures et secondes seulement").arg(hoursStr).arg(secondsStr);
+                        time = tr("%1 %2", "hours and seconds only").arg(hoursStr).arg(secondsStr);
                     }
                 } else {
                     if (seconds == 0) {
-                        time = tr("%1 %2", "heures et minutes seulement").arg(hoursStr).arg(minutesStr);
+                        time = tr("%1 %2", "hours and minutes only").arg(hoursStr).arg(minutesStr);
                     } else {
-                        time = tr("%1 %2 %3", "heures minutes secondes").arg(hoursStr).arg(minutesStr).arg(secondsStr);
+                        time = tr("%1 %2 %3", "hours minutes seconds").arg(hoursStr).arg(minutesStr).arg(secondsStr);
                     }
                 }
             }

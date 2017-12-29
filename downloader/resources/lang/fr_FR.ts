@@ -2,187 +2,187 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR" sourcelanguage="en_US">
 <context>
-    <name>About</name>
+    <name>Dialog</name>
     <message>
-        <location filename="../../../commongui/ui/about.ui" line="55"/>
-        <source>About</source>
-        <translation>A propos</translation>
+        <location filename="../../ui/authenticationdialog.ui" line="20"/>
+        <source>Credentials are required by the remote host</source>
+        <translation>L&apos;hôte distant a besoin d&apos;un identifiant et d&apos;un mot de passe</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/about.ui" line="151"/>
-        <source>OK</source>
-        <translation>Valider</translation>
-    </message>
-</context>
-<context>
-    <name>AskPopup</name>
-    <message>
-        <location filename="../../../commongui/ui/askpopup.ui" line="74"/>
-        <source>Question</source>
-        <translation>Question</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/askpopup.ui" line="184"/>
-        <source>Yes</source>
-        <translation>Oui</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/askpopup.ui" line="219"/>
-        <source>No</source>
-        <translation>Non</translation>
-    </message>
-</context>
-<context>
-    <name>Personalize</name>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="55"/>
-        <source>Customize my installation</source>
-        <translation>Personnaliser mon installation</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="102"/>
-        <source>Application installation directory</source>
-        <translation>Répertoire d&apos;installation de l&apos;application</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="185"/>
-        <location filename="../../../commongui/ui/personalize.ui" line="325"/>
-        <source>Change</source>
-        <translation>Changer</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="257"/>
-        <source>Data installation directory</source>
-        <translation>Répertoire d&apos;installation des données</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="379"/>
-        <source>Start-up</source>
-        <translation>Démarrage</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="409"/>
-        <source>Add an offline launch shortcut</source>
-        <translation>Ajout un raccourci de lancement hors ligne</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="442"/>
-        <source>Launch the application at startup</source>
-        <translation>Lancer l&apos;application au démarrage de l&apos;ordinateur</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="467"/>
-        <source>Proxy settings</source>
-        <translation>Configuration du proxy</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/personalize.ui" line="496"/>
-        <source>Start installation</source>
-        <translation>Lancer l&apos;installation</translation>
-    </message>
-</context>
-<context>
-    <name>Proxy</name>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="55"/>
-        <source>Proxy configuration</source>
-        <translation>Configuration du proxy</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="83"/>
-        <source>No proxy configuration</source>
-        <translation>Pas de configuration de proxy</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="113"/>
-        <source>Automatic proxy configuration</source>
-        <translation>Configuration automatique du proxy</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="141"/>
-        <source>Manual proxy configuration</source>
-        <translation>Configuration manuelle du proxy</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="165"/>
-        <source>Hostname</source>
-        <translation>Nom d&apos;hôte</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="232"/>
-        <source>Port</source>
-        <translation>Port</translation>
-    </message>
-    <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="302"/>
+        <location filename="../../ui/authenticationdialog.ui" line="30"/>
         <source>Login</source>
         <translation>Identifiant</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="378"/>
+        <location filename="../../ui/authenticationdialog.ui" line="40"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/proxy.ui" line="460"/>
-        <source>OK</source>
-        <translation>Valider</translation>
+        <location filename="../../ui/authenticationdialog.ui" line="64"/>
+        <source>Site</source>
+        <translation>Site</translation>
     </message>
 </context>
 <context>
-    <name>Welcome</name>
+    <name>DownloadManager</name>
     <message>
-        <location filename="../../../commongui/ui/welcome.ui" line="49"/>
-        <source>Welcome to installation of @Application</source>
-        <translation>Bienvenue dans l&apos;installation de l&apos;application</translation>
+        <location filename="../../src/network/downloadmanager.cpp" line="388"/>
+        <source>%1 %2</source>
+        <extracomment>This string refers to download speed as &quot;12 ko/s&quot;.</extracomment>
+        <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/welcome.ui" line="79"/>
-        <source>By installing this product, you agree</source>
-        <translation>En installant ce produit, vous acceptez</translation>
+        <location filename="../../src/network/downloadmanager.cpp" line="107"/>
+        <source>HTTP authentification required</source>
+        <translation>Authentification HTTP requise</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/welcome.ui" line="101"/>
-        <source>User contract</source>
-        <translation>Contrat d&apos;utilisateur</translation>
+        <location filename="../../src/network/downloadmanager.cpp" line="109"/>
+        <source>%1 on %2</source>
+        <comment>The realm on host</comment>
+        <translation>%1 sur %2</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/welcome.ui" line="135"/>
-        <source>Simple installation</source>
-        <translation>Installation simple</translation>
+        <location filename="../../src/network/downloadmanager.cpp" line="147"/>
+        <source>Proxy authentication required</source>
+        <translation>Authentification proxy requise</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/welcome.ui" line="164"/>
-        <source>Custom installation</source>
-        <translation>Installation personnalisée</translation>
+        <location filename="../../src/network/downloadmanager.cpp" line="149"/>
+        <source>%1</source>
+        <comment>The proxy domain</comment>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="376"/>
+        <source>B/s</source>
+        <extracomment>This string refers to bytes per second.</extracomment>
+        <translation>o/s</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="380"/>
+        <source>kB/s</source>
+        <extracomment>This string refers to kilobytes per second.</extracomment>
+        <translation>ko/s</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="384"/>
+        <source>MB/s</source>
+        <extracomment>This string refers to megabytes per second.</extracomment>
+        <translation>Mo/s</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/network/downloadmanager.cpp" line="399"/>
+        <source>%n hour(s)</source>
+        <comment>the estimated heures</comment>
+        <translation>
+            <numerusform>%n heure</numerusform>
+            <numerusform>%n heures</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/network/downloadmanager.cpp" line="400"/>
+        <source>%n minute(s)</source>
+        <comment>the estimated minutes</comment>
+        <translation>
+            <numerusform>%n minute</numerusform>
+            <numerusform>%n minutes</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/network/downloadmanager.cpp" line="401"/>
+        <source>%n second(s)</source>
+        <comment>the estimated seconds</comment>
+        <translation>
+            <numerusform>%n seconds</numerusform>
+            <numerusform>%n secondes</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="409"/>
+        <source>%1</source>
+        <comment>seconds only</comment>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="413"/>
+        <source>%1</source>
+        <comment>minutes only</comment>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="415"/>
+        <source>%1 %2</source>
+        <comment>minutes and seconds only</comment>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="421"/>
+        <source>%1</source>
+        <comment>hours only</comment>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="423"/>
+        <source>%1 %2</source>
+        <comment>hours and seconds only</comment>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="427"/>
+        <source>%1 %2</source>
+        <comment>hours and minutes only</comment>
+        <translation>%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/network/downloadmanager.cpp" line="429"/>
+        <source>%1 %2 %3</source>
+        <comment>hours minutes seconds</comment>
+        <translation>%1 %2 %3</translation>
     </message>
 </context>
 <context>
-    <name>Window</name>
+    <name>MainWindow</name>
     <message>
-        <location filename="../../../commongui/ui/window.ui" line="126"/>
-        <source>@Application installation</source>
-        <translation>Installation de l&apos;application</translation>
+        <location filename="../../ui/mainwindow.ui" line="97"/>
+        <source>Downloader</source>
+        <translation>Téléchargeur</translation>
     </message>
     <message>
-        <location filename="../../../commongui/ui/window.ui" line="158"/>
-        <source>About</source>
-        <translation>A propos</translation>
+        <location filename="../../ui/mainwindow.ui" line="216"/>
+        <source>Download</source>
+        <translation>Télécharger</translation>
     </message>
     <message>
-        <location filename="../../../commongui/src/gui/window.cpp" line="23"/>
-        <source>Stand-alone deployment</source>
-        <translation>Déploiement autonome</translation>
+        <location filename="../../src/gui/mainwindow.cpp" line="75"/>
+        <source>Warning!</source>
+        <extracomment>This string refers to the exit message title.</extracomment>
+        <translation>Attention !</translation>
     </message>
     <message>
-        <location filename="../../../commongui/src/gui/window.cpp" line="113"/>
-        <source>Do you want to exit the application?</source>
-        <translation>Voulez-vous quitter l&apos;application?</translation>
+        <location filename="../../src/gui/mainwindow.cpp" line="77"/>
+        <source>You are about to quit the application, do you want to continue?</source>
+        <extracomment>This string refers to the exit message.</extracomment>
+        <translation>Vous êtes sur le point de quitter l&apos;application, voulez-vous continuer ?</translation>
     </message>
     <message>
-        <location filename="../../../commongui/src/gui/window.cpp" line="113"/>
-        <source>The installation will be stopped</source>
-        <translation>L&apos;installation sera arrêtée</translation>
+        <location filename="../../src/gui/mainwindow.cpp" line="135"/>
+        <source>Estimated time: %1</source>
+        <extracomment>This string refers to a remaining time.</extracomment>
+        <translation>Temps estimé : %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/mainwindow.cpp" line="141"/>
+        <source>Server %1</source>
+        <extracomment>This string refers to a web URL.</extracomment>
+        <translation>Serveur %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/mainwindow.cpp" line="146"/>
+        <source>Downloading %1</source>
+        <extracomment>This string refers to a downloaded file.</extracomment>
+        <translation>Téléchargement de %1</translation>
     </message>
 </context>
 </TS>

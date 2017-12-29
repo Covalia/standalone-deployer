@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="titlelabel">
      <property name="text">
-      <string>Le site distant exige un identifiant et un mot de passe</string>
+      <string>Credentials are required by the remote host</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -27,7 +27,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="loginLabel">
      <property name="text">
-      <string>Identifiant :</string>
+      <string>Login</string>
      </property>
     </widget>
    </item>
@@ -37,7 +37,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="passwordLabel">
      <property name="text">
-      <string>Mot de passe :</string>
+      <string>Password</string>
      </property>
     </widget>
    </item>
@@ -61,7 +61,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="siteLabel">
      <property name="text">
-      <string>Site:</string>
+      <string>Site</string>
      </property>
     </widget>
    </item>
