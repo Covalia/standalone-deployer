@@ -8,9 +8,16 @@ TARGET = settings
 TEMPLATE = lib
 
 DESTDIR = bin
-OBJECTS_DIR = build/objects
-RCC_DIR = build/rcc
-UI_DIR = build/ui
+
+Release:OBJECTS_DIR = release/objects
+Release:RCC_DIR = release/rcc
+Release:UI_DIR = release/ui
+Release:MOC_DIR = release/moc
+
+Debug:OBJECTS_DIR = debug/objects
+Debug:RCC_DIR = debug/rcc
+Debug:UI_DIR = debug/ui
+Debug:MOC_DIR = debug/moc
 
 INCLUDEPATH += .
 INCLUDEPATH += src

@@ -10,5 +10,5 @@ SUBDIRS += _settings
 SUBDIRS += _filesystem
 SUBDIRS += loader
 SUBDIRS += downloader
-SUBDIRS += installer
 SUBDIRS += uninstaller
+SUBDIRS += installer

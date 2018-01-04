@@ -1,4 +1,5 @@
 .DS_Store
+Thumbs.db
 .qmake.stash
 Makefile
 Makefile.Debug
@@ -7,8 +8,6 @@ bin/
 build/
 release/
 debug/
-*.pro\.user
+*.pro.user
 *.autosave
 *_plugin_import.cpp
-
-build-downloader-Desktop_Qt_5_6_2_MinGW_32bit-Debug/
