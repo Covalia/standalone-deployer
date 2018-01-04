@@ -72,6 +72,14 @@ HEADERS += src/shortcut/shortcut.h
 
 RESOURCES += fixed_resources.qrc
 
+win32 {
+RESOURCES += windows_resources.qrc
+}
+
+macx {
+RESOURCES += macosx_resources.qrc
+}
+
 defined(OVERRIDABLE_INSTALLER_RESOURCES, var) {
     RESOURCES += $$OVERRIDABLE_INSTALLER_RESOURCES
     message("Using installer resources from file: $$OVERRIDABLE_INSTALLER_RESOURCES")
