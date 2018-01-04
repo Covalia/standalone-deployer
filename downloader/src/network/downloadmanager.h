@@ -90,4 +90,4 @@ private:
     bool m_httpAuthCanceled;
 };
 
-#endif // ifndef DOWNLOADMANAGER_H
+#endif // ifndef DOWNLOADER__DOWNLOADMANAGER_H

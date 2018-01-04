@@ -29,4 +29,4 @@ class JavaUpdate
         QString m_hash;
 };
 
-#endif // ifndef JAVAUPDATE_H
+#endif // ifndef DOWNLOADER__JAVAUPDATE_H

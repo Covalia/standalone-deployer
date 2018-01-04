@@ -13,4 +13,4 @@ class StyleManager
         static void setGeneralStyle();
 };
 
-#endif // STYLEMANAGER_H
+#endif

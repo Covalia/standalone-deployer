@@ -36,4 +36,4 @@ class Download
         bool m_main;
 };
 
-#endif // ifndef DOWNLOAD_H
+#endif // ifndef DOWNLOADER__DOWNLOAD_H

@@ -40,4 +40,4 @@ signals:
     void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 };
 
-#endif // ifndef APP_DOWNLOADER_H
+#endif // ifndef DOWNLOADER__APPDOWNLOADER_H

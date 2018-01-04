@@ -50,4 +50,4 @@ class WindowUI : public QMainWindow
         void aboutEvent();
 };
 
-#endif // WINDOW_H
+#endif // INSTALLER__WINDOW_H

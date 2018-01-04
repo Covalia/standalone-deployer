@@ -104,4 +104,4 @@ private:
         QString m_allUserShortcut;
 };
 
-#endif // COMMANDLINEPARSER_H
+#endif // INSTALLER__COMMANDLINEPARSER_H

@@ -148,4 +148,4 @@ class DeploymentXML : public QObject
         QString readNextText();
 };
 
-#endif // ifndef DEPLOYMENTXML_H
+#endif // ifndef DOWNLOADER__DEPLOYMENTXML_H

@@ -222,4 +222,4 @@ private:
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(SimpleCrypt::CryptoFlags)
 
-#endif // SimpleCrypt_H
+#endif // SETTINGS__SIMPLECRYPT_H

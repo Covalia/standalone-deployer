@@ -33,4 +33,4 @@ class ProxyUI : public QWidget
         void updateVisibleField();
 };
 
-#endif // PROXY_H
+#endif // INSTALLER__PROXY_H

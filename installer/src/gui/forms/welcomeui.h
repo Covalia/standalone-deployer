@@ -34,4 +34,4 @@ class WelcomeUI : public QWidget
         Ui::WelcomeUI * m_ui;
 };
 
-#endif // WELCOME_H
+#endif // INSTALLER__WELCOME_H

@@ -48,4 +48,4 @@ class UIManager : public QObject
         void switchAboutTo();
 };
 
-#endif // UIMANAGER_H
+#endif // INSTALLER__UIMANAGER_H

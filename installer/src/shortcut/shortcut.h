@@ -55,5 +55,5 @@ public:
         QString findUserStartMenuFolder();
     };
 
-#endif // ifdef (_WIN32)
-#endif // SHORTCUT_H
+#endif // _WIN32
+#endif // INSTALLER__SHORTCUT_H

@@ -31,4 +31,4 @@ class AboutUI : public QWidget
         void validateAbout();
 };
 
-#endif // ABOUT_H
+#endif // INSTALLER__ABOUT_H

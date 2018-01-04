@@ -37,4 +37,4 @@ class PersonalizeUI : public QWidget
         void fileChooserDataEvent();
 };
 
-#endif // PERSONALIZE_H
+#endif // INSTALLER__PERSONALIZE_H

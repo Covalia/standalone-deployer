@@ -14,4 +14,4 @@ class CryptManager
         quint64 getKey();
 };
 
-#endif // CRYPTMANAGER_H
+#endif // SETTINGS__CRYPTMANAGER_H

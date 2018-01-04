@@ -41,4 +41,4 @@ class DownloadUI : public QWidget
         void buttonSlideEvent();
 };
 
-#endif // DOWNLOAD_H
+#endif // INSTALLER__DOWNLOAD_H

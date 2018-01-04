@@ -44,4 +44,4 @@ inline bool operator<(const Application &_e1, const Application &_e2)
     return _e1.getName() < _e2.getName();
 }
 
-#endif // ifndef APPLICATION_H
+#endif // ifndef DOWNLOADER__APPLICATION_H

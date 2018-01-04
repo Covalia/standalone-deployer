@@ -208,4 +208,4 @@ class Settings
         bool m_runAtStart;
 };
 
-#endif // SETTINGS_H
+#endif // SETTINGS__SETTINGS_H

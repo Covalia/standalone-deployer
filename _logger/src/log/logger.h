@@ -12,4 +12,4 @@ class Logger
         Logger(QString pathLog);
 };
 
-#endif // LOGGER_H
+#endif // LOGGER__LOGGER_H

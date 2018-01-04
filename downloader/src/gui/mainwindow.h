@@ -44,4 +44,4 @@ private:
     virtual void closeEvent(QCloseEvent *);
 };
 
-#endif // ifndef MAINWINDOW_H
+#endif // ifndef DOWNLOADER__MAINWINDOW_H

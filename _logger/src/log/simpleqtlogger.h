@@ -519,4 +519,4 @@ private:
 
 } // namespace simpleqtlogger
 
-#endif // _SIMPLE_QT_LOGGER_H
+#endif // LOGGER__SIMPLEQTLOGGER_H

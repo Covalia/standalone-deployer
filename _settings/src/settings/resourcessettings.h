@@ -162,4 +162,4 @@ private:
         QString m_border_window;
 };
 
-#endif // RESOURCESSETTINGS_H
+#endif // SETTINGS__RESOURCESSETTINGS_H
