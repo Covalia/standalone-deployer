@@ -4,7 +4,7 @@ CONFIG += warn_on
 CONFIG += debug_and_release
 CONFIG += staticlib
 
-TARGET = logger
+TARGET = filesystem
 TEMPLATE = lib
 
 DESTDIR = bin
@@ -18,8 +18,9 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-SOURCES += src/log/logger.cpp
-SOURCES += src/log/simpleqtlogger.cpp
+SOURCES += src/fs/apptreemanager.cpp
+SOURCES += src/fs/config.cpp
 
-HEADERS += src/log/logger.h
-HEADERS += src/log/simpleqtlogger.h
+HEADERS += src/fs/apptreemanager.h
+HEADERS += src/fs/config.h
+

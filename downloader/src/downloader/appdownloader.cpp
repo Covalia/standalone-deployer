@@ -1,6 +1,6 @@
 #include "downloader/appdownloader.h"
 #include "network/downloadmanager.h"
-#include "config/global.h"
+#include "downloader/config.h"
 #include <QDebug>
 
 AppDownloader::AppDownloader(const QUrl &_appUrl, const QDir &_appInstallDir, QObject *_parent) : QObject(_parent),
@@ -53,7 +53,7 @@ void AppDownloader::start()
     urls << QUrl("lib/external/balloontip-1.2.4.1.jar");
 
 
-    // urls << m_appUrl + Global::AppCnlpRemoteFilename;
+    // urls << m_appUrl + DownloaderConfig::AppCnlpRemoteFilename;
 
     // TODO transmettre le nom de l'application avec les url des fichiers, il s'agit du sous dossier
     m_downloader->setUrlListToDownload("Application", urls);

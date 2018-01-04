@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QSaveFile>
 #include <QDir>
-#include "config/global.h"
+#include "downloader/config.h"
 #include "ui_authenticationdialog.h"
 
 // TODO : gérer les coupures dans le download + head.
@@ -181,7 +181,7 @@ void DownloadManager::startNextHeadRequest()
 
     QUrl url = m_headQueue.dequeue();
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
+    request.setHeader(QNetworkRequest::UserAgentHeader, DownloaderConfig::UserAgentValue);
     m_currentReply = m_manager.head(request);
     m_currentReply->ignoreSslErrors();
 
@@ -284,7 +284,7 @@ void DownloadManager::startNextDownload()
     qDebug() << "Downloading" << url.toEncoded().constData();
 
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::UserAgentHeader, Global::UserAgentValue);
+    request.setHeader(QNetworkRequest::UserAgentHeader, DownloaderConfig::UserAgentValue);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, QVariant(true));
     m_currentReply = m_manager.get(request);
     m_currentReply->ignoreSslErrors();

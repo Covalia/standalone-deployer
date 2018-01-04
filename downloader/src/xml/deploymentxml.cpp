@@ -1,5 +1,5 @@
 #include "xml/deploymentxml.h"
-#include "config/global.h"
+#include "downloader/config.h"
 #include <QFile>
 
 const QString DeploymentXML::RDeploymentTag("deployment");
@@ -266,12 +266,12 @@ bool DeploymentXML::processApplication()
         downloaderExtensionClasspath = m_xmlReader.attributes().value(DownloaderExtensionClasspathAttribute).toString();
     }
 
-    if (name == Global::AppName) {
-        application = new Application(Global::AppName, Global::AppCnlpRemoteFilename, Global::AppCnlpLocalFilename);
-    } else if (name ==  Global::StarterName) {
-        application = new Application(Global::StarterName, Global::StarterCnlpRemoteFilename, Global::StarterCnlpLocalFilename);
-    } else if (name ==  Global::DownloaderName) {
-        application = new Application(Global::DownloaderName, Global::DownloaderCnlpRemoteFilename, Global::StarterCnlpLocalFilename);
+    if (name == DownloaderConfig::AppName) {
+        application = new Application(DownloaderConfig::AppName, DownloaderConfig::AppCnlpRemoteFilename, DownloaderConfig::AppCnlpLocalFilename);
+    } else if (name ==  DownloaderConfig::StarterName) {
+        application = new Application(DownloaderConfig::StarterName, DownloaderConfig::StarterCnlpRemoteFilename, DownloaderConfig::StarterCnlpLocalFilename);
+    } else if (name ==  DownloaderConfig::DownloaderName) {
+        application = new Application(DownloaderConfig::DownloaderName, DownloaderConfig::DownloaderCnlpRemoteFilename, DownloaderConfig::StarterCnlpLocalFilename);
     }
 
     if (application) {

@@ -35,14 +35,15 @@ INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
+INCLUDEPATH += ../_filesystem/src
+LIBS += -L../_filesystem/bin -lfilesystem
 
 FORMS += ui/authenticationdialog.ui
 FORMS += ui/mainwindow.ui
 
 SOURCES += src/main.cpp
-SOURCES += src/config/global.cpp
 SOURCES += src/downloader/appdownloader.cpp
-SOURCES += src/fs/apptreemanager.cpp
+SOURCES += src/downloader/config.cpp
 SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
@@ -51,9 +52,8 @@ SOURCES += src/xml/data/download.cpp
 SOURCES += src/xml/data/javaupdate.cpp
 SOURCES += src/xml/deploymentxml.cpp
 
-HEADERS += src/config/global.h
 HEADERS += src/downloader/appdownloader.h
-HEADERS += src/fs/apptreemanager.h
+HEADERS += src/downloader/config.h
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/utils/hashmac/hashmac512.h

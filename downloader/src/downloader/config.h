@@ -1,34 +1,18 @@
-#ifndef CONFIG__GLOBAL_H
-#define CONFIG__GLOBAL_H
+#ifndef DOWNLOADER__CONFIG_H
+#define DOWNLOADER__CONFIG_H
 
 #include <QString>
 
-class Global
+class DownloaderConfig
 {
 public:
+    // TODO lire depuis la config.ini
     /// URL de l'application
     static const QString AppUrl;
 
+    // TODO inutile
     /// Chemin de l'installation
     static const QString InstallationDir;
-
-    /// Chemin relatif d'installation de l'application
-    static const QString AppDir;
-
-    /// Chemin relatif de la configuration de l'application
-    static const QString ConfigurationDir;
-
-    /// Chemin relatif des extensions de l'application
-    static const QString ExtensionDir;
-
-    /// Chemin relatif de Java
-    static const QString JavaDir;
-
-    /// Chemin relatif des logs de l'application
-    static const QString LogsDir;
-
-    /// Chemin relatif du répertoire temp de l'application
-    static const QString TempDir;
 
     /// User-Agent du downloader
     static const QString UserAgentValue;
@@ -55,4 +39,4 @@ public:
     static const QString DownloaderCnlpLocalFilename;
 };
 
-#endif // ifndef CONFIG__GLOBAL_H
+#endif // ifndef DOWNLOADER__CONFIG_H

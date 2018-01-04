@@ -27,4 +27,4 @@ private:
     const QDir m_installationDir;
 };
 
-#endif // ifndef APPTREEMANAGER_H
+#endif // ifndef DOWNLOADER__APPTREEMANAGER_H
