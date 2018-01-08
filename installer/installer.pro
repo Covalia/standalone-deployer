@@ -18,6 +18,9 @@ CONFIG(release, debug|release) {
 TARGET = installer
 TEMPLATE = app
 
+# icone macosx
+ICON = "$$TARGET".icns
+
 DESTDIR = bin
 
 Release:OBJECTS_DIR = release/objects
