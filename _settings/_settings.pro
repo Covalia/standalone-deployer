@@ -4,6 +4,10 @@ CONFIG += warn_on
 CONFIG += debug_and_release
 CONFIG += staticlib
 
+CONFIG(release, debug|release) {
+	DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 TARGET = settings
 TEMPLATE = lib
 

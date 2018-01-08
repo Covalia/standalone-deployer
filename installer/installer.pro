@@ -4,19 +4,22 @@ QT += widgets
 
 CONFIG += warn_on
 CONFIG += debug_and_release
+CONFIG += app_bundle
 
 CONFIG(debug, release|debug) {
-	CONFIG -= app_bundle
 	CONFIG += console
 }
 
 CONFIG(release, debug|release) {
-	CONFIG += app_bundle
 	CONFIG -= console
+	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
 TARGET = installer
 TEMPLATE = app
+
+# icone macosx
+ICON = "$$TARGET".icns
 
 DESTDIR = bin
 
@@ -97,3 +100,10 @@ else {
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
+
+macx {
+QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background.png"
+dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
+distclean.depends += dmgclean
+QMAKE_EXTRA_TARGETS += distclean dmgclean
+}

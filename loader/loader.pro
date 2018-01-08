@@ -2,19 +2,22 @@ QT += core
 
 CONFIG += warn_on
 CONFIG += debug_and_release
+CONFIG += app_bundle
 
 CONFIG(debug, release|debug) {
-	CONFIG -= app_bundle
 	CONFIG += console
 }
 
 CONFIG(release, debug|release) {
-	CONFIG += app_bundle
 	CONFIG -= console
+	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
 TARGET = loader
 TEMPLATE = app
+
+# icone macosx
+ICON = "$$TARGET".icns
 
 DESTDIR = bin
 
@@ -46,3 +49,10 @@ SOURCES += src/main.cpp
 # RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg
+
+macx {
+QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background-no-run.png"
+dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
+distclean.depends += dmgclean
+QMAKE_EXTRA_TARGETS += distclean dmgclean
+}
