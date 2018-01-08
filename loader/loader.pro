@@ -2,15 +2,15 @@ QT += core
 
 CONFIG += warn_on
 CONFIG += debug_and_release
+CONFIG += app_bundle
 
 CONFIG(debug, release|debug) {
-	CONFIG -= app_bundle
 	CONFIG += console
 }
 
 CONFIG(release, debug|release) {
-	CONFIG += app_bundle
 	CONFIG -= console
+	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
 TARGET = loader
