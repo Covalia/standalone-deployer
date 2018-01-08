@@ -11,3 +11,5 @@ debug/
 *.pro.user
 *.autosave
 *_plugin_import.cpp
+*.dmg
+*.log

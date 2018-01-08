@@ -49,3 +49,10 @@ SOURCES += src/main.cpp
 # RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg
+
+macx {
+QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background-no-run.png"
+dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
+distclean.depends += dmgclean
+QMAKE_EXTRA_TARGETS += distclean dmgclean
+}

@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/bin">
-        <file alias="downloader">../downloader/bin/downloader</file>
-        <file alias="loader">../loader/bin/loader</file>
-        <file alias="uninstaller">../uninstaller/bin/uninstaller</file>
+        <file alias="downloader.dmg">../downloader/bin/downloader.dmg</file>
+        <file alias="loader.dmg">../loader/bin/loader.dmg</file>
+        <file alias="uninstaller.dmg">../uninstaller/bin/uninstaller.dmg</file>
     </qresource>
 </RCC>
