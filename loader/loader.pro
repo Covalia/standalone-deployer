@@ -56,3 +56,8 @@ dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
 distclean.depends += dmgclean
 QMAKE_EXTRA_TARGETS += distclean dmgclean
 }
+win32 {
+CONFIG(release, debug|release) {
+QMAKE_POST_LINK += ../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
+}
+}

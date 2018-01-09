@@ -13,3 +13,4 @@ debug/
 *_plugin_import.cpp
 *.dmg
 *.log
+object_script.*.*
