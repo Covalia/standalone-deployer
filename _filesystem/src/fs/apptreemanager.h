@@ -1,5 +1,5 @@
-#ifndef DOWNLOADER__APPTREEMANAGER_H
-#define DOWNLOADER__APPTREEMANAGER_H
+#ifndef FILESYSTEM__APPTREEMANAGER_H
+#define FILESYSTEM__APPTREEMANAGER_H
 
 #include <QObject>
 #include <QDir>
@@ -27,4 +27,4 @@ private:
     const QDir m_installationDir;
 };
 
-#endif // ifndef DOWNLOADER__APPTREEMANAGER_H
+#endif // ifndef FILESYSTEM__APPTREEMANAGER_H

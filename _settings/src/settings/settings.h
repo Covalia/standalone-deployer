@@ -194,7 +194,7 @@ class Settings
         bool m_shortcutOnline;
         bool m_shortcutAllUser;
 
-        // classpath downloader
+        // classpath updater
         QString m_classpathExtension;
 
         // data

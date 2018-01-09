@@ -40,8 +40,8 @@ function pack_icon {
 
 # TODO put icon license into the about page
 # license: Freepik on flaticon.com
-# downloader
-pack_icon 'downloader'
+# updater
+pack_icon 'updater'
 # https://www.flaticon.com/free-icon/cloud-computing_667470
 # installer
 pack_icon 'installer'

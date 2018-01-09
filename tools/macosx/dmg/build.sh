@@ -17,7 +17,7 @@ HDIUTIL=/usr/bin/hdiutil
 SCRIPT_PATH="$( cd "$(dirname "$0")" || exit 2; pwd -P )"
 
 # temporary dmg size
-DMG_SIZE=20000
+DMG_SIZE=80000
 
 printf 'Building dmg image for %s app\n' "${PROJECT}" >&2
 

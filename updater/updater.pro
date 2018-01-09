@@ -1,6 +1,7 @@
 QT += core
 QT += gui
 QT += widgets
+QT += network
 
 CONFIG += warn_on
 CONFIG += debug_and_release
@@ -15,7 +16,7 @@ CONFIG(release, debug|release) {
 	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
-TARGET = uninstaller
+TARGET = updater
 TEMPLATE = app
 
 # icone macosx
@@ -43,12 +44,32 @@ INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
+INCLUDEPATH += ../_filesystem/src
+LIBS += -L../_filesystem/bin -lfilesystem
 
-# FORMS +=
+FORMS += ui/authenticationdialog.ui
+FORMS += ui/mainwindow.ui
 
 SOURCES += src/main.cpp
+SOURCES += src/updater/appupdater.cpp
+SOURCES += src/updater/config.cpp
+SOURCES += src/gui/mainwindow.cpp
+SOURCES += src/network/downloadmanager.cpp
+SOURCES += src/utils/hashmac/hashmac512.cpp
+SOURCES += src/xml/data/application.cpp
+SOURCES += src/xml/data/download.cpp
+SOURCES += src/xml/data/javaupdate.cpp
+SOURCES += src/xml/deploymentxml.cpp
 
-# HEADERS +=
+HEADERS += src/updater/appupdater.h
+HEADERS += src/updater/config.h
+HEADERS += src/gui/mainwindow.h
+HEADERS += src/network/downloadmanager.h
+HEADERS += src/utils/hashmac/hashmac512.h
+HEADERS += src/xml/data/application.h
+HEADERS += src/xml/data/download.h
+HEADERS += src/xml/data/javaupdate.h
+HEADERS += src/xml/deploymentxml.h
 
 RESOURCES += resources.qrc
 

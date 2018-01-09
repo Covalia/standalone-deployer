@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/bin">
-        <file alias="downloader.exe">../downloader/bin/downloader.exe</file>
+        <file alias="updater.exe">../updater/bin/updater.exe</file>
         <file alias="loader.exe">../loader/bin/loader.exe</file>
         <file alias="uninstaller.exe">../uninstaller/bin/uninstaller.exe</file>
     </qresource>

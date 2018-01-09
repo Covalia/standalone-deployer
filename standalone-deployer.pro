@@ -9,6 +9,6 @@ SUBDIRS += _logger
 SUBDIRS += _settings
 SUBDIRS += _filesystem
 SUBDIRS += loader
-SUBDIRS += downloader
+SUBDIRS += updater
 SUBDIRS += uninstaller
 SUBDIRS += installer
