@@ -20,6 +20,7 @@ ResourcesSettings::ResourcesSettings() :
     m_shortcut_online(true),
     m_shortcut_offline(false),
     m_shortcut_offline_args("--offline=true"),
+    m_run_at_start(true),
     m_default_installation_path("$HOME"),
     m_default_installation_folder_name("Application"),
     m_default_data_path_simple_install("$INSTALL_PATH/Data"),
@@ -91,6 +92,8 @@ void ResourcesSettings::readSettings()
     m_shortcut_offline = m_settings->value(P_SHORTCUT_OFFLINE, m_shortcut_offline).toBool();
     m_shortcut_offline_args = m_settings->value(P_SHORTCUT_OFFLINE_ARGS, m_shortcut_offline_args).toString();
 
+    m_run_at_start = m_settings->value(P_RUN_AT_START, m_run_at_start).toBool();
+
     m_default_installation_path = getTransformedVariablePath(m_settings->value(P_DEFAULT_INSTALLATION_PATH, m_default_installation_path).toString());
     m_default_installation_folder_name = m_settings->value(P_DEFAULT_INSTALLATION_FOLDER_NAME, m_default_installation_folder_name).toString();
 
@@ -124,6 +127,8 @@ void ResourcesSettings::sendToSettings()
     settings->setShortcutOfflineName(m_shortcut_name_offline);
     settings->setShortcutOfflineArgs(m_shortcut_offline_args);
 
+    settings->setRunAtStart(m_run_at_start);
+
     // install path
     settings->setInstallLocation(m_default_installation_path + "/" + m_default_installation_folder_name);
 
@@ -138,6 +143,16 @@ QString ResourcesSettings::getTransformedVariablePath(QString _path)
     _path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
     _path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
     return _path;
+}
+
+bool ResourcesSettings::getRun_at_start() const
+{
+    return m_run_at_start;
+}
+
+void ResourcesSettings::setRun_at_start(bool run_at_start)
+{
+    m_run_at_start = run_at_start;
 }
 
 QString ResourcesSettings::getShortcut_offline_args() const

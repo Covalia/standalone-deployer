@@ -5,6 +5,7 @@
 #include "log/logger.h"
 #include "manager/installmanager.h"
 #include "settings/settings.h"
+#include "gui/forms/windowui.h"
 
 int main(int argc, char * argv[])
 {
@@ -19,7 +20,5 @@ int main(int argc, char * argv[])
 
     int ret = app.exec();
 
-//    delete installManager;
-
     return ret;
-} // main
+}

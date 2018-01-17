@@ -34,6 +34,9 @@ class InstallManager: public QObject
     private slots:
         void eventStartInstallation();
         void eventCloseInstallation(bool _launchApplication);
+
+    signals:
+        void endInstallation(bool _success, QString _error);
 };
 
 #endif // INSTALLMANAGER_H

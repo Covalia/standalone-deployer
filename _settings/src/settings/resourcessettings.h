@@ -15,6 +15,8 @@ static QString P_SHORTCUT_ONLINE = "shortcut_online";
 static QString P_SHORTCUT_OFFLINE = "shortcut_offline";
 static QString P_SHORTCUT_OFFLINE_ARGS = "shortcut_offline_args";
 
+static QString P_RUN_AT_START = "run_at_start";
+
 static QString P_DEFAULT_INSTALLATION_PATH = "default_installation_path";
 static QString P_DEFAULT_INSTALLATION_FOLDER_NAME = "default_installation_folder_name";
 
@@ -115,6 +117,9 @@ class ResourcesSettings
         QString getShortcut_offline_args() const;
         void setShortcut_offline_args(const QString &shortcut_offline_args);
 
+        bool getRun_at_start() const;
+        void setRun_at_start(bool run_at_start);
+
 private:
         /**
          * @brief Use for singleton
@@ -155,6 +160,7 @@ private:
         bool m_shortcut_online;
         bool m_shortcut_offline;
         QString m_shortcut_offline_args;
+        bool m_run_at_start;
         QString m_default_installation_path;
         QString m_default_installation_folder_name;
         QString m_default_data_path_simple_install;

@@ -1,5 +1,7 @@
 #include "gui/manager/uimanager.h"
 
+#include <QApplication>
+
 #include "log/logger.h"
 #include "gui/forms/windowui.h"
 #include "gui/forms/welcomeui.h"
@@ -21,7 +23,6 @@ UIManager::UIManager() : QObject(),
     m_endInstallation(0)
 {
     m_window = new WindowUI();
-
     m_welcome = new WelcomeUI();
     m_personalize = new PersonalizeUI();
     m_proxy = new ProxyUI();
@@ -91,7 +92,7 @@ void UIManager::returnToLastPage()
 
     m_window->changeContentWidget(widget);
     m_window->setVisibleButton(true, true);
-} // UIManager::returnToLastPage
+}
 
 void UIManager::changeWelcome()
 {
@@ -109,7 +110,7 @@ void UIManager::changeWelcome()
         connect(m_welcome, SIGNAL(simpleInstallationSignal()),
                 this, SLOT(switchWelcomeToInstallation()));
     }
-} // UIManager::changeWelcome
+}
 
 void UIManager::changePersonalize()
 {
@@ -211,14 +212,16 @@ void UIManager::switchAboutTo()
     returnToLastPage();
 }
 
-void UIManager::eventEndInstallation(bool _success, QString _error){
+void UIManager::eventEndInstallation(bool _success, QString _error)
+{
     m_installation->disconnect();
     changeEndInstallation();
-    if(!_success && m_endInstallation){
+    if (!_success && m_endInstallation) {
         m_endInstallation->showError(_error);
     }
 }
 
-void UIManager::eventCloseInstallation(bool _launchApplication){
+void UIManager::eventCloseInstallation(bool _launchApplication)
+{
     closeInstallationSignal(_launchApplication);
 }

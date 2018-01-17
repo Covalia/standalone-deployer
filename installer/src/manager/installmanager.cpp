@@ -64,6 +64,8 @@ void InstallManager::initInstallation()
 
         QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
                          this, SLOT(eventStartInstallation()));
+        QObject::connect(this, SIGNAL(endInstallation(bool,QString)),
+                         m_uiManager, SLOT(eventEndInstallation(bool,QString)));
     } else {
         startInstallation();
     }
@@ -95,7 +97,7 @@ void InstallManager::startInstallation()
         errorMessage = tr("An error ocurred during parameters writing");
     }
 
-    QThread::sleep(10);
+    QThread::sleep(1);
 
     // extract resources
     bool succesExtractResources =  extractResources();
@@ -114,9 +116,9 @@ void InstallManager::startInstallation()
     if (m_uiManager) {
         if (success) {
             L_INFO("Success Installation");
-            m_uiManager->eventEndInstallation(success, "");
+            emit endInstallation(success, "");
         } else {
-            m_uiManager->eventEndInstallation(success, errorMessage);
+            emit endInstallation(success, errorMessage);
         }
 
         QObject::connect(m_uiManager, SIGNAL(closeInstallationSignal(bool)),
@@ -194,6 +196,7 @@ bool InstallManager::createDesktopShortcut()
         // WINDOWS SHORCUT
         // - online desktop shortcut
         // - offline desktop shorcut
+        // - startup shorcut (run start computer)
         // - startMenu
 
         WindowsShortcutManager * windowsShortcutManager = new WindowsShortcutManager();
@@ -205,6 +208,10 @@ bool InstallManager::createDesktopShortcut()
         // offline shortcut
         if (settings->getShortcutOffline()) {
             success = success && windowsShortcutManager->createDesktopShortcut(settings->getShortcutOfflineName(), settings->getShortcutOfflineArgs());
+        }
+        // startup shortcut
+        if (settings->getRunAtStart()) {
+            success = success && windowsShortcutManager->createStartShorcut(settings->getShortcutOfflineName(), settings->getShortcutAllUser());
         }
         return success;
 
@@ -242,8 +249,6 @@ void InstallManager::closeInstallation(bool _launchApplication)
     L_INFO("End treatment, close application");
     qApp->exit();
 }
-
-
 
 void InstallManager::eventCloseInstallation(bool _launchApplication)
 {

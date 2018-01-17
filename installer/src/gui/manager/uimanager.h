@@ -54,7 +54,7 @@ class UIManager : public QObject
         void switchAboutTo();
         void eventCloseInstallation(bool _launchApplication);
 
-    public :
+    public slots:
         void eventEndInstallation(bool _success, QString _error);
 
     signals:

@@ -5,7 +5,6 @@
 #include "shortcut/shortcut.h"
 #include "fs/apptreemanager.h"
 
-
 #include <QStandardPaths>
 
 WindowsShortcutManager::WindowsShortcutManager()
@@ -14,30 +13,44 @@ WindowsShortcutManager::WindowsShortcutManager()
 
 bool WindowsShortcutManager::createDesktopShortcut(QString _shortcutName, QString _args)
 {
+    L_INFO("Start preparation of desktop shortcut");
+    QString shortcutFolderPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    return createShortcut(shortcutFolderPath, _shortcutName, _args);
+}
+
+bool WindowsShortcutManager::createStartShorcut(QString _shortcutName, bool allUser)
+{
+    Shortcut * shorcutCreator = new Shortcut();
+    QString folderPath("");
+
+    if (allUser) {
+        folderPath = shorcutCreator->findAllUserStartupFolder();
+    } else {
+        folderPath = shorcutCreator->findUserStartupFolder();
+    }
+    L_INFO("Start creation shortcut in start menu folder to run at computer start");
+    return createShortcut(folderPath, _shortcutName, "");
+}
+
+bool WindowsShortcutManager::createShortcut(QString _shortcutFolderPath, QString _shortcutName, QString _args)
+{
     Settings * settings = Settings::getInstance();
     AppTreeManager * m_treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
 
-    L_INFO("Start preparation of desktop shortcut");
-
     QString loaderPath =  m_treeManager->getLoaderFilePath();
-    QString shortcutPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/" + _shortcutName + ".lnk";
+    QString shortcutPath = _shortcutFolderPath + "/" + _shortcutName + ".lnk";
     QString description = settings->getApplicationName();
     QString executionDir = settings->getInstallLocation();
     QString iconPath = settings->getInstallLocation() + "/shortcut.ico";
 
-    L_INFO("Shortcut shortcutPath " + shortcutPath);
-    L_INFO("Shortcut loaderPath " + loaderPath);
-    L_INFO("Shortcut description " + description);
-    L_INFO("Shortcut executionDir " + executionDir);
-    L_INFO("Shortcut iconPath " + iconPath);
-    L_INFO("Shortcut args " + _args);
+    L_INFO("Shortcut creation : shortcutPath=" + shortcutPath + " loaderPath=" + loaderPath + " description=" + description + " executionDir=" + executionDir + " iconPath=" + iconPath + " args=" + _args);
 
     #ifdef _WIN32
-        Shortcut * shorcutCreator = new Shortcut();
-
         std::string strLoaderPath = shortcutPath.toStdString();
 
         L_INFO("Starting shortcut creation ");
+
+        Shortcut * shorcutCreator = new Shortcut();
 
         HRESULT result = shorcutCreator->createWindowsShortcut((const wchar_t *)loaderPath.utf16(), (const wchar_t *)_args.utf16(),
                                                                const_cast<char *>(strLoaderPath.c_str()), (const wchar_t *)description.utf16(),
@@ -53,11 +66,6 @@ bool WindowsShortcutManager::createDesktopShortcut(QString _shortcutName, QStrin
             L_ERROR("On error occured when shortcut creation");
             return false;
         }
-
-        QString allUserStartMenu = shorcutCreator->findAllUserStartMenuFolder();
-        QString userStartMenu = shorcutCreator->findUserStartMenuFolder();
-        L_INFO(userStartMenu);
-
     #endif
 
     return true;
