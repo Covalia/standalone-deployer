@@ -52,14 +52,14 @@ class UIManager : public QObject
         void switchPersonalizeToInstallation();
         void switchProxyToPersonalize();
         void switchAboutTo();
-        void eventCloseInstallation(bool launchApplication);
+        void eventCloseInstallation(bool _launchApplication);
 
     public :
-        void eventEndInstallation(bool success, QString error);
+        void eventEndInstallation(bool _success, QString _error);
 
     signals:
         void changeInstallationSignal();
-        void closeInstallationSignal(bool launchApplication);
+        void closeInstallationSignal(bool _launchApplication);
 };
 
 #endif // INSTALLER__UIMANAGER_H

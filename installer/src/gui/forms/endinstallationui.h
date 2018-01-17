@@ -15,16 +15,16 @@ class EndInstallationUI : public QWidget
         explicit EndInstallationUI(QWidget * parent = 0);
         ~EndInstallationUI();
 
-        void showError(QString error);
+        void showError(QString _error);
 
     private:
-        Ui::EndInstallationUI * ui;
+        Ui::EndInstallationUI * m_ui;
 
     private slots:
         void closeInstallationEvent();
 
     signals:
-        void closeInstallationSignal(bool launchApplication);
+        void closeInstallationSignal(bool _launchApplication);
 };
 
 #endif // ENDINSTALLATIONUI_H

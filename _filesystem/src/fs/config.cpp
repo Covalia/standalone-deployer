@@ -12,3 +12,4 @@ const QString FileSystemConfig::LoaderFile("loader");
 const QString FileSystemConfig::UpdaterFile("updater");
 const QString FileSystemConfig::WindowsExtension(".exe");
 const QString FileSystemConfig::MacOSExtension(".dmg");
+const QString FileSystemConfig::ConfigurationFile("standalone-deployer.ini");

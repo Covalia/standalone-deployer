@@ -23,10 +23,21 @@ class AppTreeManager : public QObject
         QDir getTempDirPath();
         QDir getUpdaterDirPath();
 
+        QString getLoaderResourcesPath();
+        QString getUpdaterResourcesPath();
+
+        QString getLoaderFilePath();
+        QString getUpdaterFilePath();
+        QString getConfigurationFilePath();
+
+        QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
+
     private:
         static bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
+        static QString getExtension();
 
         const QDir m_installationDir;
+
 };
 
 #endif // ifndef FILESYSTEM__APPTREEMANAGER_H

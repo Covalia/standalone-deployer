@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class LoaderManager: public QObject
+class LoaderManager : public QObject
 {
     Q_OBJECT
 
@@ -17,7 +17,6 @@ class LoaderManager: public QObject
 
     signals:
         void closeAppSignal();
-
 };
 
 #endif // LOADERMANAGER_H

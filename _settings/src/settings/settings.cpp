@@ -23,8 +23,8 @@ Settings::Settings() :
     m_proxyLogin(""),
     m_proxyPassword(""),
     m_language(Language::English),
-    m_shortcutOffline(false),
     m_shortcutOnline(false),
+    m_shortcutOffline(false),
     m_shortcutName("Application"),
     m_shortcutOfflineName("Application offline"),
     m_shortcutOfflineArgs("--offline=true"),
@@ -75,26 +75,30 @@ void Settings::initSettings(QString _installPath)
     }
 }
 
-void Settings::putSetting(QString key, QVariant value)
+void Settings::putSetting(QString _key, QVariant _value)
 {
-    m_settings->setValue(key, value);
+    m_settings->setValue(_key, _value);
 }
 
-QVariant Settings::getSetting(QString key)
+QVariant Settings::getSetting(QString _key)
 {
-    return m_settings->value(key);
+    return m_settings->value(_key);
 }
 
-QVariant Settings::getSetting(QString key, QVariant defaultValue)
+QVariant Settings::getSetting(QString _key, QVariant _defaultValue)
 {
-    return m_settings->value(key, defaultValue);
+    return m_settings->value(_key, _defaultValue);
 }
 
-void Settings::removeSetting(QString key)
+void Settings::removeSetting(QString _key)
 {
-    m_settings->remove(key);
+    m_settings->remove(_key);
 }
 
+bool Settings::isWrittable()
+{
+    return m_settings->isWritable();
+}
 
 void Settings::writeSettings()
 {
@@ -150,7 +154,10 @@ void Settings::writeSettings()
     putSetting(S_RUN_AT_START, m_runAtStart);
     m_settings->endGroup();
     L_INFO("End to write all settings");
-} // Settings::writeSettings
+
+    // write immediately in .ini file
+    m_settings->sync();
+}
 
 void Settings::readSettings()
 {
@@ -206,7 +213,7 @@ void Settings::readSettings()
     m_runAtStart = getSetting(S_RUN_AT_START, m_runAtStart).toBool();
     m_settings->endGroup();
     L_INFO("End to read all settings");
-} // Settings::readSettings
+}
 
 QString Settings::paramListString()
 {
@@ -236,7 +243,7 @@ QString Settings::paramListString()
     s = s + "runAtStart = " + QString::number(m_runAtStart) + "\n";
 
     return s;
-} // Settings::toString
+}
 
 QString Settings::getShortcutOfflineArgs() const
 {

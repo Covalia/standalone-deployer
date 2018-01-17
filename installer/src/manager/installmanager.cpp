@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QProcess>
+#include <QThread>
 
 #include "log/logger.h"
 #include "shortcut/shortcut.h"
@@ -15,18 +16,19 @@
 #include "settings/resourcessettings.h"
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
-#include "fs/apptreemanager.h"
 #include "fs/config.h"
-#include "fs/resourcesutil.h"
 #include "windowsshortcutmanager.h"
 
-InstallManager::InstallManager() : QObject(), m_uiManager(0)
+InstallManager::InstallManager() : QObject(),
+    m_uiManager(0),
+    m_treeManager(0)
 {
 }
 
 InstallManager::~InstallManager()
 {
     delete m_uiManager;
+    delete m_treeManager;
 }
 
 void InstallManager::initInstallation()
@@ -44,6 +46,9 @@ void InstallManager::initInstallation()
     runAppAfter = lineParser->isRunApp();
     L_INFO("Run after = " + QString::number(runAppAfter));
     lineParser->sendToSettings();
+
+    Settings * settings = Settings::getInstance();
+    m_treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
 
     // init style
     StyleManager::setGeneralStyle();
@@ -64,17 +69,22 @@ void InstallManager::initInstallation()
     }
 }
 
+void InstallManager::eventStartInstallation()
+{
+    startInstallation();
+}
+
 void InstallManager::startInstallation()
 {
     Settings * settings = Settings::getInstance();
 
     L_INFO("End of parameters initialization");
-    L_INFO("Setings before start installation  : \n********\n" + settings->paramListString() + "********\n");
+    L_INFO("Settings before start installation  : \n********\n" + settings->paramListString() + "********\n");
 
     QString errorMessage = "";
 
     // tree creation
-    bool folderCreation = createInstallationFolders(settings->getInstallLocation());
+    bool folderCreation = createInstallationFolders();
     if (!folderCreation) {
         errorMessage = tr("An error ocurred during folder creation");
     }
@@ -84,6 +94,8 @@ void InstallManager::startInstallation()
     if (!settingWriting) {
         errorMessage = tr("An error ocurred during parameters writing");
     }
+
+    QThread::sleep(10);
 
     // extract resources
     bool succesExtractResources =  extractResources();
@@ -114,18 +126,17 @@ void InstallManager::startInstallation()
     }
 }
 
-bool InstallManager::createInstallationFolders(QString installDir)
+bool InstallManager::createInstallationFolders()
 {
-    L_INFO("Start the installation in directory : " + installDir);
-    AppTreeManager * treeManager = new AppTreeManager(QDir(installDir));
+    L_INFO("Start the installation in directory : ");
 
-    if (!treeManager->createDirectoryIfNotExist()) {
+    if (!m_treeManager->createDirectoryIfNotExist()) {
         L_ERROR("Error when create installation folder ");
         return false;
     } else {
         L_INFO("Succes of installation folder verification ");
 
-        if (!treeManager->makeAppDirectories()) {
+        if (!m_treeManager->makeAppDirectories()) {
             L_ERROR("Error when create sub-installation folder (application tree) ");
             return false;
         }
@@ -139,18 +150,22 @@ bool InstallManager::createIniConfigurationFile()
 {
     Settings * settings = Settings::getInstance();
 
-    QString installPath(settings->getInstallLocation() + "/" + FileSystemConfig::ConfigurationDir);
-    QString installFile("standalone-deployer.ini");
-    QString installFilePath(installPath + "/" + installFile);
+    QString installFilePath(m_treeManager->getConfigurationFilePath());
 
     L_INFO("Start to create param file. Path = " + installFilePath);
     settings->initSettings(installFilePath);
+
+    if (!settings->isWrittable()) {
+        L_ERROR("File configuration is no writtable. It's impossible to write ini configurlation file in path = " + installFilePath);
+        return false;
+    }
+
     settings->writeSettings();
 
-    if (QDir(installPath).exists(installFile)) {
+    if (QFile::exists(installFilePath)) {
         return true;
     } else {
-        L_ERROR("An error occurred on the configuration file " + installPath + ". File is not created. ");
+        L_ERROR("An error occurred on the configuration file " + installFilePath + ". File is not created. ");
         return false;
     }
 }
@@ -159,13 +174,13 @@ bool InstallManager::extractResources()
 {
     Settings * settings = Settings::getInstance();
 
-    QPair<bool, QString> extractUpdater = ResourcesUtil::extractResourceToPath(ResourcesUtil::getUpdaterResourcesPath(), ResourcesUtil::getUpdaterPath(settings->getInstallLocation()));
+    QPair<bool, QString> extractUpdater = m_treeManager->extractResourceToPath(m_treeManager->getUpdaterResourcesPath(), m_treeManager->getUpdaterFilePath());
     L_INFO(extractUpdater.second);
 
-    QPair<bool, QString> extractLoader = ResourcesUtil::extractResourceToPath(ResourcesUtil::getLoaderResourcesPath(), ResourcesUtil::getLoaderPath(settings->getInstallLocation()));
+    QPair<bool, QString> extractLoader = m_treeManager->extractResourceToPath(m_treeManager->getLoaderResourcesPath(), m_treeManager->getLoaderFilePath());
     L_INFO(extractLoader.second);
 
-    QPair<bool, QString> extractAppIcon = ResourcesUtil::extractResourceToPath(":/images/shortcut.ico", settings->getInstallLocation() + "/shortcut.ico");
+    QPair<bool, QString> extractAppIcon = m_treeManager->extractResourceToPath(":/images/shortcut.ico", settings->getInstallLocation() + "/shortcut.ico");
     L_INFO(extractAppIcon.second);
 
     return extractUpdater.first && extractLoader.first && extractAppIcon.first;
@@ -201,16 +216,16 @@ bool InstallManager::createDesktopShortcut()
 
 bool InstallManager::launchLoader()
 {
-    Settings * settings = Settings::getInstance();
+    QStringList args;
     QProcess process;
-    QString loaderFile = ResourcesUtil::getLoaderPath(settings->getInstallLocation());
+    QString loaderFile = m_treeManager->getLoaderFilePath();
 
     if (!QFile::exists(loaderFile)) {
         L_ERROR("An error occured when launch file " + loaderFile + ". The file doesn't exist.");
         return false;
     }
     L_INFO("Launch file " + loaderFile);
-    bool success = process.startDetached(loaderFile);
+    bool success = process.startDetached(loaderFile, args);
     if (!success) {
         L_ERROR("Error when launching file " + loaderFile);
     } else {
@@ -219,21 +234,18 @@ bool InstallManager::launchLoader()
     return success;
 }
 
-void InstallManager::closeInstallation(bool launchApplication)
+void InstallManager::closeInstallation(bool _launchApplication)
 {
-    if (launchApplication) {
+    if (_launchApplication) {
         launchLoader();
     }
     L_INFO("End treatment, close application");
     qApp->exit();
 }
 
-void InstallManager::eventStartInstallation()
-{
-    startInstallation();
-}
 
-void InstallManager::eventCloseInstallation(bool launchApplication)
+
+void InstallManager::eventCloseInstallation(bool _launchApplication)
 {
-    closeInstallation(launchApplication);
+    closeInstallation(_launchApplication);
 }

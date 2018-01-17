@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include "gui/manager/uimanager.h"
+#include "fs/apptreemanager.h"
 
 class InstallManager: public QObject
 {
@@ -19,19 +20,20 @@ class InstallManager: public QObject
     private:
 
         UIManager * m_uiManager;
+        AppTreeManager * m_treeManager;
         bool runAppAfter;
 
-        bool createInstallationFolders(QString installDir);
+        bool createInstallationFolders();
         bool createIniConfigurationFile();
         bool extractResources();
         bool createDesktopShortcut();
         void startInstallation();
-        void closeInstallation(bool launchApplication);
+        void closeInstallation(bool _launchApplication);
         bool launchLoader();
 
     private slots:
         void eventStartInstallation();
-        void eventCloseInstallation(bool launchApplication);
+        void eventCloseInstallation(bool _launchApplication);
 };
 
 #endif // INSTALLMANAGER_H

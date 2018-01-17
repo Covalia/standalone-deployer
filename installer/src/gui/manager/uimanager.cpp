@@ -211,14 +211,14 @@ void UIManager::switchAboutTo()
     returnToLastPage();
 }
 
-void UIManager::eventEndInstallation(bool success, QString error){
+void UIManager::eventEndInstallation(bool _success, QString _error){
     m_installation->disconnect();
     changeEndInstallation();
-    if(!success && m_endInstallation){
-        m_endInstallation->showError(error);
+    if(!_success && m_endInstallation){
+        m_endInstallation->showError(_error);
     }
 }
 
-void UIManager::eventCloseInstallation(bool launchApplication){
-    closeInstallationSignal(launchApplication);
+void UIManager::eventCloseInstallation(bool _launchApplication){
+    closeInstallationSignal(_launchApplication);
 }

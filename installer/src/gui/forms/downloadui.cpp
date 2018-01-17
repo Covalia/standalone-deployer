@@ -77,7 +77,7 @@ void DownloadUI::loadSlideShowImagesFromResources()
         m_buttonsList << button;
         group->addButton(button);
     }
-} // DownloadUI::loadSlideShowImagesFromResources
+}
 
 void DownloadUI::buttonSlideEvent()
 {

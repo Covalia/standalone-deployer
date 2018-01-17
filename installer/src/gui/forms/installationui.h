@@ -12,13 +12,13 @@ class InstallationUI : public QWidget
 {
     Q_OBJECT
 
-public:
-    explicit InstallationUI(QWidget *parent = 0);
-    ~InstallationUI();
+    public:
+        explicit InstallationUI(QWidget * parent = 0);
+        ~InstallationUI();
 
-private:
-    Ui::InstallationUI *ui;
-    QMovie *movie;
+    private:
+        Ui::InstallationUI * m_ui;
+        QMovie * movie;
 };
 
 #endif // INSTALLATIONUI_H

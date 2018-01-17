@@ -1,31 +1,34 @@
 #include "endinstallationui.h"
 #include "ui_endinstallation.h"
 
-EndInstallationUI::EndInstallationUI(QWidget *parent) :
+#include "gui/style/stylemanager.h"
+
+EndInstallationUI::EndInstallationUI(QWidget * parent) :
     QWidget(parent),
-    ui(new Ui::EndInstallationUI)
+    m_ui(new Ui::EndInstallationUI)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
-    ui->buttonFinish->setAccessibleName("pageButton");
+    StyleManager::transformStyle(this);
+    m_ui->buttonFinish->setAccessibleName("pageButton");
 
-    connect(ui->buttonFinish, SIGNAL(clicked()), this, SLOT(closeInstallationEvent()));
+    connect(m_ui->buttonFinish, SIGNAL(clicked()), this, SLOT(closeInstallationEvent()));
 }
 
 EndInstallationUI::~EndInstallationUI()
 {
-    delete ui;
+    delete m_ui;
 }
 
-
-void EndInstallationUI::showError(QString error){
-    ui->labelIcon->setPixmap(QPixmap(":/images/failure.png"));
-    ui->labelTitre->setText(tr("An error occurred during installation"));
-    ui->checkBoxLaunchAfterClose->setVisible(false);
-    ui->checkBoxLaunchAfterClose->setChecked(false);
+void EndInstallationUI::showError(QString _error)
+{
+    m_ui->labelIcon->setPixmap(QPixmap(":/images/failure.png"));
+    m_ui->labelTitre->setText(tr("An error occurred during installation"));
+    m_ui->checkBoxLaunchAfterClose->setVisible(false);
+    m_ui->checkBoxLaunchAfterClose->setChecked(false);
 }
 
-
-void EndInstallationUI::closeInstallationEvent(){
-    closeInstallationSignal(ui->checkBoxLaunchAfterClose->isChecked());
+void EndInstallationUI::closeInstallationEvent()
+{
+    closeInstallationSignal(m_ui->checkBoxLaunchAfterClose->isChecked());
 }

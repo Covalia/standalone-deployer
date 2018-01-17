@@ -109,7 +109,7 @@ void ResourcesSettings::readSettings()
     m_color_text_gray = m_settings->value(P_COLOR_TEXT_GRAY, m_color_text_gray).toString();
     m_color_disabled = m_settings->value(P_COLOR_DISABLED, m_color_disabled).toString();
     m_border_window = m_settings->value(P_BORDER_WINDOW, m_border_window).toString();
-} // ResourcesSettings::readSettings
+}
 
 void ResourcesSettings::sendToSettings()
 {
@@ -132,12 +132,12 @@ void ResourcesSettings::sendToSettings()
     settings->setDataLocation(m_default_data_path_simple_install);
 }
 
-QString ResourcesSettings::getTransformedVariablePath(QString path)
+QString ResourcesSettings::getTransformedVariablePath(QString _path)
 {
-    path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-    path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
-    path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
-    return path;
+    _path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+    _path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
+    _path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
+    return _path;
 }
 
 QString ResourcesSettings::getShortcut_offline_args() const

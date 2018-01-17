@@ -31,8 +31,6 @@ DEPENDPATH += src
 
 SOURCES += src/fs/apptreemanager.cpp
 SOURCES += src/fs/config.cpp
-SOURCES += src/fs/resourcesutil.cpp
 
 HEADERS += src/fs/apptreemanager.h
 HEADERS += src/fs/config.h
-HEADERS += src/fs/resourcesutil.h

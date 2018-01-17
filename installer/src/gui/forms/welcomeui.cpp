@@ -46,4 +46,3 @@ void WelcomeUI::customContractEvent()
     contractSignal();
 }
 
-// dans slot -> signal

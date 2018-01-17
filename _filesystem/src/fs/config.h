@@ -6,38 +6,41 @@
 class FileSystemConfig
 {
 public:
-    /// Chemin relatif d'installation de l'application
+    /// relative path of application installation application
     static const QString AppDir;
 
-    /// Chemin relatif de la configuration de l'application
+    /// relative path of application configuration
     static const QString ConfigurationDir;
 
-    /// Chemin relatif des extensions de l'application
+    /// Relative path of application extensions
     static const QString ExtensionDir;
 
-    /// Chemin relatif de Java
+    /// Relative path of Java
     static const QString JavaDir;
 
-    /// Chemin relatif des logs de l'application
+    /// Relative path of the application logs
     static const QString LogsDir;
 
-    /// Chemin relatif du répertoire temp de l'application
+    /// Relative path of the temporary directory of the application
     static const QString TempDir;
 
-    /// Chemin relatif du répertoire temp de l'application
+    /// Relative directory path of application updater
     static const QString UpdaterDir;
 
-    /// Nom du fichier loader
+    /// Loader file name
     static const QString LoaderFile;
 
-    /// Nom du fichier updater
+    /// Updater Loader file name
     static const QString UpdaterFile;
 
-    /// Nom de l'extension windows des executable
+    /// Name of executables windows extension
     static const QString WindowsExtension;
 
-    /// Nom de l'extension macos des executable
+    /// Name of executables Mac OS extension
     static const QString MacOSExtension;
+
+    /// Name of configuration file
+    static const QString ConfigurationFile;
 
 };
 

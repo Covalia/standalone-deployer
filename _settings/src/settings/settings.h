@@ -64,6 +64,8 @@ class Settings
 
         void initSettings(QString installPath);
 
+        bool isWrittable();
+
         void writeSettings();
 
         void readSettings();
@@ -170,14 +172,14 @@ private:
          * @param key
          * @param value
          */
-        void putSetting(QString key, QVariant value);
+        void putSetting(QString _key, QVariant _value);
 
         /**
          * @brief Find setting value with key
          * @param key
          * @return
          */
-        QVariant getSetting(QString key);
+        QVariant getSetting(QString _key);
 
         /**
          * @brief Find setting value with key, and return default value if key not find
@@ -185,13 +187,13 @@ private:
          * @param defaultValue
          * @return
          */
-        QVariant getSetting(QString key, QVariant defaultValue);
+        QVariant getSetting(QString _key, QVariant _defaultValue);
 
         /**
          * @brief Remove a setting with key
          * @param key
          */
-        void removeSetting(QString key);
+        void removeSetting(QString _key);
 
         /**
          * @brief QSetting instance for find and add setting

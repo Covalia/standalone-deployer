@@ -4,10 +4,9 @@
 #include <QProcess>
 #include <QStringList>
 
-
 #include "log/logger.h"
 #include "settings/settings.h"
-#include "fs/resourcesutil.h"
+#include "fs/apptreemanager.h"
 
 LoaderManager::LoaderManager() : QObject()
 {
@@ -20,10 +19,15 @@ LoaderManager::~LoaderManager()
 bool LoaderManager::launchUpdater()
 {
     Settings * settings = Settings::getInstance();
-    L_INFO("Install location = " + settings->getInstallLocation());
+
+    QString installLocation = settings->getInstallLocation();
+
+    L_INFO("Install location = " + installLocation);
+
+    AppTreeManager * treeManager = new AppTreeManager(QDir(installLocation));
 
     QProcess process;
-    QString updaterFile = ResourcesUtil::getUpdaterPath(settings->getInstallLocation());
+    QString updaterFile = treeManager->getUpdaterFilePath();
 
     if (!QFile::exists(updaterFile)) {
         L_ERROR("An error occured when launch Updater file " + updaterFile + ". The file doesn't exist.");
@@ -31,6 +35,7 @@ bool LoaderManager::launchUpdater()
     }
     QStringList args = qApp->arguments();
     L_INFO("Launch file " + updaterFile + " with args " + args.join(""));
+
     bool success = process.startDetached(updaterFile, args);
     if (!success) {
         L_ERROR("Error when launching file " + updaterFile);
@@ -40,9 +45,8 @@ bool LoaderManager::launchUpdater()
     return success;
 }
 
-void LoaderManager::closeAppEvent(){
+void LoaderManager::closeAppEvent()
+{
     L_INFO("Signal close app");
     closeAppSignal();
 }
-
-

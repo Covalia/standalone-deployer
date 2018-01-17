@@ -8,7 +8,7 @@ class WindowsShortcutManager
     public:
         WindowsShortcutManager();
 
-        bool createDesktopShortcut(QString shortcutName, QString args);
+        bool createDesktopShortcut(QString _shortcutName, QString _args);
 };
 
 #endif // WINDOWSSHORTCUTMANAGER_H

@@ -140,7 +140,7 @@ private:
          */
         virtual ~ResourcesSettings();
 
-        QString getTransformedVariablePath(QString path);
+        QString getTransformedVariablePath(QString _path);
 
         /**
          * @brief QSetting instance for find and add setting

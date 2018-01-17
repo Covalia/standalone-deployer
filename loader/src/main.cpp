@@ -4,6 +4,7 @@
 #include "log/logger.h"
 #include "loadermanager.h"
 #include "settings/settings.h"
+#include "fs/apptreemanager.h"
 
 int main(int argc, char * argv[])
 {
@@ -11,12 +12,14 @@ int main(int argc, char * argv[])
 
     QString dirPath = app.applicationDirPath();
 
-    new Logger(dirPath + "/Logs/loader.log");
+    AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
 
+    new Logger(treeManager->getLogsDirPath().absolutePath() + "/loader.log");
     L_INFO("Start Loader in " +  dirPath);
 
-    QString settingsPath = dirPath + "/Config/standalone-deployer.ini";
+    QString settingsPath = treeManager->getConfigurationFilePath();
     L_INFO("Start read settings in " +  settingsPath);
+
     Settings * settings = Settings::getInstance();
     settings->initSettings(settingsPath);
     settings->readSettings();
@@ -35,5 +38,3 @@ int main(int argc, char * argv[])
 
     return ret;
 }
-
-

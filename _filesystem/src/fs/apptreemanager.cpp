@@ -18,6 +18,7 @@ AppTreeManager::~AppTreeManager()
 bool AppTreeManager::createDirectoryIfNotExist()
 {
     QDir directory(m_installationDir);
+
     if (!directory.exists()) {
         return QDir().mkpath(directory.path());
     }
@@ -56,6 +57,39 @@ bool AppTreeManager::makeDirectoryIfNotExists(QDir _directoryPath, const QString
     }
 }
 
+QString AppTreeManager::getExtension()
+{
+    QString extension = "";
+
+    #ifdef _WIN32
+        extension = FileSystemConfig::WindowsExtension;
+    #elif TARGET_OS_MAC
+        extension = FileSystemConfig::MacOSExtension;
+    #endif
+    return extension;
+}
+
+QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath, QString copyFilePath)
+{
+    if (QFile::exists(copyFilePath)) {
+        QFile f(copyFilePath);
+        f.setPermissions(QFile::WriteOther);
+        bool remove = f.remove();
+        if (!remove) {
+            QPair<bool, QString> error = qMakePair(false, "Error when remove file" + copyFilePath);
+            return error;
+        }
+    }
+    bool success = QFile::copy(resourcePath, copyFilePath);
+    if (success) {
+        QPair<bool, QString> error = qMakePair(true, "Success extracting " + copyFilePath);
+        return error;
+    } else {
+        QPair<bool, QString> error = qMakePair(false, "An error occurred when extracting " + copyFilePath);
+        return error;
+    }
+}
+
 QDir AppTreeManager::getAppDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::AppDir));
@@ -89,4 +123,28 @@ QDir AppTreeManager::getTempDirPath()
 QDir AppTreeManager::getUpdaterDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
+}
+
+QString AppTreeManager::getLoaderResourcesPath()
+{
+    return ":/bin/" + FileSystemConfig::LoaderFile + getExtension();
+}
+
+QString AppTreeManager::getUpdaterResourcesPath()
+{
+    return ":/bin/" + FileSystemConfig::UpdaterFile + getExtension();
+}
+
+QString AppTreeManager::getLoaderFilePath()
+{
+    return m_installationDir.absolutePath() + "/" + FileSystemConfig::LoaderFile + getExtension();
+}
+
+QString AppTreeManager::getUpdaterFilePath()
+{
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + FileSystemConfig::UpdaterFile + getExtension();
+}
+
+QString AppTreeManager:: getConfigurationFilePath(){
+    return m_installationDir.absolutePath() + "/" + FileSystemConfig::ConfigurationDir + "/" + FileSystemConfig::ConfigurationFile;
 }
