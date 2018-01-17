@@ -41,10 +41,13 @@ INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
+INCLUDEPATH += ../_filesystem/src
+LIBS += -L../_filesystem/bin -lfilesystem
 
 SOURCES += src/main.cpp
+SOURCES += src/loadermanager.cpp
 
-# HEADERS += src/
+HEADERS += src/loadermanager.h
 
 # RESOURCES += resources.qrc
 
@@ -62,4 +65,7 @@ CONFIG(release, debug|release) {
 QMAKE_POST_LINK += ../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
 }
 }
+
+
+
 

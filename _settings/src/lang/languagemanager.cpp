@@ -26,12 +26,12 @@ void LanguageManager::updateLanguage(QString locale)
     qApp->removeTranslator(&translator);
     QString location = ":/translations";
 
-    L_INFO("loading translator");
+    L_INFO("Loading translator");
     if (translator.load(locale, location)) {
-        L_INFO("LOAD FINISHED");
+        L_INFO("Loading translator Finished");
         qApp->installTranslator(&translator);
     } else {
-        L_INFO("COULD NOT INSTALL TRANSLATIONS " + locale);
+        L_INFO("Could not intall translations " + locale);
     }
 }
 
@@ -46,5 +46,17 @@ Language LanguageManager::getLanguageFromLocale(QString locale)
     else{
         L_WARN("Language witch locale " + locale + " is not supported by application");
         return Language::English;
+    }
+}
+
+QString LanguageManager::getStringLanguageFromEnum(Language language){
+     L_INFO("LOAD FINISHED");
+    switch(language){
+        case English :
+            return "English";
+        case French :
+            return "Francais";
+        default :
+            return "Default";
     }
 }

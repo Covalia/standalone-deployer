@@ -2,6 +2,7 @@
 #define SETTINGS__LANGUAGEMANAGER_H
 
 #include <QTranslator>
+#include <QString>
 
 enum Language { English, French };
 
@@ -14,6 +15,7 @@ class LanguageManager
         static void updateLanguage(QString locale);
 
         static Language getLanguageFromLocale(QString locale);
+        static QString getStringLanguageFromEnum(Language language);
 
     private:
         static QTranslator translator;

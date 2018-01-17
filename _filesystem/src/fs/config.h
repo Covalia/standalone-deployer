@@ -24,6 +24,21 @@ public:
     /// Chemin relatif du répertoire temp de l'application
     static const QString TempDir;
 
+    /// Chemin relatif du répertoire temp de l'application
+    static const QString UpdaterDir;
+
+    /// Nom du fichier loader
+    static const QString LoaderFile;
+
+    /// Nom du fichier updater
+    static const QString UpdaterFile;
+
+    /// Nom de l'extension windows des executable
+    static const QString WindowsExtension;
+
+    /// Nom de l'extension macos des executable
+    static const QString MacOSExtension;
+
 };
 
 #endif // ifndef FILESYSTEM__CONFIG_H

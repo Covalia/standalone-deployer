@@ -18,10 +18,12 @@ ResourcesSettings::ResourcesSettings() :
     m_shortcut_name("Application"),
     m_shortcut_name_offline("Application Offline"),
     m_shortcut_online(true),
-    m_shortcut_offline(true),
-    m_default_installation_path("$HOME/Application"),
-    m_default_data_path_simple_install("$HOME/Application/Data"),
-    m_default_data_path_custom_install("$HOME/Application/Data"),
+    m_shortcut_offline(false),
+    m_shortcut_offline_args("--offline=true"),
+    m_default_installation_path("$HOME"),
+    m_default_installation_folder_name("Application"),
+    m_default_data_path_simple_install("$INSTALL_PATH/Data"),
+    m_default_data_path_custom_install("$INSTALL_PATH/Data"),
     m_possible_change_data_location(false),
     m_hash_key(""),
     m_encrypted_password_key("0x0c2cd4a4bcb9f023"),
@@ -87,8 +89,10 @@ void ResourcesSettings::readSettings()
     m_shortcut_name_offline = m_settings->value(P_SHORTCUT_NAME_OFFLINE, m_shortcut_name_offline).toString();
     m_shortcut_online = m_settings->value(P_SHORTCUT_ONLINE, m_shortcut_online).toBool();
     m_shortcut_offline = m_settings->value(P_SHORTCUT_OFFLINE, m_shortcut_offline).toBool();
+    m_shortcut_offline_args = m_settings->value(P_SHORTCUT_OFFLINE_ARGS, m_shortcut_offline_args).toString();
 
     m_default_installation_path = getTransformedVariablePath(m_settings->value(P_DEFAULT_INSTALLATION_PATH, m_default_installation_path).toString());
+    m_default_installation_folder_name = m_settings->value(P_DEFAULT_INSTALLATION_FOLDER_NAME, m_default_installation_folder_name).toString();
 
     m_default_data_path_simple_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_SIMPLE_INSTALL, m_default_data_path_simple_install).toString());
     m_default_data_path_custom_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_CUSTOM_INSTALL, m_default_data_path_custom_install).toString());
@@ -111,14 +115,17 @@ void ResourcesSettings::sendToSettings()
 {
     Settings * settings = Settings::getInstance();
 
+    settings->setApplicationName(m_app_name);
     settings->setServerURL(m_ip_server);
     settings->setLanguage(LanguageManager::getLanguageFromLocale(m_language));
     settings->setShortcutName(m_shortcut_name);
     settings->setShortcutOnline(m_shortcut_online);
     settings->setShortcutOffline(m_shortcut_offline);
+    settings->setShortcutOfflineName(m_shortcut_name_offline);
+    settings->setShortcutOfflineArgs(m_shortcut_offline_args);
 
     // install path
-    settings->setInstallLocation(m_default_installation_path);
+    settings->setInstallLocation(m_default_installation_path + "/" + m_default_installation_folder_name);
 
     // data path
     // use simple by default
@@ -128,7 +135,29 @@ void ResourcesSettings::sendToSettings()
 QString ResourcesSettings::getTransformedVariablePath(QString path)
 {
     path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+    path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
+    path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
     return path;
+}
+
+QString ResourcesSettings::getShortcut_offline_args() const
+{
+    return m_shortcut_offline_args;
+}
+
+void ResourcesSettings::setShortcut_offline_args(const QString &shortcut_offline_args)
+{
+    m_shortcut_offline_args = shortcut_offline_args;
+}
+
+QString ResourcesSettings::getDefault_installation_folder_name() const
+{
+    return m_default_installation_folder_name;
+}
+
+void ResourcesSettings::setDefault_installation_folder_name(const QString &default_installation_folder_name)
+{
+    m_default_installation_folder_name = default_installation_folder_name;
 }
 
 QString ResourcesSettings::getEncrypted_password_key() const

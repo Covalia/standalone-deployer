@@ -10,6 +10,8 @@ class PersonalizeUI;
 class ProxyUI;
 class AboutUI;
 class DownloadUI;
+class InstallationUI;
+class EndInstallationUI;
 
 class UIManager : public QObject
 {
@@ -27,8 +29,10 @@ class UIManager : public QObject
         ProxyUI * m_proxy;
         AboutUI * m_about;
         DownloadUI * m_download;
+        InstallationUI * m_installation;
+        EndInstallationUI * m_endInstallation;
 
-        enum Page { WelcomePage, PersonalizePage, ProxyPage, AboutPage, DownloadPage };
+        enum Page { WelcomePage, PersonalizePage, ProxyPage, AboutPage, DownloadPage, InstallationPage, EndInstallationPage };
         Page m_returnPage;
 
         void returnToLastPage();
@@ -37,15 +41,25 @@ class UIManager : public QObject
         void changeProxy();
         void changeAbout();
         void changeDownload();
+        void changeInstallation();
+        void changeEndInstallation();
 
     private slots:
         void aboutEvent();
         void switchWelcomeToPersonalize();
-        void switchWelcomeToDownload();
+        void switchWelcomeToInstallation();
         void switchPersonalizeToProxy();
-        void switchPersonalizeToDownload();
+        void switchPersonalizeToInstallation();
         void switchProxyToPersonalize();
         void switchAboutTo();
+        void eventCloseInstallation(bool launchApplication);
+
+    public :
+        void eventEndInstallation(bool success, QString error);
+
+    signals:
+        void changeInstallationSignal();
+        void closeInstallationSignal(bool launchApplication);
 };
 
 #endif // INSTALLER__UIMANAGER_H

@@ -8,27 +8,28 @@
 CommandLineParser::CommandLineParser()
 {
     // silence mode
-    QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "true", EMPTY);
+    QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "silent", EMPTY);
 
     // data location
-    QCommandLineOption intallLocation_opt("installLocation", "Application installation path [intallLocation=\"XXX\"].", "true", EMPTY);
-    QCommandLineOption dataLocation_opt("dataLocation", "Application data path [dataLocation=\"XXX\"]", "true", EMPTY);
+    QCommandLineOption intallLocation_opt("installLocation", "Application installation path [--intallLocation=\"XXX\"].", "installLocation", EMPTY);
+    QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", EMPTY);
 
     // proxy configuration
-    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse --proxyAuto]", "true", EMPTY);
-    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "true", EMPTY);
-    QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "true", EMPTY);
-    QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "true", EMPTY);
-    QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "true", EMPTY);
+    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse --proxyAuto]", "proxyAuto", EMPTY);
+    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "proxyHostname", EMPTY);
+    QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "proxyPort", EMPTY);
+    QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "proxyLogin", EMPTY);
+    QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "proxyPassword", EMPTY);
 
     // language
-    QCommandLineOption language_opt("language", "Language. EN=English,FR=French; [language=FR]", "true", EMPTY);
+    QCommandLineOption language_opt("language", "Language. EN=English, FR=French; [--language=FR]", "language", EMPTY);
 
     // start and shortcut
-    QCommandLineOption runAtStart_opt("runAtStart", "Launch application when computer starts. [runAtStart=true]", "true", EMPTY);
-    QCommandLineOption createOfflineShortcut_opt("createOfflineShortcut", "Create offline shortcut. [createOfflineShortcut=true]", "true", EMPTY);
-    QCommandLineOption createShortcut_opt("createShortcut", "Create application shortcut. [shortcurt=false]", "true", EMPTY);
-    QCommandLineOption createAllUserShortcut_opt("createAllUserShortcut", "Create application shortcuts for all users. Option reserved when installation and data location are not in user folder [createAllUserShortcut=false]", "true", EMPTY);
+    QCommandLineOption runApp_opt("runApp", "Launch application after installation. [--runApp=true]", "runApp", EMPTY);
+    QCommandLineOption runAtStart_opt("runAtStart", "Launch application when computer starts. [--runAtStart=true]", "runAtStart", EMPTY);
+    QCommandLineOption createOfflineShortcut_opt("createOfflineShortcut", "Create offline shortcut. [--createOfflineShortcut=true]", "createOfflineShortcut", EMPTY);
+    QCommandLineOption createShortcut_opt("createShortcut", "Create application shortcut. [--shortcurt=false]", "createShortcut", EMPTY);
+    QCommandLineOption createAllUserShortcut_opt("createAllUserShortcut", "Create application shortcuts for all users. Option reserved when installation and data location are not in user folder [--createAllUserShortcut=false]", "createAllUserShortcut", EMPTY);
 
     QCommandLineParser parser;
 
@@ -45,6 +46,7 @@ CommandLineParser::CommandLineParser()
     parser.addOption(proxyLogin_opt);
     parser.addOption(proxyPassword_opt);
     parser.addOption(language_opt);
+    parser.addOption(runApp_opt);
     parser.addOption(runAtStart_opt);
     parser.addOption(createOfflineShortcut_opt);
     parser.addOption(createShortcut_opt);
@@ -66,6 +68,7 @@ CommandLineParser::CommandLineParser()
     m_proxyLogin = getValueString(parser, proxyLogin_opt);
     m_proxyPassword = getValueString(parser, proxyPassword_opt);
     m_language = getValueString(parser, language_opt);
+    m_runApp = getValueBool(parser, runApp_opt);
     m_runAtStart = getValueBool(parser, runAtStart_opt);
     m_offshort = getValueBool(parser, createOfflineShortcut_opt);
     m_shortcut = getValueBool(parser, createShortcut_opt);
@@ -160,9 +163,38 @@ bool CommandLineParser::parseBool(QString value)
     return value == "true";
 }
 
+bool CommandLineParser::parseBoolWithDefaultValue(QString value, bool defaultValue)
+{
+    if(value == EMPTY){
+        return defaultValue;
+    }
+    return parseBool(value);
+}
+
+
+bool CommandLineParser::isSilent()
+{
+    return parseBoolWithDefaultValue(m_silent, false);
+}
+
+bool CommandLineParser::isRunApp()
+{
+    return parseBoolWithDefaultValue(m_runApp, true);
+}
+
 QString CommandLineParser::getAllUserShortcut() const
 {
     return m_allUserShortcut;
+}
+
+QString CommandLineParser::getRunApp() const
+{
+    return m_runApp;
+}
+
+void CommandLineParser::setRunApp(const QString &runApp)
+{
+    m_runApp = runApp;
 }
 
 void CommandLineParser::setAllUserShortcut(const QString &allUserShortcut)

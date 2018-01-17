@@ -7,6 +7,8 @@
 #include "gui/forms/proxyui.h"
 #include "gui/forms/aboutui.h"
 #include "gui/forms/downloadui.h"
+#include "gui/forms/installationui.h"
+#include "gui/forms/endinstallationui.h"
 
 UIManager::UIManager() : QObject(),
     m_window(0),
@@ -14,7 +16,9 @@ UIManager::UIManager() : QObject(),
     m_personalize(0),
     m_proxy(0),
     m_about(0),
-    m_download(0)
+    m_download(0),
+    m_installation(0),
+    m_endInstallation(0)
 {
     m_window = new WindowUI();
 
@@ -23,6 +27,8 @@ UIManager::UIManager() : QObject(),
     m_proxy = new ProxyUI();
     m_about = new AboutUI();
     m_download = new DownloadUI();
+    m_installation = new InstallationUI();
+    m_endInstallation = new EndInstallationUI();
 
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_window, SLOT(changeLanguage()));
@@ -46,6 +52,8 @@ UIManager::~UIManager()
     delete m_proxy;
     delete m_about;
     delete m_download;
+    delete m_installation;
+    delete m_endInstallation;
 }
 
 void UIManager::aboutEvent()
@@ -73,7 +81,13 @@ void UIManager::returnToLastPage()
         case DownloadPage:
             widget = m_download;
             break;
-    }
+        case InstallationPage:
+            widget = m_installation;
+            break;
+        case EndInstallationPage:
+            widget = m_endInstallation;
+            break;
+    } // switch
 
     m_window->changeContentWidget(widget);
     m_window->setVisibleButton(true, true);
@@ -93,7 +107,7 @@ void UIManager::changeWelcome()
         connect(m_welcome, SIGNAL(contractSignal()),
                 this, SLOT(aboutEvent()));
         connect(m_welcome, SIGNAL(simpleInstallationSignal()),
-                this, SLOT(switchWelcomeToDownload()));
+                this, SLOT(switchWelcomeToInstallation()));
     }
 } // UIManager::changeWelcome
 
@@ -108,7 +122,7 @@ void UIManager::changePersonalize()
     connect(m_personalize, SIGNAL(proxySettingSignal()),
             this, SLOT(switchPersonalizeToProxy()));
     connect(m_personalize, SIGNAL(customInstallationSignal()),
-            this, SLOT(switchWelcomeToDownload()));
+            this, SLOT(switchWelcomeToInstallation()));
 }
 
 void UIManager::changeProxy()
@@ -146,16 +160,31 @@ void UIManager::changeDownload()
             m_download, SLOT(changeLanguage()));
 }
 
+void UIManager::changeInstallation()
+{
+    m_window->changeContentWidget(m_installation);
+    m_window->setVisibleButton(false, false);
+    changeInstallationSignal();
+}
+
+void UIManager::changeEndInstallation()
+{
+    m_window->changeContentWidget(m_endInstallation);
+    m_window->setVisibleButton(false, false);
+    connect(m_endInstallation, SIGNAL(closeInstallationSignal(bool)),
+            this, SLOT(eventCloseInstallation(bool)));
+}
+
 void UIManager::switchWelcomeToPersonalize()
 {
     m_welcome->disconnect();
     changePersonalize();
 }
 
-void UIManager::switchWelcomeToDownload()
+void UIManager::switchWelcomeToInstallation()
 {
     m_welcome->disconnect();
-    changeDownload();
+    changeInstallation();
 }
 
 void UIManager::switchPersonalizeToProxy()
@@ -164,10 +193,10 @@ void UIManager::switchPersonalizeToProxy()
     changeProxy();
 }
 
-void UIManager::switchPersonalizeToDownload()
+void UIManager::switchPersonalizeToInstallation()
 {
     m_personalize->disconnect();
-    changeDownload();
+    changeInstallation();
 }
 
 void UIManager::switchProxyToPersonalize()
@@ -180,4 +209,16 @@ void UIManager::switchAboutTo()
 {
     m_about->disconnect();
     returnToLastPage();
+}
+
+void UIManager::eventEndInstallation(bool success, QString error){
+    m_installation->disconnect();
+    changeEndInstallation();
+    if(!success && m_endInstallation){
+        m_endInstallation->showError(error);
+    }
+}
+
+void UIManager::eventCloseInstallation(bool launchApplication){
+    closeInstallationSignal(launchApplication);
 }

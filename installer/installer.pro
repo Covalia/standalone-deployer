@@ -50,6 +50,8 @@ LIBS += -L../_filesystem/bin -lfilesystem
 FORMS += ui/about.ui
 FORMS += ui/askpopup.ui
 FORMS += ui/download.ui
+FORMS += ui/endinstallation.ui
+FORMS += ui/installation.ui
 FORMS += ui/personalize.ui
 FORMS += ui/proxy.ui
 FORMS += ui/welcome.ui
@@ -60,24 +62,32 @@ SOURCES += src/commandline/commandlineparser.cpp
 SOURCES += src/gui/forms/aboutui.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
 SOURCES += src/gui/forms/downloadui.cpp
+SOURCES += src/gui/forms/endinstallationui.cpp
+SOURCES += src/gui/forms/installationui.cpp
 SOURCES += src/gui/forms/personalizeui.cpp
 SOURCES += src/gui/forms/proxyui.cpp
 SOURCES += src/gui/forms/welcomeui.cpp
 SOURCES += src/gui/forms/windowui.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/gui/style/stylemanager.cpp
+SOURCES += src/manager/installmanager.cpp
+SOURCES += src/manager/windowsshortcutmanager.cpp
 SOURCES += src/shortcut/shortcut.cpp
 
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/gui/forms/aboutui.h
 HEADERS += src/gui/forms/askpopupui.h
 HEADERS += src/gui/forms/downloadui.h
+HEADERS += src/gui/forms/endinstallationui.h
+HEADERS += src/gui/forms/installationui.h
 HEADERS += src/gui/forms/personalizeui.h
 HEADERS += src/gui/forms/proxyui.h
 HEADERS += src/gui/forms/welcomeui.h
 HEADERS += src/gui/forms/windowui.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/gui/style/stylemanager.h
+HEADERS += src/manager/installmanager.h
+HEADERS += src/manager/windowsshortcutmanager.h
 HEADERS += src/shortcut/shortcut.h
 
 RESOURCES += fixed_resources.qrc
@@ -109,9 +119,9 @@ distclean.depends += dmgclean
 QMAKE_EXTRA_TARGETS += distclean dmgclean
 }
 
-win32 {
-CONFIG(release, debug|release) {
-QMAKE_POST_LINK += ../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
-}
-}
+#win32 {
+#CONFIG(release, debug|release) {
+#QMAKE_POST_LINK += ../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
+#}
+#}
 

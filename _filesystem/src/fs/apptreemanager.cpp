@@ -15,6 +15,15 @@ AppTreeManager::~AppTreeManager()
 {
 }
 
+bool AppTreeManager::createDirectoryIfNotExist()
+{
+    QDir directory(m_installationDir);
+    if (!directory.exists()) {
+        return QDir().mkpath(directory.path());
+    }
+    return true;
+}
+
 bool AppTreeManager::makeAppDirectories()
 {
     bool result = true;
@@ -25,6 +34,7 @@ bool AppTreeManager::makeAppDirectories()
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::UpdaterDir);
 
     return result;
 }
@@ -74,4 +84,9 @@ QDir AppTreeManager::getLogsDirPath()
 QDir AppTreeManager::getTempDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::TempDir));
+}
+
+QDir AppTreeManager::getUpdaterDirPath()
+{
+    return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
 }

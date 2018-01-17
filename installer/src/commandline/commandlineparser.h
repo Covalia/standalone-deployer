@@ -3,7 +3,6 @@
 
 #include <QCommandLineParser>
 
-
 const QString EMPTY = "EMPTY";
 
 /**
@@ -17,6 +16,9 @@ class CommandLineParser
         CommandLineParser();
 
         void sendToSettings();
+
+        bool isSilent();
+        bool isRunApp();
 
         QString getSilent() const;
         void setSilent(const QString &silent);
@@ -45,6 +47,9 @@ class CommandLineParser
         QString getLanguage() const;
         void setLanguage(const QString &language);
 
+        QString getRunApp() const;
+        void setRunApp(const QString &runApp);
+
         QString getRunAtStart() const;
         void setRunAtStart(const QString &runAtStart);
 
@@ -57,7 +62,7 @@ class CommandLineParser
         QString getAllUserShortcut() const;
         void setAllUserShortcut(const QString &allUserShortcut);
 
-private:
+    private:
 
         /**
          * @brief Method used to read boolean arguments
@@ -89,6 +94,13 @@ private:
          */
         bool parseBool(QString value);
 
+        /**
+         * @brief Parse bool value with default value when value is EMPTY (no set in command)
+         * @param value
+         * @return
+         */
+        bool parseBoolWithDefaultValue(QString value, bool defaultValue);
+
         QString m_silent;
         QString m_intallLocation;
         QString m_dataLocation;
@@ -98,6 +110,7 @@ private:
         QString m_proxyLogin;
         QString m_proxyPassword;
         QString m_language;
+        QString m_runApp;
         QString m_runAtStart;
         QString m_offshort;
         QString m_shortcut;

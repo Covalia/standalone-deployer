@@ -13,8 +13,10 @@ static QString P_SHORTCUT_NAME = "shortcut_name";
 static QString P_SHORTCUT_NAME_OFFLINE = "shortcut_name_offline";
 static QString P_SHORTCUT_ONLINE = "shortcut_online";
 static QString P_SHORTCUT_OFFLINE = "shortcut_offline";
+static QString P_SHORTCUT_OFFLINE_ARGS = "shortcut_offline_args";
 
 static QString P_DEFAULT_INSTALLATION_PATH = "default_installation_path";
+static QString P_DEFAULT_INSTALLATION_FOLDER_NAME = "default_installation_folder_name";
 
 static QString P_DEFAULT_DATA_PATH_SIMPLE_INSTALL = "default_data_path_simple_install";
 static QString P_DEFAULT_DATA_PATH_CUSTOM_INSTALL = "default_data_path_custom_install";
@@ -107,6 +109,12 @@ class ResourcesSettings
         QString getEncrypted_password_key() const;
         void setEncrypted_password_key(const QString &encrypted_password_key);
 
+        QString getDefault_installation_folder_name() const;
+        void setDefault_installation_folder_name(const QString &default_installation_folder_name);
+
+        QString getShortcut_offline_args() const;
+        void setShortcut_offline_args(const QString &shortcut_offline_args);
+
 private:
         /**
          * @brief Use for singleton
@@ -146,7 +154,9 @@ private:
         QString m_shortcut_name_offline;
         bool m_shortcut_online;
         bool m_shortcut_offline;
+        QString m_shortcut_offline_args;
         QString m_default_installation_path;
+        QString m_default_installation_folder_name;
         QString m_default_data_path_simple_install;
         QString m_default_data_path_custom_install;
         bool m_possible_change_data_location;

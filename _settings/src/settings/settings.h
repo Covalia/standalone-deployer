@@ -9,6 +9,7 @@
 
 class QSettings;
 
+static QString GROUP_INFO = "INFO";
 static QString GROUP_PROXY = "PROXY";
 static QString GROUP_LANGUAGE = "LANGUAGE";
 static QString GROUP_SHORTCUT = "SHORTCUT";
@@ -16,6 +17,9 @@ static QString GROUP_CLASSPATH = "CLASSPATH";
 static QString GROUP_DATA = "DATA";
 static QString GROUP_SERVER = "SERVER";
 static QString GROUP_START = "START";
+
+static QString S_APPLICATION_NAME = "application_name";
+static QString S_UPDATER_PATH = "update_path";
 
 static QString S_PROXY_USE = "proxyUse";
 static QString S_PROXY_AUTO = "proxyAuto";
@@ -28,9 +32,11 @@ static QString S_PROXY_PASSWORD = "proxyPassword";
 
 static QString S_LANGUAGE_LANGUAGE = "language";
 
-static QString S_SHORTCUT_NAME = "shortcutName";
-static QString S_SHORTCUT_OFFLINE = "shortcutOffline";
 static QString S_SHORTCUT_ONLINE = "shortcutOnline";
+static QString S_SHORTCUT_OFFLINE = "shortcutOffline";
+static QString S_SHORTCUT_NAME = "shortcutName";
+static QString S_SHORTCUT_OFFLINE_NAME = "shortcutOfflineName";
+static QString S_SHORTCUT_OFFLINE_ARGS = "shortcutOfflineArgs";
 static QString S_SHORTCUT_ALL_USER = "shortcutAllUser";
 
 static QString S_CLASSPATH_EXTENSION = "classpathExtension";
@@ -61,6 +67,8 @@ class Settings
         void writeSettings();
 
         void readSettings();
+
+        QString paramListString();
 
         bool getProxyUse() const;
         void setProxyUse(bool proxyUse);
@@ -116,7 +124,22 @@ class Settings
         bool getShortcutOnline() const;
         void setShortcutOnline(bool shortcutOnline);
 
-    private:
+        QString getApplicationName() const;
+        void setApplicationName(const QString &applicationName);
+
+        QString getUpdaterVersion() const;
+        void setUpdaterVersion(const QString &updaterVersion);
+
+        QString getUpdaterPath() const;
+        void setUpdaterPath(const QString &updaterPath);
+
+        QString getShortcutOfflineName() const;
+        void setShortcutOfflineName(const QString &shortcutOfflineName);
+
+        QString getShortcutOfflineArgs() const;
+        void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
+
+private:
 
         /**
          * @brief Use for singleton
@@ -175,6 +198,10 @@ class Settings
          */
         QSettings * m_settings;
 
+        // info
+        QString m_applicationName;
+        QString m_updaterPath;
+
         // proxy
         bool m_proxyUse;
         bool m_proxyAuto;
@@ -189,9 +216,11 @@ class Settings
         Language m_language;
 
         // shortcut
-        QString m_shortcutName;
-        bool m_shortcutOffline;
         bool m_shortcutOnline;
+        bool m_shortcutOffline;
+        QString m_shortcutName;
+        QString m_shortcutOfflineName;
+        QString m_shortcutOfflineArgs;
         bool m_shortcutAllUser;
 
         // classpath updater
