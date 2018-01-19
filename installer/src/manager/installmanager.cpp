@@ -78,13 +78,6 @@ void InstallManager::startInstallation()
 {
     L_INFO("End of parameters initialization");
 
-    L_INFO("Move log in install folder");
-    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
-    QString logPath(m_treeManager->getLogsDirPath().absolutePath() + "/installer.log");
-    m_treeManager->extractResourceToPath("installer.log", logPath);
-    new Logger(logPath);
-    L_INFO("End move log in install folder");
-
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QString errorMessage = "";
@@ -94,6 +87,8 @@ void InstallManager::startInstallation()
     if (!folderCreation) {
         errorMessage = tr("An error ocurred during folder creation");
     }
+
+    moveLogInInstallFolder();
 
     // settings writing
     bool settingWriting =  createIniConfigurationFile();
@@ -150,6 +145,16 @@ bool InstallManager::createInstallationFolders()
         L_INFO("Succes of sub-installation folder creation ");
         return true;
     }
+}
+
+void InstallManager::moveLogInInstallFolder()
+{
+    L_INFO("Move log in install folder");
+    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
+    QString logPath(m_treeManager->getLogsDirPath().absolutePath() + "/installer.log");
+    m_treeManager->extractResourceToPath("installer.log", logPath);
+    new Logger(logPath);
+    L_INFO("End move log in install folder");
 }
 
 bool InstallManager::createIniConfigurationFile()

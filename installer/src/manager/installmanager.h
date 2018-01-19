@@ -29,6 +29,7 @@ class InstallManager: public QObject
         bool runAppAfter;
 
         bool createInstallationFolders();
+        void moveLogInInstallFolder();
         bool createIniConfigurationFile();
         bool extractResources();
         bool createDesktopShortcut();
