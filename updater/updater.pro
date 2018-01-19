@@ -2,6 +2,7 @@ QT += core
 QT += gui
 QT += widgets
 QT += network
+QT += concurrent
 
 CONFIG += warn_on
 CONFIG += debug_and_release
@@ -36,6 +37,7 @@ Debug:MOC_DIR = debug/moc
 
 INCLUDEPATH += .
 INCLUDEPATH += src
+INCLUDEPATH += headers/libarchive
 
 DEPENDPATH += .
 DEPENDPATH += src
@@ -47,6 +49,14 @@ LIBS += -L../_settings/bin -lsettings
 INCLUDEPATH += ../_filesystem/src
 LIBS += -L../_filesystem/bin -lfilesystem
 
+macx {
+LIBS += -L./libs/libarchive/macosx -larchive
+}
+win32 {
+# attention, l'ordre est important.
+LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
+}
+
 FORMS += ui/authenticationdialog.ui
 FORMS += ui/mainwindow.ui
 
@@ -56,6 +66,7 @@ SOURCES += src/updater/config.cpp
 SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
+SOURCES += src/utils/unzip/zipextractor.cpp
 SOURCES += src/xml/data/application.cpp
 SOURCES += src/xml/data/download.cpp
 SOURCES += src/xml/data/javaupdate.cpp
@@ -66,6 +77,8 @@ HEADERS += src/updater/config.h
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/utils/hashmac/hashmac512.h
+HEADERS += src/utils/qarchive/qarchive.h
+HEADERS += src/utils/unzip/zipextractor.h
 HEADERS += src/xml/data/application.h
 HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h
