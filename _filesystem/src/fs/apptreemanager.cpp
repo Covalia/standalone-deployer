@@ -32,6 +32,7 @@ bool AppTreeManager::makeAppDirectories()
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::AppDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ConfigurationDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ExtensionDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ImagesDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
@@ -73,19 +74,27 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
 {
     if (QFile::exists(copyFilePath)) {
         QFile f(copyFilePath);
-        f.setPermissions(QFile::WriteOther);
+        f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
         bool remove = f.remove();
         if (!remove) {
             QPair<bool, QString> error = qMakePair(false, "Error when remove file" + copyFilePath);
             return error;
         }
+        if (QFile::exists(copyFilePath)) {
+            QPair<bool, QString> error = qMakePair(false, "File already exist. Can't copie file " + resourcePath +  " in path" + copyFilePath);
+            return error;
+        }
     }
     bool success = QFile::copy(resourcePath, copyFilePath);
     if (success) {
-        QPair<bool, QString> error = qMakePair(true, "Success extracting " + copyFilePath);
+        if (!QFile::exists(copyFilePath)) {
+            QPair<bool, QString> error = qMakePair(false, "File don't exist. An error occured when copy file " + resourcePath +  " in path" + copyFilePath);
+            return error;
+        }
+        QPair<bool, QString> error = qMakePair(true, "Success extracting " + resourcePath + " in " + copyFilePath);
         return error;
     } else {
-        QPair<bool, QString> error = qMakePair(false, "An error occurred when extracting " + copyFilePath);
+        QPair<bool, QString> error = qMakePair(false, "An error occurred when copie " + resourcePath + " in " + copyFilePath);
         return error;
     }
 }
@@ -103,6 +112,11 @@ QDir AppTreeManager::getConfigurationDirPath()
 QDir AppTreeManager::getExtensionDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::ExtensionDir));
+}
+
+QDir AppTreeManager::getImagesDirPath()
+{
+    return QDir(m_installationDir.filePath(FileSystemConfig::ImagesDir));
 }
 
 QDir AppTreeManager::getJavaDirPath()
@@ -145,6 +159,7 @@ QString AppTreeManager::getUpdaterFilePath()
     return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + FileSystemConfig::UpdaterFile + getExtension();
 }
 
-QString AppTreeManager:: getConfigurationFilePath(){
+QString AppTreeManager:: getConfigurationFilePath()
+{
     return m_installationDir.absolutePath() + "/" + FileSystemConfig::ConfigurationDir + "/" + FileSystemConfig::ConfigurationFile;
 }

@@ -32,9 +32,5 @@ int main(int argc, char * argv[])
     loaderManager->launchUpdater();
     loaderManager->closeAppEvent();
 
-    int ret = app.exec();
-
-    delete loaderManager;
-
-    return ret;
+    return app.exec();
 }

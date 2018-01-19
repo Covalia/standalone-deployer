@@ -15,6 +15,9 @@ public:
     /// Relative path of application extensions
     static const QString ExtensionDir;
 
+    /// Relative path of Image
+    static const QString ImagesDir;
+
     /// Relative path of Java
     static const QString JavaDir;
 

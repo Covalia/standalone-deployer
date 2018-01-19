@@ -10,7 +10,6 @@
     #include <objidl.h>
     #include <shlguid.h>
     #include <Shlobj.h>
-    #include <QStandardPaths>
 
     #include "log/logger.h"
 

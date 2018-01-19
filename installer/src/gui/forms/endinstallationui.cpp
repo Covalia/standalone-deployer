@@ -11,6 +11,7 @@ EndInstallationUI::EndInstallationUI(QWidget * parent) :
 
     StyleManager::transformStyle(this);
     m_ui->buttonFinish->setAccessibleName("pageButton");
+    m_ui->labelError->setVisible(false);
 
     connect(m_ui->buttonFinish, SIGNAL(clicked()), this, SLOT(closeInstallationEvent()));
 }
@@ -26,6 +27,8 @@ void EndInstallationUI::showError(QString _error)
     m_ui->labelTitre->setText(tr("An error occurred during installation"));
     m_ui->checkBoxLaunchAfterClose->setVisible(false);
     m_ui->checkBoxLaunchAfterClose->setChecked(false);
+    m_ui->labelError->setVisible(true);
+    m_ui->labelError->setText(_error);
 }
 
 void EndInstallationUI::closeInstallationEvent()

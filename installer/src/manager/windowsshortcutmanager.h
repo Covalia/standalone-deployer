@@ -9,10 +9,11 @@ class WindowsShortcutManager
         WindowsShortcutManager();
 
         bool createDesktopShortcut(QString _shortcutName, QString _args);
-        bool createStartShorcut(QString _shortcutName, bool allUser);
+        bool createStartShorcut(QString _shortcutName, bool _allUser);
+        bool createStartMenuShorcut(QString _startMenuFolderName, bool _allUser);
 
     private:
-        bool createShortcut(QString _shortcutFolderPath, QString _shortcutName, QString _args);
+        bool createShortcut(QString shortcutPath, QString targetPath, QString _args, QString executionDir, QString iconPath, QString description);
 };
 
 #endif // WINDOWSSHORTCUTMANAGER_H

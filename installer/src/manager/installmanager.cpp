@@ -34,12 +34,11 @@ InstallManager::~InstallManager()
 void InstallManager::initInstallation()
 {
     // init project resources
-    ResourcesSettings * projectSettings = ResourcesSettings::getInstance();
-
-    projectSettings->initSettings(":/resources/project.ini");
-    projectSettings->readSettings();
-    projectSettings->sendToSettings();
-    L_INFO("Ip=" + projectSettings->getIp_server());
+    m_projectSettings = ResourcesSettings::getInstance();
+    m_projectSettings->initSettings(":/resources/project.ini");
+    m_projectSettings->readSettings();
+    m_projectSettings->sendToSettings();
+    L_INFO("Ip=" + m_projectSettings->getIp_server());
 
     L_INFO("Parsing command line");
     CommandLineParser * lineParser = new CommandLineParser();
@@ -47,8 +46,7 @@ void InstallManager::initInstallation()
     L_INFO("Run after = " + QString::number(runAppAfter));
     lineParser->sendToSettings();
 
-    Settings * settings = Settings::getInstance();
-    m_treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
+    m_settings = Settings::getInstance();
 
     // init style
     StyleManager::setGeneralStyle();
@@ -78,10 +76,16 @@ void InstallManager::eventStartInstallation()
 
 void InstallManager::startInstallation()
 {
-    Settings * settings = Settings::getInstance();
-
     L_INFO("End of parameters initialization");
-    L_INFO("Settings before start installation  : \n********\n" + settings->paramListString() + "********\n");
+
+    L_INFO("Move log in install folder");
+    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
+    QString logPath(m_treeManager->getLogsDirPath().absolutePath() + "/installer.log");
+    m_treeManager->extractResourceToPath("installer.log", logPath);
+    new Logger(logPath);
+    L_INFO("End move log in install folder");
+
+    L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QString errorMessage = "";
 
@@ -97,7 +101,7 @@ void InstallManager::startInstallation()
         errorMessage = tr("An error ocurred during parameters writing");
     }
 
-    QThread::sleep(1);
+    QThread::sleep(5);
 
     // extract resources
     bool succesExtractResources =  extractResources();
@@ -111,7 +115,7 @@ void InstallManager::startInstallation()
         errorMessage = tr("An error ocurred during shortcut creation");
     }
 
-    bool success = folderCreation && settingWriting && succesExtractResources;
+    bool success = folderCreation && settingWriting && succesExtractResources && succesCreateShortcut;
 
     if (m_uiManager) {
         if (success) {
@@ -130,7 +134,7 @@ void InstallManager::startInstallation()
 
 bool InstallManager::createInstallationFolders()
 {
-    L_INFO("Start the installation in directory : ");
+    L_INFO("Start the installation in directory : " + m_settings->getDataLocation());
 
     if (!m_treeManager->createDirectoryIfNotExist()) {
         L_ERROR("Error when create installation folder ");
@@ -150,19 +154,17 @@ bool InstallManager::createInstallationFolders()
 
 bool InstallManager::createIniConfigurationFile()
 {
-    Settings * settings = Settings::getInstance();
-
     QString installFilePath(m_treeManager->getConfigurationFilePath());
 
     L_INFO("Start to create param file. Path = " + installFilePath);
-    settings->initSettings(installFilePath);
+    m_settings->initSettings(installFilePath);
 
-    if (!settings->isWrittable()) {
+    if (!m_settings->isWrittable()) {
         L_ERROR("File configuration is no writtable. It's impossible to write ini configurlation file in path = " + installFilePath);
         return false;
     }
 
-    settings->writeSettings();
+    m_settings->writeSettings();
 
     if (QFile::exists(installFilePath)) {
         return true;
@@ -174,24 +176,26 @@ bool InstallManager::createIniConfigurationFile()
 
 bool InstallManager::extractResources()
 {
-    Settings * settings = Settings::getInstance();
-
     QPair<bool, QString> extractUpdater = m_treeManager->extractResourceToPath(m_treeManager->getUpdaterResourcesPath(), m_treeManager->getUpdaterFilePath());
     L_INFO(extractUpdater.second);
 
     QPair<bool, QString> extractLoader = m_treeManager->extractResourceToPath(m_treeManager->getLoaderResourcesPath(), m_treeManager->getLoaderFilePath());
     L_INFO(extractLoader.second);
 
-    QPair<bool, QString> extractAppIcon = m_treeManager->extractResourceToPath(":/images/shortcut.ico", settings->getInstallLocation() + "/shortcut.ico");
+    QPair<bool, QString> extractAppIcon = m_treeManager->extractResourceToPath(":/images/shortcut.ico", m_treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico");
     L_INFO(extractAppIcon.second);
 
-    return extractUpdater.first && extractLoader.first && extractAppIcon.first;
+    QPair<bool, QString> extractTrashIcon = m_treeManager->extractResourceToPath(":/images/trash.ico", m_treeManager->getImagesDirPath().absolutePath() + "/trash.ico");
+    L_INFO(extractTrashIcon.second);
+
+    QPair<bool, QString> extractConfigIcon = m_treeManager->extractResourceToPath(":/images/config.ico", m_treeManager->getImagesDirPath().absolutePath() + "/config.ico");
+    L_INFO(extractConfigIcon.second);
+
+    return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first;
 }
 
 bool InstallManager::createDesktopShortcut()
 {
-    Settings * settings = Settings::getInstance();
-
     #ifdef _WIN32
         // WINDOWS SHORCUT
         // - online desktop shortcut
@@ -202,17 +206,19 @@ bool InstallManager::createDesktopShortcut()
         WindowsShortcutManager * windowsShortcutManager = new WindowsShortcutManager();
         bool success = true;
         // online shortcut
-        if (settings->getShortcutOnline()) {
-            success = success && windowsShortcutManager->createDesktopShortcut(settings->getShortcutName(), "");
+        if (m_settings->getShortcutOnline()) {
+            success = success && windowsShortcutManager->createDesktopShortcut(m_settings->getShortcutName(), "");
         }
         // offline shortcut
-        if (settings->getShortcutOffline()) {
-            success = success && windowsShortcutManager->createDesktopShortcut(settings->getShortcutOfflineName(), settings->getShortcutOfflineArgs());
+        if (m_settings->getShortcutOffline()) {
+            success = success && windowsShortcutManager->createDesktopShortcut(m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs());
         }
         // startup shortcut
-        if (settings->getRunAtStart()) {
-            success = success && windowsShortcutManager->createStartShorcut(settings->getShortcutOfflineName(), settings->getShortcutAllUser());
+        if (m_settings->getRunAtStart()) {
+            success = success && windowsShortcutManager->createStartShorcut(m_settings->getShortcutName(), m_settings->getShortcutAllUser());
         }
+        // StratMenu folder and shortcut
+        success = success && windowsShortcutManager->createStartMenuShorcut(QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser());
         return success;
 
     #elif TARGET_OS_MAC

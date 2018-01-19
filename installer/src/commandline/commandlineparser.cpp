@@ -15,7 +15,7 @@ CommandLineParser::CommandLineParser()
     QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", EMPTY);
 
     // proxy configuration
-    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse --proxyAuto]", "proxyAuto", EMPTY);
+    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse=true --proxyAuto=true]", "proxyAuto", EMPTY);
     QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "proxyHostname", EMPTY);
     QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "proxyPort", EMPTY);
     QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "proxyLogin", EMPTY);

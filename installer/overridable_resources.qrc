@@ -9,9 +9,12 @@
         <file alias="icon.png">resources/images/icon.png</file>
         <file alias="logo_title.png">resources/images/logo_title.png</file>
         <file alias="shortcut.ico">resources/images/shortcut.ico</file>
-		<file alias="loading.gif">resources/images/loading.gif</file>
-		<file alias="succes.png">resources/images/succes.png</file>
-		<file alias="failure.png">resources/images/failure.png</file>
+        <file alias="config.ico">resources/images/config.ico</file>
+        <file alias="trash.ico">resources/images/trash.ico</file>
+        <file alias="loading.gif">resources/images/loading.gif</file>
+        <file alias="succes.png">resources/images/succes.png</file>
+        <file alias="failure.png">resources/images/failure.png</file>
+
     </qresource>
     <qresource prefix="/slideshow">
         <file>resources/slideshow/mockup.png</file>

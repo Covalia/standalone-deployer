@@ -18,6 +18,7 @@ class AppTreeManager : public QObject
         QDir getAppDirPath();
         QDir getConfigurationDirPath();
         QDir getExtensionDirPath();
+        QDir getImagesDirPath();
         QDir getJavaDirPath();
         QDir getLogsDirPath();
         QDir getTempDirPath();
@@ -32,8 +33,9 @@ class AppTreeManager : public QObject
 
         QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
 
-    private:
         static bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
+
+    private:
         static QString getExtension();
 
         const QDir m_installationDir;

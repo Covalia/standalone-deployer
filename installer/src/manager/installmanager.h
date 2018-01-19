@@ -6,6 +6,8 @@
 
 #include "gui/manager/uimanager.h"
 #include "fs/apptreemanager.h"
+#include "settings/resourcessettings.h"
+#include "settings/settings.h"
 
 class InstallManager: public QObject
 {
@@ -21,6 +23,9 @@ class InstallManager: public QObject
 
         UIManager * m_uiManager;
         AppTreeManager * m_treeManager;
+        ResourcesSettings * m_projectSettings;
+        Settings * m_settings;
+
         bool runAppAfter;
 
         bool createInstallationFolders();
