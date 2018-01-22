@@ -1,9 +1,10 @@
 Pour MacOS, récupération des sources de libarchive 3.3.1 et build via les
 commandes :
-./configure --without-bz2lib --without-iconv --without-lz4 --without-lzma
---with-lzo2 --without-cng --without-nettle --without-openssl --without-xml2
---without-expat --disable-shared --enable-static --disable-bsdtar
---disable-bsdcat --disable-bsdcpio --disable-rpath --disable-xattr --disable-acl
+export MACOSX_DEPLOYMENT_TARGET=10.10
+./configure --without-bz2lib --without-iconv --without-lz4 --without-lzma \
+--with-lzo2 --without-nettle --without-openssl --without-xml2 --without-expat \
+--disable-shared --enable-static --disable-bsdtar --disable-bsdcat \
+--disable-bsdcpio --disable-rpath --disable-xattr --disable-acl \
 --prefix=${PWD}/out
 make
 make install
