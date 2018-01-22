@@ -1,6 +1,8 @@
 #ifndef WINDOWSSHORTCUTMANAGER_H
 #define WINDOWSSHORTCUTMANAGER_H
 
+#ifdef _WIN32
+
 #include <QString>
 
 class WindowsShortcutManager
@@ -15,5 +17,6 @@ class WindowsShortcutManager
     private:
         bool createShortcut(QString shortcutPath, QString targetPath, QString _args, QString executionDir, QString iconPath, QString description);
 };
+#endif
 
 #endif // WINDOWSSHORTCUTMANAGER_H

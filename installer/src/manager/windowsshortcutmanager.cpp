@@ -1,5 +1,6 @@
-#include "manager/windowsshortcutmanager.h"
+#ifdef _WIN32
 
+#include "manager/windowsshortcutmanager.h"
 #include "settings/settings.h"
 #include "log/logger.h"
 #include "shortcut/shortcut.h"
@@ -139,7 +140,6 @@ bool WindowsShortcutManager::createShortcut(QString shortcutPath, QString target
         }
     }
 
-    #ifdef _WIN32
         std::string strLoaderPath = shortcutPath.toStdString();
         L_INFO("Starting shortcut creation ");
         Shortcut * shorcutCreator = new Shortcut();
@@ -157,6 +157,7 @@ bool WindowsShortcutManager::createShortcut(QString shortcutPath, QString target
             L_ERROR("On error occured when shortcut creation");
             return false;
         }
-    #endif
     return true;
 }
+
+#endif
