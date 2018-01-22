@@ -17,7 +17,7 @@
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
 #include "fs/config.h"
-#include "windowsshortcutmanager.h"
+#include "manager/windowsshortcutmanager.h"
 
 InstallManager::InstallManager() : QObject(),
     m_uiManager(0),

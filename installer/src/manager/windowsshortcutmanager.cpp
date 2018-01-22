@@ -1,4 +1,4 @@
-#include "windowsshortcutmanager.h"
+#include "manager/windowsshortcutmanager.h"
 
 #include "settings/settings.h"
 #include "log/logger.h"
