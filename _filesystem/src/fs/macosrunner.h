@@ -10,6 +10,8 @@ class MacosRunner : public QObject {
     public:
         static bool openDmgFile(const QString &_appName);
         static bool closeDmgFile(const QString &_appName);
+
+        static bool openApp(const QString &_appName, const QStringList &_args);
 };
 
 #endif

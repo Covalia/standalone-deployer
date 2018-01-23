@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QDir>
 
-
 #include "log/logger.h"
 #include "manager/installmanager.h"
 #include "settings/settings.h"

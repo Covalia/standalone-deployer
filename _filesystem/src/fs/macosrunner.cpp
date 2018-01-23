@@ -36,3 +36,24 @@ bool MacosRunner::closeDmgFile(const QString &_appName)
     process.start("hdiutil", args);
     return process.waitForFinished();
 }
+
+bool MacosRunner::openApp(const QString &_appName, const QStringList &_args)
+{
+    // TODO mêmes remarques que ci-dessus
+
+    QProcess process;
+    // open -a /usr/local/Cellar/macvim/8.0-143/MacVim.app --args /etc/passwd
+    QStringList args;
+
+    args << "-a";
+    args << "/usr/local/Cellar/macvim/8.0-143/MacVim.app";
+    if (_args.size() > 0) {
+        // les arguments doivent être passés après l'argument nommé --args
+        args << "--args";
+        args << _args;
+    }
+
+    process.start("open", args);
+    // open retourne lorsque le programme est lancé, donc on peut faire un waitForFinished :)
+    return process.waitForFinished();
+}
