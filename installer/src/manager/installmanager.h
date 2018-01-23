@@ -32,7 +32,7 @@ class InstallManager: public QObject
         void moveLogInInstallFolder();
         bool createIniConfigurationFile();
         bool extractResources();
-        bool createDesktopShortcut();
+        bool createShortcut();
         void startInstallation();
         void closeInstallation(bool _launchApplication);
         bool launchLoader();

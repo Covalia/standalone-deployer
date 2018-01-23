@@ -10,14 +10,13 @@
 #include <QThread>
 
 #include "log/logger.h"
-#include "shortcut/shortcut.h"
+#include "shortcut/windowsshortcut.h"
 #include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "settings/resourcessettings.h"
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
 #include "fs/config.h"
-#include "windowsshortcutmanager.h"
 
 InstallManager::InstallManager() : QObject(),
     m_uiManager(0),
@@ -67,6 +66,8 @@ void InstallManager::initInstallation()
     } else {
         startInstallation();
     }
+
+    delete lineParser;
 }
 
 void InstallManager::eventStartInstallation()
@@ -81,6 +82,7 @@ void InstallManager::startInstallation()
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QString errorMessage = "";
+    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
 
     // tree creation
     bool folderCreation = createInstallationFolders();
@@ -96,8 +98,6 @@ void InstallManager::startInstallation()
         errorMessage = tr("An error ocurred during parameters writing");
     }
 
-    QThread::sleep(5);
-
     // extract resources
     bool succesExtractResources =  extractResources();
     if (!succesExtractResources) {
@@ -105,7 +105,7 @@ void InstallManager::startInstallation()
     }
 
     // create shorcut
-    bool succesCreateShortcut = createDesktopShortcut();
+    bool succesCreateShortcut = createShortcut();
     if (!succesCreateShortcut) {
         errorMessage = tr("An error ocurred during shortcut creation");
     }
@@ -150,7 +150,6 @@ bool InstallManager::createInstallationFolders()
 void InstallManager::moveLogInInstallFolder()
 {
     L_INFO("Move log in install folder");
-    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
     QString logPath(m_treeManager->getLogsDirPath().absolutePath() + "/installer.log");
     m_treeManager->extractResourceToPath("installer.log", logPath);
     new Logger(logPath);
@@ -199,7 +198,7 @@ bool InstallManager::extractResources()
     return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first;
 }
 
-bool InstallManager::createDesktopShortcut()
+bool InstallManager::createShortcut()
 {
     #ifdef _WIN32
         // WINDOWS SHORCUT
@@ -208,7 +207,7 @@ bool InstallManager::createDesktopShortcut()
         // - startup shorcut (run start computer)
         // - startMenu
 
-        WindowsShortcutManager * windowsShortcutManager = new WindowsShortcutManager();
+        WindowsShortcut * windowsShortcutManager = new WindowsShortcut();
         bool success = true;
         // online shortcut
         if (m_settings->getShortcutOnline()) {

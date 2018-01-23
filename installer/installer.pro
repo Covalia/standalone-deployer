@@ -71,8 +71,7 @@ SOURCES += src/gui/forms/windowui.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/manager/installmanager.cpp
-SOURCES += src/manager/windowsshortcutmanager.cpp
-SOURCES += src/shortcut/shortcut.cpp
+SOURCES += src/shortcut/windowsshortcut.cpp
 
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/gui/forms/aboutui.h
@@ -87,8 +86,7 @@ HEADERS += src/gui/forms/windowui.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/manager/installmanager.h
-HEADERS += src/manager/windowsshortcutmanager.h
-HEADERS += src/shortcut/shortcut.h
+HEADERS += src/shortcut/windowsshortcut.h
 
 RESOURCES += fixed_resources.qrc
 
