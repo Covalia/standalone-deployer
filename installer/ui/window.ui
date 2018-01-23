@@ -14,7 +14,7 @@
    <string notr="true"/>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../overridable_resources.qrc">
     <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
   </property>
   <property name="statusTip">
@@ -97,7 +97,7 @@
               <string notr="true"/>
              </property>
              <property name="pixmap">
-              <pixmap>:/images/logo_title.png</pixmap>
+              <pixmap resource="../overridable_resources.qrc">:/images/logo_title.png</pixmap>
              </property>
             </widget>
            </item>
@@ -122,6 +122,9 @@
                <weight>75</weight>
                <bold>true</bold>
               </font>
+             </property>
+             <property name="statusTip">
+              <string notr="true"/>
              </property>
              <property name="styleSheet">
               <string notr="true">color: @color-text-on-background ;</string>
@@ -315,7 +318,7 @@ QPushButton:hover {
   </widget>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../overridable_resources.qrc"/>
  </resources>
  <connections/>
 </ui>

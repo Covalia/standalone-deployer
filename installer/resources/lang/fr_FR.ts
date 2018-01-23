@@ -33,6 +33,60 @@
     </message>
 </context>
 <context>
+    <name>EndInstallationUI</name>
+    <message>
+        <location filename="../../ui/endinstallation.ui" line="97"/>
+        <source>The installation is now complete</source>
+        <translation>L&apos;installation est maintenant terminée</translation>
+    </message>
+    <message>
+        <location filename="../../ui/endinstallation.ui" line="107"/>
+        <source>Launch the application at closing</source>
+        <translation>Lancez l&apos;application à la fermeture</translation>
+    </message>
+    <message>
+        <location filename="../../ui/endinstallation.ui" line="167"/>
+        <source>Finish</source>
+        <translation>Terminer</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/forms/endinstallationui.cpp" line="27"/>
+        <source>An error occurred during installation</source>
+        <translation>Une erreur s&apos;est produite lors de l&apos;installation</translation>
+    </message>
+</context>
+<context>
+    <name>InstallManager</name>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="90"/>
+        <source>An error ocurred during folder creation</source>
+        <translation>Une erreur s&apos;est produite lors de la création du dossier</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="98"/>
+        <source>An error ocurred during parameters writing</source>
+        <translation>Une erreur s&apos;est produite lors de l&apos;écriture des paramètres</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="104"/>
+        <source>An error ocurred during resources extraction</source>
+        <translation>Une erreur s&apos;est produite lors de l&apos;extraction des ressources</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="110"/>
+        <source>An error ocurred during shortcut creation</source>
+        <translation>An error occurred during shortcuts creation</translation>
+    </message>
+</context>
+<context>
+    <name>InstallationUI</name>
+    <message>
+        <location filename="../../ui/installation.ui" line="75"/>
+        <source>Loading installation...</source>
+        <translation>Installation en cours...</translation>
+    </message>
+</context>
+<context>
     <name>PersonalizeUI</name>
     <message>
         <location filename="../../ui/personalize.ui" line="55"/>
@@ -132,9 +186,19 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/main.cpp" line="66"/>
+        <location filename="../../src/manager/installmanager.cpp" line="57"/>
         <source>Standalone deployment</source>
         <translation>Déploiement autonome</translation>
+    </message>
+    <message>
+        <location filename="../../src/shortcut/windowsshortcut.cpp" line="100"/>
+        <source>Uninstall %1</source>
+        <translation>Désinstaller %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>
+        <source>Configure %1</source>
+        <translation>Configurer %1</translation>
     </message>
 </context>
 <context>
@@ -168,7 +232,7 @@
 <context>
     <name>WindowUI</name>
     <message>
-        <location filename="../../ui/window.ui" line="162"/>
+        <location filename="../../ui/window.ui" line="165"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
@@ -178,9 +242,9 @@
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="36"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="43"/>
         <source>Installation of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Installation de %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/forms/windowui.cpp" line="118"/>

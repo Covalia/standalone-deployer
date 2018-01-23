@@ -31,16 +31,16 @@ WindowUI::WindowUI(QWidget * _parent) :
     connect(m_ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
     connect(m_ui->buttonAbout, SIGNAL(clicked()), this, SLOT(aboutEvent()));
 
-    //windows title
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
-
     // combobox init
     m_itemDelegate = new QStyledItemDelegate();
     m_ui->comboBoxLanguage->setItemDelegate(m_itemDelegate);
     m_ui->comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
     m_ui->comboBoxLanguage->addItem("English", QVariant("en_US"));
     connect(m_ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
+
+    //windows title
+    ResourcesSettings * resource = ResourcesSettings::getInstance();
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
 
     // bug combobox style
     StyleManager::transformStyle(this);
