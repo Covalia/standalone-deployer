@@ -43,6 +43,8 @@ INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
+INCLUDEPATH += ../_filesystem/src
+LIBS += -L../_filesystem/bin -lfilesystem
 
 # FORMS +=
 
