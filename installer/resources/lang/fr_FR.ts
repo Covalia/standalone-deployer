@@ -242,17 +242,17 @@
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="43"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="148"/>
         <source>Installation of %1</source>
         <translation>Installation de %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="118"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="119"/>
         <source>Do you want to exit the application?</source>
         <translation>Voulez-vous quitter l&apos;application ?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="118"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="119"/>
         <source>The installation will be stopped</source>
         <translation>L&apos;installation sera interrompue</translation>
     </message>

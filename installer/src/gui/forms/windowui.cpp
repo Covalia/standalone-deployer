@@ -39,8 +39,7 @@ WindowUI::WindowUI(QWidget * _parent) :
     connect(m_ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
 
     //windows title
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
+    updateUi();
 
     // bug combobox style
     StyleManager::transformStyle(this);
@@ -52,6 +51,7 @@ WindowUI::~WindowUI()
     delete m_itemDelegate;
 }
 
+
 void WindowUI::center()
 {
     QRect geometry = frameGeometry();
@@ -61,6 +61,7 @@ void WindowUI::center()
     m_position = center;
     move(geometry.topLeft());
 }
+
 
 void WindowUI::mousePressEvent(QMouseEvent * _e)
 {
@@ -141,7 +142,13 @@ void WindowUI::comboBoxLanguageEvent(int _index)
     }
 }
 
+void WindowUI::updateUi(){
+    m_ui->retranslateUi(this);
+    ResourcesSettings * resource = ResourcesSettings::getInstance();
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
+}
+
 void WindowUI::changeLanguage()
 {
-    m_ui->retranslateUi(this);
+    updateUi();
 }
