@@ -29,8 +29,13 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
+
 SOURCES += src/fs/apptreemanager.cpp
 SOURCES += src/fs/config.cpp
+SOURCES += src/fs/macosrunner.cpp
 
 HEADERS += src/fs/apptreemanager.h
 HEADERS += src/fs/config.h
+HEADERS += src/fs/macosrunner.h
