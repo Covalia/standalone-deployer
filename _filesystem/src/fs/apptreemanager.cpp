@@ -62,9 +62,10 @@ QString AppTreeManager::getExtension()
 {
     QString extension = "";
 
-    #ifdef _WIN32
+    #ifdef Q_OS_WIN
         extension = FileSystemConfig::WindowsExtension;
-    #elif TARGET_OS_MAC
+    #endif
+    #ifdef Q_OS_MACOS
         extension = FileSystemConfig::MacOSExtension;
     #endif
     return extension;

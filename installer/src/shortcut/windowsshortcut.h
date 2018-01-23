@@ -1,7 +1,7 @@
 #ifndef INSTALLER__SHORTCUT_H
 #define INSTALLER__SHORTCUT_H
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN
 
 #include <QString>
 #include <Windows.h>

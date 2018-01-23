@@ -1,6 +1,6 @@
 #include "shortcut/windowsshortcut.h"
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN
 
     #include <Windows.h>
     #include <shlobj.h>

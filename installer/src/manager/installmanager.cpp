@@ -200,7 +200,7 @@ bool InstallManager::extractResources()
 
 bool InstallManager::createShortcut()
 {
-    #ifdef _WIN32
+    #ifdef Q_OS_WIN
         // WINDOWS SHORCUT
         // - online desktop shortcut
         // - offline desktop shorcut
@@ -225,7 +225,8 @@ bool InstallManager::createShortcut()
         success = success && windowsShortcutManager->createStartMenuShorcut(QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser());
         return success;
 
-    #elif TARGET_OS_MAC
+    #endif
+    #ifdef Q_OS_MACOS
         // MAC OS SHORTCUT
         return true;
     #endif
