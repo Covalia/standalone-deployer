@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
     new Logger("updater.log");
 
 
-    L_INFO("Downlaoder started.");
+    L_INFO("Updater started.");
     QApplication app(argc, argv);
 
     QTranslator translator;
