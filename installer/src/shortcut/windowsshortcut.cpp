@@ -67,15 +67,15 @@
 
         // startMenu folder creation
         QString applicationFolder = folderPath + "/" + _startMenuFolderName;
-        QDir applicationFolderDir(applicationFolder);
-        if (applicationFolderDir.exists()) {
-            L_INFO("Remove folder " + applicationFolder);
-            bool successRemoveDir = applicationFolderDir.removeRecursively();
-            if (!successRemoveDir) {
-                L_ERROR("An error occured when removing folder " + applicationFolder);
-                return false;
-            }
-        }
+//        QDir applicationFolderDir(applicationFolder);
+//        if (applicationFolderDir.exists()) {
+//            L_INFO("Remove folder " + applicationFolder);
+//            bool successRemoveDir = applicationFolderDir.removeRecursively();
+//            if (!successRemoveDir) {
+//                L_ERROR("An error occured when removing folder " + applicationFolder);
+//                return false;
+//            }
+//        }
 
         bool successCreationStartMenuFolder = AppTreeManager::makeDirectoryIfNotExists(folderPath, _startMenuFolderName);
 
@@ -127,7 +127,7 @@
                 // verirfy if shorcut has been moved in all user start menu programs
                 folderPath = findAllUserStartMenuProgramsFolder();
                 applicationFolder = folderPath + "/" + _startMenuFolderName;
-                if (applicationFolderDir.exists()) {
+                if (QDir(applicationFolder).exists()) {
                     if (!QFile::exists(applicationFolder + "/" + runApplicationPathShortcut)) {
                         L_ERROR(copyApplicationShortcut.second);
                         return false;
@@ -173,10 +173,10 @@
             }
         }
 
-        std::string strLoaderPath = shortcutPath.toStdString();
+        std::string strShorcutPath = shortcutPath.toStdString();
         L_INFO("Starting shortcut creation ");
         HRESULT result = createWindowsShortcut((const wchar_t *)targetPath.utf16(), (const wchar_t *)_args.utf16(),
-                                               const_cast<char *>(strLoaderPath.c_str()), (const wchar_t *)description.utf16(),
+                                               const_cast<char *>(strShorcutPath.c_str()), (const wchar_t *)description.utf16(),
                                                1, (const wchar_t *)executionDir.utf16(),
                                                (const wchar_t *)iconPath.utf16(), 0);
         if (SUCCEEDED(result)) {
@@ -197,6 +197,8 @@
                                                    int _iShowmode, LPCWSTR _pszCurdir,
                                                    LPCWSTR _pszIconfile, int _iIconindex)
     {
+        //TODO manage accent in link file
+
         HRESULT hRes;                       /* Returned COM result code */
         IShellLink * pShellLink;            /* IShellLink object pointer */
         IPersistFile * pPersistFile;        /* IPersistFile object pointer */

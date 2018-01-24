@@ -92,6 +92,12 @@ void InstallManager::startInstallation()
 
     moveLogInInstallFolder();
 
+    // create updater version folder
+    bool successUpdaterVersionCreation =  createUpdaterFolderVersion();
+    if (!successUpdaterVersionCreation) {
+        errorMessage = tr("An error ocurred during updater version folder creation");
+    }
+
     // settings writing
     bool settingWriting =  createIniConfigurationFile();
     if (!settingWriting) {
@@ -110,7 +116,7 @@ void InstallManager::startInstallation()
         errorMessage = tr("An error ocurred during shortcut creation");
     }
 
-    bool success = folderCreation && settingWriting && succesExtractResources && succesCreateShortcut;
+    bool success = folderCreation && settingWriting && successUpdaterVersionCreation && succesExtractResources && succesCreateShortcut;
 
     if (m_uiManager) {
         if (success) {
@@ -156,6 +162,14 @@ void InstallManager::moveLogInInstallFolder()
     L_INFO("End move log in install folder");
 }
 
+bool InstallManager::createUpdaterFolderVersion()
+{
+    bool success = m_treeManager->makeDirectoryIfNotExists(m_treeManager->getUpdaterDirPath(), AppTreeManager::getUpdaterVersion());
+
+    m_settings->setUpdaterVersion(AppTreeManager::getUpdaterVersion());
+    return success;
+}
+
 bool InstallManager::createIniConfigurationFile()
 {
     QString installFilePath(m_treeManager->getConfigurationFilePath());
@@ -180,7 +194,7 @@ bool InstallManager::createIniConfigurationFile()
 
 bool InstallManager::extractResources()
 {
-    QPair<bool, QString> extractUpdater = m_treeManager->extractResourceToPath(m_treeManager->getUpdaterResourcesPath(), m_treeManager->getUpdaterFilePath());
+    QPair<bool, QString> extractUpdater = m_treeManager->extractResourceToPath(m_treeManager->getUpdaterResourcesPath(), m_treeManager->getUpdaterFilePath(AppTreeManager::getUpdaterVersion()));
     L_INFO(extractUpdater.second);
 
     QPair<bool, QString> extractLoader = m_treeManager->extractResourceToPath(m_treeManager->getLoaderResourcesPath(), m_treeManager->getLoaderFilePath());
@@ -238,17 +252,25 @@ bool InstallManager::launchLoader()
     QProcess process;
     QString loaderFile = m_treeManager->getLoaderFilePath();
 
+    QString sOldPath = QDir::currentPath();
+
+    QDir::setCurrent(m_settings->getInstallLocation());
+
     if (!QFile::exists(loaderFile)) {
         L_ERROR("An error occured when launch file " + loaderFile + ". The file doesn't exist.");
         return false;
     }
     L_INFO("Launch file " + loaderFile);
+
     bool success = process.startDetached(loaderFile, args);
     if (!success) {
         L_ERROR("Error when launching file " + loaderFile);
     } else {
         L_INFO("Success launching file " + loaderFile);
     }
+
+    QDir::setCurrent(sOldPath);
+
     return success;
 }
 

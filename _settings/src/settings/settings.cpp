@@ -13,7 +13,7 @@ QMutex Settings::sm_settingsMutex;
 Settings::Settings() :
     m_settings(0),
     m_applicationName("Application"),
-    m_updaterPath(""),
+    m_updaterVersion("???"),
     m_proxyUse(false),
     m_proxyAuto(false),
     m_proxyManual(false),
@@ -107,7 +107,7 @@ void Settings::writeSettings()
 
     m_settings->beginGroup(GROUP_INFO);
     putSetting(S_APPLICATION_NAME, m_applicationName);
-    putSetting(S_UPDATER_PATH, m_updaterPath);
+    putSetting(S_UPDATER_VERSION, m_updaterVersion);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -118,10 +118,7 @@ void Settings::writeSettings()
     putSetting(S_PROXY_PORT, m_proxyPort);
     putSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification);
     putSetting(S_PROXY_LOGIN, m_proxyLogin);
-    // encrypt password
-    CryptManager * crypt = new CryptManager();
-    QString encryptedPwd = crypt->encryptToString(m_proxyPassword);
-    putSetting(S_PROXY_PASSWORD, encryptedPwd);
+    putSetting(S_PROXY_PASSWORD, m_proxyPassword);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);
@@ -164,9 +161,9 @@ void Settings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GROUP_PROXY);
+    m_settings->beginGroup(GROUP_INFO);
     m_applicationName = getSetting(S_APPLICATION_NAME, m_applicationName).toString();
-    m_updaterPath = getSetting(S_UPDATER_PATH, m_updaterPath).toString();
+    m_updaterVersion = getSetting(S_UPDATER_VERSION, m_updaterVersion).toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -177,10 +174,7 @@ void Settings::readSettings()
     m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
     m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification).toBool();
     m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
-    // decrypt password
-    CryptManager * crypt = new CryptManager();
-    QString encryptedPwd = getSetting(S_PROXY_PASSWORD, "").toString();
-    m_proxyPassword = crypt->decryptToString(encryptedPwd);
+    m_proxyPassword = getSetting(S_PROXY_PASSWORD, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);
@@ -220,7 +214,7 @@ QString Settings::paramListString()
     QString s;
 
     s = s + "applicationName = " + m_applicationName + "\n";
-    s = s + "updaterPath = " + m_updaterPath + "\n";
+    s = s + "updaterVersion = " + m_updaterVersion + "\n";
     s = s + "proxyUse = " + QString::number(m_proxyUse) + "\n";
     s = s + "proxyAuto = " + QString::number(m_proxyAuto) + "\n";
     s = s + "proxyManual = " + QString::number(m_proxyManual)  + "\n";
@@ -265,14 +259,14 @@ void Settings::setShortcutOfflineName(const QString &shortcutOfflineName)
     m_shortcutOfflineName = shortcutOfflineName;
 }
 
-QString Settings::getUpdaterPath() const
+QString Settings::getUpdaterVersion() const
 {
-    return m_updaterPath;
+    return m_updaterVersion;
 }
 
-void Settings::setUpdaterPath(const QString &updaterPath)
+void Settings::setUpdaterVersion(const QString &updaterVersion)
 {
-    m_updaterPath = updaterPath;
+    m_updaterVersion = updaterVersion;
 }
 
 QString Settings::getApplicationName() const
@@ -387,12 +381,14 @@ void Settings::setLanguage(const Language &language)
 
 QString Settings::getProxyPassword() const
 {
-    return m_proxyPassword;
+    CryptManager * crypt = new CryptManager();
+    return crypt->decryptToString(m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
-    m_proxyPassword = proxyPassword;
+    CryptManager * crypt = new CryptManager();
+    m_proxyPassword = crypt->encryptToString(proxyPassword);
 }
 
 QString Settings::getProxyLogin() const

@@ -50,7 +50,6 @@ Language LanguageManager::getLanguageFromLocale(QString locale)
 }
 
 QString LanguageManager::getStringLanguageFromEnum(Language language){
-     L_INFO("LOAD FINISHED");
     switch(language){
         case English :
             return "English";

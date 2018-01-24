@@ -193,7 +193,7 @@
     <message>
         <location filename="../../src/shortcut/windowsshortcut.cpp" line="100"/>
         <source>Uninstall %1</source>
-        <translation>Désinstaller %1</translation>
+        <translation type="unfinished">Desinstaller %1</translation>
     </message>
     <message>
         <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>

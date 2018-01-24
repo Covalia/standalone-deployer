@@ -15,6 +15,10 @@ class AppTreeManager : public QObject
         bool createDirectoryIfNotExist();
         bool makeAppDirectories();
 
+        static QString getInstallerVersion();
+        static QString getUpdaterVersion();
+        static QString getLoaderVersion();
+
         QDir getAppDirPath();
         QDir getConfigurationDirPath();
         QDir getExtensionDirPath();
@@ -23,12 +27,13 @@ class AppTreeManager : public QObject
         QDir getLogsDirPath();
         QDir getTempDirPath();
         QDir getUpdaterDirPath();
+        QDir getLoaderDirPath();
 
         QString getLoaderResourcesPath();
         QString getUpdaterResourcesPath();
 
         QString getLoaderFilePath();
-        QString getUpdaterFilePath();
+        QString getUpdaterFilePath(QString updaterVersion);
         QString getConfigurationFilePath();
 
         QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);

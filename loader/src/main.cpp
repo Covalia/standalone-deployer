@@ -10,7 +10,7 @@ int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QString dirPath = app.applicationDirPath();
+    QString dirPath = QDir::currentPath();
 
     AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
 
@@ -23,6 +23,9 @@ int main(int argc, char * argv[])
     Settings * settings = Settings::getInstance();
     settings->initSettings(settingsPath);
     settings->readSettings();
+    L_INFO("---------Settings info ------------");
+    L_INFO(settings->paramListString());
+    L_INFO("-----------------------------------");
 
     LoaderManager * loaderManager = new LoaderManager();
 

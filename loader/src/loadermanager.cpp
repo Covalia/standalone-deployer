@@ -27,7 +27,7 @@ bool LoaderManager::launchUpdater()
     AppTreeManager * treeManager = new AppTreeManager(QDir(installLocation));
 
     QProcess process;
-    QString updaterFile = treeManager->getUpdaterFilePath();
+    QString updaterFile = treeManager->getUpdaterFilePath(settings->getUpdaterVersion());
 
     if (!QFile::exists(updaterFile)) {
         L_ERROR("An error occured when launch Updater file " + updaterFile + ". The file doesn't exist.");

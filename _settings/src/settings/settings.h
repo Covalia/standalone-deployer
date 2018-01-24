@@ -19,7 +19,7 @@ static QString GROUP_SERVER = "SERVER";
 static QString GROUP_START = "START";
 
 static QString S_APPLICATION_NAME = "application_name";
-static QString S_UPDATER_PATH = "update_path";
+static QString S_UPDATER_VERSION = "updater_version";
 
 static QString S_PROXY_USE = "proxyUse";
 static QString S_PROXY_AUTO = "proxyAuto";
@@ -132,9 +132,6 @@ class Settings
         QString getUpdaterVersion() const;
         void setUpdaterVersion(const QString &updaterVersion);
 
-        QString getUpdaterPath() const;
-        void setUpdaterPath(const QString &updaterPath);
-
         QString getShortcutOfflineName() const;
         void setShortcutOfflineName(const QString &shortcutOfflineName);
 
@@ -202,7 +199,7 @@ private:
 
         // info
         QString m_applicationName;
-        QString m_updaterPath;
+        QString m_updaterVersion;
 
         // proxy
         bool m_proxyUse;

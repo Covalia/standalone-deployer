@@ -6,6 +6,18 @@
 class FileSystemConfig
 {
 public:
+
+    /// relative path of application installation application
+    static const QString InstallerVersion;
+
+    /// relative path of application configuration
+    static const QString UpdateVersion;
+
+    /// Relative path of application extensions
+    static const QString LoaderVersion;
+
+
+
     /// relative path of application installation application
     static const QString AppDir;
 
@@ -29,6 +41,11 @@ public:
 
     /// Relative directory path of application updater
     static const QString UpdaterDir;
+
+    /// Relative directory path of application updater
+    static const QString LoaderDir;
+
+
 
     /// Loader file name
     static const QString LoaderFile;

@@ -37,6 +37,7 @@ bool AppTreeManager::makeAppDirectories()
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::UpdaterDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LoaderDir);
 
     return result;
 }
@@ -82,7 +83,7 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
             return error;
         }
         if (QFile::exists(copyFilePath)) {
-            QPair<bool, QString> error = qMakePair(false, "File already exist. Can't copie file " + resourcePath +  " in path" + copyFilePath);
+            QPair<bool, QString> error = qMakePair(false, "File still exists. Can't copie file " + resourcePath +  " in path" + copyFilePath);
             return error;
         }
     }
@@ -98,6 +99,21 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
         QPair<bool, QString> error = qMakePair(false, "An error occurred when copie " + resourcePath + " in " + copyFilePath);
         return error;
     }
+}
+
+QString AppTreeManager::getInstallerVersion()
+{
+    return FileSystemConfig::InstallerVersion;
+}
+
+QString AppTreeManager::getUpdaterVersion()
+{
+    return FileSystemConfig::UpdateVersion;
+}
+
+QString AppTreeManager::getLoaderVersion()
+{
+    return FileSystemConfig::LoaderVersion;
 }
 
 QDir AppTreeManager::getAppDirPath()
@@ -140,6 +156,11 @@ QDir AppTreeManager::getUpdaterDirPath()
     return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
 }
 
+QDir AppTreeManager::getLoaderDirPath()
+{
+    return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
+}
+
 QString AppTreeManager::getLoaderResourcesPath()
 {
     return ":/bin/" + FileSystemConfig::LoaderFile + getExtension();
@@ -152,12 +173,12 @@ QString AppTreeManager::getUpdaterResourcesPath()
 
 QString AppTreeManager::getLoaderFilePath()
 {
-    return m_installationDir.absolutePath() + "/" + FileSystemConfig::LoaderFile + getExtension();
+    return m_installationDir.absolutePath()+ "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + getExtension();
 }
 
-QString AppTreeManager::getUpdaterFilePath()
+QString AppTreeManager::getUpdaterFilePath(QString updaterVersion)
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + FileSystemConfig::UpdaterFile + getExtension();
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + getExtension();
 }
 
 QString AppTreeManager:: getConfigurationFilePath()

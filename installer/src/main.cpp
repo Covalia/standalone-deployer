@@ -4,6 +4,7 @@
 
 #include "log/logger.h"
 #include "manager/installmanager.h"
+#include "fs/apptreemanager.h"
 #include "settings/settings.h"
 #include "gui/forms/windowui.h"
 
@@ -12,7 +13,7 @@ int main(int argc, char * argv[])
     QApplication app(argc, argv);
 
     new Logger("installer.log");
-    L_INFO("Installer started");
+    L_INFO("Installer started " + AppTreeManager::getInstallerVersion());
 
     L_INFO("Exe path " + QDir("./").absolutePath());
     InstallManager * installManager = new InstallManager();
