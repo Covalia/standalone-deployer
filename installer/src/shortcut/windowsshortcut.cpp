@@ -15,7 +15,7 @@
     #include "settings/settings.h"
     #include "fs/apptreemanager.h"
 
-#include <QStandardPaths>
+    #include <QStandardPaths>
 
     WindowsShortcut::WindowsShortcut()
     {
@@ -197,7 +197,7 @@
                                                    int _iShowmode, LPCWSTR _pszCurdir,
                                                    LPCWSTR _pszIconfile, int _iIconindex)
     {
-        //TODO manage accent in link file
+        // TODO manage accent in link file
 
         HRESULT hRes;                       /* Returned COM result code */
         IShellLink * pShellLink;            /* IShellLink object pointer */

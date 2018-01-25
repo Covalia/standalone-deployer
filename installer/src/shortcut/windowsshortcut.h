@@ -1,7 +1,10 @@
 #ifndef INSTALLER__SHORTCUT_H
 #define INSTALLER__SHORTCUT_H
 
+#include <QtGlobal>
+
 #ifdef Q_OS_WIN
+
 
 #include <QString>
 #include <Windows.h>
