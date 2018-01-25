@@ -57,12 +57,15 @@ win32 {
 LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
+FORMS += ui/askpopup.ui
 FORMS += ui/authenticationdialog.ui
 FORMS += ui/mainwindow.ui
+FORMS += ui/splashscreen.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/gui/askpopupui.cpp
 SOURCES += src/gui/mainwindow.cpp
+SOURCES += src/gui/splashscreen.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/utils/unzip/zipextractor.cpp
@@ -75,6 +78,7 @@ SOURCES += src/xml/deploymentxml.cpp
 
 HEADERS += src/gui/askpopupui.h
 HEADERS += src/gui/mainwindow.h
+HEADERS += src/gui/splashscreen.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/utils/qarchive/qarchive.h
