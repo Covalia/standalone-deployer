@@ -1,9 +1,14 @@
 #include <QApplication>
-#include <QTranslator>
-#include <QDebug>
+#include <QDir>
 
+#include "fs/apptreemanager.h"
 #include "gui/mainwindow.h"
+#include "gui/splashscreen.h"
+#include "gui/style/stylemanager.h"
+#include "lang/languagemanager.h"
 #include "log/logger.h"
+#include "settings/resourcessettings.h"
+#include "settings/settings.h"
 
 /*!
  *
@@ -33,23 +38,38 @@
  */
 int main(int argc, char * argv[])
 {
-    // TODO set path installation? Must be init before installation to log
-    // logger initialization
-    new Logger("updater.log");
-
-
-    L_INFO("Updater started.");
     QApplication app(argc, argv);
 
-    QTranslator translator;
-    // TODO gérer langue par défaut et demander quelle langue utiliser.
-    QString locale = QLocale::system().name();
-    QString location = ":/translations";
-    qDebug() << "locale:" << locale;
+    QString dirPath = QDir::currentPath();
+    AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
 
-    qDebug() << "loading translator";
-    translator.load(locale, location);
-    app.installTranslator(&translator);
+    new Logger(treeManager->getLogsDirPath().absolutePath() + "/updater.log");
+
+    L_INFO("Updater started.");
+
+    QString settingsPath = treeManager->getConfigurationFilePath();
+
+    L_INFO("Start read install folder resources" + settingsPath);
+    Settings * settings = Settings::getInstance();
+    settings->initSettings(settingsPath);
+    settings->readSettings();
+    L_INFO("---------Settings info ------------");
+    L_INFO(settings->paramListString());
+    L_INFO("-----------------------------------");
+
+    // init style
+    StyleManager::setGeneralStyle();
+
+    // init language with locale in settings
+    LanguageManager::updateLanguage(LanguageManager::getStringLanguageFromEnum(settings->getLanguage()));
+
+    QStringList args = qApp->arguments();
+    args.removeFirst();
+    L_INFO("Updater Arguments =  " + args.join(""));
+
+//    Splashscreen splashscreen;
+//    splashscreen.show();
+//    splashscreen.center();
 
     MainWindow window;
     window.show();
