@@ -27,8 +27,8 @@
         Settings * settings = Settings::getInstance();
         AppTreeManager * treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
         QString loaderPath =  treeManager->getLoaderFilePath();
-        QString shortcutPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/" + _shortcutName + ".lnk";
-        QString description = settings->getApplicationName();
+        QString shortcutPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + _shortcutName + ".lnk";
+        QString description = settings->getApplicationName() + "éé";
         QString executionDir = settings->getInstallLocation();
         QString iconPath = treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico";
         delete treeManager;
@@ -67,15 +67,6 @@
 
         // startMenu folder creation
         QString applicationFolder = folderPath + "/" + _startMenuFolderName;
-//        QDir applicationFolderDir(applicationFolder);
-//        if (applicationFolderDir.exists()) {
-//            L_INFO("Remove folder " + applicationFolder);
-//            bool successRemoveDir = applicationFolderDir.removeRecursively();
-//            if (!successRemoveDir) {
-//                L_ERROR("An error occured when removing folder " + applicationFolder);
-//                return false;
-//            }
-//        }
 
         bool successCreationStartMenuFolder = AppTreeManager::makeDirectoryIfNotExists(folderPath, _startMenuFolderName);
 
@@ -173,10 +164,11 @@
             }
         }
 
-        std::string strShorcutPath = shortcutPath.toStdString();
+        std::string shortcutLatinChar = std::string(shortcutPath.toLatin1().constData());
+
         L_INFO("Starting shortcut creation ");
         HRESULT result = createWindowsShortcut((const wchar_t *)targetPath.utf16(), (const wchar_t *)_args.utf16(),
-                                               const_cast<char *>(strShorcutPath.c_str()), (const wchar_t *)description.utf16(),
+                                               shortcutLatinChar.c_str(), (const wchar_t *)description.utf16(),
                                                1, (const wchar_t *)executionDir.utf16(),
                                                (const wchar_t *)iconPath.utf16(), 0);
         if (SUCCEEDED(result)) {
@@ -192,73 +184,75 @@
         return true;
     }
 
-    HRESULT WindowsShortcut::createWindowsShortcut(LPCWSTR _pszTargetfile, LPCWSTR _pszTargetargs,
-                                                   LPSTR _pszLinkfile, LPCWSTR _pszDescription,
-                                                   int _iShowmode, LPCWSTR _pszCurdir,
-                                                   LPCWSTR _pszIconfile, int _iIconindex)
-    {
-        // TODO manage accent in link file
+    #ifndef _UNICODE
+        HRESULT WindowsShortcut::createWindowsShortcut(LPCWSTR _pszTargetfile, LPCWSTR _pszTargetargs,
+                                                       const char * _pszLinkfile, LPCWSTR _pszDescription,
+                                                       int _iShowmode, LPCWSTR _pszCurdir,
+                                                       LPCWSTR _pszIconfile, int _iIconindex)
+        {
+            // TODO manage accent in link file
 
-        HRESULT hRes;                       /* Returned COM result code */
-        IShellLink * pShellLink;            /* IShellLink object pointer */
-        IPersistFile * pPersistFile;        /* IPersistFile object pointer */
-        WCHAR wszLinkfile[MAX_PATH];        /* pszLinkfile as Unicode string */
+            HRESULT hRes;                       /* Returned COM result code */
+            IShellLink * pShellLink;            /* IShellLink object pointer */
+            IPersistFile * pPersistFile;        /* IPersistFile object pointer */
+            WCHAR wszLinkfile[MAX_PATH];        /* pszLinkfile as Unicode string */
 
-        CoInitialize(NULL);
-        hRes = E_INVALIDARG;
-        if (
-            (_pszTargetfile != NULL) && (lstrlen(_pszTargetfile) > 0) &&
-            (_pszTargetargs != NULL) &&
-            (_pszLinkfile != NULL) && (strlen(_pszLinkfile) > 0) &&
-            (_pszDescription != NULL) &&
-            (_iShowmode >= 0) &&
-            (_pszCurdir != NULL) &&
-            (_pszIconfile != NULL) &&
-            (_iIconindex >= 0)
-            ) {
-            hRes = CoCreateInstance(
-                    CLSID_ShellLink,        /* pre-defined CLSID of the IShellLink object */
-                    NULL,                   /* pointer to parent interface if part of aggregate */
-                    CLSCTX_INPROC_SERVER,   /* caller and called code are in same process */
-                    IID_IShellLink,         /* pre-defined interface of the IShellLink object */
-                    (LPVOID *)&pShellLink); /* Returns a pointer to the IShellLink object */
+            CoInitialize(NULL);
+            hRes = E_INVALIDARG;
+            if (
+                (_pszTargetfile != NULL) && (lstrlen(_pszTargetfile) > 0) &&
+                (_pszTargetargs != NULL) &&
+                (_pszLinkfile != NULL) && (strlen(_pszLinkfile) > 0) &&
+                (_pszDescription != NULL) &&
+                (_iShowmode >= 0) &&
+                (_pszCurdir != NULL) &&
+                (_pszIconfile != NULL) &&
+                (_iIconindex >= 0)
+                ) {
+                hRes = CoCreateInstance(
+                        CLSID_ShellLink,        /* pre-defined CLSID of the IShellLink object */
+                        NULL,                   /* pointer to parent interface if part of aggregate */
+                        CLSCTX_INPROC_SERVER,   /* caller and called code are in same process */
+                        IID_IShellLink,         /* pre-defined interface of the IShellLink object */
+                        (LPVOID *)&pShellLink); /* Returns a pointer to the IShellLink object */
 
-            if (SUCCEEDED(hRes)) {
-                /* Set the fields in the IShellLink object */
-                hRes = pShellLink->SetPath(_pszTargetfile);
-                hRes = pShellLink->SetArguments(_pszTargetargs);
-                if (lstrlen(_pszDescription) > 0) {
-                    hRes = pShellLink->SetDescription(_pszDescription);
-                }
-                if (_iShowmode > 0) {
-                    hRes = pShellLink->SetShowCmd(_iShowmode);
-                }
-                if (lstrlen(_pszCurdir) > 0) {
-                    hRes = pShellLink->SetWorkingDirectory(_pszCurdir);
-                }
-                if (lstrlen(_pszIconfile) > 0 && _iIconindex >= 0) {
-                    hRes = pShellLink->SetIconLocation(_pszIconfile, _iIconindex);
-                }
-
-                /* Use the IPersistFile object to save the shell link */
-                hRes = pShellLink->QueryInterface(
-                        IID_IPersistFile,         /* pre-defined interface of the
-                                                   *  IPersistFile object */
-                        (LPVOID *)&pPersistFile); /* returns a pointer to the
-                                                   * IPersistFile object */
                 if (SUCCEEDED(hRes)) {
-                    MultiByteToWideChar(CP_ACP, 0,
-                                        _pszLinkfile, -1,
-                                        wszLinkfile, MAX_PATH);
-                    hRes = pPersistFile->Save(wszLinkfile, TRUE);
-                    pPersistFile->Release();
+                    /* Set the fields in the IShellLink object */
+                    hRes = pShellLink->SetPath(_pszTargetfile);
+                    hRes = pShellLink->SetArguments(_pszTargetargs);
+                    if (lstrlen(_pszDescription) > 0) {
+                        hRes = pShellLink->SetDescription(_pszDescription);
+                    }
+                    if (_iShowmode > 0) {
+                        hRes = pShellLink->SetShowCmd(_iShowmode);
+                    }
+                    if (lstrlen(_pszCurdir) > 0) {
+                        hRes = pShellLink->SetWorkingDirectory(_pszCurdir);
+                    }
+                    if (lstrlen(_pszIconfile) > 0 && _iIconindex >= 0) {
+                        hRes = pShellLink->SetIconLocation(_pszIconfile, _iIconindex);
+                    }
+
+                    /* Use the IPersistFile object to save the shell link */
+                    hRes = pShellLink->QueryInterface(
+                            IID_IPersistFile,     /* pre-defined interface of the
+                                                   *  IPersistFile object */
+                            (LPVOID *)&pPersistFile); /* returns a pointer to the
+                                                       * IPersistFile object */
+                    if (SUCCEEDED(hRes)) {
+                        MultiByteToWideChar(CP_ACP, 0,
+                                            _pszLinkfile, -1,
+                                            wszLinkfile, MAX_PATH);
+                        hRes = pPersistFile->Save(wszLinkfile, TRUE);
+                        pPersistFile->Release();
+                    }
+                    pShellLink->Release();
                 }
-                pShellLink->Release();
             }
+            CoUninitialize();
+            return (hRes);
         }
-        CoUninitialize();
-        return (hRes);
-    }
+    #endif
 
     QString WindowsShortcut::findAllUserStartMenuProgramsFolder()
     {

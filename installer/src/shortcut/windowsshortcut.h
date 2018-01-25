@@ -93,7 +93,7 @@
              * @return HRESULT value >= 0 for success, < 0 for failure.
              */
             HRESULT createWindowsShortcut(LPCWSTR _pszTargetfile, LPCWSTR _pszTargetargs,
-                                          LPSTR _pszLinkfile, LPCWSTR _pszDescription,
+                                          const char * _pszLinkfile, LPCWSTR _pszDescription,
                                           int _iShowmode, LPCWSTR _pszCurdir,
                                           LPCWSTR _pszIconfile, int _iIconindex);
     };
