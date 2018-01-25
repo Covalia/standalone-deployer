@@ -30,6 +30,9 @@ public:
     /// Relative path of Image
     static const QString ImagesDir;
 
+    /// Relative path of Slides
+    static const QString SlidesDir;
+
     /// Relative path of Java
     static const QString JavaDir;
 

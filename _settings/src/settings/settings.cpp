@@ -33,7 +33,16 @@ Settings::Settings() :
     m_dataLocation(""),
     m_installLocation(""),
     m_serverURL(""),
-    m_runAtStart(false)
+    m_runAtStart(false),
+    m_colorPanelBackgroundBorder("#364058"),
+    m_colorPanelBackground("#2d364c"),
+    m_colorButtonBackgroundOver("#2a7d7d"),
+    m_colorButtonBackground("#339999"),
+    m_colorTextOnBackground("#eff0f2"),
+    m_colorTextGray("#9ea0a5"),
+    m_colorDisabled("#656976"),
+    m_borderWindow("0")
+
 {
     L_INFO("Initialise Setting singleton instance");
 }
@@ -150,6 +159,18 @@ void Settings::writeSettings()
     m_settings->beginGroup(GROUP_START);
     putSetting(S_RUN_AT_START, m_runAtStart);
     m_settings->endGroup();
+
+    m_settings->beginGroup(GROUP_THEME);
+    putSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_colorPanelBackgroundBorder);
+    putSetting(S_COLOR_PANEL_BACKGROUND, m_colorPanelBackground);
+    putSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_colorButtonBackgroundOver);
+    putSetting(S_COLOR_BUTTON_BACKGROUND, m_colorButtonBackground);
+    putSetting(S_COLOR_TEXT_ON_BACKGROUND, m_colorTextOnBackground);
+    putSetting(S_COLOR_TEXT_GRAY, m_colorTextGray);
+    putSetting(S_COLOR_DISABLED, m_colorDisabled);
+    putSetting(S_BORDER_WINDOW, m_borderWindow);
+    m_settings->endGroup();
+
     L_INFO("End to write all settings");
 
     // write immediately in .ini file
@@ -206,6 +227,19 @@ void Settings::readSettings()
     m_settings->beginGroup(GROUP_START);
     m_runAtStart = getSetting(S_RUN_AT_START, m_runAtStart).toBool();
     m_settings->endGroup();
+
+    m_settings->beginGroup(GROUP_THEME);
+    m_colorPanelBackgroundBorder= getSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_dataLocation).toString();
+    m_colorPanelBackground= getSetting(S_COLOR_PANEL_BACKGROUND, m_dataLocation).toString();
+    m_colorButtonBackgroundOver= getSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_dataLocation).toString();
+    m_colorButtonBackground= getSetting(S_COLOR_BUTTON_BACKGROUND, m_dataLocation).toString();
+    m_colorTextOnBackground= getSetting(S_COLOR_TEXT_ON_BACKGROUND, m_dataLocation).toString();
+    m_colorTextGray= getSetting(S_COLOR_TEXT_GRAY, m_dataLocation).toString();
+    m_colorDisabled= getSetting(S_COLOR_DISABLED, m_dataLocation).toString();
+    m_borderWindow= getSetting(S_BORDER_WINDOW, m_dataLocation).toString();
+    m_settings->endGroup();
+
+
     L_INFO("End to read all settings");
 }
 
@@ -237,6 +271,86 @@ QString Settings::paramListString()
     s = s + "runAtStart = " + QString::number(m_runAtStart) + "\n";
 
     return s;
+}
+
+QString Settings::getBorderWindow() const
+{
+    return m_borderWindow;
+}
+
+void Settings::setBorderWindow(const QString &borderWindow)
+{
+    m_borderWindow = borderWindow;
+}
+
+QString Settings::getColorDisabled() const
+{
+    return m_colorDisabled;
+}
+
+void Settings::setColorDisabled(const QString &colorDisabled)
+{
+    m_colorDisabled = colorDisabled;
+}
+
+QString Settings::getColorTextGray() const
+{
+    return m_colorTextGray;
+}
+
+void Settings::setColorTextGray(const QString &colorTextGray)
+{
+    m_colorTextGray = colorTextGray;
+}
+
+QString Settings::getColorTextOnBackground() const
+{
+    return m_colorTextOnBackground;
+}
+
+void Settings::setColorTextOnBackground(const QString &colorTextOnBackground)
+{
+    m_colorTextOnBackground = colorTextOnBackground;
+}
+
+QString Settings::getColorButtonBackground() const
+{
+    return m_colorButtonBackground;
+}
+
+void Settings::setColorButtonBackground(const QString &colorButtonBackground)
+{
+    m_colorButtonBackground = colorButtonBackground;
+}
+
+QString Settings::getColorButtonBackgroundOver() const
+{
+    return m_colorButtonBackgroundOver;
+}
+
+void Settings::setColorButtonBackgroundOver(const QString &colorButtonBackgroundOver)
+{
+    m_colorButtonBackgroundOver = colorButtonBackgroundOver;
+}
+
+QString Settings::getColorPanelBackground() const
+{
+    return m_colorPanelBackground;
+}
+
+void Settings::setColorPanelBackground(const QString &colorPanelBackground)
+{
+    m_colorPanelBackground = colorPanelBackground;
+}
+
+QString Settings::getColorPanelBackgroundBorder() const
+{
+    return m_colorPanelBackgroundBorder;
+}
+
+void Settings::setColorPanelBackgroundBorder(const QString &colorPanelBackgroundBorder)
+{
+    m_colorPanelBackgroundBorder = colorPanelBackgroundBorder;
 }
 
 QString Settings::getShortcutOfflineArgs() const
@@ -382,12 +496,14 @@ void Settings::setLanguage(const Language &language)
 QString Settings::getProxyPassword() const
 {
     CryptManager * crypt = new CryptManager();
+
     return crypt->decryptToString(m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
     CryptManager * crypt = new CryptManager();
+
     m_proxyPassword = crypt->encryptToString(proxyPassword);
 }
 

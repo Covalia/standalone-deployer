@@ -33,6 +33,7 @@ bool AppTreeManager::makeAppDirectories()
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ConfigurationDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ExtensionDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ImagesDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(getImagesDirPath(), FileSystemConfig::SlidesDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
@@ -79,7 +80,7 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
         f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
         bool remove = f.remove();
         if (!remove) {
-            QPair<bool, QString> error = qMakePair(false, "Error when remove file" + copyFilePath);
+            QPair<bool, QString> error = qMakePair(false, "Error when remove file " + copyFilePath);
             return error;
         }
         if (QFile::exists(copyFilePath)) {
@@ -134,6 +135,11 @@ QDir AppTreeManager::getExtensionDirPath()
 QDir AppTreeManager::getImagesDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::ImagesDir));
+}
+
+QDir AppTreeManager::getSlidesDirPath()
+{
+    return QDir(getImagesDirPath().filePath(FileSystemConfig::SlidesDir));
 }
 
 QDir AppTreeManager::getJavaDirPath()

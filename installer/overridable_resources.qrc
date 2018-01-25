@@ -1,7 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/project.ini</file>
-        <file>resources/style.css</file>
+        <file alias="project.ini">resources/project.ini</file>
+        <file alias="style.css">resources/style.css</file>
+    </qresource>
+	<qresource prefix="/slideshow">
+        <file alias="mockup.png">resources/slideshow/mockup.png</file>
+        <file alias="mockup1.png">resources/slideshow/mockup1.png</file>
+        <file alias="mockup2.png">resources/slideshow/mockup2.png</file>
+        <file alias="mockup3.png">resources/slideshow/mockup3.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="close.png">resources/images/close.png</file>
@@ -14,12 +20,5 @@
         <file alias="loading.gif">resources/images/loading.gif</file>
         <file alias="succes.png">resources/images/succes.png</file>
         <file alias="failure.png">resources/images/failure.png</file>
-
-    </qresource>
-    <qresource prefix="/slideshow">
-        <file>resources/slideshow/mockup.png</file>
-        <file>resources/slideshow/mockup1.png</file>
-        <file>resources/slideshow/mockup2.png</file>
-        <file>resources/slideshow/mockup3.png</file>
     </qresource>
 </RCC>

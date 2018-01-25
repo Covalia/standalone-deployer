@@ -8,6 +8,8 @@
 #include <QStandardPaths>
 #include <QProcess>
 #include <QThread>
+#include <QDirIterator>
+#include <QStringList>
 
 #include "log/logger.h"
 #include "shortcut/windowsshortcut.h"
@@ -34,7 +36,7 @@ void InstallManager::initInstallation()
 {
     // init project resources
     m_projectSettings = ResourcesSettings::getInstance();
-    m_projectSettings->initSettings(":/resources/project.ini");
+    m_projectSettings->initSettings(":/project.ini");
     m_projectSettings->readSettings();
     m_projectSettings->sendToSettings();
     L_INFO("Ip=" + m_projectSettings->getIp_server());
@@ -195,21 +197,76 @@ bool InstallManager::createIniConfigurationFile()
 bool InstallManager::extractResources()
 {
     QPair<bool, QString> extractUpdater = m_treeManager->extractResourceToPath(m_treeManager->getUpdaterResourcesPath(), m_treeManager->getUpdaterFilePath(AppTreeManager::getUpdaterVersion()));
-    L_INFO(extractUpdater.second);
+    if (extractUpdater.first) {
+        L_INFO(extractUpdater.second);
+    } else {
+        L_ERROR(extractUpdater.second);
+    }
 
     QPair<bool, QString> extractLoader = m_treeManager->extractResourceToPath(m_treeManager->getLoaderResourcesPath(), m_treeManager->getLoaderFilePath());
-    L_INFO(extractLoader.second);
+    if (extractLoader.first) {
+        L_INFO(extractLoader.second);
+    } else {
+        L_ERROR(extractLoader.second);
+    }
 
     QPair<bool, QString> extractAppIcon = m_treeManager->extractResourceToPath(":/images/shortcut.ico", m_treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico");
-    L_INFO(extractAppIcon.second);
+    if (extractAppIcon.first) {
+        L_INFO(extractAppIcon.second);
+    } else {
+        L_ERROR(extractAppIcon.second);
+    }
 
     QPair<bool, QString> extractTrashIcon = m_treeManager->extractResourceToPath(":/images/trash.ico", m_treeManager->getImagesDirPath().absolutePath() + "/trash.ico");
-    L_INFO(extractTrashIcon.second);
+    if (extractTrashIcon.first) {
+        L_INFO(extractTrashIcon.second);
+    } else {
+        L_ERROR(extractTrashIcon.second);
+    }
 
     QPair<bool, QString> extractConfigIcon = m_treeManager->extractResourceToPath(":/images/config.ico", m_treeManager->getImagesDirPath().absolutePath() + "/config.ico");
-    L_INFO(extractConfigIcon.second);
+    if (extractConfigIcon.first) {
+        L_INFO(extractConfigIcon.second);
+    } else {
+        L_ERROR(extractConfigIcon.second);
+    }
 
-    return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first;
+    QPair<bool, QString> extractStyle = m_treeManager->extractResourceToPath(":/style.css", m_treeManager->getConfigurationDirPath().absolutePath() + "/style.css");
+    if (extractStyle.first) {
+        L_INFO(extractStyle.second);
+    } else {
+        L_ERROR(extractStyle.second);
+    }
+
+    QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
+    bool extractSlides = true;
+    while (it.hasNext()) {
+        const QString resourcePath = it.next();
+        QString resourceName = resourcePath.split("/").last();
+        QPair<bool, QString> extractSlide = m_treeManager->extractResourceToPath(resourcePath, m_treeManager->getSlidesDirPath().absolutePath() + "/" + resourceName);
+        if (extractSlide.first) {
+            L_INFO(extractSlide.second);
+        } else {
+            L_ERROR(extractSlide.second);
+        }
+        extractSlides = extractSlides && extractSlide.first;
+    }
+
+    QPair<bool, QString> extractClose = m_treeManager->extractResourceToPath(":/images/close.png", m_treeManager->getImagesDirPath().absolutePath() + "/close.png");
+    if (extractClose.first) {
+        L_INFO(extractClose.second);
+    } else {
+        L_ERROR(extractClose.second);
+    }
+
+    QPair<bool, QString> extractTitleLogo = m_treeManager->extractResourceToPath(":/images/logo_title.png", m_treeManager->getImagesDirPath().absolutePath() + "/logo_title.png");
+    if (extractTitleLogo.first) {
+        L_INFO(extractTitleLogo.second);
+    } else {
+        L_ERROR(extractTitleLogo.second);
+    }
+
+    return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first && extractStyle.first && extractSlides && extractClose.first && extractTitleLogo.first;
 }
 
 bool InstallManager::createShortcut()

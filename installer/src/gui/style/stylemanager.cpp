@@ -34,7 +34,7 @@ void StyleManager::transformStyle(QWidget * parentWidget)
 }
 
 void StyleManager::setGeneralStyle(){
-    QFile f(":/resources/style.css");
+    QFile f(":/style.css");
 
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);

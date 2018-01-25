@@ -23,6 +23,7 @@ class AppTreeManager : public QObject
         QDir getConfigurationDirPath();
         QDir getExtensionDirPath();
         QDir getImagesDirPath();
+        QDir getSlidesDirPath();
         QDir getJavaDirPath();
         QDir getLogsDirPath();
         QDir getTempDirPath();
