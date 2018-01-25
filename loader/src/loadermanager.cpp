@@ -34,7 +34,11 @@ bool LoaderManager::launchUpdater()
         return false;
     }
     QStringList args = qApp->arguments();
+    args.removeFirst();
     L_INFO("Launch file " + updaterFile + " with args " + args.join(""));
+
+    QString sOldPath = QDir::currentPath();
+    QDir::setCurrent(installLocation);
 
     bool success = process.startDetached(updaterFile, args);
     if (!success) {
@@ -42,6 +46,9 @@ bool LoaderManager::launchUpdater()
     } else {
         L_INFO("Success launching file " + updaterFile);
     }
+
+    QDir::setCurrent(sOldPath);
+
     return success;
 }
 
