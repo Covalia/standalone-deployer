@@ -4,17 +4,18 @@
 #include "tools/factory/factory.h"
 #include "tools/path/pathimpl.h"
 
-// TODO voir comment faire un lock + mutex
-
 class WindowsFactory : public Factory {
     public:
         static WindowsFactory * getFactoryInstance()
         {
             static WindowsFactory * factory = 0;
 
+            sm_mutex.lock();
             if (!factory) {
-                factory = new WindowsFactory;
+                factory = new MacosFactory;
             }
+            sm_mutex.unlock();
+
             return factory;
         }
 

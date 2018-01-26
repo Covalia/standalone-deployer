@@ -7,6 +7,6 @@ WindowsPathImpl::~WindowsPathImpl() {
 }
 
 // TODO implémenter et ajouter des arguments pour gérer chaque application
-QString WindowsPathImpl::getInstallationRoot() {
+QString WindowsPathImpl::getInstallationRootPath() {
     return "titi";
 }

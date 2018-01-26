@@ -14,10 +14,10 @@ Path::~Path() {
     delete m_pathImpl;
 }
 
-QString Path::getInstallationRoot()
+QString Path::getInstallationRootPath()
 {
     if (m_pathImpl) {
-        return m_pathImpl->getInstallationRoot();
+        return m_pathImpl->getInstallationRootPath();
     }
     return "";
 }

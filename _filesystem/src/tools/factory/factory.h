@@ -1,6 +1,8 @@
 #ifndef FILESYSTEM__FACTORY_H
 #define FILESYSTEM__FACTORY_H
 
+#include <mutex>
+
 class PathImpl;
 
 class Factory {
@@ -10,8 +12,11 @@ class Factory {
 
         // les services proposés par la factory
 
-        // TODO gestion des working directories
+        // gestion des working directories
         virtual PathImpl * makePath() = 0;
+
+    protected:
+        static std::mutex sm_mutex;
 };
 
 #endif

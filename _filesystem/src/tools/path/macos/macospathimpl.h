@@ -7,7 +7,7 @@ class MacosPathImpl : public PathImpl {
     public:
         MacosPathImpl();
         virtual ~MacosPathImpl();
-        virtual QString getInstallationRoot();
+        virtual QString getInstallationRootPath();
 };
 
 #endif

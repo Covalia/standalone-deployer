@@ -12,7 +12,7 @@ class Path {
         virtual ~Path();
         // chaque application doit implémenter ceci pour trouver la
         // racine du projet à partir
-        QString getInstallationRoot();
+        QString getInstallationRootPath();
 
     private:
         PathImpl * m_pathImpl;

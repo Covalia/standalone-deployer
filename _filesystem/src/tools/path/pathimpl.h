@@ -3,12 +3,14 @@
 
 #include "tools/path/path.h"
 
+#include <QCoreApplication>
+
 class PathImpl {
     public:
         // Tout le code en commun vient ici
         PathImpl();
         virtual ~PathImpl();
-        virtual QString getInstallationRoot() = 0;
+        virtual QString getInstallationRootPath() = 0;
 };
 
 #endif

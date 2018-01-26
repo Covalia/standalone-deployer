@@ -9,6 +9,8 @@
 #include "tools/factory/macos/macosfactory.h"
 #endif
 
+std::mutex Factory::sm_mutex;
+
 Factory * Factory::getFactory()
 {
     static Factory * factory = 0;

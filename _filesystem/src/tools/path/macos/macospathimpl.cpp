@@ -7,6 +7,6 @@ MacosPathImpl::~MacosPathImpl() {
 }
 
 // TODO implémenter et ajouter des arguments pour gérer chaque application
-QString MacosPathImpl::getInstallationRoot() {
-    return "toto";
+QString MacosPathImpl::getInstallationRootPath() {
+    return QCoreApplication::applicationDirPath();
 }

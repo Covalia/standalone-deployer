@@ -7,7 +7,7 @@ class WindowsPathImpl : public PathImpl {
     public:
         WindowsPathImpl();
         virtual ~WindowsPathImpl();
-        virtual QString getInstallationRoot();
+        virtual QString getInstallationRootPath();
 };
 
 #endif
