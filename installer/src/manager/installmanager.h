@@ -3,13 +3,14 @@
 
 #include <QString>
 #include <QObject>
+#include <QThread>
 
 #include "gui/manager/uimanager.h"
 #include "fs/apptreemanager.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
 
-class InstallManager: public QObject
+class InstallManager: public QThread
 {
     Q_OBJECT
 
@@ -37,6 +38,9 @@ class InstallManager: public QObject
         void startInstallation();
         void closeInstallation(bool _launchApplication);
         bool launchLoader();
+
+    protected:
+         void run();
 
     private slots:
         void eventStartInstallation();

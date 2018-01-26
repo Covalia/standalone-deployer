@@ -101,7 +101,7 @@ void UIManager::changeWelcome()
         connect(m_welcome, SIGNAL(contractSignal()),
                 this, SLOT(aboutEvent()));
         connect(m_welcome, SIGNAL(simpleInstallationSignal()),
-                this, SLOT(switchWelcomeToInstallation()));
+                this, SLOT(switchWelcomeToInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
     }
 }
 
@@ -146,11 +146,11 @@ void UIManager::changeAbout()
     }
 }
 
-
 void UIManager::changeInstallation()
 {
     m_window->changeContentWidget(m_installation);
     m_window->setVisibleButton(false, false);
+    m_window->update();
     changeInstallationSignal();
 }
 

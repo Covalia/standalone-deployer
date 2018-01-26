@@ -20,7 +20,7 @@
 #include "gui/style/stylemanager.h"
 #include "fs/config.h"
 
-InstallManager::InstallManager() : QObject(),
+InstallManager::InstallManager() : QThread(),
     m_uiManager(0),
     m_treeManager(0)
 {
@@ -62,20 +62,27 @@ void InstallManager::initInstallation()
         m_uiManager->init();
 
         QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
-                         this, SLOT(eventStartInstallation()));
+                         this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
         QObject::connect(this, SIGNAL(endInstallation(bool,QString)),
                          m_uiManager, SLOT(eventEndInstallation(bool,QString)));
     } else {
-        startInstallation();
+        start();
     }
 
     delete lineParser;
 }
 
+
 void InstallManager::eventStartInstallation()
+{
+    start();
+}
+
+void InstallManager::run()
 {
     startInstallation();
 }
+
 
 void InstallManager::startInstallation()
 {
