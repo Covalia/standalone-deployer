@@ -2,7 +2,7 @@
 #define FILESYSTEM__WINDOWSFACTORY_H
 
 #include "tools/factory/factory.h"
-#include "tools/path/pathimpl.h"
+#include "tools/installpath/installpathimpl.h"
 
 class WindowsFactory : public Factory {
     public:
@@ -12,7 +12,7 @@ class WindowsFactory : public Factory {
 
             sm_mutex.lock();
             if (!factory) {
-                factory = new MacosFactory;
+                factory = new WindowsFactory;
             }
             sm_mutex.unlock();
 
@@ -20,7 +20,7 @@ class WindowsFactory : public Factory {
         }
 
         virtual ~WindowsFactory();
-        virtual PathImpl * makePath();
+        virtual InstallPathImpl * makeInstallPath();
 
     private:
         WindowsFactory();

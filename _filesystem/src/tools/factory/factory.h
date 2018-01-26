@@ -3,7 +3,7 @@
 
 #include <mutex>
 
-class PathImpl;
+class InstallPathImpl;
 
 class Factory {
     public:
@@ -13,7 +13,7 @@ class Factory {
         // les services proposés par la factory
 
         // gestion des working directories
-        virtual PathImpl * makePath() = 0;
+        virtual InstallPathImpl * makeInstallPath() = 0;
 
     protected:
         static std::mutex sm_mutex;

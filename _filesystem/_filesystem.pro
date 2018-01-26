@@ -32,27 +32,27 @@ DEPENDPATH += src
 SOURCES += src/fs/apptreemanager.cpp
 SOURCES += src/fs/config.cpp
 SOURCES += src/tools/factory/factory.cpp
-SOURCES += src/tools/path/path.cpp
-SOURCES += src/tools/path/pathimpl.cpp
+SOURCES += src/tools/installpath/installpath.cpp
+SOURCES += src/tools/installpath/installpathimpl.cpp
 
 HEADERS += src/fs/apptreemanager.h
 HEADERS += src/fs/config.h
 HEADERS += src/tools/factory/factory.h
-HEADERS += src/tools/path/path.h
-HEADERS += src/tools/path/pathimpl.h
+HEADERS += src/tools/installpath/installpath.h
+HEADERS += src/tools/installpath/installpathimpl.h
 
 win32 {
 HEADERS += src/tools/factory/windows/windowsfactory.h
-HEADERS += src/tools/path/windows/windowspathimpl.h
+HEADERS += src/tools/installpath/windows/windowsinstallpathimpl.h
 
 SOURCES += src/tools/factory/windows/windowsfactory.cpp
-SOURCES += src/tools/path/windows/windowspathimpl.cpp
+SOURCES += src/tools/installpath/windows/windowsinstallpathimpl.cpp
 }
 
 macx {
 HEADERS += src/tools/factory/macos/macosfactory.h
-HEADERS += src/tools/path/macos/macospathimpl.h
+HEADERS += src/tools/installpath/macos/macosinstallpathimpl.h
 
 SOURCES += src/tools/factory/macos/macosfactory.cpp
-SOURCES += src/tools/path/macos/macospathimpl.cpp
+SOURCES += src/tools/installpath/macos/macosinstallpathimpl.cpp
 }

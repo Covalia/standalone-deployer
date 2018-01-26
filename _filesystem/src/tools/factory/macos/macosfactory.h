@@ -2,7 +2,7 @@
 #define FILESYSTEM__MACOSFACTORY_H
 
 #include "tools/factory/factory.h"
-#include "tools/path/pathimpl.h"
+#include "tools/installpath/installpathimpl.h"
 
 class MacosFactory : public Factory {
     public:
@@ -20,7 +20,7 @@ class MacosFactory : public Factory {
         }
 
         virtual ~MacosFactory();
-        virtual PathImpl * makePath();
+        virtual InstallPathImpl * makeInstallPath();
 
     private:
         MacosFactory();

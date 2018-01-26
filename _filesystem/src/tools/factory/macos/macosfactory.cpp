@@ -1,5 +1,5 @@
 #include "tools/factory/macos/macosfactory.h"
-#include "tools/path/macos/macospathimpl.h"
+#include "tools/installpath/macos/macosinstallpathimpl.h"
 
 MacosFactory::MacosFactory()
 {
@@ -9,8 +9,8 @@ MacosFactory::~MacosFactory()
 {
 }
 
-PathImpl * MacosFactory::makePath()
+InstallPathImpl * MacosFactory::makeInstallPath()
 {
     // La classe Path est responsable de libérer cette instance
-    return new MacosPathImpl();
+    return new MacosInstallPathImpl();
 }

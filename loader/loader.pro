@@ -46,8 +46,10 @@ LIBS += -L../_filesystem/bin -lfilesystem
 
 SOURCES += src/main.cpp
 SOURCES += src/loadermanager.cpp
+SOURCES += src/utils.cpp
 
 HEADERS += src/loadermanager.h
+HEADERS += src/utils.h
 
 # RESOURCES += resources.qrc
 

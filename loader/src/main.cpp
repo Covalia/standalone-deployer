@@ -1,21 +1,22 @@
 #include <QCoreApplication>
 #include <QObject>
+#include <QtDebug>
 
 #include "log/logger.h"
 #include "loadermanager.h"
 #include "settings/settings.h"
 #include "fs/apptreemanager.h"
+#include "utils.h"
 
 int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QString dirPath = QDir::currentPath();
+    qDebug() << "-- Installation root: " << Utils::getInstallationRootPath();
 
-    AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
+    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
 
     new Logger(treeManager->getLogsDirPath().absolutePath() + "/loader.log");
-    L_INFO("Start Loader in " +  dirPath);
 
     QString settingsPath = treeManager->getConfigurationFilePath();
     L_INFO("Start read settings in " +  settingsPath);

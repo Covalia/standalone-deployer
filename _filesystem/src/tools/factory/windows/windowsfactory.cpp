@@ -1,5 +1,5 @@
 #include "tools/factory/windows/windowsfactory.h"
-#include "tools/path/windows/windowspathimpl.h"
+#include "tools/installpath/windows/windowsinstallpathimpl.h"
 
 WindowsFactory::WindowsFactory()
 {
@@ -9,8 +9,8 @@ WindowsFactory::~WindowsFactory()
 {
 }
 
-PathImpl * WindowsFactory::makePath()
+InstallPathImpl * WindowsFactory::makeInstallPath()
 {
     // La classe Path est responsable de libérer cette instance
-    return new WindowsPathImpl();
+    return new WindowsInstallPathImpl();
 }

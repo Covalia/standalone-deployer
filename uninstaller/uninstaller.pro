@@ -49,8 +49,10 @@ LIBS += -L../_filesystem/bin -lfilesystem
 # FORMS +=
 
 SOURCES += src/main.cpp
+SOURCES += src/utils.cpp
 
 # HEADERS +=
+HEADERS += src/utils.h
 
 RESOURCES += resources.qrc
 

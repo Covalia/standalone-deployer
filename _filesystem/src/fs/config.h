@@ -7,6 +7,12 @@ class FileSystemConfig
 {
 public:
 
+    enum AppComponent {
+        Loader,
+        Uninstaller,
+        Updater
+    };
+
     /// relative path of application installation application
     static const QString InstallerVersion;
 

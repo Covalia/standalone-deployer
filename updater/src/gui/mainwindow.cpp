@@ -11,6 +11,7 @@
 #include "settings/settings.h"
 #include "updater/config.h"
 #include "gui/style/stylemanager.h"
+#include "utils.h"
 
 /*!
  * \class MainWindow
@@ -38,8 +39,7 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_ui->pushButton->setAccessibleName("pageButton");
     StyleManager::transformStyle(this);
 
-    Settings * settings = Settings::getInstance();
-    AppTreeManager * treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
+    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
     m_ui->closeButton->setIcon(QIcon(treeManager->getImagesDirPath().absolutePath()+"/close.png"));
     m_ui->titleIconLabel->setPixmap(QPixmap(treeManager->getImagesDirPath().absolutePath()+"/logo_title.png"));
 
@@ -189,8 +189,7 @@ void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _byte
 void MainWindow::loadSlideShowImagesFromResources()
 {
     m_imagesList.clear();
-    Settings * settings = Settings::getInstance();
-    AppTreeManager * treeManager = new AppTreeManager(QDir(settings->getInstallLocation()));
+    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
     QDirIterator it(treeManager->getSlidesDirPath(), QDirIterator::Subdirectories);
     while (it.hasNext()) {
         const QString resourcePath = it.next();

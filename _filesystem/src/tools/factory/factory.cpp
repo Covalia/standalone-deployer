@@ -3,7 +3,7 @@
 #include <QtGlobal>
 
 #ifdef Q_OS_WIN
-#include "utils/windowsfactory.h"
+#include "tools/factory/windows/windowsfactory.h"
 #endif
 #ifdef Q_OS_MACOS
 #include "tools/factory/macos/macosfactory.h"
