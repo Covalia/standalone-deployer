@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
-#include "fs/config.h"
+#include "io/config.h"
 
 AppTreeManager::AppTreeManager(const QDir &_installationDir, QObject * _parent) :
     QObject(_parent),

@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__MACOSFACTORY_H
-#define FILESYSTEM__MACOSFACTORY_H
+#ifndef IO__MACOSFACTORY_H
+#define IO__MACOSFACTORY_H
 
 #include "tools/factory/factory.h"
 #include "tools/installpath/installpathimpl.h"

@@ -8,7 +8,7 @@ CONFIG(release, debug|release) {
 	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
-TARGET = filesystem
+TARGET = io
 TEMPLATE = lib
 
 DESTDIR = bin
@@ -30,13 +30,13 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 SOURCES += src/fs/apptreemanager.cpp
-SOURCES += src/fs/config.cpp
+SOURCES += src/io/config.cpp
 SOURCES += src/tools/factory/factory.cpp
 SOURCES += src/tools/installpath/installpath.cpp
 SOURCES += src/tools/installpath/installpathimpl.cpp
 
 HEADERS += src/fs/apptreemanager.h
-HEADERS += src/fs/config.h
+HEADERS += src/io/config.h
 HEADERS += src/tools/factory/factory.h
 HEADERS += src/tools/installpath/installpath.h
 HEADERS += src/tools/installpath/installpathimpl.h

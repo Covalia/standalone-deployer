@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__WINDOWSPATHIMPL_H
-#define FILESYSTEM__WINDOWSPATHIMPL_H
+#ifndef IO__WINDOWSINSTALLPATHIMPL_H
+#define IO__WINDOWSINSTALLPATHIMPL_H
 
 #include "tools/installpath/installpathimpl.h"
 

@@ -1,8 +1,8 @@
-#ifndef FILESYSTEM__PATHIMPL_H
-#define FILESYSTEM__PATHIMPL_H
+#ifndef IO__INSTALLPATHIMPL_H
+#define IO__INSTALLPATHIMPL_H
 
 #include "tools/installpath/installpath.h"
-#include "fs/config.h"
+#include "io/config.h"
 
 #include <QCoreApplication>
 #include <QDir>

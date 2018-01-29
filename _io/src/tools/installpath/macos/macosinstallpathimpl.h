@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__MACOSPATHIMPL_H
-#define FILESYSTEM__MACOSPATHIMPL_H
+#ifndef IO__MACOSINSTALLPATHIMPL_H
+#define IO__MACOSINSTALLPATHIMPL_H
 
 #include "tools/installpath/installpathimpl.h"
 

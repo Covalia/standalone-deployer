@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__CONFIG_H
-#define FILESYSTEM__CONFIG_H
+#ifndef IO__CONFIG_H
+#define IO__CONFIG_H
 
 #include <QString>
 
@@ -73,4 +73,4 @@ public:
 
 };
 
-#endif // ifndef FILESYSTEM__CONFIG_H
+#endif // ifndef IO__CONFIG_H

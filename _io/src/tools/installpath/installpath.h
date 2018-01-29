@@ -1,9 +1,9 @@
-#ifndef FILESYSTEM__PATH_H
-#define FILESYSTEM__PATH_H
+#ifndef IO__INSTALLPATH_H
+#define IO__INSTALLPATH_H
 
 #include <QString>
 #include "tools/installpath/installpathimpl.h"
-#include "fs/config.h"
+#include "io/config.h"
 
 class InstallPathImpl;
 

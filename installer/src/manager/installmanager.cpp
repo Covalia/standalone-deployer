@@ -18,7 +18,7 @@
 #include "settings/resourcessettings.h"
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
-#include "fs/config.h"
+#include "io/config.h"
 
 InstallManager::InstallManager() : QObject(),
     m_uiManager(0),
