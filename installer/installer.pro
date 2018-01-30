@@ -40,12 +40,13 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
+# attention, l'ordre est important.
+INCLUDEPATH += ../_io/src
+LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
-INCLUDEPATH += ../_filesystem/src
-LIBS += -L../_filesystem/bin -lfilesystem
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 FORMS += ui/about.ui
 FORMS += ui/askpopup.ui
@@ -69,7 +70,6 @@ SOURCES += src/gui/forms/windowui.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/manager/installmanager.cpp
-SOURCES += src/shortcut/windowsshortcut.cpp
 
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/gui/forms/aboutui.h
@@ -83,7 +83,6 @@ HEADERS += src/gui/forms/windowui.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/manager/installmanager.h
-HEADERS += src/shortcut/windowsshortcut.h
 
 RESOURCES += fixed_resources.qrc
 

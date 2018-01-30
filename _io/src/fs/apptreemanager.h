@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__APPTREEMANAGER_H
-#define FILESYSTEM__APPTREEMANAGER_H
+#ifndef IO__APPTREEMANAGER_H
+#define IO__APPTREEMANAGER_H
 
 #include <QObject>
 #include <QDir>
@@ -48,4 +48,4 @@ class AppTreeManager : public QObject
 
 };
 
-#endif // ifndef FILESYSTEM__APPTREEMANAGER_H
+#endif // ifndef IO__APPTREEMANAGER_H

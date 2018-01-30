@@ -1,4 +1,4 @@
-#include "fs/config.h"
+#include "io/config.h"
 
 const QString FileSystemConfig::InstallerVersion("1.0");
 const QString FileSystemConfig::UpdateVersion("1.0");

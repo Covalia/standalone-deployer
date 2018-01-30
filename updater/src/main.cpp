@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDir>
+#include <QtDebug>
 
 #include "fs/apptreemanager.h"
 #include "gui/mainwindow.h"
@@ -9,6 +10,7 @@
 #include "log/logger.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
+#include "utils.h"
 
 /*!
  *
@@ -40,8 +42,9 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    QString dirPath = QDir::currentPath();
-    AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
+    qDebug() << "-- Installation root: " << Utils::getInstallationRootPath();
+
+    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
 
     new Logger(treeManager->getLogsDirPath().absolutePath() + "/updater.log");
 

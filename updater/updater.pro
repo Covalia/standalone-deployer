@@ -42,12 +42,13 @@ INCLUDEPATH += headers/libarchive
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
+# attention, l'ordre est important.
+INCLUDEPATH += ../_io/src
+LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
-INCLUDEPATH += ../_filesystem/src
-LIBS += -L../_filesystem/bin -lfilesystem
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 macx {
 LIBS += -L./libs/libarchive/macosx -larchive
@@ -68,10 +69,11 @@ SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/gui/splashscreen.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/network/downloadmanager.cpp
-SOURCES += src/utils/hashmac/hashmac512.cpp
-SOURCES += src/utils/unzip/zipextractor.cpp
 SOURCES += src/updater/appupdater.cpp
 SOURCES += src/updater/config.cpp
+SOURCES += src/utils.cpp
+SOURCES += src/utils/hashmac/hashmac512.cpp
+SOURCES += src/utils/unzip/zipextractor.cpp
 SOURCES += src/xml/data/application.cpp
 SOURCES += src/xml/data/download.cpp
 SOURCES += src/xml/data/javaupdate.cpp
@@ -82,11 +84,12 @@ HEADERS += src/gui/mainwindow.h
 HEADERS += src/gui/splashscreen.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h
+HEADERS += src/updater/appupdater.h
+HEADERS += src/updater/config.h
+HEADERS += src/utils.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/utils/qarchive/qarchive.h
 HEADERS += src/utils/unzip/zipextractor.h
-HEADERS += src/updater/appupdater.h
-HEADERS += src/updater/config.h
 HEADERS += src/xml/data/application.h
 HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h

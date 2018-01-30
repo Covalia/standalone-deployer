@@ -1,11 +1,17 @@
-#ifndef FILESYSTEM__CONFIG_H
-#define FILESYSTEM__CONFIG_H
+#ifndef IO__CONFIG_H
+#define IO__CONFIG_H
 
 #include <QString>
 
 class FileSystemConfig
 {
 public:
+
+    enum AppComponent {
+        Loader,
+        Uninstaller,
+        Updater
+    };
 
     /// relative path of application installation application
     static const QString InstallerVersion;
@@ -67,4 +73,4 @@ public:
 
 };
 
-#endif // ifndef FILESYSTEM__CONFIG_H
+#endif // ifndef IO__CONFIG_H

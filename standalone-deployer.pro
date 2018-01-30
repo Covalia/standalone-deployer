@@ -7,7 +7,7 @@ CONFIG += ordered
 
 SUBDIRS += _logger
 SUBDIRS += _settings
-SUBDIRS += _filesystem
+SUBDIRS += _io
 SUBDIRS += loader
 SUBDIRS += updater
 SUBDIRS += uninstaller

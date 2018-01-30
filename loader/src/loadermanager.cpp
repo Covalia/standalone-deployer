@@ -7,6 +7,7 @@
 #include "log/logger.h"
 #include "settings/settings.h"
 #include "fs/apptreemanager.h"
+#include "utils.h"
 
 LoaderManager::LoaderManager() : QObject()
 {
@@ -20,7 +21,7 @@ bool LoaderManager::launchUpdater()
 {
     Settings * settings = Settings::getInstance();
 
-    QString installLocation = settings->getInstallLocation();
+    QString installLocation = Utils::getInstallationRootPath();
 
     L_INFO("Install location = " + installLocation);
 
