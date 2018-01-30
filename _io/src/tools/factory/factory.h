@@ -4,6 +4,7 @@
 #include <mutex>
 
 class InstallPathImpl;
+class ShortcutImpl;
 
 class Factory {
     public:
@@ -14,6 +15,8 @@ class Factory {
 
         // gestion des working directories
         virtual InstallPathImpl * makeInstallPath() = 0;
+        // gestion des raccourcis
+        virtual ShortcutImpl * makeShortcut() = 0;
 
     protected:
         static std::mutex sm_mutex;

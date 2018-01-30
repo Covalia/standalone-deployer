@@ -42,12 +42,13 @@ INCLUDEPATH += headers/libarchive
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
-INCLUDEPATH += ../_settings/src
-LIBS += -L../_settings/bin -lsettings
+# attention, l'ordre est important.
 INCLUDEPATH += ../_io/src
 LIBS += -L../_io/bin -lio
+INCLUDEPATH += ../_settings/src
+LIBS += -L../_settings/bin -lsettings
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 macx {
 LIBS += -L./libs/libarchive/macosx -larchive

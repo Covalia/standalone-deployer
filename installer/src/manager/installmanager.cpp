@@ -12,7 +12,7 @@
 #include <QStringList>
 
 #include "log/logger.h"
-#include "shortcut/windowsshortcut.h"
+#include "tools/shortcut/shortcut.h"
 #include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "settings/resourcessettings.h"
@@ -271,36 +271,23 @@ bool InstallManager::extractResources()
 
 bool InstallManager::createShortcut()
 {
-    #ifdef Q_OS_WIN
-        // WINDOWS SHORCUT
-        // - online desktop shortcut
-        // - offline desktop shorcut
-        // - startup shorcut (run start computer)
-        // - startMenu
-
-        WindowsShortcut * windowsShortcutManager = new WindowsShortcut();
+        Shortcut shortcut;
         bool success = true;
         // online shortcut
         if (m_settings->getShortcutOnline()) {
-            success = success && windowsShortcutManager->createDesktopShortcut(m_settings->getShortcutName(), "");
+            success &= shortcut.createDesktopShortcut(m_settings->getShortcutName(), "", m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // offline shortcut
         if (m_settings->getShortcutOffline()) {
-            success = success && windowsShortcutManager->createDesktopShortcut(m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs());
+            success &= shortcut.createDesktopShortcut(m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // startup shortcut
         if (m_settings->getRunAtStart()) {
-            success = success && windowsShortcutManager->createStartShorcut(m_settings->getShortcutName(), m_settings->getShortcutAllUser());
+            success &= shortcut.createStartShorcut(m_settings->getShortcutName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
-        // StratMenu folder and shortcut
-        success = success && windowsShortcutManager->createStartMenuShorcut(QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser());
+        // StartMenu folder and shortcut
+        success &= shortcut.createStartMenuShorcut(QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         return success;
-
-    #endif
-    #ifdef Q_OS_MACOS
-        // MAC OS SHORTCUT
-        return true;
-    #endif
 }
 
 bool InstallManager::launchLoader()

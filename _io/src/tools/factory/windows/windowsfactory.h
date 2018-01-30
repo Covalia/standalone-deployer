@@ -3,6 +3,7 @@
 
 #include "tools/factory/factory.h"
 #include "tools/installpath/installpathimpl.h"
+#include "tools/shortcut/shortcutimpl.h"
 
 class WindowsFactory : public Factory {
     public:
@@ -21,6 +22,7 @@ class WindowsFactory : public Factory {
 
         virtual ~WindowsFactory();
         virtual InstallPathImpl * makeInstallPath();
+        virtual ShortcutImpl * makeShortcut();
 
     private:
         WindowsFactory();
