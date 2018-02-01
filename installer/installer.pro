@@ -40,16 +40,16 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
+# attention, l'ordre est important.
+INCLUDEPATH += ../_io/src
+LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
-INCLUDEPATH += ../_filesystem/src
-LIBS += -L../_filesystem/bin -lfilesystem
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 FORMS += ui/about.ui
 FORMS += ui/askpopup.ui
-FORMS += ui/download.ui
 FORMS += ui/endinstallation.ui
 FORMS += ui/installation.ui
 FORMS += ui/personalize.ui
@@ -61,7 +61,6 @@ SOURCES += src/main.cpp
 SOURCES += src/commandline/commandlineparser.cpp
 SOURCES += src/gui/forms/aboutui.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
-SOURCES += src/gui/forms/downloadui.cpp
 SOURCES += src/gui/forms/endinstallationui.cpp
 SOURCES += src/gui/forms/installationui.cpp
 SOURCES += src/gui/forms/personalizeui.cpp
@@ -71,13 +70,10 @@ SOURCES += src/gui/forms/windowui.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/manager/installmanager.cpp
-SOURCES += src/manager/windowsshortcutmanager.cpp
-SOURCES += src/shortcut/shortcut.cpp
 
 HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/gui/forms/aboutui.h
 HEADERS += src/gui/forms/askpopupui.h
-HEADERS += src/gui/forms/downloadui.h
 HEADERS += src/gui/forms/endinstallationui.h
 HEADERS += src/gui/forms/installationui.h
 HEADERS += src/gui/forms/personalizeui.h
@@ -87,8 +83,6 @@ HEADERS += src/gui/forms/windowui.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/manager/installmanager.h
-HEADERS += src/manager/windowsshortcutmanager.h
-HEADERS += src/shortcut/shortcut.h
 
 RESOURCES += fixed_resources.qrc
 

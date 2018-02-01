@@ -37,17 +37,20 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
+# attention, l'ordre est important.
+INCLUDEPATH += ../_io/src
+LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
-INCLUDEPATH += ../_filesystem/src
-LIBS += -L../_filesystem/bin -lfilesystem
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 SOURCES += src/main.cpp
 SOURCES += src/loadermanager.cpp
+SOURCES += src/utils.cpp
 
 HEADERS += src/loadermanager.h
+HEADERS += src/utils.h
 
 # RESOURCES += resources.qrc
 

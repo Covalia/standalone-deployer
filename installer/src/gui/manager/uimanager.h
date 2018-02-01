@@ -9,7 +9,6 @@ class WelcomeUI;
 class PersonalizeUI;
 class ProxyUI;
 class AboutUI;
-class DownloadUI;
 class InstallationUI;
 class EndInstallationUI;
 
@@ -28,11 +27,10 @@ class UIManager : public QObject
         PersonalizeUI * m_personalize;
         ProxyUI * m_proxy;
         AboutUI * m_about;
-        DownloadUI * m_download;
         InstallationUI * m_installation;
         EndInstallationUI * m_endInstallation;
 
-        enum Page { WelcomePage, PersonalizePage, ProxyPage, AboutPage, DownloadPage, InstallationPage, EndInstallationPage };
+        enum Page { WelcomePage, PersonalizePage, ProxyPage, AboutPage, InstallationPage, EndInstallationPage };
         Page m_returnPage;
 
         void returnToLastPage();
@@ -40,7 +38,6 @@ class UIManager : public QObject
         void changePersonalize();
         void changeProxy();
         void changeAbout();
-        void changeDownload();
         void changeInstallation();
         void changeEndInstallation();
 

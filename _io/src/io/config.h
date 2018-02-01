@@ -1,11 +1,29 @@
-#ifndef FILESYSTEM__CONFIG_H
-#define FILESYSTEM__CONFIG_H
+#ifndef IO__CONFIG_H
+#define IO__CONFIG_H
 
 #include <QString>
 
 class FileSystemConfig
 {
 public:
+
+    enum AppComponent {
+        Loader,
+        Uninstaller,
+        Updater
+    };
+
+    /// relative path of application installation application
+    static const QString InstallerVersion;
+
+    /// relative path of application configuration
+    static const QString UpdateVersion;
+
+    /// Relative path of application extensions
+    static const QString LoaderVersion;
+
+
+
     /// relative path of application installation application
     static const QString AppDir;
 
@@ -18,6 +36,9 @@ public:
     /// Relative path of Image
     static const QString ImagesDir;
 
+    /// Relative path of Slides
+    static const QString SlidesDir;
+
     /// Relative path of Java
     static const QString JavaDir;
 
@@ -29,6 +50,11 @@ public:
 
     /// Relative directory path of application updater
     static const QString UpdaterDir;
+
+    /// Relative directory path of application updater
+    static const QString LoaderDir;
+
+
 
     /// Loader file name
     static const QString LoaderFile;
@@ -47,4 +73,4 @@ public:
 
 };
 
-#endif // ifndef FILESYSTEM__CONFIG_H
+#endif // ifndef IO__CONFIG_H

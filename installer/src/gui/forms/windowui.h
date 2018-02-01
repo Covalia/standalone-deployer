@@ -39,6 +39,7 @@ class WindowUI : public QMainWindow
         void mouseMoveEvent(QMouseEvent *);
         void hideLayoutContent(QLayout * _layout);
         virtual void closeEvent(QCloseEvent *);
+        void updateUi();
 
     signals:
         void changeLanguageSignal();

@@ -1,36 +1,41 @@
 #include <QCoreApplication>
 #include <QObject>
+#include <QtDebug>
 
 #include "log/logger.h"
 #include "loadermanager.h"
 #include "settings/settings.h"
 #include "fs/apptreemanager.h"
+#include "utils.h"
 
 int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QString dirPath = app.applicationDirPath();
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    qDebug() << "-- Installation root: " << installationRootPath.absolutePath();
 
-    AppTreeManager * treeManager = new AppTreeManager(QDir(dirPath));
+    AppTreeManager treeManager(installationRootPath);
 
-    new Logger(treeManager->getLogsDirPath().absolutePath() + "/loader.log");
-    L_INFO("Start Loader in " +  dirPath);
+    new Logger(treeManager.getLogsDirPath().absolutePath() + "/loader.log");
 
-    QString settingsPath = treeManager->getConfigurationFilePath();
+    QString settingsPath = treeManager.getConfigurationFilePath();
     L_INFO("Start read settings in " +  settingsPath);
 
     Settings * settings = Settings::getInstance();
     settings->initSettings(settingsPath);
     settings->readSettings();
+    L_INFO("---------Settings info ------------");
+    L_INFO(settings->paramListString());
+    L_INFO("-----------------------------------");
 
-    LoaderManager * loaderManager = new LoaderManager();
+    LoaderManager loaderManager;
 
     // close properly after treatment
-    QObject::connect(loaderManager, SIGNAL(closeAppSignal()), qApp, SLOT(quit()), Qt::QueuedConnection);
+    QObject::connect(&loaderManager, SIGNAL(closeAppSignal()), qApp, SLOT(quit()), Qt::QueuedConnection);
 
-    loaderManager->launchUpdater();
-    loaderManager->closeAppEvent();
+    loaderManager.launchUpdater();
+    loaderManager.closeAppEvent();
 
     return app.exec();
 }

@@ -8,7 +8,6 @@
 #include "gui/forms/personalizeui.h"
 #include "gui/forms/proxyui.h"
 #include "gui/forms/aboutui.h"
-#include "gui/forms/downloadui.h"
 #include "gui/forms/installationui.h"
 #include "gui/forms/endinstallationui.h"
 
@@ -18,7 +17,6 @@ UIManager::UIManager() : QObject(),
     m_personalize(0),
     m_proxy(0),
     m_about(0),
-    m_download(0),
     m_installation(0),
     m_endInstallation(0)
 {
@@ -27,7 +25,6 @@ UIManager::UIManager() : QObject(),
     m_personalize = new PersonalizeUI();
     m_proxy = new ProxyUI();
     m_about = new AboutUI();
-    m_download = new DownloadUI();
     m_installation = new InstallationUI();
     m_endInstallation = new EndInstallationUI();
 
@@ -52,7 +49,6 @@ UIManager::~UIManager()
     delete m_personalize;
     delete m_proxy;
     delete m_about;
-    delete m_download;
     delete m_installation;
     delete m_endInstallation;
 }
@@ -78,9 +74,6 @@ void UIManager::returnToLastPage()
             break;
         case AboutPage:
             widget = m_about;
-            break;
-        case DownloadPage:
-            widget = m_download;
             break;
         case InstallationPage:
             widget = m_installation;
@@ -108,7 +101,7 @@ void UIManager::changeWelcome()
         connect(m_welcome, SIGNAL(contractSignal()),
                 this, SLOT(aboutEvent()));
         connect(m_welcome, SIGNAL(simpleInstallationSignal()),
-                this, SLOT(switchWelcomeToInstallation()));
+                this, SLOT(switchWelcomeToInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
     }
 }
 
@@ -153,18 +146,11 @@ void UIManager::changeAbout()
     }
 }
 
-void UIManager::changeDownload()
-{
-    m_window->changeContentWidget(m_download);
-    m_window->setVisibleButton(false, false);
-    connect(m_window, SIGNAL(changeLanguageSignal()),
-            m_download, SLOT(changeLanguage()));
-}
-
 void UIManager::changeInstallation()
 {
     m_window->changeContentWidget(m_installation);
     m_window->setVisibleButton(false, false);
+    m_window->update();
     changeInstallationSignal();
 }
 

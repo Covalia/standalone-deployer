@@ -7,6 +7,7 @@
 #include "log/logger.h"
 #include "settings/settings.h"
 #include "fs/apptreemanager.h"
+#include "utils.h"
 
 LoaderManager::LoaderManager() : QObject()
 {
@@ -20,21 +21,25 @@ bool LoaderManager::launchUpdater()
 {
     Settings * settings = Settings::getInstance();
 
-    QString installLocation = settings->getInstallLocation();
+    QDir installationRootPath(Utils::getInstallationRootPath());
 
-    L_INFO("Install location = " + installLocation);
+    L_INFO("Install location = " + installationRootPath.absolutePath());
 
-    AppTreeManager * treeManager = new AppTreeManager(QDir(installLocation));
+    AppTreeManager treeManager(installationRootPath);
 
     QProcess process;
-    QString updaterFile = treeManager->getUpdaterFilePath();
+    QString updaterFile = treeManager.getUpdaterFilePath(settings->getUpdaterVersion());
 
     if (!QFile::exists(updaterFile)) {
         L_ERROR("An error occured when launch Updater file " + updaterFile + ". The file doesn't exist.");
         return false;
     }
     QStringList args = qApp->arguments();
+    args.removeFirst();
     L_INFO("Launch file " + updaterFile + " with args " + args.join(""));
+
+    QString sOldPath = QDir::currentPath();
+    QDir::setCurrent(installationRootPath.absolutePath());
 
     bool success = process.startDetached(updaterFile, args);
     if (!success) {
@@ -42,6 +47,9 @@ bool LoaderManager::launchUpdater()
     } else {
         L_INFO("Success launching file " + updaterFile);
     }
+
+    QDir::setCurrent(sOldPath);
+
     return success;
 }
 

@@ -11,16 +11,12 @@ CryptManager::CryptManager()
 QString CryptManager::encryptToString(const QString& text)
 {
     SimpleCrypt crypto(getKey());
-
-    // TODO set crypt setting key
     return crypto.encryptToString(text);
 }
 
 QString CryptManager::decryptToString(const QString& text)
 {
     SimpleCrypt crypto(getKey());
-
-    // TODO set crypt setting key
     return crypto.decryptToString(text);
 }
 

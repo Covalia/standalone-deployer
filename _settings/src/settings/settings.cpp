@@ -13,7 +13,7 @@ QMutex Settings::sm_settingsMutex;
 Settings::Settings() :
     m_settings(0),
     m_applicationName("Application"),
-    m_updaterPath(""),
+    m_updaterVersion("???"),
     m_proxyUse(false),
     m_proxyAuto(false),
     m_proxyManual(false),
@@ -33,7 +33,16 @@ Settings::Settings() :
     m_dataLocation(""),
     m_installLocation(""),
     m_serverURL(""),
-    m_runAtStart(false)
+    m_runAtStart(false),
+    m_colorPanelBackgroundBorder("#364058"),
+    m_colorPanelBackground("#2d364c"),
+    m_colorButtonBackgroundOver("#2a7d7d"),
+    m_colorButtonBackground("#339999"),
+    m_colorTextOnBackground("#eff0f2"),
+    m_colorTextGray("#9ea0a5"),
+    m_colorDisabled("#656976"),
+    m_borderWindow("0")
+
 {
     L_INFO("Initialise Setting singleton instance");
 }
@@ -107,7 +116,7 @@ void Settings::writeSettings()
 
     m_settings->beginGroup(GROUP_INFO);
     putSetting(S_APPLICATION_NAME, m_applicationName);
-    putSetting(S_UPDATER_PATH, m_updaterPath);
+    putSetting(S_UPDATER_VERSION, m_updaterVersion);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -118,10 +127,7 @@ void Settings::writeSettings()
     putSetting(S_PROXY_PORT, m_proxyPort);
     putSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification);
     putSetting(S_PROXY_LOGIN, m_proxyLogin);
-    // encrypt password
-    CryptManager * crypt = new CryptManager();
-    QString encryptedPwd = crypt->encryptToString(m_proxyPassword);
-    putSetting(S_PROXY_PASSWORD, encryptedPwd);
+    putSetting(S_PROXY_PASSWORD, m_proxyPassword);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);
@@ -153,6 +159,18 @@ void Settings::writeSettings()
     m_settings->beginGroup(GROUP_START);
     putSetting(S_RUN_AT_START, m_runAtStart);
     m_settings->endGroup();
+
+    m_settings->beginGroup(GROUP_THEME);
+    putSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_colorPanelBackgroundBorder);
+    putSetting(S_COLOR_PANEL_BACKGROUND, m_colorPanelBackground);
+    putSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_colorButtonBackgroundOver);
+    putSetting(S_COLOR_BUTTON_BACKGROUND, m_colorButtonBackground);
+    putSetting(S_COLOR_TEXT_ON_BACKGROUND, m_colorTextOnBackground);
+    putSetting(S_COLOR_TEXT_GRAY, m_colorTextGray);
+    putSetting(S_COLOR_DISABLED, m_colorDisabled);
+    putSetting(S_BORDER_WINDOW, m_borderWindow);
+    m_settings->endGroup();
+
     L_INFO("End to write all settings");
 
     // write immediately in .ini file
@@ -164,9 +182,9 @@ void Settings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GROUP_PROXY);
+    m_settings->beginGroup(GROUP_INFO);
     m_applicationName = getSetting(S_APPLICATION_NAME, m_applicationName).toString();
-    m_updaterPath = getSetting(S_UPDATER_PATH, m_updaterPath).toString();
+    m_updaterVersion = getSetting(S_UPDATER_VERSION, m_updaterVersion).toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -177,10 +195,7 @@ void Settings::readSettings()
     m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
     m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification).toBool();
     m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
-    // decrypt password
-    CryptManager * crypt = new CryptManager();
-    QString encryptedPwd = getSetting(S_PROXY_PASSWORD, "").toString();
-    m_proxyPassword = crypt->decryptToString(encryptedPwd);
+    m_proxyPassword = getSetting(S_PROXY_PASSWORD, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_LANGUAGE);
@@ -212,6 +227,19 @@ void Settings::readSettings()
     m_settings->beginGroup(GROUP_START);
     m_runAtStart = getSetting(S_RUN_AT_START, m_runAtStart).toBool();
     m_settings->endGroup();
+
+    m_settings->beginGroup(GROUP_THEME);
+    m_colorPanelBackgroundBorder= getSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_dataLocation).toString();
+    m_colorPanelBackground= getSetting(S_COLOR_PANEL_BACKGROUND, m_dataLocation).toString();
+    m_colorButtonBackgroundOver= getSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_dataLocation).toString();
+    m_colorButtonBackground= getSetting(S_COLOR_BUTTON_BACKGROUND, m_dataLocation).toString();
+    m_colorTextOnBackground= getSetting(S_COLOR_TEXT_ON_BACKGROUND, m_dataLocation).toString();
+    m_colorTextGray= getSetting(S_COLOR_TEXT_GRAY, m_dataLocation).toString();
+    m_colorDisabled= getSetting(S_COLOR_DISABLED, m_dataLocation).toString();
+    m_borderWindow= getSetting(S_BORDER_WINDOW, m_dataLocation).toString();
+    m_settings->endGroup();
+
+
     L_INFO("End to read all settings");
 }
 
@@ -220,7 +248,7 @@ QString Settings::paramListString()
     QString s;
 
     s = s + "applicationName = " + m_applicationName + "\n";
-    s = s + "updaterPath = " + m_updaterPath + "\n";
+    s = s + "updaterVersion = " + m_updaterVersion + "\n";
     s = s + "proxyUse = " + QString::number(m_proxyUse) + "\n";
     s = s + "proxyAuto = " + QString::number(m_proxyAuto) + "\n";
     s = s + "proxyManual = " + QString::number(m_proxyManual)  + "\n";
@@ -245,6 +273,86 @@ QString Settings::paramListString()
     return s;
 }
 
+QString Settings::getBorderWindow() const
+{
+    return m_borderWindow;
+}
+
+void Settings::setBorderWindow(const QString &borderWindow)
+{
+    m_borderWindow = borderWindow;
+}
+
+QString Settings::getColorDisabled() const
+{
+    return m_colorDisabled;
+}
+
+void Settings::setColorDisabled(const QString &colorDisabled)
+{
+    m_colorDisabled = colorDisabled;
+}
+
+QString Settings::getColorTextGray() const
+{
+    return m_colorTextGray;
+}
+
+void Settings::setColorTextGray(const QString &colorTextGray)
+{
+    m_colorTextGray = colorTextGray;
+}
+
+QString Settings::getColorTextOnBackground() const
+{
+    return m_colorTextOnBackground;
+}
+
+void Settings::setColorTextOnBackground(const QString &colorTextOnBackground)
+{
+    m_colorTextOnBackground = colorTextOnBackground;
+}
+
+QString Settings::getColorButtonBackground() const
+{
+    return m_colorButtonBackground;
+}
+
+void Settings::setColorButtonBackground(const QString &colorButtonBackground)
+{
+    m_colorButtonBackground = colorButtonBackground;
+}
+
+QString Settings::getColorButtonBackgroundOver() const
+{
+    return m_colorButtonBackgroundOver;
+}
+
+void Settings::setColorButtonBackgroundOver(const QString &colorButtonBackgroundOver)
+{
+    m_colorButtonBackgroundOver = colorButtonBackgroundOver;
+}
+
+QString Settings::getColorPanelBackground() const
+{
+    return m_colorPanelBackground;
+}
+
+void Settings::setColorPanelBackground(const QString &colorPanelBackground)
+{
+    m_colorPanelBackground = colorPanelBackground;
+}
+
+QString Settings::getColorPanelBackgroundBorder() const
+{
+    return m_colorPanelBackgroundBorder;
+}
+
+void Settings::setColorPanelBackgroundBorder(const QString &colorPanelBackgroundBorder)
+{
+    m_colorPanelBackgroundBorder = colorPanelBackgroundBorder;
+}
+
 QString Settings::getShortcutOfflineArgs() const
 {
     return m_shortcutOfflineArgs;
@@ -265,14 +373,14 @@ void Settings::setShortcutOfflineName(const QString &shortcutOfflineName)
     m_shortcutOfflineName = shortcutOfflineName;
 }
 
-QString Settings::getUpdaterPath() const
+QString Settings::getUpdaterVersion() const
 {
-    return m_updaterPath;
+    return m_updaterVersion;
 }
 
-void Settings::setUpdaterPath(const QString &updaterPath)
+void Settings::setUpdaterVersion(const QString &updaterVersion)
 {
-    m_updaterPath = updaterPath;
+    m_updaterVersion = updaterVersion;
 }
 
 QString Settings::getApplicationName() const
@@ -387,12 +495,16 @@ void Settings::setLanguage(const Language &language)
 
 QString Settings::getProxyPassword() const
 {
-    return m_proxyPassword;
+    CryptManager * crypt = new CryptManager();
+
+    return crypt->decryptToString(m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
-    m_proxyPassword = proxyPassword;
+    CryptManager * crypt = new CryptManager();
+
+    m_proxyPassword = crypt->encryptToString(proxyPassword);
 }
 
 QString Settings::getProxyLogin() const

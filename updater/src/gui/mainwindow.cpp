@@ -3,10 +3,15 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDirIterator>
+
+#include "gui/askpopupui.h"
 #include "ui_mainwindow.h"
 #include "gui/mainwindow.h"
 #include "updater/appupdater.h"
+#include "settings/settings.h"
 #include "updater/config.h"
+#include "gui/style/stylemanager.h"
+#include "utils.h"
 
 /*!
  * \class MainWindow
@@ -16,6 +21,8 @@
  * \date october 25, 2017
  */
 
+static int update_counter = -1;
+
 /*!
  *
  * \brief Constructor
@@ -24,14 +31,28 @@
 MainWindow::MainWindow(QWidget * _parent) :
     QMainWindow(_parent),
     m_ui(new Ui::MainWindow),
+    m_timer(0),
     m_appUpdater(0)
 {
     m_ui->setupUi(this);
 
+    m_ui->pushButton->setAccessibleName("pageButton");
+    StyleManager::transformStyle(this);
+
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    AppTreeManager treeManager(installationRootPath);
+    m_ui->closeButton->setIcon(QIcon(treeManager.getImagesDirPath().absolutePath()+"/close.png"));
+    m_ui->titleIconLabel->setPixmap(QPixmap(treeManager.getImagesDirPath().absolutePath()+"/logo_title.png"));
+
     m_appUpdater = new AppUpdater(UpdaterConfig::AppUrl, UpdaterConfig::InstallationDir, this);
+
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
+    m_timer->start(5000);
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
     connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+
     connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));
     connect(m_appUpdater, SIGNAL(downloadFileMessage(const QString&)),
@@ -60,7 +81,15 @@ MainWindow::~MainWindow()
 {
     delete m_ui;
     delete m_appUpdater;
+    delete m_timer;
 }
+
+void MainWindow::showEvent(QShowEvent * _event)
+{
+    QMainWindow::showEvent(_event);
+    updateSlideShow();
+}
+
 
 void MainWindow::closeEvent(QCloseEvent * _event)
 {
@@ -69,15 +98,11 @@ void MainWindow::closeEvent(QCloseEvent * _event)
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        //: This string refers to the exit message title.
-        int ret = QMessageBox::question(this, tr("Warning!"),
-                                        //: This string refers to the exit message.
-                                        tr("You are about to quit the application, do you want to continue?"),
-                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-
-        if (ret == QMessageBox::Yes) {
-            m_alreadyClosedOnMacOs = true;
+        AskPopupUI * popupClose = new AskPopupUI(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        popupClose->show();
+        if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();
+            m_alreadyClosedOnMacOs = true;
         } else {
             _event->ignore();
         }
@@ -160,4 +185,81 @@ void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _byte
         m_ui->totalProgressBar->setMaximum(100);
         m_ui->totalProgressBar->setValue(static_cast<int>(_bytesReceived * 100.0 / _bytesTotal));
     }
+}
+
+void MainWindow::loadSlideShowImagesFromResources()
+{
+    m_imagesList.clear();
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    AppTreeManager treeManager(installationRootPath);
+    QDirIterator it(treeManager.getSlidesDirPath(), QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        const QString resourcePath = it.next();
+        const QPixmap pixmap = QPixmap(resourcePath);
+        if (!pixmap.isNull()) {
+            m_imagesList << pixmap;
+        }
+    }
+    std::random_shuffle(m_imagesList.begin(), m_imagesList.end());
+
+    QButtonGroup * group = new QButtonGroup(this);
+    group->setExclusive(true);
+    m_buttonsList.clear();
+    for (int i = 0; i < m_imagesList.size(); i++) {
+        QPushButton * button = new QPushButton("", this);
+        button->setMaximumSize(QSize(10, 10));
+        button->setCheckable(true);
+
+        QString bSlideStyle = " QPushButton{                      \
+                                    border-radius: 2px;                     \
+                                    background : @color-text-gray;          \
+                                    margin : 3px;                           \
+                                }                                           \
+                                QPushButton:hover {                         \
+                                    background : @color-text-on-background; \
+                                }                                           \
+                                QPushButton:checked {                       \
+                                  background : @color-text-on-background;   \
+                                }";
+        button->setStyleSheet(StyleManager::transformStyle(bSlideStyle));
+        button->setCursor(Qt::PointingHandCursor);
+        connect(button, SIGNAL(clicked(bool)), this, SLOT(buttonSlideEvent()));
+        m_ui->horizontalLayoutButtonSlider->addWidget(button);
+        m_buttonsList << button;
+        group->addButton(button);
+    }
+}
+
+void MainWindow::buttonSlideEvent()
+{
+    QPushButton * button = qobject_cast<QPushButton *>(sender());
+
+    if (button) {
+        m_timer->stop();
+        m_timer->start();
+        int index = m_buttonsList.indexOf(button);
+        update_counter = index;
+        updateSlideShow(index);
+    }
+}
+
+void MainWindow::updateSlideShow(int _index)
+{
+    if (!m_imagesList.isEmpty()) {
+        const QSize maxSize = m_ui->labelImage->size();
+        QPixmap pixmap = m_imagesList.at(_index);
+        QPixmap resizedPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        m_ui->labelImage->setPixmap(resizedPixmap);
+        m_buttonsList.at(_index)->setChecked(true);
+    }
+}
+
+void MainWindow::updateSlideShow()
+{
+    if (m_imagesList.isEmpty()) {
+        loadSlideShowImagesFromResources();
+    }
+    update_counter++;
+    update_counter %= m_imagesList.size();
+    updateSlideShow(update_counter);
 }

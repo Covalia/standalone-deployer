@@ -2,9 +2,9 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
-#include "fs/config.h"
+#include "io/config.h"
 
-AppTreeManager::AppTreeManager(const QDir &_installationDir, QObject * _parent) :
+AppTreeManager::AppTreeManager(QDir _installationDir, QObject * _parent) :
     QObject(_parent),
     m_installationDir(_installationDir)
 {
@@ -33,10 +33,12 @@ bool AppTreeManager::makeAppDirectories()
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ConfigurationDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ExtensionDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ImagesDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(getImagesDirPath(), FileSystemConfig::SlidesDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
     result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::UpdaterDir);
+    result &= AppTreeManager::makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LoaderDir);
 
     return result;
 }
@@ -62,9 +64,10 @@ QString AppTreeManager::getExtension()
 {
     QString extension = "";
 
-    #ifdef _WIN32
+    #ifdef Q_OS_WIN
         extension = FileSystemConfig::WindowsExtension;
-    #elif TARGET_OS_MAC
+    #endif
+    #ifdef Q_OS_MACOS
         extension = FileSystemConfig::MacOSExtension;
     #endif
     return extension;
@@ -77,11 +80,11 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
         f.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
         bool remove = f.remove();
         if (!remove) {
-            QPair<bool, QString> error = qMakePair(false, "Error when remove file" + copyFilePath);
+            QPair<bool, QString> error = qMakePair(false, "Error when remove file " + copyFilePath);
             return error;
         }
         if (QFile::exists(copyFilePath)) {
-            QPair<bool, QString> error = qMakePair(false, "File already exist. Can't copie file " + resourcePath +  " in path" + copyFilePath);
+            QPair<bool, QString> error = qMakePair(false, "File still exists. Can't copie file " + resourcePath +  " in path" + copyFilePath);
             return error;
         }
     }
@@ -97,6 +100,21 @@ QPair<bool, QString> AppTreeManager::extractResourceToPath(QString resourcePath,
         QPair<bool, QString> error = qMakePair(false, "An error occurred when copie " + resourcePath + " in " + copyFilePath);
         return error;
     }
+}
+
+QString AppTreeManager::getInstallerVersion()
+{
+    return FileSystemConfig::InstallerVersion;
+}
+
+QString AppTreeManager::getUpdaterVersion()
+{
+    return FileSystemConfig::UpdateVersion;
+}
+
+QString AppTreeManager::getLoaderVersion()
+{
+    return FileSystemConfig::LoaderVersion;
 }
 
 QDir AppTreeManager::getAppDirPath()
@@ -119,6 +137,11 @@ QDir AppTreeManager::getImagesDirPath()
     return QDir(m_installationDir.filePath(FileSystemConfig::ImagesDir));
 }
 
+QDir AppTreeManager::getSlidesDirPath()
+{
+    return QDir(getImagesDirPath().filePath(FileSystemConfig::SlidesDir));
+}
+
 QDir AppTreeManager::getJavaDirPath()
 {
     return QDir(m_installationDir.filePath(FileSystemConfig::JavaDir));
@@ -139,6 +162,11 @@ QDir AppTreeManager::getUpdaterDirPath()
     return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
 }
 
+QDir AppTreeManager::getLoaderDirPath()
+{
+    return QDir(m_installationDir.filePath(FileSystemConfig::UpdaterDir));
+}
+
 QString AppTreeManager::getLoaderResourcesPath()
 {
     return ":/bin/" + FileSystemConfig::LoaderFile + getExtension();
@@ -151,12 +179,12 @@ QString AppTreeManager::getUpdaterResourcesPath()
 
 QString AppTreeManager::getLoaderFilePath()
 {
-    return m_installationDir.absolutePath() + "/" + FileSystemConfig::LoaderFile + getExtension();
+    return m_installationDir.absolutePath()+ "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + getExtension();
 }
 
-QString AppTreeManager::getUpdaterFilePath()
+QString AppTreeManager::getUpdaterFilePath(QString updaterVersion)
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + FileSystemConfig::UpdaterFile + getExtension();
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + getExtension();
 }
 
 QString AppTreeManager:: getConfigurationFilePath()

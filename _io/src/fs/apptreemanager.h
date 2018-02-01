@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__APPTREEMANAGER_H
-#define FILESYSTEM__APPTREEMANAGER_H
+#ifndef IO__APPTREEMANAGER_H
+#define IO__APPTREEMANAGER_H
 
 #include <QObject>
 #include <QDir>
@@ -9,26 +9,32 @@ class AppTreeManager : public QObject
     Q_OBJECT
 
     public:
-        AppTreeManager(const QDir &_installationDir, QObject * _parent = 0);
+        AppTreeManager(QDir _installationDir, QObject * _parent = 0);
         virtual ~AppTreeManager();
 
         bool createDirectoryIfNotExist();
         bool makeAppDirectories();
 
+        static QString getInstallerVersion();
+        static QString getUpdaterVersion();
+        static QString getLoaderVersion();
+
         QDir getAppDirPath();
         QDir getConfigurationDirPath();
         QDir getExtensionDirPath();
         QDir getImagesDirPath();
+        QDir getSlidesDirPath();
         QDir getJavaDirPath();
         QDir getLogsDirPath();
         QDir getTempDirPath();
         QDir getUpdaterDirPath();
+        QDir getLoaderDirPath();
 
         QString getLoaderResourcesPath();
         QString getUpdaterResourcesPath();
 
         QString getLoaderFilePath();
-        QString getUpdaterFilePath();
+        QString getUpdaterFilePath(QString updaterVersion);
         QString getConfigurationFilePath();
 
         QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
@@ -42,4 +48,4 @@ class AppTreeManager : public QObject
 
 };
 
-#endif // ifndef FILESYSTEM__APPTREEMANAGER_H
+#endif // ifndef IO__APPTREEMANAGER_H

@@ -42,12 +42,13 @@ INCLUDEPATH += headers/libarchive
 DEPENDPATH += .
 DEPENDPATH += src
 
-INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
+# attention, l'ordre est important.
+INCLUDEPATH += ../_io/src
+LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
 LIBS += -L../_settings/bin -lsettings
-INCLUDEPATH += ../_filesystem/src
-LIBS += -L../_filesystem/bin -lfilesystem
+INCLUDEPATH += ../_logger/src
+LIBS += -L../_logger/bin -llogger
 
 macx {
 LIBS += -L./libs/libarchive/macosx -larchive
@@ -57,14 +58,20 @@ win32 {
 LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
+FORMS += ui/askpopup.ui
 FORMS += ui/authenticationdialog.ui
 FORMS += ui/mainwindow.ui
+FORMS += ui/splashscreen.ui
 
 SOURCES += src/main.cpp
+SOURCES += src/gui/askpopupui.cpp
+SOURCES += src/gui/mainwindow.cpp
+SOURCES += src/gui/splashscreen.cpp
+SOURCES += src/gui/style/stylemanager.cpp
+SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/updater/appupdater.cpp
 SOURCES += src/updater/config.cpp
-SOURCES += src/gui/mainwindow.cpp
-SOURCES += src/network/downloadmanager.cpp
+SOURCES += src/utils.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/utils/unzip/zipextractor.cpp
 SOURCES += src/xml/data/application.cpp
@@ -72,10 +79,14 @@ SOURCES += src/xml/data/download.cpp
 SOURCES += src/xml/data/javaupdate.cpp
 SOURCES += src/xml/deploymentxml.cpp
 
+HEADERS += src/gui/askpopupui.h
+HEADERS += src/gui/mainwindow.h
+HEADERS += src/gui/splashscreen.h
+HEADERS += src/gui/style/stylemanager.h
+HEADERS += src/network/downloadmanager.h
 HEADERS += src/updater/appupdater.h
 HEADERS += src/updater/config.h
-HEADERS += src/gui/mainwindow.h
-HEADERS += src/network/downloadmanager.h
+HEADERS += src/utils.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/utils/qarchive/qarchive.h
 HEADERS += src/utils/unzip/zipextractor.h
@@ -84,7 +95,17 @@ HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h
 HEADERS += src/xml/deploymentxml.h
 
-RESOURCES += resources.qrc
+RESOURCES += fixed_resources.qrc
+
+defined(OVERRIDABLE_UPDATER_RESOURCES, var) {
+    RESOURCES += $$OVERRIDABLE_UPDATER_RESOURCES
+    message("Using installer resources from file: $$OVERRIDABLE_UPDATER_RESOURCES")
+}
+else {
+    RESOURCES += overridable_resources.qrc
+}
+
+
 
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts

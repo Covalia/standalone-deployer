@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QUrl>
+#include <QPixmap>
+#include <QPushButton>
+#include <QTimer>
 
 class QCloseEvent;
 class QMouseEvent;
@@ -35,13 +38,22 @@ class MainWindow : public QMainWindow
         void updateDownloadFileMessage(const QString &_file);
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
+        void updateSlideShow();
+        void updateSlideShow(int _index);
+        void buttonSlideEvent();
+
     private:
         QPoint m_clickedPosition;
         Ui::MainWindow * m_ui;
+        QList<QPixmap> m_imagesList;
+        QList<QPushButton *> m_buttonsList;
+        QTimer * m_timer;
         bool m_alreadyClosedOnMacOs = false;
         AppUpdater * m_appUpdater;
 
+        void showEvent(QShowEvent * _event);
         virtual void closeEvent(QCloseEvent *);
+        void loadSlideShowImagesFromResources();
 };
 
 #endif // ifndef UPDATER__MAINWINDOW_H

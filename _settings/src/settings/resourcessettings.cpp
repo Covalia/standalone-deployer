@@ -135,6 +135,17 @@ void ResourcesSettings::sendToSettings()
     // data path
     // use simple by default
     settings->setDataLocation(m_default_data_path_simple_install);
+
+    settings->setColorPanelBackgroundBorder(m_color_panel_background_border);
+    settings->setColorPanelBackground(m_color_panel_background);
+    settings->setColorButtonBackgroundOver(m_color_button_background_over);
+    settings->setColorButtonBackground(m_color_button_background);
+    settings->setColorTextOnBackground(m_color_text_on_background);
+    settings->setColorTextGray(m_color_text_gray);
+    settings->setColorDisabled(m_color_disabled);
+    settings->setBorderWindow(m_border_window);
+
+
 }
 
 QString ResourcesSettings::getTransformedVariablePath(QString _path)
