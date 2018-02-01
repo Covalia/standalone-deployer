@@ -44,13 +44,14 @@ int main(int argc, char * argv[])
 
     qDebug() << "-- Installation root: " << Utils::getInstallationRootPath();
 
-    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    AppTreeManager treeManager(installationRootPath);
 
-    new Logger(treeManager->getLogsDirPath().absolutePath() + "/updater.log");
+    new Logger(treeManager.getLogsDirPath().absolutePath() + "/updater.log");
 
     L_INFO("Updater started.");
 
-    QString settingsPath = treeManager->getConfigurationFilePath();
+    QString settingsPath = treeManager.getConfigurationFilePath();
 
     L_INFO("Start read install folder resources" + settingsPath);
     Settings * settings = Settings::getInstance();

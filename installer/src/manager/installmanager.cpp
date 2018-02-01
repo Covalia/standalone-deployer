@@ -91,7 +91,9 @@ void InstallManager::startInstallation()
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QString errorMessage = "";
-    m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
+    if (!m_treeManager) {
+        m_treeManager = new AppTreeManager(QDir(m_settings->getInstallLocation()));
+    }
 
     // tree creation
     bool folderCreation = createInstallationFolders();

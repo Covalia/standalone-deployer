@@ -9,7 +9,7 @@ class AppTreeManager : public QObject
     Q_OBJECT
 
     public:
-        AppTreeManager(const QDir &_installationDir, QObject * _parent = 0);
+        AppTreeManager(QDir _installationDir, QObject * _parent = 0);
         virtual ~AppTreeManager();
 
         bool createDirectoryIfNotExist();

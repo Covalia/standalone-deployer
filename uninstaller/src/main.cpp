@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QDebug>
+#include <QDir>
 
 #include "log/logger.h"
 #include "utils.h"
@@ -10,8 +11,8 @@ int main(int argc, char * argv[])
     // logger initialization
     new Logger("uninstaller.log");
 
-    QString rootPath = Utils::getInstallationRootPath();
-    qDebug() << "root path:" << rootPath;
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    qDebug() << "root path:" << installationRootPath.absolutePath();
 
     QCoreApplication app(argc, argv);
     return app.exec();

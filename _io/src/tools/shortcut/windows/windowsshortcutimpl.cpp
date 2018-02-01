@@ -25,25 +25,23 @@ WindowsShortcutImpl::~WindowsShortcutImpl()
 bool WindowsShortcutImpl::createDesktopShortcut(QString _shortcutName, QString _args, QString _installLocation, QString _applicationName)
 {
     L_INFO("Start preparation of desktop shortcut");
-    AppTreeManager *treeManager = new AppTreeManager(QDir(_installLocation));
-    QString loaderPath =  treeManager->getLoaderFilePath();
+    AppTreeManager treeManager(QDir(_installLocation));
+    QString loaderPath =  treeManager.getLoaderFilePath();
     QString shortcutPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/" + _shortcutName + ".lnk";
     QString description = _applicationName;
     QString executionDir = _installLocation;
-    QString iconPath = treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico";
-    delete treeManager;
+    QString iconPath = treeManager.getImagesDirPath().absolutePath() + "/shortcut.ico";
     return createShortcut(shortcutPath, loaderPath, _args, executionDir, iconPath, description);
 }
 
 bool WindowsShortcutImpl::createStartShorcut(QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName)
 {
     L_INFO("Start creation shortcut in startup folder to run at computer start");
-    AppTreeManager *treeManager = new AppTreeManager(QDir(_installLocation));
-    QString loaderPath =  treeManager->getLoaderFilePath();
+    AppTreeManager treeManager(QDir(_installLocation));
+    QString loaderPath =  treeManager.getLoaderFilePath();
     QString description = _applicationName;
     QString executionDir = _installLocation;
-    QString iconPath = treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico";
-    delete treeManager;
+    QString iconPath = treeManager.getImagesDirPath().absolutePath() + "/shortcut.ico";
     if (_allUser) {
         return createShortcut(findAllUserStartupFolder() + "/" + _shortcutName + ".lnk", loaderPath, "", executionDir, iconPath, description);
     } else {
@@ -54,7 +52,7 @@ bool WindowsShortcutImpl::createStartShorcut(QString _shortcutName, bool _allUse
 bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName)
 {
     L_INFO("Start creation shortcut in startMenu folder");
-    AppTreeManager *treeManager = new AppTreeManager(QDir(_installLocation));
+    AppTreeManager treeManager(QDir(_installLocation));
     QString folderPath("");
 
     if (_allUser) {
@@ -89,13 +87,13 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
     QString uninstallApplicationPathShortcut = QObject::tr("Uninstall %1").arg(_applicationName) + ".lnk";
     QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
 
-    QString loaderPath =  treeManager->getLoaderFilePath();
+    QString loaderPath =  treeManager.getLoaderFilePath();
     QString description = _applicationName;
     QString executionDir = _installLocation;
 
-    QString iconApplicationPath = treeManager->getImagesDirPath().absolutePath() + "/shortcut.ico";
-    QString iconUninstallPath = treeManager->getImagesDirPath().absolutePath() + "/trash.ico";
-    QString iconConfigurationPath = treeManager->getImagesDirPath().absolutePath() + "/config.ico";
+    QString iconApplicationPath = treeManager.getImagesDirPath().absolutePath() + "/shortcut.ico";
+    QString iconUninstallPath = treeManager.getImagesDirPath().absolutePath() + "/trash.ico";
+    QString iconConfigurationPath = treeManager.getImagesDirPath().absolutePath() + "/config.ico";
 
     bool runApplicationShortcut = createShortcut(_installLocation + "/" + runApplicationPathShortcut, loaderPath, "", executionDir, iconApplicationPath, description);
     bool uninstallApplicationShortcut = createShortcut(_installLocation + "/" + uninstallApplicationPathShortcut, loaderPath, "-uninstall", executionDir, iconUninstallPath, description);
@@ -103,11 +101,9 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
 
     if (runApplicationShortcut && uninstallApplicationShortcut && configureApplicationShortcut) {
         L_INFO("Start copie shortcut in startmenu");
-        QPair<bool, QString> copyApplicationShortcut = treeManager->extractResourceToPath(_installLocation + "/" + runApplicationPathShortcut, applicationFolder + "/" + runApplicationPathShortcut);
-        QPair<bool, QString> copyUnstallationShortcut = treeManager->extractResourceToPath(_installLocation + "/" + uninstallApplicationPathShortcut, applicationFolder + "/" + uninstallApplicationPathShortcut);
-        QPair<bool, QString> copyConfigurationShortcut = treeManager->extractResourceToPath(_installLocation + "/" + settingsApplicationPathShortcut, applicationFolder + "/" + settingsApplicationPathShortcut);
-
-        delete treeManager;
+        QPair<bool, QString> copyApplicationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + runApplicationPathShortcut, applicationFolder + "/" + runApplicationPathShortcut);
+        QPair<bool, QString> copyUnstallationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + uninstallApplicationPathShortcut, applicationFolder + "/" + uninstallApplicationPathShortcut);
+        QPair<bool, QString> copyConfigurationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + settingsApplicationPathShortcut, applicationFolder + "/" + settingsApplicationPathShortcut);
 
         if (copyApplicationShortcut.first && copyUnstallationShortcut.first && copyConfigurationShortcut.first) {
             L_INFO("Success Startmenu folder creation and shortcuts copie");
@@ -141,7 +137,6 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
             }
         }
     } else {
-        delete treeManager;
         return false;
     }
 }

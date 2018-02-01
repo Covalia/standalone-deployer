@@ -39,9 +39,10 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_ui->pushButton->setAccessibleName("pageButton");
     StyleManager::transformStyle(this);
 
-    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
-    m_ui->closeButton->setIcon(QIcon(treeManager->getImagesDirPath().absolutePath()+"/close.png"));
-    m_ui->titleIconLabel->setPixmap(QPixmap(treeManager->getImagesDirPath().absolutePath()+"/logo_title.png"));
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    AppTreeManager treeManager(installationRootPath);
+    m_ui->closeButton->setIcon(QIcon(treeManager.getImagesDirPath().absolutePath()+"/close.png"));
+    m_ui->titleIconLabel->setPixmap(QPixmap(treeManager.getImagesDirPath().absolutePath()+"/logo_title.png"));
 
     m_appUpdater = new AppUpdater(UpdaterConfig::AppUrl, UpdaterConfig::InstallationDir, this);
 
@@ -189,8 +190,9 @@ void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _byte
 void MainWindow::loadSlideShowImagesFromResources()
 {
     m_imagesList.clear();
-    AppTreeManager * treeManager = new AppTreeManager(QDir(Utils::getInstallationRootPath()));
-    QDirIterator it(treeManager->getSlidesDirPath(), QDirIterator::Subdirectories);
+    QDir installationRootPath(Utils::getInstallationRootPath());
+    AppTreeManager treeManager(installationRootPath);
+    QDirIterator it(treeManager.getSlidesDirPath(), QDirIterator::Subdirectories);
     while (it.hasNext()) {
         const QString resourcePath = it.next();
         const QPixmap pixmap = QPixmap(resourcePath);

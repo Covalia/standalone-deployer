@@ -4,7 +4,7 @@
 #include <QFile>
 #include "io/config.h"
 
-AppTreeManager::AppTreeManager(const QDir &_installationDir, QObject * _parent) :
+AppTreeManager::AppTreeManager(QDir _installationDir, QObject * _parent) :
     QObject(_parent),
     m_installationDir(_installationDir)
 {
