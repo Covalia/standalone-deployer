@@ -32,7 +32,6 @@ DEPENDPATH += src
 INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 
-SOURCES += src/fs/apptreemanager.cpp
 SOURCES += src/io/config.cpp
 SOURCES += src/tools/factory/factory.cpp
 SOURCES += src/tools/installpath/installpath.cpp
@@ -40,7 +39,6 @@ SOURCES += src/tools/installpath/installpathimpl.cpp
 SOURCES += src/tools/shortcut/shortcut.cpp
 SOURCES += src/tools/shortcut/shortcutimpl.cpp
 
-HEADERS += src/fs/apptreemanager.h
 HEADERS += src/io/config.h
 HEADERS += src/tools/factory/factory.h
 HEADERS += src/tools/installpath/installpath.h

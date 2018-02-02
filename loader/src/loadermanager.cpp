@@ -21,14 +21,12 @@ bool LoaderManager::launchUpdater()
 {
     Settings * settings = Settings::getInstance();
 
-    QDir installationRootPath(Utils::getInstallationRootPath());
+    InstallPath installPath = Utils::getInstallPath();
 
-    L_INFO("Install location = " + installationRootPath.absolutePath());
-
-    AppTreeManager treeManager(installationRootPath);
+    L_INFO("Install location = " + installPath.getInstallationRootPath().absolutePath());
 
     QProcess process;
-    QString updaterFile = treeManager.getUpdaterFilePath(settings->getUpdaterVersion());
+    QString updaterFile = installPath.getUpdaterFilePath(settings->getUpdaterVersion());
 
     if (!QFile::exists(updaterFile)) {
         L_ERROR("An error occured when launch Updater file " + updaterFile + ". The file doesn't exist.");
@@ -39,7 +37,7 @@ bool LoaderManager::launchUpdater()
     L_INFO("Launch file " + updaterFile + " with args " + args.join(""));
 
     QString sOldPath = QDir::currentPath();
-    QDir::setCurrent(installationRootPath.absolutePath());
+    QDir::setCurrent(installPath.getInstallationRootPath().absolutePath());
 
     bool success = process.startDetached(updaterFile, args);
     if (!success) {

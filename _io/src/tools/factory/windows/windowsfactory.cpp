@@ -10,10 +10,10 @@ WindowsFactory::~WindowsFactory()
 {
 }
 
-InstallPathImpl * WindowsFactory::makeInstallPath()
+InstallPathImpl * WindowsFactory::makeInstallPath(FileSystemConfig::AppComponent _app)
 {
     // La classe Path est responsable de libérer cette instance
-    return new WindowsInstallPathImpl();
+    return new WindowsInstallPathImpl(_app);
 }
 
 ShortcutImpl * WindowsFactory::makeShortcut()

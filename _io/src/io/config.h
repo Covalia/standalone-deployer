@@ -10,7 +10,8 @@ public:
     enum AppComponent {
         Loader,
         Uninstaller,
-        Updater
+        Updater,
+        Installer
     };
 
     /// relative path of application installation application

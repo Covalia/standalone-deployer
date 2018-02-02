@@ -10,10 +10,10 @@ MacosFactory::~MacosFactory()
 {
 }
 
-InstallPathImpl * MacosFactory::makeInstallPath()
+InstallPathImpl * MacosFactory::makeInstallPath(FileSystemConfig::AppComponent _app)
 {
     // La classe Path est responsable de libérer cette instance
-    return new MacosInstallPathImpl();
+    return new MacosInstallPathImpl(_app);
 }
 
 ShortcutImpl * MacosFactory::makeShortcut()

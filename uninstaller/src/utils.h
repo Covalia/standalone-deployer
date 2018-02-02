@@ -1,11 +1,11 @@
 #ifndef UNINSTALLER__UTILS_H
 #define UNINSTALLER__UTILS_H
 
-#include <QString>
+#include "tools/installpath/installpath.h"
 
 class Utils {
     public:
-        static QString getInstallationRootPath();
+        static InstallPath getInstallPath();
 };
 
 #endif

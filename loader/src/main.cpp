@@ -12,14 +12,12 @@ int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QDir installationRootPath(Utils::getInstallationRootPath());
-    qDebug() << "-- Installation root: " << installationRootPath.absolutePath();
+    InstallPath installPath = Utils::getInstallPath();
+    qDebug() << "-- Installation root: " << installPath.getInstallationRootPath();
 
-    AppTreeManager treeManager(installationRootPath);
+    new Logger(installPath.getLogsDirPath().absolutePath() + "/loader.log");
 
-    new Logger(treeManager.getLogsDirPath().absolutePath() + "/loader.log");
-
-    QString settingsPath = treeManager.getConfigurationFilePath();
+    QString settingsPath = installPath.getConfigurationFilePath();
     L_INFO("Start read settings in " +  settingsPath);
 
     Settings * settings = Settings::getInstance();

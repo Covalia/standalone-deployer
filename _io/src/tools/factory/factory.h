@@ -2,6 +2,8 @@
 #define IO__FACTORY_H
 
 #include <mutex>
+#include <QDir>
+#include "io/config.h"
 
 class InstallPathImpl;
 class ShortcutImpl;
@@ -14,7 +16,7 @@ class Factory {
         // les services proposés par la factory
 
         // gestion des working directories
-        virtual InstallPathImpl * makeInstallPath() = 0;
+        virtual InstallPathImpl * makeInstallPath(FileSystemConfig::AppComponent _app) = 0;
         // gestion des raccourcis
         virtual ShortcutImpl * makeShortcut() = 0;
 

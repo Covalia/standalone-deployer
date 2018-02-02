@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QDir>
-#include "fs/apptreemanager.h"
+#include "utils.h"
 
 class DownloadManager;
 
@@ -29,7 +29,7 @@ private slots:
 private:
     DownloadManager * m_updater;
     QUrl m_appUrl;
-    AppTreeManager * m_appTreeManager;
+    InstallPath m_installPath;
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);

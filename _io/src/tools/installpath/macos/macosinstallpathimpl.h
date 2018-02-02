@@ -5,9 +5,12 @@
 
 class MacosInstallPathImpl : public InstallPathImpl {
     public:
-        MacosInstallPathImpl();
-        virtual ~MacosInstallPathImpl();
-        virtual QString getInstallationRootPath(FileSystemConfig::AppComponent _app);
+        MacosInstallPathImpl(FileSystemConfig::AppComponent _app);
+        virtual bool makeAppDirectories();
+        virtual QString getLoaderResourcesPath();
+        virtual QString getUpdaterResourcesPath();
+        virtual QString getLoaderFilePath();
+        virtual QString getUpdaterFilePath(QString updaterVersion);
 };
 
 #endif

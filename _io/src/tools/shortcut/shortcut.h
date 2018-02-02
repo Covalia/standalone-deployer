@@ -3,6 +3,7 @@
 
 #include <QString>
 #include "tools/shortcut/shortcutimpl.h"
+#include "tools/installpath/installpath.h"
 #include "io/config.h"
 
 class ShortcutImpl;
@@ -17,9 +18,9 @@ class Shortcut {
         Shortcut();
         virtual ~Shortcut();
 
-        bool createDesktopShortcut(QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
-        bool createStartShorcut(QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
-        bool createStartMenuShorcut(QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
+        bool createDesktopShortcut(InstallPath _installPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
+        bool createStartShorcut(InstallPath _installPath, QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
+        bool createStartMenuShorcut(InstallPath _installPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
 
     private:
         ShortcutImpl * m_shortcutImpl;

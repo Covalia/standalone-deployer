@@ -38,10 +38,9 @@ void StyleManager::transformStyle(QWidget * parentWidget)
 
 void StyleManager::setGeneralStyle()
 {
-    QDir installationRootPath(Utils::getInstallationRootPath());
-    AppTreeManager treeManager(installationRootPath);
+    InstallPath installPath = Utils::getInstallPath();
 
-    QFile f(treeManager.getConfigurationDirPath().absolutePath() + "/style.css");
+    QFile f(installPath.getConfigurationDirPath().absolutePath() + "/style.css");
 
     if (f.exists()) {
         if (f.open(QFile::ReadOnly | QFile::Text)) {

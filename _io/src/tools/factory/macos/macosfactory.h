@@ -21,7 +21,7 @@ class MacosFactory : public Factory {
         }
 
         virtual ~MacosFactory();
-        virtual InstallPathImpl * makeInstallPath();
+        virtual InstallPathImpl * makeInstallPath(FileSystemConfig::AppComponent _app);
         virtual ShortcutImpl * makeShortcut();
 
     private:

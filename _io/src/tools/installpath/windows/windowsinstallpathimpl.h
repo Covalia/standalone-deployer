@@ -5,9 +5,12 @@
 
 class WindowsInstallPathImpl : public InstallPathImpl {
     public:
-        WindowsInstallPathImpl();
-        virtual ~WindowsInstallPathImpl();
-        virtual QString getInstallationRootPath(FileSystemConfig::AppComponent _app);
+        WindowsInstallPathImpl(FileSystemConfig::AppComponent _app);
+        virtual bool makeAppDirectories();
+        virtual QString getLoaderResourcesPath();
+        virtual QString getUpdaterResourcesPath();
+        virtual QString getLoaderFilePath();
+        virtual QString getUpdaterFilePath(QString updaterVersion);
 };
 
 #endif

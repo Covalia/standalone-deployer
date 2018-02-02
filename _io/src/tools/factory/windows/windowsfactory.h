@@ -21,7 +21,7 @@ class WindowsFactory : public Factory {
         }
 
         virtual ~WindowsFactory();
-        virtual InstallPathImpl * makeInstallPath();
+        virtual InstallPathImpl * makeInstallPath(FileSystemConfig::AppComponent _app);
         virtual ShortcutImpl * makeShortcut();
 
     private:

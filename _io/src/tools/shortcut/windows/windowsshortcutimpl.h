@@ -18,7 +18,7 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createDesktopShortcut(QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
+        virtual bool createDesktopShortcut(InstallPath _installPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
 
         /**
          * @brief create windows shortcut in startup folder to run application when computer starting
@@ -28,7 +28,7 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartShorcut(QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
+        virtual bool createStartShorcut(InstallPath _installPath, QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
 
         /**
          * @brief create startmenu folder and shortcut
@@ -38,7 +38,7 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartMenuShorcut(QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
+        virtual bool createStartMenuShorcut(InstallPath _installPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
 
     private:
         /**

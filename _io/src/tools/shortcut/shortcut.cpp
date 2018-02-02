@@ -15,26 +15,26 @@ Shortcut::~Shortcut()
     delete m_shortcutImpl;
 }
 
-bool Shortcut::createDesktopShortcut(QString _shortcutName, QString _args, QString _installLocation, QString _applicationName)
+bool Shortcut::createDesktopShortcut(InstallPath _installPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName)
 {
     if (m_shortcutImpl) {
-        return m_shortcutImpl->createDesktopShortcut(_shortcutName, _args, _installLocation, _applicationName);
+        return m_shortcutImpl->createDesktopShortcut(_installPath, _shortcutName, _args, _installLocation, _applicationName);
     }
     return false;
 }
 
-bool Shortcut::createStartShorcut(QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName)
+bool Shortcut::createStartShorcut(InstallPath _installPath, QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName)
 {
     if (m_shortcutImpl) {
-        return m_shortcutImpl->createStartShorcut(_shortcutName, _allUser, _installLocation, _applicationName);
+        return m_shortcutImpl->createStartShorcut(_installPath, _shortcutName, _allUser, _installLocation, _applicationName);
     }
     return false;
 }
 
-bool Shortcut::createStartMenuShorcut(QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName)
+bool Shortcut::createStartMenuShorcut(InstallPath _installPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName)
 {
     if (m_shortcutImpl) {
-        return m_shortcutImpl->createStartMenuShorcut(_startMenuFolderName, _allUser, _installLocation, _applicationName);
+        return m_shortcutImpl->createStartMenuShorcut(_installPath, _startMenuFolderName, _allUser, _installLocation, _applicationName);
     }
     return false;
 }
