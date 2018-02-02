@@ -15,9 +15,6 @@ QString WindowsInstallPathImpl::getInstallationRootPath(FileSystemConfig::AppCom
         case FileSystemConfig::AppComponent::Updater:
             cdUp(dir, 2);
             break;
-        case FileSystemConfig::AppComponent::Uninstaller:
-            // nothing to do
-            break;
     }
     return dir.absolutePath();
 }

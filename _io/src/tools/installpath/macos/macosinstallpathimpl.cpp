@@ -20,9 +20,6 @@ QString MacosInstallPathImpl::getInstallationRootPath(FileSystemConfig::AppCompo
         case FileSystemConfig::AppComponent::Updater:
             cdUp(dir, 5);
             break;
-        case FileSystemConfig::AppComponent::Uninstaller:
-            cdUp(dir, 3);
-            break;
     }
     return dir.absolutePath();
 }
