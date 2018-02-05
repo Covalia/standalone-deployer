@@ -256,8 +256,9 @@ void MainWindow::updateSlideShow()
 {
     if (m_imagesList.isEmpty()) {
         loadSlideShowImagesFromResources();
+    } else {
+        update_counter++;
+        update_counter %= m_imagesList.size();
+        updateSlideShow(update_counter);
     }
-    update_counter++;
-    update_counter %= m_imagesList.size();
-    updateSlideShow(update_counter);
 }
