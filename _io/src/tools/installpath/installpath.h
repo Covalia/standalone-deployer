@@ -2,6 +2,7 @@
 #define IO__INSTALLPATH_H
 
 #include <QDir>
+#include <QSharedPointer>
 #include "tools/installpath/installpathimpl.h"
 #include "io/config.h"
 
@@ -45,7 +46,7 @@ class InstallPath {
         bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
 
     private:
-        InstallPathImpl * m_pathInstallImpl;
+        QSharedPointer<InstallPathImpl> m_pathInstallImpl;
 };
 
 #endif

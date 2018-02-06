@@ -153,95 +153,128 @@ bool WindowsShortcutImpl::createShortcut(QString shortcutPath, QString targetPat
         }
     }
 
-	std::string shortcutLatinChar = std::string(shortcutPath.toLatin1().constData());
-
     L_INFO("Starting shortcut creation ");
-    HRESULT result = createWindowsShortcut((const wchar_t *)targetPath.utf16(), (const wchar_t *)_args.utf16(),
-                                           shortcutLatinChar.c_str(), (const wchar_t *)description.utf16(),
-                                           1, (const wchar_t *)executionDir.utf16(),
-                                           (const wchar_t *)iconPath.utf16(), 0);
-    if (SUCCEEDED(result)) {
-        L_INFO("Success shortcut creation");
-        if (!QFile::exists(shortcutPath)) {
-            L_ERROR("Shortcut doesn't exist : " + shortcutPath);
-            return false;
-        }
-    } else {
-        L_ERROR("On error occured when shortcut creation");
-        return false;
-    }
-    return true;
+    return createWindowsShortcut(targetPath, _args, shortcutPath, description,
+                                           executionDir, iconPath, 0);
 }
 
-#ifndef _UNICODE
-HRESULT WindowsShortcutImpl::createWindowsShortcut(LPCWSTR _pszTargetfile, LPCWSTR _pszTargetargs,
-                                               const char * _pszLinkfile, LPCWSTR _pszDescription,
-                                               int _iShowmode, LPCWSTR _pszCurdir,
-                                               LPCWSTR _pszIconfile, int _iIconindex)
+LPCWSTR WindowsShortcutImpl::lpcwstrFromQString(QString _qstring) {
+    wchar_t* ch = new wchar_t[_qstring.length() + 1];
+    _qstring.toWCharArray(ch);
+    ch[_qstring.length()] = 0;
+    return ch;
+}
+
+
+HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString _targetArgs,
+                                               QString _linkFile, QString _description,
+                                               QString _currentDir, QString _iconFile, int _iconIndex)
 {
-    // TODO manage accent in link file
-
-    HRESULT hRes;                       /* Returned COM result code */
-    IShellLink * pShellLink;            /* IShellLink object pointer */
-    IPersistFile * pPersistFile;        /* IPersistFile object pointer */
-    WCHAR wszLinkfile[MAX_PATH];        /* pszLinkfile as Unicode string */
-
-    CoInitialize(NULL);
-    hRes = E_INVALIDARG;
-    if (
-        (_pszTargetfile != NULL) && (lstrlen(_pszTargetfile) > 0) &&
-        (_pszTargetargs != NULL) &&
-        (_pszLinkfile != NULL) && (strlen(_pszLinkfile) > 0) &&
-        (_pszDescription != NULL) &&
-        (_iShowmode >= 0) &&
-        (_pszCurdir != NULL) &&
-        (_pszIconfile != NULL) &&
-        (_iIconindex >= 0)
-        ) {
-        hRes = CoCreateInstance(
-                CLSID_ShellLink,        /* pre-defined CLSID of the IShellLink object */
-                NULL,                   /* pointer to parent interface if part of aggregate */
-                CLSCTX_INPROC_SERVER,   /* caller and called code are in same process */
-                IID_IShellLink,         /* pre-defined interface of the IShellLink object */
-                (LPVOID *)&pShellLink); /* Returns a pointer to the IShellLink object */
-
-        if (SUCCEEDED(hRes)) {
-            /* Set the fields in the IShellLink object */
-            hRes = pShellLink->SetPath(_pszTargetfile);
-            hRes = pShellLink->SetArguments(_pszTargetargs);
-            if (lstrlen(_pszDescription) > 0) {
-                hRes = pShellLink->SetDescription(_pszDescription);
-            }
-            if (_iShowmode > 0) {
-                hRes = pShellLink->SetShowCmd(_iShowmode);
-            }
-            if (lstrlen(_pszCurdir) > 0) {
-                hRes = pShellLink->SetWorkingDirectory(_pszCurdir);
-            }
-            if (lstrlen(_pszIconfile) > 0 && _iIconindex >= 0) {
-                hRes = pShellLink->SetIconLocation(_pszIconfile, _iIconindex);
-            }
-
-            /* Use the IPersistFile object to save the shell link */
-            hRes = pShellLink->QueryInterface(
-                    IID_IPersistFile,         /* pre-defined interface of the
-                                               *  IPersistFile object */
-                    (LPVOID *)&pPersistFile); /* returns a pointer to the
-                                               * IPersistFile object */
-            if (SUCCEEDED(hRes)) {
-                MultiByteToWideChar(CP_ACP, 0,
-                                    _pszLinkfile, -1,
-                                    wszLinkfile, MAX_PATH);
-                hRes = pPersistFile->Save(wszLinkfile, TRUE);
-                pPersistFile->Release();
-            }
-            pShellLink->Release();
-        }
+    if (_targetFile.isEmpty() || _linkFile.isEmpty()) {
+       L_INFO("target file or link file is empty");
+       return false;
     }
+
+    bool result = true;
+
+    // init com library
+    CoInitialize(0);
+
+    IShellLink *psl;
+
+    LPCWSTR w_targetFile = lpcwstrFromQString(_targetFile);
+    LPCWSTR w_targetArgs = lpcwstrFromQString(_targetArgs);
+    LPCWSTR w_description = lpcwstrFromQString(_description);
+    LPCWSTR w_currentDir = lpcwstrFromQString(_currentDir);
+    LPCWSTR w_iconFile = lpcwstrFromQString(_iconFile);
+    LPCWSTR w_linkFile = lpcwstrFromQString(_linkFile);
+
+    HRESULT hres = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *) &psl);
+    if (!SUCCEEDED(hres)) {
+        L_ERROR("Error while creating IShellLink instance");
+        result = false;
+    }
+    else {
+
+        hres = psl->SetPath(w_targetFile);
+        if (!SUCCEEDED(hres)) {
+            L_ERROR("Error while setting path");
+            result = false;
+        }
+        else {
+            hres = psl->SetShowCmd(1);
+            if (!SUCCEEDED(hres)) {
+                L_ERROR("Error while setting show cmd");
+                result = false;
+            }
+            else {
+                if (!_targetArgs.isEmpty()) {
+                    hres = psl->SetArguments(w_targetArgs);
+                }
+                if (!SUCCEEDED(hres)) {
+                    L_ERROR("Error while setting arguments");
+                    result = false;
+                }
+                else {
+                    if (!_description.isEmpty()) {
+                        hres = psl->SetDescription(w_description);
+                    }
+                    if (!SUCCEEDED(hres)) {
+                        L_ERROR("Error while setting description");
+                        result = false;
+                    }
+                    else {
+                        if (!_currentDir.isEmpty()) {
+                            hres = psl->SetWorkingDirectory(w_currentDir);
+                        }
+                        if (!SUCCEEDED(hres)) {
+                            L_ERROR("Error while setting working directory");
+                            result = false;
+                        }
+                        else {
+                            if (!_iconFile.isEmpty() && _iconIndex >= 0) {
+                                hres = psl->SetIconLocation(w_iconFile, _iconIndex);
+                            }
+                            if (!SUCCEEDED(hres)) {
+                                L_ERROR("Error while setting icon location");
+                                result = false;
+                            }
+                            else {
+                                IPersistFile *ppf;
+                                // get IPersistFile interface
+                                hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *) &ppf);
+                                if (!SUCCEEDED(hres)) {
+                                    L_ERROR("Error while setting query interface");
+                                    result = false;
+                                }
+                                else {
+                                    hres = ppf->Save(w_linkFile, 1);
+                                    if (hres != S_OK) {
+                                        L_ERROR("Error while saving shortcut");
+                                        result = false;
+                                    }
+                                }
+                                ppf->Release();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        psl->Release();
+    }
+
+	delete[] w_targetFile;
+	delete[] w_targetArgs;
+	delete[] w_description;
+	delete[] w_currentDir;
+	delete[] w_iconFile;
+	delete[] w_linkFile;
+
     CoUninitialize();
-    return (hRes);
+
+    return result;
 }
-#endif
 
 QString WindowsShortcutImpl::findAllUserStartMenuProgramsFolder()
 {

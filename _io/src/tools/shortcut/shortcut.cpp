@@ -6,13 +6,12 @@ Shortcut::Shortcut() : m_shortcutImpl(0)
     Factory * factory = Factory::getFactory();
 
     if (factory) {
-        m_shortcutImpl = factory->makeShortcut();
+        m_shortcutImpl = QSharedPointer<ShortcutImpl>(factory->makeShortcut());
     }
 }
 
 Shortcut::~Shortcut()
 {
-    delete m_shortcutImpl;
 }
 
 bool Shortcut::createDesktopShortcut(InstallPath _installPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName)

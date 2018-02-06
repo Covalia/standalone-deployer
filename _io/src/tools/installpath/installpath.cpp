@@ -6,13 +6,12 @@ InstallPath::InstallPath(FileSystemConfig::AppComponent _app) : m_pathInstallImp
     Factory * factory = Factory::getFactory();
 
     if (factory) {
-        m_pathInstallImpl = factory->makeInstallPath(_app);
+        m_pathInstallImpl = QSharedPointer<InstallPathImpl>(factory->makeInstallPath(_app));
     }
 }
 
 InstallPath::~InstallPath()
 {
-    delete m_pathInstallImpl;
 }
 
 QDir InstallPath::getInstallationRootPath()

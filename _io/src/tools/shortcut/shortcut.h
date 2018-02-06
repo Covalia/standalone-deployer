@@ -2,6 +2,7 @@
 #define IO__SHORTCUT_H
 
 #include <QString>
+#include <QSharedPointer>
 #include "tools/shortcut/shortcutimpl.h"
 #include "tools/installpath/installpath.h"
 #include "io/config.h"
@@ -23,7 +24,7 @@ class Shortcut {
         bool createStartMenuShorcut(InstallPath _installPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
 
     private:
-        ShortcutImpl * m_shortcutImpl;
+        QSharedPointer<ShortcutImpl> m_shortcutImpl;
 };
 
 #endif

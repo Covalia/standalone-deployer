@@ -79,23 +79,27 @@ class WindowsShortcutImpl : public ShortcutImpl {
         QString findWindowsPath(int hToken);
 
         /**
+         * brief convert QString to LPCWSTR. Taller is responsible to delete[] the returned pointer.
+         */
+        LPCWSTR lpcwstrFromQString(QString _qstring);
+
+        /**
          * @brief Creates the actual 'lnk' file (assumes COM has been initialized).
          *
-         * @param pszTargetfile     - File name of the link's target.
-         * @param pszTargetargs     - Command line arguments passed to link's target.
-         * @param pszLinkfile       - File name of the actual link file being created.
-         * @param pszDescription    - Description of the linked item.
-         * @param iShowmode         - ShowWindow() constant for the link's target.
-         * @param pszCurdir         - Working directory of the active link.
-         * @param pszIconfile       - File name of the icon file used for the link.
-         * @param iIconindex        - Index of the icon in the icon file.
+         * @param _targetFile     - File name of the link's target.
+         * @param _targetArgs     - Command line arguments passed to link's target.
+         * @param _linkFile       - File name of the actual link file being created.
+         * @param _description    - Description of the linked item.
+         * @param _currentDir     - Working directory of the active link.
+         * @param _iconFile       - File name of the icon file used for the link.
+         * @param _iconIndex      - Index of the icon in the icon file.
          *
          * @return HRESULT value >= 0 for success, < 0 for failure.
          */
-        HRESULT createWindowsShortcut(LPCWSTR _pszTargetfile, LPCWSTR _pszTargetargs,
-                                      const char * _pszLinkfile, LPCWSTR _pszDescription,
-                                      int _iShowmode, LPCWSTR _pszCurdir,
-                                      LPCWSTR _pszIconfile, int _iIconindex);
+        HRESULT createWindowsShortcut(QString _targetFile, QString _targetArgs,
+                                      QString _linkFile, QString _description,
+                                      QString _currentDir, QString _iconFile, int _iconIndex);
+
 };
 
 #endif
