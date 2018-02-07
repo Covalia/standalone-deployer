@@ -1,11 +1,11 @@
 #ifndef UNINSTALLER__UTILS_H
 #define UNINSTALLER__UTILS_H
 
-#include "tools/installpath/installpath.h"
+#include "factories/apppath/apppath.h"
 
 class Utils {
     public:
-        static InstallPath getInstallPath();
+        static AppPath getAppPath();
 };
 
 #endif

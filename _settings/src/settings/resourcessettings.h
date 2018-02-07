@@ -42,7 +42,7 @@ class ResourcesSettings
         static ResourcesSettings * getInstance();
         static void kill();
 
-        void initSettings(QString installPath);
+        void initSettings(QString _appPath);
 
         void readSettings();
 

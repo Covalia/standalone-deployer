@@ -1,6 +1,6 @@
 #include "utils.h"
 
-InstallPath Utils::getInstallPath()
+AppPath Utils::getAppPath()
 {
-    return InstallPath(FileSystemConfig::AppComponent::Updater);
+    return AppPath(FileSystemConfig::AppComponent::Updater);
 }

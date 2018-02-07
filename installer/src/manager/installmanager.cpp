@@ -12,7 +12,7 @@
 #include <QStringList>
 
 #include "log/logger.h"
-#include "tools/shortcut/shortcut.h"
+#include "factories/shortcut/shortcut.h"
 #include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "settings/resourcessettings.h"
@@ -22,7 +22,7 @@
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(0),
-    m_installPath(Utils::getInstallPath())
+    m_appPath(Utils::getAppPath())
 {
 }
 
@@ -90,7 +90,7 @@ void InstallManager::startInstallation()
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QString errorMessage = "";
-    m_installPath.setInstallationRootPath(QDir(m_settings->getInstallLocation()));
+    m_appPath.setInstallationRootPath(QDir(m_settings->getInstallLocation()));
 
     // tree creation
     bool folderCreation = createInstallationFolders();
@@ -145,13 +145,13 @@ bool InstallManager::createInstallationFolders()
 {
     L_INFO("Start the installation in directory : " + m_settings->getDataLocation());
 
-    if (!m_installPath.createDirectoryIfNotExist()) {
+    if (!m_appPath.createDirectoryIfNotExist()) {
         L_ERROR("Error when create installation folder ");
         return false;
     } else {
         L_INFO("Succes of installation folder verification ");
 
-        if (!m_installPath.makeAppDirectories()) {
+        if (!m_appPath.makeAppDirectories()) {
             L_ERROR("Error when create sub-installation folder (application tree) ");
             return false;
         }
@@ -164,23 +164,23 @@ bool InstallManager::createInstallationFolders()
 void InstallManager::moveLogInInstallFolder()
 {
     L_INFO("Move log in install folder");
-    QString logPath(m_installPath.getLogsDirPath().absolutePath() + "/installer.log");
-    m_installPath.extractResourceToPath("installer.log", logPath);
+    QString logPath(m_appPath.getLogsDirPath().absolutePath() + "/installer.log");
+    m_appPath.extractResourceToPath("installer.log", logPath);
     new Logger(logPath);
     L_INFO("End move log in install folder");
 }
 
 bool InstallManager::createUpdaterFolderVersion()
 {
-    bool success = m_installPath.makeDirectoryIfNotExists(m_installPath.getUpdaterDirPath(), m_installPath.getUpdaterVersion());
+    bool success = m_appPath.makeDirectoryIfNotExists(m_appPath.getUpdaterDirPath(), m_appPath.getUpdaterVersion());
 
-    m_settings->setUpdaterVersion(m_installPath.getUpdaterVersion());
+    m_settings->setUpdaterVersion(m_appPath.getUpdaterVersion());
     return success;
 }
 
 bool InstallManager::createIniConfigurationFile()
 {
-    QString installFilePath(m_installPath.getConfigurationFilePath());
+    QString installFilePath(m_appPath.getConfigurationFilePath());
 
     L_INFO("Start to create param file. Path = " + installFilePath);
     m_settings->initSettings(installFilePath);
@@ -202,42 +202,42 @@ bool InstallManager::createIniConfigurationFile()
 
 bool InstallManager::extractResources()
 {
-    QPair<bool, QString> extractUpdater = m_installPath.extractResourceToPath(m_installPath.getUpdaterResourcesPath(), m_installPath.getUpdaterFilePath(m_installPath.getUpdaterVersion()));
+    QPair<bool, QString> extractUpdater = m_appPath.extractResourceToPath(m_appPath.getUpdaterResourcesPath(), m_appPath.getUpdaterFilePath(m_appPath.getUpdaterVersion()));
     if (extractUpdater.first) {
         L_INFO(extractUpdater.second);
     } else {
         L_ERROR(extractUpdater.second);
     }
 
-    QPair<bool, QString> extractLoader = m_installPath.extractResourceToPath(m_installPath.getLoaderResourcesPath(), m_installPath.getLoaderFilePath());
+    QPair<bool, QString> extractLoader = m_appPath.extractResourceToPath(m_appPath.getLoaderResourcesPath(), m_appPath.getLoaderFilePath());
     if (extractLoader.first) {
         L_INFO(extractLoader.second);
     } else {
         L_ERROR(extractLoader.second);
     }
 
-    QPair<bool, QString> extractAppIcon = m_installPath.extractResourceToPath(":/images/shortcut.ico", m_installPath.getImagesDirPath().absolutePath() + "/shortcut.ico");
+    QPair<bool, QString> extractAppIcon = m_appPath.extractResourceToPath(":/images/shortcut.ico", m_appPath.getImagesDirPath().absolutePath() + "/shortcut.ico");
     if (extractAppIcon.first) {
         L_INFO(extractAppIcon.second);
     } else {
         L_ERROR(extractAppIcon.second);
     }
 
-    QPair<bool, QString> extractTrashIcon = m_installPath.extractResourceToPath(":/images/trash.ico", m_installPath.getImagesDirPath().absolutePath() + "/trash.ico");
+    QPair<bool, QString> extractTrashIcon = m_appPath.extractResourceToPath(":/images/trash.ico", m_appPath.getImagesDirPath().absolutePath() + "/trash.ico");
     if (extractTrashIcon.first) {
         L_INFO(extractTrashIcon.second);
     } else {
         L_ERROR(extractTrashIcon.second);
     }
 
-    QPair<bool, QString> extractConfigIcon = m_installPath.extractResourceToPath(":/images/config.ico", m_installPath.getImagesDirPath().absolutePath() + "/config.ico");
+    QPair<bool, QString> extractConfigIcon = m_appPath.extractResourceToPath(":/images/config.ico", m_appPath.getImagesDirPath().absolutePath() + "/config.ico");
     if (extractConfigIcon.first) {
         L_INFO(extractConfigIcon.second);
     } else {
         L_ERROR(extractConfigIcon.second);
     }
 
-    QPair<bool, QString> extractStyle = m_installPath.extractResourceToPath(":/style.css", m_installPath.getConfigurationDirPath().absolutePath() + "/style.css");
+    QPair<bool, QString> extractStyle = m_appPath.extractResourceToPath(":/style.css", m_appPath.getConfigurationDirPath().absolutePath() + "/style.css");
     if (extractStyle.first) {
         L_INFO(extractStyle.second);
     } else {
@@ -249,7 +249,7 @@ bool InstallManager::extractResources()
     while (it.hasNext()) {
         const QString resourcePath = it.next();
         QString resourceName = resourcePath.split("/").last();
-        QPair<bool, QString> extractSlide = m_installPath.extractResourceToPath(resourcePath, m_installPath.getSlidesDirPath().absolutePath() + "/" + resourceName);
+        QPair<bool, QString> extractSlide = m_appPath.extractResourceToPath(resourcePath, m_appPath.getSlidesDirPath().absolutePath() + "/" + resourceName);
         if (extractSlide.first) {
             L_INFO(extractSlide.second);
         } else {
@@ -258,14 +258,14 @@ bool InstallManager::extractResources()
         extractSlides = extractSlides && extractSlide.first;
     }
 
-    QPair<bool, QString> extractClose = m_installPath.extractResourceToPath(":/images/close.png", m_installPath.getImagesDirPath().absolutePath() + "/close.png");
+    QPair<bool, QString> extractClose = m_appPath.extractResourceToPath(":/images/close.png", m_appPath.getImagesDirPath().absolutePath() + "/close.png");
     if (extractClose.first) {
         L_INFO(extractClose.second);
     } else {
         L_ERROR(extractClose.second);
     }
 
-    QPair<bool, QString> extractTitleLogo = m_installPath.extractResourceToPath(":/images/logo_title.png", m_installPath.getImagesDirPath().absolutePath() + "/logo_title.png");
+    QPair<bool, QString> extractTitleLogo = m_appPath.extractResourceToPath(":/images/logo_title.png", m_appPath.getImagesDirPath().absolutePath() + "/logo_title.png");
     if (extractTitleLogo.first) {
         L_INFO(extractTitleLogo.second);
     } else {
@@ -281,18 +281,18 @@ bool InstallManager::createShortcut()
         bool success = true;
         // online shortcut
         if (m_settings->getShortcutOnline()) {
-            success &= shortcut.createDesktopShortcut(m_installPath, m_settings->getShortcutName(), "", m_settings->getInstallLocation(), m_settings->getApplicationName());
+            success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // offline shortcut
         if (m_settings->getShortcutOffline()) {
-            success &= shortcut.createDesktopShortcut(m_installPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getInstallLocation(), m_settings->getApplicationName());
+            success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // startup shortcut
         if (m_settings->getRunAtStart()) {
-            success &= shortcut.createStartShorcut(m_installPath, m_settings->getShortcutName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
+            success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // StartMenu folder and shortcut
-        success &= shortcut.createStartMenuShorcut(m_installPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
+        success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         return success;
 }
 
@@ -300,7 +300,7 @@ bool InstallManager::launchLoader()
 {
     QStringList args;
     QProcess process;
-    QString loaderFile = m_installPath.getLoaderFilePath();
+    QString loaderFile = m_appPath.getLoaderFilePath();
 
     QString sOldPath = QDir::currentPath();
 

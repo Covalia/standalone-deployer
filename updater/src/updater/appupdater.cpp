@@ -5,7 +5,7 @@
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject *_parent) : QObject(_parent),
     m_updater(0),
-    m_installPath(Utils::getInstallPath())
+    m_appPath(Utils::getAppPath())
 {
     m_appUrl = _appUrl;
 
@@ -13,7 +13,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
 
     // TODO récupérer ici la configuration du proxy.
 
-    m_updater = new DownloadManager(m_installPath.getTempDirPath(), _appUrl, proxy, this);
+    m_updater = new DownloadManager(m_appPath.getTempDirPath(), _appUrl, proxy, this);
 
     connect(m_updater, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));
@@ -39,7 +39,7 @@ void AppUpdater::start()
 	qDebug() << "start app updater";
 	emit serverUrlMessage(m_appUrl);
 
-    bool result = m_installPath.makeAppDirectories();
+    bool result = m_appPath.makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;
 
     QList<QUrl> urls;

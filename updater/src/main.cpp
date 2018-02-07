@@ -41,14 +41,14 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    InstallPath installPath = Utils::getInstallPath();
-    qDebug() << "-- Installation root: " << installPath.getInstallationRootPath().absolutePath();
+    AppPath appPath = Utils::getAppPath();
+    qDebug() << "-- Installation root: " << appPath.getInstallationRootPath().absolutePath();
 
-    new Logger(installPath.getLogsDirPath().absolutePath() + "/updater.log");
+    new Logger(appPath.getLogsDirPath().absolutePath() + "/updater.log");
 
     L_INFO("Updater started.");
 
-    QString settingsPath = installPath.getConfigurationFilePath();
+    QString settingsPath = appPath.getConfigurationFilePath();
 
     L_INFO("Start read install folder resources" + settingsPath);
     Settings * settings = Settings::getInstance();

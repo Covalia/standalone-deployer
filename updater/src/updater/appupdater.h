@@ -29,7 +29,7 @@ private slots:
 private:
     DownloadManager * m_updater;
     QUrl m_appUrl;
-    InstallPath m_installPath;
+    AppPath m_appPath;
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);

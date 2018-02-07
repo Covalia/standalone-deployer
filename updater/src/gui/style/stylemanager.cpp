@@ -1,6 +1,5 @@
 #include "gui/style/stylemanager.h"
 #include "settings/settings.h"
-#include "fs/apptreemanager.h"
 #include "utils.h"
 
 #include <QApplication>
@@ -38,9 +37,9 @@ void StyleManager::transformStyle(QWidget * parentWidget)
 
 void StyleManager::setGeneralStyle()
 {
-    InstallPath installPath = Utils::getInstallPath();
+    AppPath appPath = Utils::getAppPath();
 
-    QFile f(installPath.getConfigurationDirPath().absolutePath() + "/style.css");
+    QFile f(appPath.getConfigurationDirPath().absolutePath() + "/style.css");
 
     if (f.exists()) {
         if (f.open(QFile::ReadOnly | QFile::Text)) {

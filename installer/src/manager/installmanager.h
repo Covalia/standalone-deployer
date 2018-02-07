@@ -23,7 +23,7 @@ class InstallManager: public QThread
     private:
 
         UIManager * m_uiManager;
-        InstallPath m_installPath;
+        AppPath m_appPath;
         ResourcesSettings * m_projectSettings;
         Settings * m_settings;
 

@@ -5,19 +5,18 @@
 #include "log/logger.h"
 #include "loadermanager.h"
 #include "settings/settings.h"
-#include "fs/apptreemanager.h"
 #include "utils.h"
 
 int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    InstallPath installPath = Utils::getInstallPath();
-    qDebug() << "-- Installation root: " << installPath.getInstallationRootPath();
+    AppPath appPath = Utils::getAppPath();
+    qDebug() << "-- Installation root: " << appPath.getInstallationRootPath();
 
-    new Logger(installPath.getLogsDirPath().absolutePath() + "/loader.log");
+    new Logger(appPath.getLogsDirPath().absolutePath() + "/loader.log");
 
-    QString settingsPath = installPath.getConfigurationFilePath();
+    QString settingsPath = appPath.getConfigurationFilePath();
     L_INFO("Start read settings in " +  settingsPath);
 
     Settings * settings = Settings::getInstance();
