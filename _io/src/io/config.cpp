@@ -12,6 +12,7 @@ const QString FileSystemConfig::SlidesDir("Slides");
 const QString FileSystemConfig::JavaDir("Java");
 const QString FileSystemConfig::LogsDir("Logs");
 const QString FileSystemConfig::TempDir("Temp");
+const QString FileSystemConfig::MountDir("Mount");
 const QString FileSystemConfig::UpdaterDir("Updater");
 const QString FileSystemConfig::LoaderDir("Loader");
 

@@ -33,6 +33,7 @@ bool MacosAppPathImpl::makeAppDirectories()
     result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
     result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
     result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::MountDir);
     result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::UpdaterDir);
     result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LoaderDir);
 

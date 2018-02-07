@@ -49,6 +49,9 @@ public:
     /// Relative path of the temporary directory of the application
     static const QString TempDir;
 
+    /// Relative path of the mount directory of the application, macos only
+    static const QString MountDir;
+
     /// Relative directory path of application updater
     static const QString UpdaterDir;
 
