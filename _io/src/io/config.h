@@ -9,7 +9,6 @@ public:
 
     enum AppComponent {
         Loader,
-        Uninstaller,
         Updater
     };
 

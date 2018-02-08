@@ -191,11 +191,6 @@
         <translation>Standalone deployment</translation>
     </message>
     <message>
-        <location filename="../../src/shortcut/windowsshortcut.cpp" line="100"/>
-        <source>Uninstall %1</source>
-        <translation>Uninstall %1</translation>
-    </message>
-    <message>
         <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>
         <source>Configure %1</source>
         <translation>Configure %1</translation>

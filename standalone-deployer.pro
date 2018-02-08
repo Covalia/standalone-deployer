@@ -10,5 +10,4 @@ SUBDIRS += _settings
 SUBDIRS += _io
 SUBDIRS += loader
 SUBDIRS += updater
-SUBDIRS += uninstaller
 SUBDIRS += installer

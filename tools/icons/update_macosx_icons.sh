@@ -46,9 +46,7 @@ pack_icon 'updater'
 # installer
 pack_icon 'installer'
 # https://www.flaticon.com/free-icon/box_679821
-# uninstaller
-pack_icon 'uninstaller'
-# https://www.flaticon.com/free-icon/garbage_577971
+
 # license: Those Icons on flaticon.com
 # loader
 # https://www.flaticon.com/free-icon/busy_522813
