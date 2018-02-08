@@ -191,11 +191,6 @@
         <translation>Déploiement autonome</translation>
     </message>
     <message>
-        <location filename="../../src/shortcut/windowsshortcut.cpp" line="100"/>
-        <source>Uninstall %1</source>
-        <translation type="unfinished">Desinstaller %1</translation>
-    </message>
-    <message>
         <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>
         <source>Configure %1</source>
         <translation>Configurer %1</translation>

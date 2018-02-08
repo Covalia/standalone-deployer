@@ -84,7 +84,6 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
     }
 
     QString runApplicationPathShortcut =  _applicationName + ".lnk";
-    QString uninstallApplicationPathShortcut = QObject::tr("Uninstall %1").arg(_applicationName) + ".lnk";
     QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
 
     QString loaderPath =  treeManager.getLoaderFilePath();
@@ -92,17 +91,14 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
     QString executionDir = _installLocation;
 
     QString iconApplicationPath = treeManager.getImagesDirPath().absolutePath() + "/shortcut.ico";
-    QString iconUninstallPath = treeManager.getImagesDirPath().absolutePath() + "/trash.ico";
     QString iconConfigurationPath = treeManager.getImagesDirPath().absolutePath() + "/config.ico";
 
     bool runApplicationShortcut = createShortcut(_installLocation + "/" + runApplicationPathShortcut, loaderPath, "", executionDir, iconApplicationPath, description);
-    bool uninstallApplicationShortcut = createShortcut(_installLocation + "/" + uninstallApplicationPathShortcut, loaderPath, "-uninstall", executionDir, iconUninstallPath, description);
     bool configureApplicationShortcut = createShortcut(_installLocation + "/" + settingsApplicationPathShortcut, loaderPath, "-configure", executionDir, iconConfigurationPath, description);
 
-    if (runApplicationShortcut && uninstallApplicationShortcut && configureApplicationShortcut) {
+    if (runApplicationShortcut && configureApplicationShortcut) {
         L_INFO("Start copie shortcut in startmenu");
         QPair<bool, QString> copyApplicationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + runApplicationPathShortcut, applicationFolder + "/" + runApplicationPathShortcut);
-        QPair<bool, QString> copyUnstallationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + uninstallApplicationPathShortcut, applicationFolder + "/" + uninstallApplicationPathShortcut);
         QPair<bool, QString> copyConfigurationShortcut = treeManager.extractResourceToPath(_installLocation + "/" + settingsApplicationPathShortcut, applicationFolder + "/" + settingsApplicationPathShortcut);
 
         if (copyApplicationShortcut.first && copyUnstallationShortcut.first && copyConfigurationShortcut.first) {
@@ -115,10 +111,6 @@ bool WindowsShortcutImpl::createStartMenuShorcut(QString _startMenuFolderName, b
             if (QDir(applicationFolder).exists()) {
                 if (!QFile::exists(applicationFolder + "/" + runApplicationPathShortcut)) {
                     L_ERROR(copyApplicationShortcut.second);
-                    return false;
-                }
-                if (!QFile::exists(applicationFolder + "/" + uninstallApplicationPathShortcut)) {
-                    L_ERROR(copyUnstallationShortcut.second);
                     return false;
                 }
                 if (!QFile::exists(applicationFolder + "/" + settingsApplicationPathShortcut)) {
