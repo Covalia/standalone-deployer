@@ -59,3 +59,13 @@ QString MacosAppPathImpl::getUpdaterFilePath(QString updaterVersion)
 {
     return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOSExtension;
 }
+
+bool MacosAppPathImpl::startLoader(QStringList _args)
+{
+    return false;
+}
+
+bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
+{
+    return false;
+}

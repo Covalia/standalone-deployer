@@ -6,7 +6,6 @@
 #include <QDir>
 #include <QFile>
 #include <QStandardPaths>
-#include <QProcess>
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
@@ -299,27 +298,13 @@ bool InstallManager::createShortcut()
 bool InstallManager::launchLoader()
 {
     QStringList args;
-    QProcess process;
-    QString loaderFile = m_appPath.getLoaderFilePath();
 
-    QString sOldPath = QDir::currentPath();
-
-    QDir::setCurrent(m_settings->getInstallLocation());
-
-    if (!QFile::exists(loaderFile)) {
-        L_ERROR("An error occured when launch file " + loaderFile + ". The file doesn't exist.");
-        return false;
-    }
-    L_INFO("Launch file " + loaderFile);
-
-    bool success = process.startDetached(loaderFile, args);
+    bool success = m_appPath.startLoader(args);
     if (!success) {
-        L_ERROR("Error when launching file " + loaderFile);
+        L_ERROR("Error when launching loader");
     } else {
-        L_INFO("Success launching file " + loaderFile);
+        L_INFO("Success launching loader");
     }
-
-    QDir::setCurrent(sOldPath);
 
     return success;
 }

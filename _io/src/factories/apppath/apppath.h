@@ -41,6 +41,9 @@ class AppPath {
         QString getUpdaterFilePath(QString updaterVersion);
         QString getConfigurationFilePath();
 
+        bool startLoader(QStringList _args);
+        bool startUpdater(QString _version, QStringList _args);
+
         QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
 
         bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);

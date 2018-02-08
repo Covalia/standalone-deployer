@@ -188,6 +188,22 @@ QString AppPath::getConfigurationFilePath()
     return "";
 }
 
+bool AppPath::startLoader(QStringList _args)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startLoader(_args);
+    }
+    return false;
+}
+
+bool AppPath::startUpdater(QString _version, QStringList _args)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startUpdater(_version, _args);
+    }
+    return false;
+}
+
 QPair<bool, QString> AppPath::extractResourceToPath(QString resourcePath, QString copyFilePath)
 {
     if (m_appPathImpl) {

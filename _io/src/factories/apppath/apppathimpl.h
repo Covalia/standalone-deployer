@@ -3,9 +3,11 @@
 
 #include "factories/apppath/apppath.h"
 #include "io/config.h"
+#include "log/logger.h"
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QProcess>
 
 class AppPathImpl {
     public:
@@ -44,6 +46,9 @@ class AppPathImpl {
         virtual QString getUpdaterFilePath(QString updaterVersion) = 0;
 
         virtual QString getConfigurationFilePath();
+
+        virtual bool startLoader(QStringList _args) = 0;
+        virtual bool startUpdater(QString _version, QStringList _args) = 0;
 
         virtual QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
 
