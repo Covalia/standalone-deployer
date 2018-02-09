@@ -12,8 +12,8 @@ class MacosAppPathImpl : public AppPathImpl {
         virtual QString getLoaderFilePath();
         virtual QString getUpdaterFilePath(QString updaterVersion);
 
-        virtual bool startLoader(QStringList _args);
-        virtual bool startUpdater(QString _version, QStringList _args);
+    protected:
+        virtual bool startApplication(QString _app, QStringList _args);
 };
 
 #endif

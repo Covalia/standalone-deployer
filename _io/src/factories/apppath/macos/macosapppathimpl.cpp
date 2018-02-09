@@ -60,12 +60,24 @@ QString MacosAppPathImpl::getUpdaterFilePath(QString updaterVersion)
     return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOSExtension;
 }
 
-bool MacosAppPathImpl::startLoader(QStringList _args)
+bool MacosAppPathImpl::startApplication(QString _app, QStringList _args)
 {
-    return false;
-}
+    if (!QFile::exists(_app)) {
+        L_ERROR("An error occured when launching " + _app + ". The app dir doesn't exist.");
+        return false;
+    }
 
-bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
-{
-    return false;
+    QStringList args;
+    args << "-a";
+    args << _app;
+    if (!_args.isEmpty()) {
+        args << "--args";
+        args << _args;
+    }
+
+    L_INFO("Launching app " + _app + " with args ...");
+    QProcess process;
+    process.start("open", args);
+    // open retourne lorsque le programme est lancé, donc on peut faire un waitForFinished :)
+    return process.waitForFinished();
 }

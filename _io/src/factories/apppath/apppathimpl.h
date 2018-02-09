@@ -47,8 +47,8 @@ class AppPathImpl {
 
         virtual QString getConfigurationFilePath();
 
-        virtual bool startLoader(QStringList _args) = 0;
-        virtual bool startUpdater(QString _version, QStringList _args) = 0;
+        virtual bool startLoader(QStringList _args);
+        virtual bool startUpdater(QString _version, QStringList _args);
 
         virtual QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
 
@@ -56,6 +56,7 @@ class AppPathImpl {
 
     protected:
         QDir m_installationDir;
+        virtual bool startApplication(QString _app, QStringList _args) = 0;
         bool cdUp(QDir &_dir, int _numUp);
 };
 

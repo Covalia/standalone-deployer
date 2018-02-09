@@ -59,28 +59,14 @@ QString WindowsAppPathImpl::getUpdaterFilePath(QString updaterVersion)
     return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsExtension;
 }
 
-bool WindowsAppPathImpl::startLoader(QStringList _args)
+bool WindowsAppPathImpl::startApplication(QString _app, QStringList _args)
 {
-    QString loaderFile = getLoaderFilePath();
-    if (!QFile::exists(loaderFile)) {
-        L_ERROR("An error occured when launching Loader file " + loaderFile + ". The file doesn't exist.");
+    if (!QFile::exists(_app)) {
+        L_ERROR("An error occured when launching " + _app + ". The exe file doesn't exist.");
         return false;
     }
 
-    L_INFO("Launching file " + loaderFile + " with args ...");
+    L_INFO("Launching file " + _app + " with args ...");
     QProcess process;
-    return process.startDetached(loaderFile, _args);
-}
-
-bool WindowsAppPathImpl::startUpdater(QString _version, QStringList _args)
-{
-    QString updaterFile = getUpdaterFilePath(_version);
-    if (!QFile::exists(updaterFile)) {
-        L_ERROR("An error occured when launching Updater file " + updaterFile + ". The file doesn't exist.");
-        return false;
-    }
-
-    L_INFO("Launching file " + updaterFile + " with args ...");
-    QProcess process;
-    return process.startDetached(updaterFile, _args);
+    return process.startDetached(_app, _args);
 }
