@@ -1,11 +1,11 @@
 #ifndef UPDATER__UTILS_H
 #define UPDATER__UTILS_H
 
-#include <QString>
+#include "factories/apppath/apppath.h"
 
 class Utils {
     public:
-        static QString getInstallationRootPath();
+        static AppPath getAppPath();
 };
 
 #endif

@@ -69,10 +69,10 @@ void ResourcesSettings::kill()
     }
 }
 
-void ResourcesSettings::initSettings(QString _installPath)
+void ResourcesSettings::initSettings(QString _appPath)
 {
     if (m_settings == 0) {
-        m_settings = new QSettings(_installPath, QSettings::IniFormat);
+        m_settings = new QSettings(_appPath, QSettings::IniFormat);
         m_settings->setFallbacksEnabled(false);
     }
 }

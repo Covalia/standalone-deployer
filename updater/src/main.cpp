@@ -2,7 +2,6 @@
 #include <QDir>
 #include <QtDebug>
 
-#include "fs/apptreemanager.h"
 #include "gui/mainwindow.h"
 #include "gui/splashscreen.h"
 #include "gui/style/stylemanager.h"
@@ -42,16 +41,14 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    qDebug() << "-- Installation root: " << Utils::getInstallationRootPath();
+    AppPath appPath = Utils::getAppPath();
+    qDebug() << "-- Installation root: " << appPath.getInstallationRootPath().absolutePath();
 
-    QDir installationRootPath(Utils::getInstallationRootPath());
-    AppTreeManager treeManager(installationRootPath);
-
-    new Logger(treeManager.getLogsDirPath().absolutePath() + "/updater.log");
+    new Logger(appPath.getLogsDirPath().absolutePath() + "/updater.log");
 
     L_INFO("Updater started.");
 
-    QString settingsPath = treeManager.getConfigurationFilePath();
+    QString settingsPath = appPath.getConfigurationFilePath();
 
     L_INFO("Start read install folder resources" + settingsPath);
     Settings * settings = Settings::getInstance();
@@ -69,7 +66,9 @@ int main(int argc, char * argv[])
 
     QStringList args = qApp->arguments();
     args.removeFirst();
-    L_INFO("Updater Arguments =  " + args.join(""));
+    if (args.contains("-debug")) {
+        L_INFO("Updater Arguments = " + args.join(" "));
+    }
 
 //    Splashscreen splashscreen;
 //    splashscreen.show();

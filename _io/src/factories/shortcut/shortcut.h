@@ -1,0 +1,30 @@
+#ifndef IO__SHORTCUT_H
+#define IO__SHORTCUT_H
+
+#include <QString>
+#include <QSharedPointer>
+#include "factories/shortcut/shortcutimpl.h"
+#include "factories/apppath/apppath.h"
+#include "io/config.h"
+
+class ShortcutImpl;
+
+/**
+ * \class Shortcut
+ *
+ * @brief Shortcut création class
+ */
+class Shortcut {
+    public:
+        Shortcut();
+        virtual ~Shortcut();
+
+        bool createDesktopShortcut(AppPath _appPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
+        bool createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
+        bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
+
+    private:
+        QSharedPointer<ShortcutImpl> m_shortcutImpl;
+};
+
+#endif

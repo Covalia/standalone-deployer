@@ -9,7 +9,8 @@ public:
 
     enum AppComponent {
         Loader,
-        Updater
+        Updater,
+        Installer
     };
 
     /// relative path of application installation application
@@ -47,6 +48,9 @@ public:
     /// Relative path of the temporary directory of the application
     static const QString TempDir;
 
+    /// Relative path of the mount directory of the application, macos only
+    static const QString MountDir;
+
     /// Relative directory path of application updater
     static const QString UpdaterDir;
 
@@ -61,11 +65,14 @@ public:
     /// Updater Loader file name
     static const QString UpdaterFile;
 
-    /// Name of executables windows extension
-    static const QString WindowsExtension;
+    /// Executables windows extension
+    static const QString WindowsAppExtension;
 
-    /// Name of executables Mac OS extension
-    static const QString MacOSExtension;
+    /// Executables Mac OS extension
+    static const QString MacOsAppExtension;
+
+    /// DMG images Mac OS extension
+    static const QString MacOsDmgExtension;
 
     /// Name of configuration file
     static const QString ConfigurationFile;

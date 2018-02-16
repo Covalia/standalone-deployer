@@ -32,38 +32,38 @@ DEPENDPATH += src
 INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 
-SOURCES += src/fs/apptreemanager.cpp
 SOURCES += src/io/config.cpp
-SOURCES += src/tools/factory/factory.cpp
-SOURCES += src/tools/installpath/installpath.cpp
-SOURCES += src/tools/installpath/installpathimpl.cpp
-SOURCES += src/tools/shortcut/shortcut.cpp
-SOURCES += src/tools/shortcut/shortcutimpl.cpp
+SOURCES += src/io/fileutils.cpp
+SOURCES += src/factories/factory/factory.cpp
+SOURCES += src/factories/apppath/apppath.cpp
+SOURCES += src/factories/apppath/apppathimpl.cpp
+SOURCES += src/factories/shortcut/shortcut.cpp
+SOURCES += src/factories/shortcut/shortcutimpl.cpp
 
-HEADERS += src/fs/apptreemanager.h
 HEADERS += src/io/config.h
-HEADERS += src/tools/factory/factory.h
-HEADERS += src/tools/installpath/installpath.h
-HEADERS += src/tools/installpath/installpathimpl.h
-HEADERS += src/tools/shortcut/shortcut.h
-HEADERS += src/tools/shortcut/shortcutimpl.h
+HEADERS += src/io/fileutils.h
+HEADERS += src/factories/factory/factory.h
+HEADERS += src/factories/apppath/apppath.h
+HEADERS += src/factories/apppath/apppathimpl.h
+HEADERS += src/factories/shortcut/shortcut.h
+HEADERS += src/factories/shortcut/shortcutimpl.h
 
 win32 {
-HEADERS += src/tools/factory/windows/windowsfactory.h
-HEADERS += src/tools/installpath/windows/windowsinstallpathimpl.h
-HEADERS += src/tools/shortcut/windows/windowsshortcutimpl.h
+HEADERS += src/factories/factory/windows/windowsfactory.h
+HEADERS += src/factories/apppath/windows/windowsapppathimpl.h
+HEADERS += src/factories/shortcut/windows/windowsshortcutimpl.h
 
-SOURCES += src/tools/factory/windows/windowsfactory.cpp
-SOURCES += src/tools/installpath/windows/windowsinstallpathimpl.cpp
-SOURCES += src/tools/shortcut/windows/windowsshortcutimpl.cpp
+SOURCES += src/factories/factory/windows/windowsfactory.cpp
+SOURCES += src/factories/apppath/windows/windowsapppathimpl.cpp
+SOURCES += src/factories/shortcut/windows/windowsshortcutimpl.cpp
 }
 
 macx {
-HEADERS += src/tools/factory/macos/macosfactory.h
-HEADERS += src/tools/installpath/macos/macosinstallpathimpl.h
-HEADERS += src/tools/shortcut/macos/macosshortcutimpl.h
+HEADERS += src/factories/factory/macos/macosfactory.h
+HEADERS += src/factories/apppath/macos/macosapppathimpl.h
+HEADERS += src/factories/shortcut/macos/macosshortcutimpl.h
 
-SOURCES += src/tools/factory/macos/macosfactory.cpp
-SOURCES += src/tools/installpath/macos/macosinstallpathimpl.cpp
-SOURCES += src/tools/shortcut/macos/macosshortcutimpl.cpp
+SOURCES += src/factories/factory/macos/macosfactory.cpp
+SOURCES += src/factories/apppath/macos/macosapppathimpl.cpp
+SOURCES += src/factories/shortcut/macos/macosshortcutimpl.cpp
 }

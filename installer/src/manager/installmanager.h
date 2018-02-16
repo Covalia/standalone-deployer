@@ -6,9 +6,9 @@
 #include <QThread>
 
 #include "gui/manager/uimanager.h"
-#include "fs/apptreemanager.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
+#include "utils.h"
 
 class InstallManager: public QThread
 {
@@ -23,7 +23,7 @@ class InstallManager: public QThread
     private:
 
         UIManager * m_uiManager;
-        AppTreeManager * m_treeManager;
+        AppPath m_appPath;
         ResourcesSettings * m_projectSettings;
         Settings * m_settings;
 

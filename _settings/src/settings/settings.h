@@ -71,7 +71,7 @@ class Settings
         static Settings *getInstance();
         static void kill();
 
-        void initSettings(QString installPath);
+        void initSettings(QString _appPath);
 
         bool isWrittable();
 

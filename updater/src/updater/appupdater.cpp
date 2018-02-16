@@ -4,17 +4,16 @@
 #include <QDebug>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject *_parent) : QObject(_parent),
-	m_updater(0),
-	m_appTreeManager(0)
+    m_updater(0),
+    m_appPath(Utils::getAppPath())
 {
-	m_appTreeManager = new AppTreeManager(_appInstallDir, this);
     m_appUrl = _appUrl;
 
     QNetworkProxy proxy;
 
     // TODO récupérer ici la configuration du proxy.
 
-    m_updater = new DownloadManager(m_appTreeManager->getTempDirPath(), _appUrl, proxy, this);
+    m_updater = new DownloadManager(m_appPath.getTempDirPath(), _appUrl, proxy, this);
 
     connect(m_updater, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));
@@ -33,7 +32,6 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
 AppUpdater::~AppUpdater()
 {
 	delete m_updater;
-	delete m_appTreeManager;
 }
 
 void AppUpdater::start()
@@ -41,7 +39,7 @@ void AppUpdater::start()
 	qDebug() << "start app updater";
 	emit serverUrlMessage(m_appUrl);
 
-	bool result = m_appTreeManager->makeAppDirectories();
+    bool result = m_appPath.makeAppDirectories();
 	qDebug() << "makeAppDirectories" << result;
 
     QList<QUrl> urls;

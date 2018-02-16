@@ -1,9 +1,6 @@
 #include "utils.h"
-#include "tools/installpath/installpath.h"
 
-QString Utils::getInstallationRootPath()
+AppPath Utils::getAppPath()
 {
-    InstallPath p;
-
-    return p.getInstallationRootPath(FileSystemConfig::AppComponent::Updater);
+    return AppPath(FileSystemConfig::AppComponent::Updater);
 }
