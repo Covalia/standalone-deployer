@@ -86,7 +86,7 @@ bool MacosAppPathImpl::startApplication(QString _app, QStringList _args)
         args << _args;
     }
 
-    L_INFO("Launching app " + _app + " with args ...");
+    L_INFO("Launching app " + _app);
     QProcess process;
     process.start("open", args);
     // open retourne lorsque le programme est lancé, donc on peut faire un waitForFinished :)

@@ -66,7 +66,7 @@ bool WindowsAppPathImpl::startApplication(QString _app, QStringList _args)
         return false;
     }
 
-    L_INFO("Launching file " + _app + " with args ...");
+    L_INFO("Launching file " + _app);
     QProcess process;
     return process.startDetached(_app, _args);
 }

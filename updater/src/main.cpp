@@ -66,7 +66,9 @@ int main(int argc, char * argv[])
 
     QStringList args = qApp->arguments();
     args.removeFirst();
-    L_INFO("Updater Arguments =  " + args.join(""));
+    if (args.contains("-debug")) {
+        L_INFO("Updater Arguments = " + args.join(" "));
+    }
 
 //    Splashscreen splashscreen;
 //    splashscreen.show();
