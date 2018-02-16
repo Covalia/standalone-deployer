@@ -10,7 +10,7 @@ class WindowsAppPathImpl : public AppPathImpl {
         virtual QString getLoaderResourcesPath();
         virtual QString getUpdaterResourcesPath();
         virtual QString getLoaderFilePath();
-        virtual QString getUpdaterFilePath(QString updaterVersion);
+        virtual QString getUpdaterFilePath(QString _updaterVersion);
 
     protected:
         virtual bool startApplication(QString _app, QStringList _args);

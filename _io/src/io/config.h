@@ -66,11 +66,14 @@ public:
     /// Updater Loader file name
     static const QString UpdaterFile;
 
-    /// Name of executables windows extension
-    static const QString WindowsExtension;
+    /// Executables windows extension
+    static const QString WindowsAppExtension;
 
-    /// Name of executables Mac OS extension
-    static const QString MacOSExtension;
+    /// Executables Mac OS extension
+    static const QString MacOsAppExtension;
+
+    /// DMG images Mac OS extension
+    static const QString MacOsDmgExtension;
 
     /// Name of configuration file
     static const QString ConfigurationFile;

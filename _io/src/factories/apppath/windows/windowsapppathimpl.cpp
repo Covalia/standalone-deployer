@@ -41,22 +41,22 @@ bool WindowsAppPathImpl::makeAppDirectories()
 
 QString WindowsAppPathImpl::getLoaderResourcesPath()
 {
-    return ResourceBinPrefix + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsExtension;
+    return ResourceBinPrefix + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsAppExtension;
 }
 
 QString WindowsAppPathImpl::getUpdaterResourcesPath()
 {
-    return ResourceBinPrefix + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsExtension;
+    return ResourceBinPrefix + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsAppExtension;
 }
 
 QString WindowsAppPathImpl::getLoaderFilePath()
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsExtension;
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsAppExtension;
 }
 
-QString WindowsAppPathImpl::getUpdaterFilePath(QString updaterVersion)
+QString WindowsAppPathImpl::getUpdaterFilePath(QString _updaterVersion)
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsExtension;
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + _updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsAppExtension;
 }
 
 bool WindowsAppPathImpl::startApplication(QString _app, QStringList _args)

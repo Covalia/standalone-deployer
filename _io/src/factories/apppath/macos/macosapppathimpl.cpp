@@ -1,4 +1,5 @@
 #include "factories/apppath/macos/macosapppathimpl.h"
+#include "io/fileutils.h"
 
 MacosAppPathImpl::MacosAppPathImpl(FileSystemConfig::AppComponent _app) : AppPathImpl(_app)
 {
@@ -42,22 +43,32 @@ bool MacosAppPathImpl::makeAppDirectories()
 
 QString MacosAppPathImpl::getLoaderResourcesPath()
 {
-    return ResourceBinPrefix + FileSystemConfig::LoaderFile + FileSystemConfig::MacOSExtension;
+    return ResourceBinPrefix + FileSystemConfig::LoaderFile + FileSystemConfig::MacOsDmgExtension;
 }
 
 QString MacosAppPathImpl::getUpdaterResourcesPath()
 {
-    return ResourceBinPrefix + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOSExtension;
+    return ResourceBinPrefix + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOsDmgExtension;
 }
 
 QString MacosAppPathImpl::getLoaderFilePath()
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::MacOSExtension;
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::MacOsDmgExtension;
 }
 
-QString MacosAppPathImpl::getUpdaterFilePath(QString updaterVersion)
+QString MacosAppPathImpl::getUpdaterFilePath(QString _updaterVersion)
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOSExtension;
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + _updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOsDmgExtension;
+}
+
+QString MacosAppPathImpl::getLoaderAppFilePath()
+{
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::MacOsAppExtension;
+}
+
+QString MacosAppPathImpl::getUpdaterAppFilePath(QString _updaterVersion)
+{
+    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + _updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOsAppExtension;
 }
 
 bool MacosAppPathImpl::startApplication(QString _app, QStringList _args)
@@ -80,4 +91,96 @@ bool MacosAppPathImpl::startApplication(QString _app, QStringList _args)
     process.start("open", args);
     // open retourne lorsque le programme est lancé, donc on peut faire un waitForFinished :)
     return process.waitForFinished();
+}
+
+bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, const QString &_dmgPath, const QString &_appPath, const QString &_appInDmgPath)
+{
+    bool result = true;
+    L_INFO(_appName + " dmg path: " + _dmgPath);
+    L_INFO(_appName + " app path: " + _appPath);
+    L_INFO(_appName + " app in dmg path: " + _appInDmgPath);
+
+    if (!FileUtils::directoryExists(_appPath)) {
+        L_INFO(_appName + " app does not exist: " + _appPath);
+        if (openDmgFile(_dmgPath)) {
+            L_INFO("Opening " + _appName + " dmg");
+            if (FileUtils::copyDirRecursively(_appInDmgPath, _appPath)) {
+                L_INFO(_appName + " app copied from dmg");
+            } else {
+                L_ERROR("Error while copying " + _appName + " app from dmg");
+                result = false;
+            }
+            if (closeDmgFile(_dmgPath)) {
+                L_INFO("Success closing " + _appName + " dmg");
+            } else {
+                L_ERROR("Error while closing " + _appName + " dmg");
+            }
+        } else {
+            L_ERROR("Error while opening " + _appName + " dmg");
+            result = false;
+        }
+    } else {
+        L_INFO(_appName + " app already exists: " + _appPath);
+    }
+    return result;
+}
+
+bool MacosAppPathImpl::startLoader(QStringList _args)
+{
+    const QString app = "loader";
+    const QString dmgPath = getLoaderFilePath();
+    const QString appPath = getLoaderAppFilePath();
+    const QString appInDmgPath = getMountDirPath().absoluteFilePath(FileSystemConfig::LoaderFile + QDir::separator() + FileSystemConfig::LoaderFile + FileSystemConfig::MacOsAppExtension);
+
+    bool result = extractAppFromDmgIfNotExist(app, dmgPath, appPath, appInDmgPath);
+    result &= startApplication(appPath, _args);
+    return result;
+}
+
+bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
+{
+    const QString app = "updater";
+    const QString dmgPath = getUpdaterFilePath(_version);
+    const QString appPath = getUpdaterAppFilePath(_version);
+    const QString appInDmgPath = getMountDirPath().absoluteFilePath(FileSystemConfig::UpdaterFile + QDir::separator() + FileSystemConfig::UpdaterFile + FileSystemConfig::MacOsAppExtension);
+
+    bool result = extractAppFromDmgIfNotExist(app, dmgPath, appPath, appInDmgPath);
+    result &= startApplication(appPath, _args);
+    return result;
+}
+
+bool MacosAppPathImpl::openDmgFile(const QString &_dmgFile)
+{
+    QStringList args;
+
+    args << "attach";
+    args << "-noautoopen";
+    args << "-mountroot";
+    args << getMountDirPath().absolutePath();
+    args << _dmgFile;
+
+    QProcess process;
+    process.start("hdiutil", args);
+    return process.waitForFinished();
+}
+
+bool MacosAppPathImpl::closeDmgFile(const QString &_dmgFile)
+{
+    QFileInfo file(_dmgFile);
+    QString imageName = file.baseName();
+
+    QStringList args;
+
+    args << "detach";
+    args << getMountDirPath().absoluteFilePath(imageName);
+
+    QProcess process;
+    process.start("hdiutil", args);
+    return process.waitForFinished();
+    return false;
+}
+
+QDir MacosAppPathImpl::getMountDirPath()
+{
+    return QDir(m_installationDir.filePath(FileSystemConfig::MountDir));
 }
