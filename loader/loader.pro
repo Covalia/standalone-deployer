@@ -57,7 +57,8 @@ HEADERS += src/utils.h
 DISTFILES += ../uncrustify.cfg
 
 macx {
-QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background-no-run.png"
+QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
+QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background-no-run.png";
 dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
 distclean.depends += dmgclean
 QMAKE_EXTRA_TARGETS += distclean dmgclean
