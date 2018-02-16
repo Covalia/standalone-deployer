@@ -393,7 +393,7 @@ void Settings::setApplicationName(const QString &applicationName)
     m_applicationName = applicationName;
 }
 
-bool Settings::getRunAtStart() const
+bool Settings::isRunAtStart() const
 {
     return m_runAtStart;
 }
@@ -443,7 +443,7 @@ void Settings::setClasspathExtension(const QString &classpathExtension)
     m_classpathExtension = classpathExtension;
 }
 
-bool Settings::getShortcutAllUser() const
+bool Settings::isShortcutAllUser() const
 {
     return m_shortcutAllUser;
 }
@@ -453,7 +453,7 @@ void Settings::setShortcutAllUser(bool shortcutAllUser)
     m_shortcutAllUser = shortcutAllUser;
 }
 
-bool Settings::getShortcutOnline() const
+bool Settings::isShortcutOnline() const
 {
     return m_shortcutOnline;
 }
@@ -463,7 +463,7 @@ void Settings::setShortcutOnline(bool shortcutOnline)
     m_shortcutOnline = shortcutOnline;
 }
 
-bool Settings::getShortcutOffline() const
+bool Settings::isShortcutOffline() const
 {
     return m_shortcutOffline;
 }
@@ -517,7 +517,7 @@ void Settings::setProxyLogin(const QString &proxyLogin)
     m_proxyLogin = proxyLogin;
 }
 
-bool Settings::getProxyAuthentification() const
+bool Settings::isProxyAuthentification() const
 {
     return m_proxyAuthentification;
 }
@@ -547,7 +547,7 @@ void Settings::setProxyHostname(const QString &proxyHostname)
     m_proxyHostname = proxyHostname;
 }
 
-bool Settings::getProxyManual() const
+bool Settings::isProxyManual() const
 {
     return m_proxyManual;
 }
@@ -557,7 +557,7 @@ void Settings::setProxyManual(bool proxyManual)
     m_proxyManual = proxyManual;
 }
 
-bool Settings::getProxyAuto() const
+bool Settings::isProxyAuto() const
 {
     return m_proxyAuto;
 }
@@ -567,7 +567,7 @@ void Settings::setProxyAuto(bool proxyAuto)
     m_proxyAuto = proxyAuto;
 }
 
-bool Settings::getProxyUse() const
+bool Settings::isProxyUse() const
 {
     return m_proxyUse;
 }

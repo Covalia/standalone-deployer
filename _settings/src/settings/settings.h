@@ -81,13 +81,13 @@ class Settings
 
         QString paramListString();
 
-        bool getProxyUse() const;
+        bool isProxyUse() const;
         void setProxyUse(bool proxyUse);
 
-        bool getProxyAuto() const;
+        bool isProxyAuto() const;
         void setProxyAuto(bool proxyAuto);
 
-        bool getProxyManual() const;
+        bool isProxyManual() const;
         void setProxyManual(bool proxyManual);
 
         QString getProxyHostname() const;
@@ -96,7 +96,7 @@ class Settings
         int getProxyPort() const;
         void setProxyPort(int proxyPort);
 
-        bool getProxyAuthentification() const;
+        bool isProxyAuthentification() const;
         void setProxyAuthentification(bool proxyAuthentification);
 
         QString getProxyLogin() const;
@@ -111,7 +111,7 @@ class Settings
         QString getShortcutName() const;
         void setShortcutName(const QString &shortcutName);
 
-        bool getShortcutAllUser() const;
+        bool isShortcutAllUser() const;
         void setShortcutAllUser(bool shortcutAllUser);
 
         QString getClasspathExtension() const;
@@ -123,16 +123,16 @@ class Settings
         QString getServerURL() const;
         void setServerURL(const QString &serverURL);
 
-        bool getRunAtStart() const;
+        bool isRunAtStart() const;
         void setRunAtStart(const bool &runAtStart);
 
         QString getInstallLocation() const;
         void setInstallLocation(const QString &installLocation);
 
-        bool getShortcutOffline() const;
+        bool isShortcutOffline() const;
         void setShortcutOffline(bool shortcutOffline);
 
-        bool getShortcutOnline() const;
+        bool isShortcutOnline() const;
         void setShortcutOnline(bool shortcutOnline);
 
         QString getApplicationName() const;

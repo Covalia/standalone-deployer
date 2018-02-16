@@ -279,19 +279,19 @@ bool InstallManager::createShortcut()
         Shortcut shortcut;
         bool success = true;
         // online shortcut
-        if (m_settings->getShortcutOnline()) {
+        if (m_settings->isShortcutOnline()) {
             success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // offline shortcut
-        if (m_settings->getShortcutOffline()) {
+        if (m_settings->isShortcutOffline()) {
             success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // startup shortcut
-        if (m_settings->getRunAtStart()) {
-            success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
+        if (m_settings->isRunAtStart()) {
+            success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         }
         // StartMenu folder and shortcut
-        success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->getShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
+        success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->isShortcutAllUser(), m_settings->getInstallLocation(), m_settings->getApplicationName());
         return success;
 }
 

@@ -24,16 +24,16 @@ PersonalizeUI::PersonalizeUI(QWidget * _parent) :
     Settings * settings = Settings::getInstance();
 
     ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->widgetDataInstallation->setVisible(resource->getPossible_change_data_location());
+    m_ui->widgetDataInstallation->setVisible(resource->isPossible_change_data_location());
     // apply custom data path to setting
-    if(resource->getPossible_change_data_location()){
+    if (resource->isPossible_change_data_location()) {
         settings->setDataLocation(resource->getDefault_data_path_custom_install());
     }
 
     m_ui->editLineFolderInstallation->setText(settings->getInstallLocation());
     m_ui->editLineDataInstallation->setText(settings->getDataLocation());
-    m_ui->checkBoxOfflineShortcut->setChecked(settings->getShortcutOffline());
-    m_ui->checkBoxRunAtStart->setChecked(settings->getRunAtStart());
+    m_ui->checkBoxOfflineShortcut->setChecked(settings->isShortcutOffline());
+    m_ui->checkBoxRunAtStart->setChecked(settings->isRunAtStart());
 
     connect(m_ui->buttonProxySetting, SIGNAL(clicked()), this, SLOT(proxySettingEvent()));
     connect(m_ui->buttonChangeFolderInstallation, SIGNAL(clicked()), this, SLOT(fileChooserInstallEvent()));

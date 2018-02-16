@@ -156,7 +156,7 @@ QString ResourcesSettings::getTransformedVariablePath(QString _path)
     return _path;
 }
 
-bool ResourcesSettings::getRun_at_start() const
+bool ResourcesSettings::isRun_at_start() const
 {
     return m_run_at_start;
 }
@@ -256,7 +256,7 @@ void ResourcesSettings::setShortcut_name_offline(const QString &shortcut_name_of
     m_shortcut_name_offline = shortcut_name_offline;
 }
 
-bool ResourcesSettings::getShortcut_online() const
+bool ResourcesSettings::isShortcut_online() const
 {
     return m_shortcut_online;
 }
@@ -266,7 +266,7 @@ void ResourcesSettings::setShortcut_online(bool shortcut_online)
     m_shortcut_online = shortcut_online;
 }
 
-bool ResourcesSettings::getShortcut_offline() const
+bool ResourcesSettings::isShortcut_offline() const
 {
     return m_shortcut_offline;
 }
@@ -286,7 +286,7 @@ void ResourcesSettings::setDefault_installation_path(const QString &default_inst
     m_default_installation_path = default_installation_path;
 }
 
-bool ResourcesSettings::getPossible_change_data_location() const
+bool ResourcesSettings::isPossible_change_data_location() const
 {
     return m_possible_change_data_location;
 }

@@ -23,11 +23,11 @@ ProxyUI::ProxyUI(QWidget * _parent) :
 
     // init with actual settings
     Settings * settings = Settings::getInstance();
-    if (!settings->getProxyUse()) {
+    if (!settings->isProxyUse()) {
         m_ui->checkBoxProxy->setChecked(true);
-    } else if (settings->getProxyAuto()) {
+    } else if (settings->isProxyAuto()) {
         m_ui->checkBoxProxyAuto->setChecked(true);
-    } else if (settings->getProxyManual()) {
+    } else if (settings->isProxyManual()) {
         m_ui->checkBoxProxyManual->setChecked(true);
     }
     m_ui->lineEditHostname->setText(settings->getProxyHostname());

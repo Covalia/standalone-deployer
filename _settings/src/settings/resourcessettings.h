@@ -72,16 +72,16 @@ class ResourcesSettings
         QString getColor_panel_background_border() const;
         void setColor_panel_background_border(const QString &color_panel_background_border);
 
-        bool getPossible_change_data_location() const;
+        bool isPossible_change_data_location() const;
         void setPossible_change_data_location(bool possible_change_data_location);
 
         QString getDefault_installation_path() const;
         void setDefault_installation_path(const QString &default_installation_path);
 
-        bool getShortcut_offline() const;
+        bool isShortcut_offline() const;
         void setShortcut_offline(bool shortcut_offline);
 
-        bool getShortcut_online() const;
+        bool isShortcut_online() const;
         void setShortcut_online(bool shortcut_online);
 
         QString getShortcut_name_offline() const;
@@ -117,7 +117,7 @@ class ResourcesSettings
         QString getShortcut_offline_args() const;
         void setShortcut_offline_args(const QString &shortcut_offline_args);
 
-        bool getRun_at_start() const;
+        bool isRun_at_start() const;
         void setRun_at_start(bool run_at_start);
 
 private:
