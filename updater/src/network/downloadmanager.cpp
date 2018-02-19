@@ -468,7 +468,7 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_ba
 
     QString relativePath = url.toString().remove(0, _baseUrl.toString().size());
 
-    QFileInfo fileInfo(_tempDir.absolutePath() + "/" + _appName + "/" + relativePath);
+    QFileInfo fileInfo(_tempDir.absoluteFilePath(_appName + QDir::separator() + relativePath));
     QDir parentDir = fileInfo.dir();
     bool created = createDirIfNotExists(parentDir);
 

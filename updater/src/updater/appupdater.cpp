@@ -13,7 +13,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
 
     // TODO récupérer ici la configuration du proxy.
 
-    m_updater = new DownloadManager(m_appPath.getTempDirPath(), _appUrl, proxy, this);
+    m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl, proxy, this);
 
     connect(m_updater, SIGNAL(downloadProgress(qint64, qint64)),
         SLOT(updateProgress(qint64, qint64)));

@@ -16,7 +16,7 @@ class Factory {
         // les services proposés par la factory
 
         // gestion des working directories
-        virtual AppPathImpl * makeAppPath(FileSystemConfig::AppComponent _app) = 0;
+        virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app) = 0;
         // gestion des raccourcis
         virtual ShortcutImpl * makeShortcut() = 0;
 

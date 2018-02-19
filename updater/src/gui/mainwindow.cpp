@@ -40,8 +40,8 @@ MainWindow::MainWindow(QWidget * _parent) :
     StyleManager::transformStyle(this);
 
     AppPath appPath = Utils::getAppPath();
-    m_ui->closeButton->setIcon(QIcon(appPath.getImagesDirPath().absolutePath()+"/close.png"));
-    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDirPath().absolutePath()+"/logo_title.png"));
+    m_ui->closeButton->setIcon(QIcon(appPath.getImagesDir().absoluteFilePath("close.png")));
+    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("logo_title.png")));
 
     m_appUpdater = new AppUpdater(UpdaterConfig::AppUrl, UpdaterConfig::InstallationDir, this);
 
@@ -190,7 +190,7 @@ void MainWindow::loadSlideShowImagesFromResources()
 {
     m_imagesList.clear();
     AppPath appPath = Utils::getAppPath();
-    QDirIterator it(appPath.getSlidesDirPath(), QDirIterator::Subdirectories);
+    QDirIterator it(appPath.getSlidesDir(), QDirIterator::Subdirectories);
     while (it.hasNext()) {
         const QString resourcePath = it.next();
         const QPixmap pixmap = QPixmap(resourcePath);

@@ -12,15 +12,15 @@ int main(int argc, char * argv[])
     QCoreApplication app(argc, argv);
 
     AppPath appPath = Utils::getAppPath();
-    qDebug() << "-- Installation root: " << appPath.getInstallationRootPath();
+    qDebug() << "-- Installation root: " << appPath.getInstallationDir();
 
-    new Logger(appPath.getLogsDirPath().absolutePath() + "/loader.log");
+    new Logger(appPath.getLogsDir().absoluteFilePath("loader.log"));
 
-    QString settingsPath = appPath.getConfigurationFilePath();
-    L_INFO("Start read settings in " +  settingsPath);
+    QSharedPointer<QFile> settingsPath = appPath.getConfigurationFile();
+    L_INFO("Start read settings in " +  settingsPath->fileName());
 
     Settings * settings = Settings::getInstance();
-    settings->initSettings(settingsPath);
+    settings->initSettings(*settingsPath);
     settings->readSettings();
     L_INFO("---------Settings info ------------");
     L_INFO(settings->paramListString());

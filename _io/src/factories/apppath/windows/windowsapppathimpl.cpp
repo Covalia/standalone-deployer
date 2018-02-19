@@ -1,18 +1,18 @@
 #include "factories/apppath/windows/windowsapppathimpl.h"
 
-WindowsAppPathImpl::WindowsAppPathImpl(FileSystemConfig::AppComponent _app) : AppPathImpl(_app)
+WindowsAppPathImpl::WindowsAppPathImpl(IOConfig::AppComponent _app) : AppPathImpl(_app)
 {
     QDir dir(QCoreApplication::applicationDirPath());
 
     switch (_app) {
-        case FileSystemConfig::AppComponent::Loader:
+        case IOConfig::AppComponent::Loader:
             cdUp(dir, 1);
             break;
-        case FileSystemConfig::AppComponent::Updater:
+        case IOConfig::AppComponent::Updater:
             cdUp(dir, 2);
             break;
-        case FileSystemConfig::AppComponent::Installer:
-            // nothing to do, call setInstallationRootPath manually only from installer project
+        case IOConfig::AppComponent::Installer:
+            // nothing to do, call setInstallationDir manually only from installer project
             break;
     }
     m_installationDir = dir.absolutePath();
@@ -22,48 +22,49 @@ bool WindowsAppPathImpl::makeAppDirectories()
 {
     bool result = true;
 
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::AppDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ConfigurationDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ExtensionDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::ImagesDir);
-    result &= makeDirectoryIfNotExists(getImagesDirPath(), FileSystemConfig::SlidesDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::JavaDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LogsDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::TempDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::UpdaterDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, FileSystemConfig::LoaderDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::AppDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ConfigurationDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ExtensionDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ImagesDir);
+    result &= makeDirectoryIfNotExists(getImagesDir(), IOConfig::SlidesDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::JavaDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LogsDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::TempDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::DataDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::UpdaterDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LoaderDir);
 
     return result;
 }
 
-QString WindowsAppPathImpl::getLoaderResourcesPath()
+QSharedPointer<QFile> WindowsAppPathImpl::getLoaderResourcesFile()
 {
-    return ResourceBinPrefix + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsAppExtension;
+    return QSharedPointer<QFile>(new QFile(ResourceBinPrefix + IOConfig::LoaderFile + IOConfig::WindowsAppExtension));
 }
 
-QString WindowsAppPathImpl::getUpdaterResourcesPath()
+QSharedPointer<QFile> WindowsAppPathImpl::getUpdaterResourcesFile()
 {
-    return ResourceBinPrefix + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsAppExtension;
+    return QSharedPointer<QFile>(new QFile(ResourceBinPrefix + IOConfig::UpdaterFile + IOConfig::WindowsAppExtension));
 }
 
-QString WindowsAppPathImpl::getLoaderFilePath()
+QSharedPointer<QFile> WindowsAppPathImpl::getLoaderFile()
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::LoaderDir + "/" + FileSystemConfig::LoaderFile + FileSystemConfig::WindowsAppExtension;
+    return QSharedPointer<QFile>(new QFile(m_installationDir.absoluteFilePath(IOConfig::LoaderDir + QDir::separator() + IOConfig::LoaderFile + IOConfig::WindowsAppExtension)));
 }
 
-QString WindowsAppPathImpl::getUpdaterFilePath(QString _updaterVersion)
+QSharedPointer<QFile> WindowsAppPathImpl::getUpdaterFile(QString _updaterVersion)
 {
-    return m_installationDir.absolutePath() + "/" +  FileSystemConfig::UpdaterDir + "/" + _updaterVersion + "/" + FileSystemConfig::UpdaterFile + FileSystemConfig::WindowsAppExtension;
+    return QSharedPointer<QFile>(new QFile(m_installationDir.absoluteFilePath(IOConfig::UpdaterDir + QDir::separator() + _updaterVersion + QDir::separator() + IOConfig::UpdaterFile + IOConfig::WindowsAppExtension)));
 }
 
-bool WindowsAppPathImpl::startApplication(QString _app, QStringList _args)
+bool WindowsAppPathImpl::startApplication(QSharedPointer<QFile> _app, QStringList _args)
 {
-    if (!QFile::exists(_app)) {
-        L_ERROR("An error occured when launching " + _app + ". The exe file doesn't exist.");
+    if (!_app->exists()) {
+        L_ERROR("An error occured when launching " + _app->fileName() + ". The exe file doesn't exist.");
         return false;
     }
 
-    L_INFO("Launching file " + _app);
+    L_INFO("Launching file " + _app->fileName());
     QProcess process;
-    return process.startDetached(_app, _args);
+    return process.startDetached(_app->fileName(), _args);
 }

@@ -12,46 +12,46 @@ class WindowsShortcutImpl : public ShortcutImpl {
 
         /**
          * @brief create windows desktop shortcut
+         * @param _appPath : objet AppPath
          * @param _shortcutName : name of  shortcut link
          * @param _args : args added to target
-         * @param _installLocation : install location, working directory
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createDesktopShortcut(AppPath _appPath, QString _shortcutName, QString _args, QString _installLocation, QString _applicationName);
+        virtual bool createDesktopShortcut(AppPath _appPath, QString _shortcutName, QString _args, QString _applicationName);
 
         /**
          * @brief create windows shortcut in startup folder to run application when computer starting
+         * @param _appPath : objet AppPath
          * @param _shortcutName : name of  shortcut link
          * @param _allUser : if startup alluser folder or current user
-         * @param _installLocation : install location, working directory
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _installLocation, QString _applicationName);
+        virtual bool createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _applicationName);
 
         /**
          * @brief create startmenu folder and shortcut
+         * @param _appPath : objet AppPath
          * @param _startMenuFolderName : name of folder
          * @param _allUser : in allsuer startmenu or current user
-         * @param _installLocation : install location, working directory
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _installLocation, QString _applicationName);
+        virtual bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _applicationName);
 
     private:
         /**
          * @brief createShortcut
-         * @param shortcutPath - File name of the actual link file being created.
-         * @param targetPath - File name of the link's target.
+         * @param _shortcutFile - File name of the actual link file being created.
+         * @param _targetFile - File name of the link's target.
          * @param _args - Command line arguments passed to link's target.
-         * @param executionDir - Working directory of the active link.
-         * @param iconPath - File name of the icon file used for the link.
-         * @param description - Description of the linked item.
+         * @param _workingDir - Working directory of the active link.
+         * @param _iconFile - File name of the icon file used for the link.
+         * @param _description - Description of the linked item.
          * @return true if success
          */
-        bool createShortcut(QString shortcutPath, QString targetPath, QString _args, QString executionDir, QString iconPath, QString description);
+        bool createShortcut(QFile &_shortcutFile, const QFile &_targetFile, QString _args, QDir _workingDir, const QFile &_iconPath, QString _description);
 
         /**
          * @brief Find programs path for all users in windows

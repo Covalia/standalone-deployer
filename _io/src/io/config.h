@@ -3,7 +3,7 @@
 
 #include <QString>
 
-class FileSystemConfig
+class IOConfig
 {
 public:
 
@@ -57,6 +57,8 @@ public:
     /// Relative directory path of application updater
     static const QString LoaderDir;
 
+    /// Relative directory path of application data
+    static const QString DataDir;
 
 
     /// Loader file name

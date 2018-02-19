@@ -1,7 +1,7 @@
 #include "factories/apppath/apppath.h"
 #include "factories/factory/factory.h"
 
-AppPath::AppPath(FileSystemConfig::AppComponent _app) : m_appPathImpl(0)
+AppPath::AppPath(IOConfig::AppComponent _app) : m_appPathImpl(0)
 {
     Factory * factory = Factory::getFactory();
 
@@ -14,17 +14,17 @@ AppPath::~AppPath()
 {
 }
 
-QDir AppPath::getInstallationRootPath()
+QDir AppPath::getInstallationDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getInstallationRootPath();
+        return m_appPathImpl->getInstallationDir();
     }
     return QDir();
 }
 
-void AppPath::setInstallationRootPath(QDir _path) {
+void AppPath::setInstallationDir(QDir _path) {
     if (m_appPathImpl) {
-        return m_appPathImpl->setInstallationRootPath(_path);
+        return m_appPathImpl->setInstallationDir(_path);
     }
 }
 
@@ -68,124 +68,132 @@ QString AppPath::getLoaderVersion()
     return "";
 }
 
-QDir AppPath::getAppDirPath()
+QDir AppPath::getAppDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getAppDirPath();
+        return m_appPathImpl->getAppDir();
     }
     return QDir();
 }
 
-QDir AppPath::getConfigurationDirPath()
+QDir AppPath::getConfigurationDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getConfigurationDirPath();
+        return m_appPathImpl->getConfigurationDir();
     }
     return QDir();
 }
 
-QDir AppPath::getExtensionDirPath()
+QDir AppPath::getExtensionDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getExtensionDirPath();
+        return m_appPathImpl->getExtensionDir();
     }
     return QDir();
 }
 
-QDir AppPath::getImagesDirPath()
+QDir AppPath::getImagesDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getImagesDirPath();
+        return m_appPathImpl->getImagesDir();
     }
     return QDir();
 }
 
-QDir AppPath::getSlidesDirPath()
+QDir AppPath::getSlidesDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getSlidesDirPath();
+        return m_appPathImpl->getSlidesDir();
     }
     return QDir();
 }
 
-QDir AppPath::getJavaDirPath()
+QDir AppPath::getJavaDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getJavaDirPath();
+        return m_appPathImpl->getJavaDir();
     }
     return QDir();
 }
 
-QDir AppPath::getLogsDirPath()
+QDir AppPath::getLogsDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getLogsDirPath();
+        return m_appPathImpl->getLogsDir();
     }
     return QDir();
 }
 
-QDir AppPath::getTempDirPath()
+QDir AppPath::getTempDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getTempDirPath();
+        return m_appPathImpl->getTempDir();
     }
     return QDir();
 }
 
-QDir AppPath::getUpdaterDirPath()
+QDir AppPath::getDataDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getUpdaterDirPath();
+        return m_appPathImpl->getDataDir();
     }
     return QDir();
 }
 
-QDir AppPath::getLoaderDirPath()
+QDir AppPath::getUpdaterDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getLoaderDirPath();
+        return m_appPathImpl->getUpdaterDir();
     }
     return QDir();
 }
 
-QString AppPath::getLoaderResourcesPath()
+QDir AppPath::getLoaderDir()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getLoaderResourcesPath();
+        return m_appPathImpl->getLoaderDir();
     }
-    return "";
+    return QDir();
 }
 
-QString AppPath::getUpdaterResourcesPath()
+QSharedPointer<QFile> AppPath::getLoaderResourcesFile()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getUpdaterResourcesPath();
+        return m_appPathImpl->getLoaderResourcesFile();
     }
-    return "";
+    return QSharedPointer<QFile>(new QFile());
 }
 
-QString AppPath::getLoaderFilePath()
+QSharedPointer<QFile> AppPath::getUpdaterResourcesFile()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getLoaderFilePath();
+        return m_appPathImpl->getUpdaterResourcesFile();
     }
-    return "";
+    return QSharedPointer<QFile>(new QFile());
 }
 
-QString AppPath::getUpdaterFilePath(QString updaterVersion)
+QSharedPointer<QFile> AppPath::getLoaderFile()
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getUpdaterFilePath(updaterVersion);
+        return m_appPathImpl->getLoaderFile();
     }
-    return "";
+    return QSharedPointer<QFile>(new QFile());
 }
 
-QString AppPath::getConfigurationFilePath()
+QSharedPointer<QFile> AppPath::getUpdaterFile(QString updaterVersion)
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->getConfigurationFilePath();
+        return m_appPathImpl->getUpdaterFile(updaterVersion);
     }
-    return "";
+    return QSharedPointer<QFile>(new QFile());
+}
+
+QSharedPointer<QFile> AppPath::getConfigurationFile()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getConfigurationFile();
+    }
+    return QSharedPointer<QFile>(new QFile());
 }
 
 bool AppPath::startLoader(QStringList _args)
@@ -204,19 +212,19 @@ bool AppPath::startUpdater(QString _version, QStringList _args)
     return false;
 }
 
-QPair<bool, QString> AppPath::extractResourceToPath(QString resourcePath, QString copyFilePath)
+QPair<bool, QString> AppPath::extractResource(QFile &_sourceFile, QFile &_destFile)
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->extractResourceToPath(resourcePath, copyFilePath);
+        return m_appPathImpl->extractResource(_sourceFile, _destFile);
     }
     QPair<bool, QString> pair = qMakePair(false, QString());
     return pair;
 }
 
-bool AppPath::makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir)
+bool AppPath::makeDirectoryIfNotExists(QDir _directory, const QString &_subDir)
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->makeDirectoryIfNotExists(_directoryPath, _subDir);
+        return m_appPathImpl->makeDirectoryIfNotExists(_directory, _subDir);
     }
     return false;
 }

@@ -5,6 +5,7 @@
 
 #include <QSettings>
 #include <QStandardPaths>
+#include <QDir>
 
 ResourcesSettings * ResourcesSettings::sm_instance = 0;
 QMutex ResourcesSettings::sm_instanceMutex;
@@ -130,7 +131,7 @@ void ResourcesSettings::sendToSettings()
     settings->setRunAtStart(m_run_at_start);
 
     // install path
-    settings->setInstallLocation(m_default_installation_path + "/" + m_default_installation_folder_name);
+    settings->setInstallLocation(m_default_installation_path + QDir::separator() + m_default_installation_folder_name);
 
     // data path
     // use simple by default

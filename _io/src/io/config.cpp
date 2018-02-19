@@ -1,24 +1,25 @@
 #include "io/config.h"
 
-const QString FileSystemConfig::InstallerVersion("1.0");
-const QString FileSystemConfig::UpdateVersion("1.0");
-const QString FileSystemConfig::LoaderVersion("1.0");
+const QString IOConfig::InstallerVersion("1.0");
+const QString IOConfig::UpdateVersion("1.0");
+const QString IOConfig::LoaderVersion("1.0");
 
-const QString FileSystemConfig::AppDir("Application");
-const QString FileSystemConfig::ConfigurationDir("Config");
-const QString FileSystemConfig::ExtensionDir("Extension");
-const QString FileSystemConfig::ImagesDir("Images");
-const QString FileSystemConfig::SlidesDir("Slides");
-const QString FileSystemConfig::JavaDir("Java");
-const QString FileSystemConfig::LogsDir("Logs");
-const QString FileSystemConfig::TempDir("Temp");
-const QString FileSystemConfig::MountDir("Mount");
-const QString FileSystemConfig::UpdaterDir("Updater");
-const QString FileSystemConfig::LoaderDir("Loader");
+const QString IOConfig::AppDir("Application");
+const QString IOConfig::ConfigurationDir("Config");
+const QString IOConfig::ExtensionDir("Extension");
+const QString IOConfig::ImagesDir("Images");
+const QString IOConfig::SlidesDir("Slides");
+const QString IOConfig::JavaDir("Java");
+const QString IOConfig::LogsDir("Logs");
+const QString IOConfig::TempDir("Temp");
+const QString IOConfig::MountDir("Mount");
+const QString IOConfig::UpdaterDir("Updater");
+const QString IOConfig::LoaderDir("Loader");
+const QString IOConfig::DataDir("Data");
 
-const QString FileSystemConfig::LoaderFile("loader");
-const QString FileSystemConfig::UpdaterFile("updater");
-const QString FileSystemConfig::WindowsAppExtension(".exe");
-const QString FileSystemConfig::MacOsAppExtension(".app");
-const QString FileSystemConfig::MacOsDmgExtension(".dmg");
-const QString FileSystemConfig::ConfigurationFile("standalone-deployer.ini");
+const QString IOConfig::LoaderFile("loader");
+const QString IOConfig::UpdaterFile("updater");
+const QString IOConfig::WindowsAppExtension(".exe");
+const QString IOConfig::MacOsAppExtension(".app");
+const QString IOConfig::MacOsDmgExtension(".dmg");
+const QString IOConfig::ConfigurationFile("standalone-deployer.ini");

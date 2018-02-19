@@ -10,11 +10,11 @@ class AppPathImpl;
 
 class AppPath {
     public:
-        AppPath(FileSystemConfig::AppComponent _app);
+        AppPath(IOConfig::AppComponent _app);
         virtual ~AppPath();
 
-        QDir getInstallationRootPath();
-        void setInstallationRootPath(QDir _path);
+        QDir getInstallationDir();
+        void setInstallationDir(QDir _path);
 
         bool createDirectoryIfNotExist();
         bool makeAppDirectories();
@@ -23,30 +23,31 @@ class AppPath {
         QString getUpdaterVersion();
         QString getLoaderVersion();
 
-        QDir getAppDirPath();
-        QDir getConfigurationDirPath();
-        QDir getExtensionDirPath();
-        QDir getImagesDirPath();
-        QDir getSlidesDirPath();
-        QDir getJavaDirPath();
-        QDir getLogsDirPath();
-        QDir getTempDirPath();
-        QDir getUpdaterDirPath();
-        QDir getLoaderDirPath();
+        QDir getAppDir();
+        QDir getConfigurationDir();
+        QDir getExtensionDir();
+        QDir getImagesDir();
+        QDir getSlidesDir();
+        QDir getJavaDir();
+        QDir getLogsDir();
+        QDir getTempDir();
+        QDir getDataDir();
+        QDir getUpdaterDir();
+        QDir getLoaderDir();
 
-        QString getLoaderResourcesPath();
-        QString getUpdaterResourcesPath();
+        QSharedPointer<QFile> getLoaderResourcesFile();
+        QSharedPointer<QFile> getUpdaterResourcesFile();
 
-        QString getLoaderFilePath();
-        QString getUpdaterFilePath(QString updaterVersion);
-        QString getConfigurationFilePath();
+        QSharedPointer<QFile> getLoaderFile();
+        QSharedPointer<QFile> getUpdaterFile(QString updaterVersion);
+        QSharedPointer<QFile> getConfigurationFile();
 
         bool startLoader(QStringList _args);
         bool startUpdater(QString _version, QStringList _args);
 
-        QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
+        QPair<bool, QString> extractResource(QFile &_sourceFile, QFile &_destFile);
 
-        bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
+        bool makeDirectoryIfNotExists(QDir _directory, const QString &_subDir);
 
     private:
         QSharedPointer<AppPathImpl> m_appPathImpl;

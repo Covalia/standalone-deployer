@@ -5,6 +5,7 @@
 #include "log/logger.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
+#include "io/config.h"
 
 #include <QDebug>
 #include <QFileDialog>
@@ -103,7 +104,7 @@ void PersonalizeUI::saveElementsInSetting()
     if (m_ui->checkBoxDataInstallation->isVisible() && m_ui->checkBoxDataInstallation->isChecked()) {
         settings->setDataLocation(m_ui->editLineDataInstallation->text());
     } else {
-        settings->setDataLocation(m_ui->editLineFolderInstallation->text() + "/Data");
+        settings->setDataLocation(m_ui->editLineFolderInstallation->text() + QDir::separator() + IOConfig::DataDir);
     }
     // offline shortcut
     if (m_ui->checkBoxOfflineShortcut->isVisible()) {

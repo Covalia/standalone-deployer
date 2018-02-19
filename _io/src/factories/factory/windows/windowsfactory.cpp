@@ -10,7 +10,7 @@ WindowsFactory::~WindowsFactory()
 {
 }
 
-AppPathImpl * WindowsFactory::makeAppPath(FileSystemConfig::AppComponent _app)
+AppPathImpl * WindowsFactory::makeAppPath(IOConfig::AppComponent _app)
 {
     // La classe Path est responsable de libérer cette instance
     return new WindowsAppPathImpl(_app);

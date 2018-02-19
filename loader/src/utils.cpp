@@ -2,5 +2,5 @@
 
 AppPath Utils::getAppPath()
 {
-    return AppPath(FileSystemConfig::AppComponent::Loader);
+    return AppPath(IOConfig::AppComponent::Loader);
 }

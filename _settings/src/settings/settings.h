@@ -4,6 +4,7 @@
 #include "lang/languagemanager.h"
 
 #include <QString>
+#include <QFile>
 #include <QVariant>
 #include <QMutex>
 
@@ -71,9 +72,9 @@ class Settings
         static Settings *getInstance();
         static void kill();
 
-        void initSettings(QString _appPath);
+        void initSettings(QFile &_settingsFile);
 
-        bool isWrittable();
+        bool isWritable();
 
         void writeSettings();
 

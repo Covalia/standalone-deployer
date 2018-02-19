@@ -5,15 +5,15 @@
 
 class WindowsAppPathImpl : public AppPathImpl {
     public:
-        WindowsAppPathImpl(FileSystemConfig::AppComponent _app);
+        WindowsAppPathImpl(IOConfig::AppComponent _app);
         virtual bool makeAppDirectories();
-        virtual QString getLoaderResourcesPath();
-        virtual QString getUpdaterResourcesPath();
-        virtual QString getLoaderFilePath();
-        virtual QString getUpdaterFilePath(QString _updaterVersion);
+        virtual QSharedPointer<QFile> getLoaderResourcesFile();
+        virtual QSharedPointer<QFile> getUpdaterResourcesFile();
+        virtual QSharedPointer<QFile> getLoaderFile();
+        virtual QSharedPointer<QFile> getUpdaterFile(QString _updaterVersion);
 
     protected:
-        virtual bool startApplication(QString _app, QStringList _args);
+        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args);
 };
 
 #endif

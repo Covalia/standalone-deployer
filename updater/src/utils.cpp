@@ -2,5 +2,5 @@
 
 AppPath Utils::getAppPath()
 {
-    return AppPath(FileSystemConfig::AppComponent::Updater);
+    return AppPath(IOConfig::AppComponent::Updater);
 }

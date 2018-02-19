@@ -76,10 +76,10 @@ void Settings::kill()
     }
 }
 
-void Settings::initSettings(QString _appPath)
+void Settings::initSettings(QFile &_settingsFile)
 {
     if (m_settings == 0) {
-        m_settings = new QSettings(_appPath, QSettings::IniFormat);
+        m_settings = new QSettings(_settingsFile.fileName(), QSettings::IniFormat);
         m_settings->setFallbacksEnabled(false);
     }
 }
@@ -104,7 +104,7 @@ void Settings::removeSetting(QString _key)
     m_settings->remove(_key);
 }
 
-bool Settings::isWrittable()
+bool Settings::isWritable()
 {
     return m_settings->isWritable();
 }

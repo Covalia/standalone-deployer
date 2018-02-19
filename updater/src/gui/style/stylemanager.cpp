@@ -39,7 +39,7 @@ void StyleManager::setGeneralStyle()
 {
     AppPath appPath = Utils::getAppPath();
 
-    QFile f(appPath.getConfigurationDirPath().absolutePath() + "/style.css");
+    QFile f(appPath.getConfigurationDir().absoluteFilePath("style.css"));
 
     if (f.exists()) {
         if (f.open(QFile::ReadOnly | QFile::Text)) {

@@ -21,7 +21,7 @@ bool LoaderManager::launchUpdater()
 
     AppPath appPath = Utils::getAppPath();
 
-    L_INFO("Install location = " + appPath.getInstallationRootPath().absolutePath());
+    L_INFO("Install location = " + appPath.getInstallationDir().absolutePath());
 
     QStringList args = qApp->arguments();
     args.removeFirst();

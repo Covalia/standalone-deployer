@@ -4,6 +4,9 @@
 #include <QCommandLineOption>
 #include "log/logger.h"
 #include "settings/settings.h"
+#include "io/config.h"
+
+#include <QDir>
 
 CommandLineParser::CommandLineParser()
 {
@@ -83,7 +86,7 @@ void CommandLineParser::sendToSettings()
 
     if (!isEmptyValue(m_intallLocation)) {
         settings->setInstallLocation(m_intallLocation);
-        settings->setDataLocation(m_intallLocation + "/Data");
+        settings->setDataLocation(m_intallLocation + QDir::separator() + IOConfig::DataDir);
     }
     if (!isEmptyValue(m_dataLocation)) {
         settings->setDataLocation(m_dataLocation);

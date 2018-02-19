@@ -15,11 +15,11 @@ class AppPathImpl {
         static const QString ResourceBinPrefix;
 
         // Tout le code en commun vient ici
-        AppPathImpl(FileSystemConfig::AppComponent _app);
+        AppPathImpl(IOConfig::AppComponent _app);
         virtual ~AppPathImpl();
-        virtual QDir getInstallationRootPath();
+        virtual QDir getInstallationDir();
         // set install root path, call only from installer
-        virtual void setInstallationRootPath(QDir _path);
+        virtual void setInstallationDir(QDir _path);
 
         virtual bool createDirectoryIfNotExist();
         virtual bool makeAppDirectories() = 0;
@@ -28,35 +28,36 @@ class AppPathImpl {
         virtual QString getUpdaterVersion();
         virtual QString getLoaderVersion();
 
-        virtual QDir getAppDirPath();
-        virtual QDir getConfigurationDirPath();
-        virtual QDir getExtensionDirPath();
-        virtual QDir getImagesDirPath();
-        virtual QDir getSlidesDirPath();
-        virtual QDir getJavaDirPath();
-        virtual QDir getLogsDirPath();
-        virtual QDir getTempDirPath();
-        virtual QDir getUpdaterDirPath();
-        virtual QDir getLoaderDirPath();
+        virtual QDir getAppDir();
+        virtual QDir getConfigurationDir();
+        virtual QDir getExtensionDir();
+        virtual QDir getImagesDir();
+        virtual QDir getSlidesDir();
+        virtual QDir getJavaDir();
+        virtual QDir getLogsDir();
+        virtual QDir getTempDir();
+        virtual QDir getDataDir();
+        virtual QDir getUpdaterDir();
+        virtual QDir getLoaderDir();
 
-        virtual QString getLoaderResourcesPath() = 0;
-        virtual QString getUpdaterResourcesPath() = 0;
+        virtual QSharedPointer<QFile> getLoaderResourcesFile() = 0;
+        virtual QSharedPointer<QFile> getUpdaterResourcesFile() = 0;
 
-        virtual QString getLoaderFilePath() = 0;
-        virtual QString getUpdaterFilePath(QString updaterVersion) = 0;
+        virtual QSharedPointer<QFile> getLoaderFile() = 0;
+        virtual QSharedPointer<QFile> getUpdaterFile(QString updaterVersion) = 0;
 
-        virtual QString getConfigurationFilePath();
+        virtual QSharedPointer<QFile> getConfigurationFile();
 
         virtual bool startLoader(QStringList _args);
         virtual bool startUpdater(QString _version, QStringList _args);
 
-        virtual QPair<bool, QString> extractResourceToPath(QString resourcePath, QString copyFilePath);
+        virtual QPair<bool, QString> extractResource(QFile &_sourceFile, QFile &_destFile);
 
-        virtual bool makeDirectoryIfNotExists(QDir _directoryPath, const QString &_subDir);
+        virtual bool makeDirectoryIfNotExists(QDir _directory, const QString &_subDir);
 
     protected:
         QDir m_installationDir;
-        virtual bool startApplication(QString _app, QStringList _args) = 0;
+        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args) = 0;
         bool cdUp(QDir &_dir, int _numUp);
 };
 
