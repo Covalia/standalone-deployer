@@ -153,6 +153,7 @@ QString ResourcesSettings::getTransformedVariablePath(QString _path)
 {
     _path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     _path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
+    // TODO attention sous macos !
     _path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
     return _path;
 }
