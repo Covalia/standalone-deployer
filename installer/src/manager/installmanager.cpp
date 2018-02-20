@@ -158,8 +158,9 @@ bool InstallManager::createInstallationFolders()
 
 void InstallManager::moveLogIntoInstallFolder()
 {
-    QFile currentLogFile("installer.log");
-    QFile destLogFile(m_appPath.getLogsDir().absoluteFilePath("installer.log"));
+    QFile currentLogFile(Utils::getInstallerlLogPath());
+    QFileInfo logFileInfo(currentLogFile);
+    QFile destLogFile(m_appPath.getLogsDir().absoluteFilePath(logFileInfo.fileName()));
     m_appPath.extractResource(currentLogFile, destLogFile);
     currentLogFile.remove();
 }

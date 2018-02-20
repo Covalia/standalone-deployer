@@ -3,9 +3,12 @@
 
 #include "factories/apppath/apppath.h"
 
+#include <QString>
+
 class Utils {
     public:
         static AppPath getAppPath();
+        static QString getInstallerlLogPath();
 };
 
 #endif

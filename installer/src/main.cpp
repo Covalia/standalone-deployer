@@ -10,7 +10,7 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    new Logger("installer.log");
+    new Logger(Utils::getInstallerlLogPath());
     L_INFO("Installer started " + Utils::getAppPath().getInstallerVersion());
 
     L_INFO("Exe path " + QDir("./").absolutePath());
