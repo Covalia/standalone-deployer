@@ -22,7 +22,8 @@ QDir AppPath::getInstallationDir()
     return QDir();
 }
 
-void AppPath::setInstallationDir(QDir _path) {
+void AppPath::setInstallationDir(QDir _path)
+{
     if (m_appPathImpl) {
         return m_appPathImpl->setInstallationDir(_path);
     }
@@ -194,6 +195,22 @@ QSharedPointer<QFile> AppPath::getConfigurationFile()
         return m_appPathImpl->getConfigurationFile();
     }
     return QSharedPointer<QFile>(new QFile());
+}
+
+bool AppPath::prepareLoader()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->prepareLoader();
+    }
+    return false;
+}
+
+bool AppPath::prepareUpdater(QString _version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->prepareUpdater(_version);
+    }
+    return false;
 }
 
 bool AppPath::startLoader(QStringList _args)

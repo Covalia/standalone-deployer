@@ -119,9 +119,15 @@ void InstallManager::startInstallation()
         errorMessages << tr("An error ocurred during shortcut creation");
     }
 
+    // preparing app
+    bool successPreparingApp = m_appPath.prepareLoader() && m_appPath.prepareUpdater(m_appPath.getUpdaterVersion());
+    if (!successPreparingApp) {
+        errorMessages << tr("An error occurred while preparing application");
+    }
+
     bool success = successCreatingFolders && successWritingSettings
             && successCreatingUpdaterVersion && successExtractingResources
-            && successCreatingShortcut;
+            && successCreatingShortcut && successPreparingApp;
 
     if (m_uiManager) {
         if (success) {

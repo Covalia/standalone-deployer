@@ -42,6 +42,10 @@ class AppPath {
         QSharedPointer<QFile> getUpdaterFile(QString updaterVersion);
         QSharedPointer<QFile> getConfigurationFile();
 
+        // will extract app from dmg on macos, nothing on windows
+        bool prepareLoader();
+        bool prepareUpdater(QString _version);
+
         bool startLoader(QStringList _args);
         bool startUpdater(QString _version, QStringList _args);
 

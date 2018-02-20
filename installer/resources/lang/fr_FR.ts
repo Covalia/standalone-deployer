@@ -58,24 +58,34 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="90"/>
+        <location filename="../../src/manager/installmanager.cpp" line="95"/>
         <source>An error ocurred during folder creation</source>
         <translation>Une erreur s&apos;est produite lors de la création du dossier</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="98"/>
+        <location filename="../../src/manager/installmanager.cpp" line="101"/>
+        <source>An error ocurred during updater version folder creation</source>
+        <translation>Une erreur s&apos;est produite lors de la création du dossier du composant de mise à jour</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="107"/>
         <source>An error ocurred during parameters writing</source>
         <translation>Une erreur s&apos;est produite lors de l&apos;écriture des paramètres</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="104"/>
+        <location filename="../../src/manager/installmanager.cpp" line="113"/>
         <source>An error ocurred during resources extraction</source>
         <translation>Une erreur s&apos;est produite lors de l&apos;extraction des ressources</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="110"/>
+        <location filename="../../src/manager/installmanager.cpp" line="119"/>
         <source>An error ocurred during shortcut creation</source>
-        <translation>An error occurred during shortcuts creation</translation>
+        <translation>Une erreur s&apos;est produite lors de la création des raccourcis</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="125"/>
+        <source>An error occurred while preparing application</source>
+        <translation>Une erreur s&apos;est produite lors de la preparation des applications</translation>
     </message>
 </context>
 <context>
@@ -189,11 +199,6 @@
         <location filename="../../src/manager/installmanager.cpp" line="57"/>
         <source>Standalone deployment</source>
         <translation>Déploiement autonome</translation>
-    </message>
-    <message>
-        <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>
-        <source>Configure %1</source>
-        <translation>Configurer %1</translation>
     </message>
 </context>
 <context>

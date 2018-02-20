@@ -152,6 +152,16 @@ bool AppPathImpl::makeDirectoryIfNotExists(QDir _directory, const QString &_subD
     }
 }
 
+bool AppPathImpl::prepareLoader()
+{
+    return true;
+}
+
+bool AppPathImpl::prepareUpdater(QString _version)
+{
+    return true;
+}
+
 bool AppPathImpl::startLoader(QStringList _args)
 {
     return startApplication(getLoaderFile(), _args);

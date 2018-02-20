@@ -91,13 +91,22 @@ bool MacosAppPathImpl::startApplication(QSharedPointer<QFile> _app, QStringList 
     return process.waitForFinished();
 }
 
-bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, const QFile &_dmgPath, const QFile &_appPath, const QString &_appInDmgPath)
+bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, const QFile &_dmgPath, const QFile &_appPath, const QString &_appInDmgPath, bool _forceOverwrite)
 {
     bool result = true;
 
     L_INFO(_appName + " dmg path: " + _dmgPath.fileName());
     L_INFO(_appName + " app path: " + _appPath.fileName());
     L_INFO(_appName + " app in dmg path: " + _appInDmgPath);
+
+    if (_forceOverwrite) {
+        L_INFO(_appName + " force overwrite");
+        if (FileUtils::removeDirRecursively(_appPath.fileName())) {
+            L_INFO(_appName + " app removed: " + _appPath.fileName());
+        } else {
+            L_ERROR(_appName + " app cannot be removed: " + _appPath.fileName());
+        }
+    }
 
     if (!FileUtils::directoryExists(_appPath.fileName())) {
         L_INFO(_appName + " app does not exist: " + _appPath.fileName());
@@ -124,22 +133,50 @@ bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, cons
     return result;
 }
 
+bool MacosAppPathImpl::prepareLoader()
+{
+    const QString app = "loader";
+    const QSharedPointer<QFile> dmgPath = getLoaderFile();
+    const QSharedPointer<QFile> appPath = getLoaderAppFile();
+    bool result = false;
+
+    if (dmgPath && appPath) {
+        const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::LoaderFile + QDir::separator() + IOConfig::LoaderFile + IOConfig::MacOsAppExtension);
+        result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, true);
+    }
+
+    return result;
+}
+
+bool MacosAppPathImpl::prepareUpdater(QString _version)
+{
+    const QString app = "updater";
+    const QSharedPointer<QFile> dmgPath = getUpdaterFile(_version);
+    const QSharedPointer<QFile> appPath = getUpdaterAppFile(_version);
+    bool result = false;
+
+    if (dmgPath && appPath) {
+        const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::UpdaterFile + QDir::separator() + IOConfig::UpdaterFile + IOConfig::MacOsAppExtension);
+        result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, true);
+    }
+
+    return result;
+}
+
 bool MacosAppPathImpl::startLoader(QStringList _args)
 {
     const QString app = "loader";
     const QSharedPointer<QFile> dmgPath = getLoaderFile();
     const QSharedPointer<QFile> appPath = getLoaderAppFile();
+    bool result = false;
 
     if (dmgPath && appPath) {
         const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::LoaderFile + QDir::separator() + IOConfig::LoaderFile + IOConfig::MacOsAppExtension);
-
-        bool result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath);
-
+        result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, false);
         result &= startApplication(appPath, _args);
-        return result;
     }
 
-    return false;
+    return result;
 }
 
 bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
@@ -147,17 +184,15 @@ bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
     const QString app = "updater";
     const QSharedPointer<QFile> dmgPath = getUpdaterFile(_version);
     const QSharedPointer<QFile> appPath = getUpdaterAppFile(_version);
+    bool result = false;
 
     if (dmgPath && appPath) {
         const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::UpdaterFile + QDir::separator() + IOConfig::UpdaterFile + IOConfig::MacOsAppExtension);
-
-        bool result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath);
-
+        result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, false);
         result &= startApplication(appPath, _args);
-        return result;
     }
 
-    return false;
+    return result;
 }
 
 bool MacosAppPathImpl::openDmgFile(const QFile &_dmgFile)

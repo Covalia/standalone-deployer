@@ -48,6 +48,9 @@ class AppPathImpl {
 
         virtual QSharedPointer<QFile> getConfigurationFile();
 
+        virtual bool prepareLoader();
+        virtual bool prepareUpdater(QString _version);
+
         virtual bool startLoader(QStringList _args);
         virtual bool startUpdater(QString _version, QStringList _args);
 

@@ -58,24 +58,34 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="90"/>
+        <location filename="../../src/manager/installmanager.cpp" line="95"/>
         <source>An error ocurred during folder creation</source>
         <translation>An error occurred during folder creation</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="98"/>
+        <location filename="../../src/manager/installmanager.cpp" line="101"/>
+        <source>An error ocurred during updater version folder creation</source>
+        <translation>An error ocurred during updater version folder creation</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="107"/>
         <source>An error ocurred during parameters writing</source>
         <translation>An error occurred during parameters writing</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="104"/>
+        <location filename="../../src/manager/installmanager.cpp" line="113"/>
         <source>An error ocurred during resources extraction</source>
         <translation>An error occurred during resources extraction</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="110"/>
+        <location filename="../../src/manager/installmanager.cpp" line="119"/>
         <source>An error ocurred during shortcut creation</source>
         <translation>An error occurred during shortcuts creation</translation>
+    </message>
+    <message>
+        <location filename="../../src/manager/installmanager.cpp" line="125"/>
+        <source>An error occurred while preparing application</source>
+        <translation>An error occurred while preparing application</translation>
     </message>
 </context>
 <context>
@@ -189,11 +199,6 @@
         <location filename="../../src/manager/installmanager.cpp" line="57"/>
         <source>Standalone deployment</source>
         <translation>Standalone deployment</translation>
-    </message>
-    <message>
-        <location filename="../../src/shortcut/windowsshortcut.cpp" line="101"/>
-        <source>Configure %1</source>
-        <translation>Configure %1</translation>
     </message>
 </context>
 <context>
