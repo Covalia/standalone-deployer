@@ -59,33 +59,33 @@
     <name>InstallManager</name>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="95"/>
-        <source>An error ocurred during folder creation</source>
-        <translation>Une erreur s&apos;est produite lors de la création du dossier</translation>
+        <source>Unable to create directory tree</source>
+        <translation>Impossible de créer l&apos;arborescence de répertoires</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="101"/>
-        <source>An error ocurred during updater version folder creation</source>
-        <translation>Une erreur s&apos;est produite lors de la création du dossier du composant de mise à jour</translation>
+        <source>Unable to create updater version folder</source>
+        <translation>Impossible de créer le dossier de version du gestionnaire de mise à jour</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="107"/>
-        <source>An error ocurred during parameters writing</source>
-        <translation>Une erreur s&apos;est produite lors de l&apos;écriture des paramètres</translation>
+        <source>Unable to write settings file</source>
+        <translation>Impossible d&apos;écrire le fichier de paramètres</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="113"/>
-        <source>An error ocurred during resources extraction</source>
-        <translation>Une erreur s&apos;est produite lors de l&apos;extraction des ressources</translation>
+        <source>Unable to extract resources</source>
+        <translation>Impossible d&apos;extraire les ressources</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="119"/>
-        <source>An error ocurred during shortcut creation</source>
-        <translation>Une erreur s&apos;est produite lors de la création des raccourcis</translation>
+        <source>Unable to create shortcuts</source>
+        <translation>Impossible de créer les raccourcis</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="125"/>
-        <source>An error occurred while preparing application</source>
-        <translation>Une erreur s&apos;est produite lors de la preparation des applications</translation>
+        <source>Unable to prepare applications</source>
+        <translation>Impossible de préparer les applications</translation>
     </message>
 </context>
 <context>

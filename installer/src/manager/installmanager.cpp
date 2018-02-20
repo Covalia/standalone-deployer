@@ -92,37 +92,37 @@ void InstallManager::startInstallation()
     // tree creation
     bool successCreatingFolders = createInstallationFolders();
     if (!successCreatingFolders) {
-        errorMessages << tr("An error ocurred during folder creation");
+        errorMessages << tr("Unable to create directory tree");
     }
 
     // create updater version folder
     bool successCreatingUpdaterVersion =  createUpdaterFolderVersion();
     if (!successCreatingUpdaterVersion) {
-        errorMessages << tr("An error ocurred during updater version folder creation");
+        errorMessages << tr("Unable to create updater version folder");
     }
 
     // settings writing
     bool successWritingSettings =  createIniConfigurationFile();
     if (!successWritingSettings) {
-        errorMessages << tr("An error ocurred during parameters writing");
+        errorMessages << tr("Unable to write settings file");
     }
 
     // extract resources
     bool successExtractingResources =  extractResources();
     if (!successExtractingResources) {
-        errorMessages << tr("An error ocurred during resources extraction");
+        errorMessages << tr("Unable to extract resources");
     }
 
     // create shorcut
     bool successCreatingShortcut = createShortcut();
     if (!successCreatingShortcut) {
-        errorMessages << tr("An error ocurred during shortcut creation");
+        errorMessages << tr("Unable to create shortcuts");
     }
 
     // preparing app
     bool successPreparingApp = m_appPath.prepareLoader() && m_appPath.prepareUpdater(m_appPath.getUpdaterVersion());
     if (!successPreparingApp) {
-        errorMessages << tr("An error occurred while preparing application");
+        errorMessages << tr("Unable to prepare applications");
     }
 
     bool success = successCreatingFolders && successWritingSettings

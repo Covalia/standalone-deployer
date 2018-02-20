@@ -59,33 +59,33 @@
     <name>InstallManager</name>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="95"/>
-        <source>An error ocurred during folder creation</source>
-        <translation>An error occurred during folder creation</translation>
+        <source>Unable to create directory tree</source>
+        <translation>Unable to create directory tree</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="101"/>
-        <source>An error ocurred during updater version folder creation</source>
-        <translation>An error ocurred during updater version folder creation</translation>
+        <source>Unable to create updater version folder</source>
+        <translation>Unable to create updater version folder</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="107"/>
-        <source>An error ocurred during parameters writing</source>
-        <translation>An error occurred during parameters writing</translation>
+        <source>Unable to write settings file</source>
+        <translation>Unable to write settings file</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="113"/>
-        <source>An error ocurred during resources extraction</source>
-        <translation>An error occurred during resources extraction</translation>
+        <source>Unable to extract resources</source>
+        <translation>Unable to extract resources</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="119"/>
-        <source>An error ocurred during shortcut creation</source>
-        <translation>An error occurred during shortcuts creation</translation>
+        <source>Unable to create shortcuts</source>
+        <translation>Unable to create shortcuts</translation>
     </message>
     <message>
         <location filename="../../src/manager/installmanager.cpp" line="125"/>
-        <source>An error occurred while preparing application</source>
-        <translation>An error occurred while preparing application</translation>
+        <source>Unable to prepare applications</source>
+        <translation>Unable to prepare applications</translation>
     </message>
 </context>
 <context>
