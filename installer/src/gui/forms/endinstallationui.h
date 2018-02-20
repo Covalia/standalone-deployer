@@ -15,7 +15,7 @@ class EndInstallationUI : public QWidget
         explicit EndInstallationUI(QWidget * parent = 0);
         ~EndInstallationUI();
 
-        void showError(QString _error);
+        void showErrors(QStringList _errors);
 
     private:
         Ui::EndInstallationUI * m_ui;

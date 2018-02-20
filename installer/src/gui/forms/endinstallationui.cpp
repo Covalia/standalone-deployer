@@ -21,14 +21,19 @@ EndInstallationUI::~EndInstallationUI()
     delete m_ui;
 }
 
-void EndInstallationUI::showError(QString _error)
+void EndInstallationUI::showErrors(QStringList _errors)
 {
     m_ui->labelIcon->setPixmap(QPixmap(":/images/failure.png"));
     m_ui->labelTitre->setText(tr("An error occurred during installation"));
     m_ui->checkBoxLaunchAfterClose->setVisible(false);
     m_ui->checkBoxLaunchAfterClose->setChecked(false);
     m_ui->labelError->setVisible(true);
-    m_ui->labelError->setText(_error);
+    QString errorMessage = "";
+    for (QStringList::iterator it = _errors.begin(); it != _errors.end(); ++it) {
+        QString current = *it;
+        errorMessage += "• " + current + "\n";
+    }
+    m_ui->labelError->setText(errorMessage);
 }
 
 void EndInstallationUI::closeInstallationEvent()

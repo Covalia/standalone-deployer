@@ -198,12 +198,12 @@ void UIManager::switchAboutTo()
     returnToLastPage();
 }
 
-void UIManager::eventEndInstallation(bool _success, QString _error)
+void UIManager::eventEndInstallation(bool _success, QStringList _errors)
 {
     m_installation->disconnect();
     changeEndInstallation();
     if (!_success && m_endInstallation) {
-        m_endInstallation->showError(_error);
+        m_endInstallation->showErrors(_errors);
     }
 }
 

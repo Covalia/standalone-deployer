@@ -61,8 +61,8 @@ void InstallManager::initInstallation()
 
         QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
                          this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-        QObject::connect(this, SIGNAL(endInstallation(bool,QString)),
-                         m_uiManager, SLOT(eventEndInstallation(bool,QString)));
+        QObject::connect(this, SIGNAL(endInstallation(bool, QStringList)),
+                         m_uiManager, SLOT(eventEndInstallation(bool, QStringList)));
     } else {
         start();
     }
@@ -86,47 +86,49 @@ void InstallManager::startInstallation()
 
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
-    QString errorMessage = "";
+    QStringList errorMessages;
     m_appPath.setInstallationDir(QDir(m_settings->getInstallLocation()));
 
     // tree creation
-    bool folderCreation = createInstallationFolders();
-    if (!folderCreation) {
-        errorMessage = tr("An error ocurred during folder creation");
+    bool successCreatingFolders = createInstallationFolders();
+    if (!successCreatingFolders) {
+        errorMessages << tr("An error ocurred during folder creation");
     }
 
     // create updater version folder
-    bool successUpdaterVersionCreation =  createUpdaterFolderVersion();
-    if (!successUpdaterVersionCreation) {
-        errorMessage = tr("An error ocurred during updater version folder creation");
+    bool successCreatingUpdaterVersion =  createUpdaterFolderVersion();
+    if (!successCreatingUpdaterVersion) {
+        errorMessages << tr("An error ocurred during updater version folder creation");
     }
 
     // settings writing
-    bool settingWriting =  createIniConfigurationFile();
-    if (!settingWriting) {
-        errorMessage = tr("An error ocurred during parameters writing");
+    bool successWritingSettings =  createIniConfigurationFile();
+    if (!successWritingSettings) {
+        errorMessages << tr("An error ocurred during parameters writing");
     }
 
     // extract resources
-    bool succesExtractResources =  extractResources();
-    if (!succesExtractResources) {
-        errorMessage = tr("An error ocurred during resources extraction");
+    bool successExtractingResources =  extractResources();
+    if (!successExtractingResources) {
+        errorMessages << tr("An error ocurred during resources extraction");
     }
 
     // create shorcut
-    bool succesCreateShortcut = createShortcut();
-    if (!succesCreateShortcut) {
-        errorMessage = tr("An error ocurred during shortcut creation");
+    bool successCreatingShortcut = createShortcut();
+    if (!successCreatingShortcut) {
+        errorMessages << tr("An error ocurred during shortcut creation");
     }
 
-    bool success = folderCreation && settingWriting && successUpdaterVersionCreation && succesExtractResources && succesCreateShortcut;
+    bool success = successCreatingFolders && successWritingSettings
+            && successCreatingUpdaterVersion && successExtractingResources
+            && successCreatingShortcut;
 
     if (m_uiManager) {
         if (success) {
             L_INFO("Success Installation");
-            emit endInstallation(success, "");
+            emit endInstallation(success, errorMessages);
         } else {
-            emit endInstallation(success, errorMessage);
+            emit endInstallation(success, errorMessages);
         }
 
         QObject::connect(m_uiManager, SIGNAL(closeInstallationSignal(bool)),

@@ -47,7 +47,7 @@ class InstallManager: public QThread
         void eventCloseInstallation(bool _launchApplication);
 
     signals:
-        void endInstallation(bool _success, QString _error);
+        void endInstallation(bool _success, QStringList _errors);
 };
 
 #endif // INSTALLMANAGER_H

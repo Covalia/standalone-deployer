@@ -52,7 +52,7 @@ class UIManager : public QObject
         void eventCloseInstallation(bool _launchApplication);
 
     public slots:
-        void eventEndInstallation(bool _success, QString _error);
+        void eventEndInstallation(bool _success, QStringList _errors);
 
     signals:
         void changeInstallationSignal();
