@@ -16,6 +16,7 @@ const QString IOConfig::MountDir("Mount");
 const QString IOConfig::UpdaterDir("Updater");
 const QString IOConfig::LoaderDir("Loader");
 const QString IOConfig::DataDir("Data");
+const QString IOConfig::CnlpDir("cnlp");
 
 const QString IOConfig::LoaderFile("loader");
 const QString IOConfig::UpdaterFile("updater");

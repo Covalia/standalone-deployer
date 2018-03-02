@@ -31,7 +31,9 @@ class AppPath {
         QDir getJavaDir();
         QDir getLogsDir();
         QDir getTempDir();
+        QDir getCnlpDir();
         QDir getDataDir();
+
         QDir getUpdaterDir();
         QDir getLoaderDir();
 

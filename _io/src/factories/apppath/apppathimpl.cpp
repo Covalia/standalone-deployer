@@ -87,6 +87,11 @@ QDir AppPathImpl::getTempDir()
     return QDir(m_installationDir.filePath(IOConfig::TempDir));
 }
 
+QDir AppPathImpl::getCnlpDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::CnlpDir));
+}
+
 QDir AppPathImpl::getDataDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::DataDir));

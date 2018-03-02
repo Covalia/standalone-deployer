@@ -36,6 +36,7 @@ class AppPathImpl {
         virtual QDir getJavaDir();
         virtual QDir getLogsDir();
         virtual QDir getTempDir();
+        virtual QDir getCnlpDir();
         virtual QDir getDataDir();
         virtual QDir getUpdaterDir();
         virtual QDir getLoaderDir();

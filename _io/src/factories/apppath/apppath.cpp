@@ -133,6 +133,14 @@ QDir AppPath::getTempDir()
     return QDir();
 }
 
+QDir AppPath::getCnlpDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getCnlpDir();
+    }
+    return QDir();
+}
+
 QDir AppPath::getDataDir()
 {
     if (m_appPathImpl) {

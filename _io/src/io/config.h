@@ -48,6 +48,9 @@ public:
     /// Relative path of the temporary directory of the application
     static const QString TempDir;
 
+    /// Relative path of the Cnlp directory
+    static const QString CnlpDir;
+
     /// Relative path of the mount directory of the application, macos only
     static const QString MountDir;
 
