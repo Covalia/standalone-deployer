@@ -4,6 +4,10 @@
 #include <QObject>
 #include <QUrl>
 #include <QDir>
+#include <QList>
+#include <QMap>
+#include "xml/data/application.h"
+#include "xml/data/download.h"
 #include "utils.h"
 
 class DownloadManager;
@@ -24,7 +28,10 @@ private slots:
     void updateDownloadFileMessage(const QString &_file);
     void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
-    void downloadFinished();
+    void cnlpDownloadFinished();
+    void applicationDownloadFinished();
+
+    static QMap<Application, QList<QUrl> > downloadsToUrls(const QMap<Application, QList<Download> > &_downloadsMap);
 
 private:
     DownloadManager * m_updater;

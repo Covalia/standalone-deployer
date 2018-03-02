@@ -1,10 +1,12 @@
 #include "updater/config.h"
 
 // TODO implémenter la config
-const QString UpdaterConfig::AppUrl("http://dev.covalia.fr/");
+const QString UpdaterConfig::AppUrl("http://10.33.25.132/");
 const QString UpdaterConfig::InstallationDir("/Users/matthieu/CovAutonome");
 
 const QString UpdaterConfig::UserAgentValue("Covalia-Updater");
+
+const QString UpdaterConfig::DeployRootPath("deploy");
 
 const QString UpdaterConfig::CnlpName("cnlp");
 

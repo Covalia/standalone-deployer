@@ -17,6 +17,9 @@ public:
     /// User-Agent de l'updater
     static const QString UserAgentValue;
 
+    /// Remote deploy root directory
+    static const QString DeployRootPath;
+
     /// Nom cnlp
     static const QString CnlpName;
 
