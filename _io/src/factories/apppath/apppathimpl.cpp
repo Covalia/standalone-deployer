@@ -104,7 +104,7 @@ QDir AppPathImpl::getUpdaterDir()
 
 QDir AppPathImpl::getLoaderDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::UpdaterDir));
+    return QDir(m_installationDir.filePath(IOConfig::LoaderDir));
 }
 
 QSharedPointer<QFile> AppPathImpl::getConfigurationFile()
