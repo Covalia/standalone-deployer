@@ -136,7 +136,7 @@ bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, cons
 
 bool MacosAppPathImpl::prepareLoader()
 {
-    const QString app = "loader";
+    const QString app = IOConfig::LoaderName;
     const QSharedPointer<QFile> dmgPath = getLoaderFile();
     const QSharedPointer<QFile> appPath = getLoaderAppFile();
     bool result = false;
@@ -151,7 +151,7 @@ bool MacosAppPathImpl::prepareLoader()
 
 bool MacosAppPathImpl::prepareUpdater(QString _version)
 {
-    const QString app = "updater";
+    const QString app = IOConfig::UpdaterName;
     const QSharedPointer<QFile> dmgPath = getUpdaterFile(_version);
     const QSharedPointer<QFile> appPath = getUpdaterAppFile(_version);
     bool result = false;
@@ -166,7 +166,7 @@ bool MacosAppPathImpl::prepareUpdater(QString _version)
 
 bool MacosAppPathImpl::startLoader(QStringList _args)
 {
-    const QString app = "loader";
+    const QString app = IOConfig::LoaderName;
     const QSharedPointer<QFile> dmgPath = getLoaderFile();
     const QSharedPointer<QFile> appPath = getLoaderAppFile();
     bool result = false;
@@ -182,7 +182,7 @@ bool MacosAppPathImpl::startLoader(QStringList _args)
 
 bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
 {
-    const QString app = "updater";
+    const QString app = IOConfig::UpdaterName;
     const QSharedPointer<QFile> dmgPath = getUpdaterFile(_version);
     const QSharedPointer<QFile> appPath = getUpdaterAppFile(_version);
     bool result = false;

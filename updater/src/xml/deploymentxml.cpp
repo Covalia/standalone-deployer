@@ -1,5 +1,6 @@
 #include "xml/deploymentxml.h"
 #include "updater/config.h"
+#include "io/config.h"
 #include <QFile>
 
 const QString DeploymentXML::RDeploymentTag("deployment");
@@ -266,17 +267,17 @@ bool DeploymentXML::processApplication()
         updaterExtensionClasspath = m_xmlReader.attributes().value(UpdaterExtensionClasspathAttribute).toString();
     }
 
-    if (name == UpdaterConfig::AppName) {
+    if (name == IOConfig::AppName) {
         application = Application::getAppApplication();
-    } else if (name == UpdaterConfig::LoaderName) {
+    } else if (name == IOConfig::LoaderName) {
         application = Application::getLoaderApplication();
-    } else if (name == UpdaterConfig::UpdaterName) {
+    } else if (name == IOConfig::UpdaterName) {
         application = Application::getUpdaterApplication();
     }
 
     bool result = false;
 
-    if (name == UpdaterConfig::AppName || name == UpdaterConfig::LoaderName || name == UpdaterConfig::UpdaterName) {
+    if (name == IOConfig::AppName || name == IOConfig::LoaderName || name == IOConfig::UpdaterName) {
         application.setVersion(version);
         application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 

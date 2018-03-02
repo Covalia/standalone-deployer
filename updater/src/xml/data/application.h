@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QHash>
+#include "io/config.h"
 #include "updater/config.h"
 
 /**
@@ -15,19 +16,19 @@ class Application
 
         static Application getAppApplication()
         {
-            return Application(UpdaterConfig::AppName, UpdaterConfig::AppCnlpRemoteFilename, UpdaterConfig::AppCnlpLocalFilename);
+            return Application(IOConfig::AppName, UpdaterConfig::AppCnlpRemoteFilename, UpdaterConfig::AppCnlpLocalFilename);
         }
         static Application getUpdaterApplication()
         {
-            return Application(UpdaterConfig::UpdaterName, UpdaterConfig::UpdaterCnlpRemoteFilename, UpdaterConfig::UpdaterCnlpLocalFilename);
+            return Application(IOConfig::UpdaterName, UpdaterConfig::UpdaterCnlpRemoteFilename, UpdaterConfig::UpdaterCnlpLocalFilename);
         }
         static Application getLoaderApplication()
         {
-            return Application(UpdaterConfig::LoaderName, UpdaterConfig::LoaderCnlpRemoteFilename, UpdaterConfig::LoaderCnlpLocalFilename);
+            return Application(IOConfig::LoaderName, UpdaterConfig::LoaderCnlpRemoteFilename, UpdaterConfig::LoaderCnlpLocalFilename);
         }
         static Application getCnlpApplication()
         {
-            return Application(UpdaterConfig::CnlpName, "", "");
+            return Application(IOConfig::CnlpName, "", "");
         }
         static Application getEmptyApplication()
         {

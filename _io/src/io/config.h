@@ -23,6 +23,18 @@ public:
     static const QString LoaderVersion;
 
 
+    /// Nom loader.
+    static const QString LoaderName;
+
+    /// Nom updater.
+    static const QString UpdaterName;
+
+    /// Nom application.
+    static const QString AppName;
+
+    /// Nom cnlp
+    static const QString CnlpName;
+
 
     /// relative path of application installation application
     static const QString AppDir;
