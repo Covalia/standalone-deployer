@@ -4,8 +4,10 @@ Application::Application(QString _name,
                          QString _cnlpRemoteFileName,
                          QString _cnlpLocalFileName) :
     m_name(_name),
+    m_version(""),
     m_cnlpRemoteFileName(_cnlpRemoteFileName),
-    m_cnlpLocalFileName(_cnlpLocalFileName)
+    m_cnlpLocalFileName(_cnlpLocalFileName),
+    m_updaterExtensionClasspath("")
 {
 }
 

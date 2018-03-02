@@ -17,6 +17,9 @@ public:
     /// User-Agent de l'updater
     static const QString UserAgentValue;
 
+    /// Nom cnlp
+    static const QString CnlpName;
+
     /// Nom application.
     static const QString AppName;
     /// Nom fichier application distant.
@@ -24,12 +27,12 @@ public:
     /// Nom fichier application local.
     static const QString AppCnlpLocalFilename;
 
-    /// Nom starter.
-    static const QString StarterName;
-    /// Nom fichier starter distant.
-    static const QString StarterCnlpRemoteFilename;
-    /// Nom fichier starter local.
-    static const QString StarterCnlpLocalFilename;
+    /// Nom loader.
+    static const QString LoaderName;
+    /// Nom fichier loader distant.
+    static const QString LoaderCnlpRemoteFilename;
+    /// Nom fichier loader local.
+    static const QString LoaderCnlpLocalFilename;
 
     /// Nom updater.
     static const QString UpdaterName;

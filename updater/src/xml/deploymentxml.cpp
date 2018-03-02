@@ -249,7 +249,7 @@ bool DeploymentXML::processApplication()
         return false;
     }
 
-    Application * application = 0;
+    Application application = Application::getEmptyApplication();
 
     QString name = "";
     QString version = "";
@@ -267,16 +267,18 @@ bool DeploymentXML::processApplication()
     }
 
     if (name == UpdaterConfig::AppName) {
-        application = new Application(UpdaterConfig::AppName, UpdaterConfig::AppCnlpRemoteFilename, UpdaterConfig::AppCnlpLocalFilename);
-    } else if (name ==  UpdaterConfig::StarterName) {
-        application = new Application(UpdaterConfig::StarterName, UpdaterConfig::StarterCnlpRemoteFilename, UpdaterConfig::StarterCnlpLocalFilename);
-    } else if (name ==  UpdaterConfig::UpdaterName) {
-        application = new Application(UpdaterConfig::UpdaterName, UpdaterConfig::UpdaterCnlpRemoteFilename, UpdaterConfig::StarterCnlpLocalFilename);
+        application = Application::getAppApplication();
+    } else if (name == UpdaterConfig::LoaderName) {
+        application = Application::getLoaderApplication();
+    } else if (name == UpdaterConfig::UpdaterName) {
+        application = Application::getUpdaterApplication();
     }
 
-    if (application) {
-        application->setVersion(version);
-        application->setUpdaterExtensionClasspath(updaterExtensionClasspath);
+    bool result = false;
+
+    if (name == UpdaterConfig::AppName || name == UpdaterConfig::LoaderName || name == UpdaterConfig::UpdaterName) {
+        application.setVersion(version);
+        application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 
         QList<Download> downloads;
 
@@ -287,13 +289,13 @@ bool DeploymentXML::processApplication()
             }
             m_xmlReader.skipCurrentElement();
         }
-        m_applications.insert(*application, downloads);
-        delete application;
+        m_applications.insert(application, downloads);
 
-        return true;
+        result = true;
     }
-    return false;
-} // DeploymentXML::processApplication
+
+    return result;
+}
 
 Download DeploymentXML::processDownload()
 {
