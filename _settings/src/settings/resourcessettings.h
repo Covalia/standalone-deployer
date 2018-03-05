@@ -24,7 +24,6 @@ static QString P_DEFAULT_DATA_PATH_SIMPLE_INSTALL = "default_data_path_simple_in
 static QString P_DEFAULT_DATA_PATH_CUSTOM_INSTALL = "default_data_path_custom_install";
 static QString P_POSSIBLE_CHANGE_DATA_LOCATION = "possible_change_data_location";
 
-static QString P_HASH_KEY = "hash_key";
 static QString P_ENCRYPTED_PASSWORD_KEY = "encrypted_password_key";
 
 static QString P_COLOR_PANEL_BACKGROUND_BORDER = "color_panel_background_border";
@@ -105,9 +104,6 @@ class ResourcesSettings
         QString getDefault_data_path_custom_install() const;
         void setDefault_data_path_custom_install(const QString &default_data_path_custom_install);
 
-        QString getHash_key() const;
-        void setHash_key(const QString &hash_key);
-
         QString getEncrypted_password_key() const;
         void setEncrypted_password_key(const QString &encrypted_password_key);
 
@@ -166,7 +162,6 @@ private:
         QString m_default_data_path_simple_install;
         QString m_default_data_path_custom_install;
         bool m_possible_change_data_location;
-        QString m_hash_key;
         QString m_encrypted_password_key;
         QString m_color_panel_background_border;
         QString m_color_panel_background;

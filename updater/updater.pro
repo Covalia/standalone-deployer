@@ -71,6 +71,7 @@ SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/updater/appupdater.cpp
 SOURCES += src/updater/config.cpp
+SOURCES += src/updater/hash_key.cpp
 SOURCES += src/utils.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
 SOURCES += src/utils/unzip/zipextractor.cpp
@@ -86,6 +87,7 @@ HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/updater/appupdater.h
 HEADERS += src/updater/config.h
+HEADERS += src/updater/hash_key.h
 HEADERS += src/utils.h
 HEADERS += src/utils/hashmac/hashmac512.h
 HEADERS += src/utils/qarchive/qarchive.h
@@ -103,6 +105,14 @@ defined(OVERRIDABLE_UPDATER_RESOURCES, var) {
 }
 else {
     RESOURCES += overridable_resources.qrc
+}
+
+defined(HASH_KEY_RESOURCES, var) {
+    RESOURCES += $$HASH_KEY_RESOURCES
+    message("Using hash key from file: $$HASH_KEY_RESOURCES")
+}
+else {
+    RESOURCES += hash_key_resources.qrc
 }
 
 

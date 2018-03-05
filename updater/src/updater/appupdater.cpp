@@ -3,6 +3,8 @@
 #include "updater/config.h"
 #include "io/config.h"
 #include "xml/deploymentxml.h"
+#include "updater/hash_key.h"
+#include "utils/hashmac/hashmac512.h"
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
     m_updater(0),
@@ -153,9 +155,10 @@ QMap<Application, QList<QUrl> > AppUpdater::downloadsToUrls(const QMap<Applicati
 
     QMap<Application, QList<QUrl> > map;
 
+    // reading hash key only once
+    const QString hash_key = HashKey::readHashKey();
     QMap<Application, QList<Download> >::const_iterator iterator = _downloadsMap.constBegin();
     while (iterator != _downloadsMap.constEnd()) {
-
         const Application application = iterator.key();
         const QList<Download> downloads = iterator.value();
 
@@ -163,7 +166,6 @@ QMap<Application, QList<QUrl> > AppUpdater::downloadsToUrls(const QMap<Applicati
         QList<QUrl> urls;
 
         foreach(Download download, downloads) {
-
             L_INFO("Remote file: " + download.getHref() + " has hash: " + download.getHashMac());
 
             QString localFile = "";
@@ -189,4 +191,3 @@ QMap<Application, QList<QUrl> > AppUpdater::downloadsToUrls(const QMap<Applicati
 
     return map;
 }
-
