@@ -79,6 +79,15 @@ inline bool operator==(const Application &_e1, const Application &_e2)
            && _e1.getUpdaterExtensionClasspath() == _e2.getUpdaterExtensionClasspath();
 }
 
+inline bool operator!=(const Application &_e1, const Application &_e2)
+{
+    return _e1.getName() != _e2.getName()
+            || _e1.getVersion() != _e2.getVersion()
+            || _e1.getCnlpRemoteFileName() != _e2.getCnlpRemoteFileName()
+            || _e1.getCnlpLocalFileName() != _e2.getCnlpLocalFileName()
+            || _e1.getUpdaterExtensionClasspath() != _e2.getUpdaterExtensionClasspath();
+}
+
 inline uint qHash(const Application &_key, uint _seed)
 {
     return qHash(_key.getName(), _seed)
