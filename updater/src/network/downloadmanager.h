@@ -24,6 +24,7 @@ public:
     virtual ~DownloadManager();
 
     void setUrlListToDownload(const QMap<Application, QList<QUrl> > &_downloads);
+    void setUrlListToDownload(const QMap<Application, QList<QString> > &_downloads);
 
     QSet<QPair<Application, QUrl> > getUrlsInError() const;
 

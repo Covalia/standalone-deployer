@@ -95,6 +95,28 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
     }
 }
 
+void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString> > &_downloadsMap)
+{
+    QMap<Application, QList<QUrl> > urlMap;
+
+    QMap<Application, QList<QString> >::const_iterator iterator = _downloadsMap.constBegin();
+    while (iterator != _downloadsMap.constEnd()) {
+
+        const Application application = iterator.key();
+        const QList<QString> downloads = iterator.value();
+
+        urlMap.insert(application, QList<QUrl>());
+
+        foreach(QString url, downloads) {
+            urlMap[application].append(QUrl(url));
+        }
+
+        ++iterator;
+    }
+
+    setUrlListToDownload(urlMap);
+}
+
 QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
 {
     return m_errorSet;

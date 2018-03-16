@@ -31,12 +31,22 @@ private slots:
     void cnlpDownloadFinished();
     void applicationDownloadFinished();
 
-    static QMap<Application, QList<QUrl> > downloadsToUrls(const QMap<Application, QList<Download> > &_downloadsMap);
+    static QList<QString> getLocalFiles(const Application &_application);
+    static QMap<Application, QList<QString> > getLocalFiles();
+    void processCnlpDownloadFileList();
+    bool buildApplicationInTempDirectory(const Application &_application);
 
 private:
     DownloadManager * m_updater;
     QUrl m_appUrl;
     AppPath m_appPath;
+
+    QString m_remoteUpdaterVersion;
+    QString m_localUpdaterVersion;
+
+    QMap<Application, QList<Download> > m_cnlpParsedFiles;
+    QMap<Application, QList<QString> > m_filesToDownload;
+    QMap<Application, QList<QString> > m_filesToKeep;
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
