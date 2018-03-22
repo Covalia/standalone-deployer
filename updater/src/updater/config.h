@@ -34,6 +34,11 @@ public:
     static const QString UpdaterCnlpRemoteFilename;
     /// Nom fichier updater local.
     static const QString UpdaterCnlpLocalFilename;
+
+    /// Build directory suffix.
+    static const QString BuildDirSuffix;
+    /// Old directory suffix.
+    static const QString OldDirSuffix;
 };
 
 #endif // ifndef UPDATER__CONFIG_H

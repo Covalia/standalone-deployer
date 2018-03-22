@@ -221,16 +221,16 @@ void AppUpdater::applicationDownloadFinished()
             // if (!m_filesToDownload[Application::getAppApplication()].isEmpty() && m_filesToKeep[Application::getAppApplication()].isEmpty()) {
 
             L_INFO("Installing " + Application::getAppApplication().getName());
-            if (QDir().rename(m_appPath.getAppDir().absolutePath(), m_appPath.getAppDir().absolutePath() + "-old")) {
-                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getAppApplication().getName() + "-build"), m_appPath.getAppDir().absolutePath())) {
-                    FileUtils::removeDirRecursively(m_appPath.getAppDir().absolutePath() + "-old");
+            if (QDir().rename(m_appPath.getAppDir().absolutePath(), m_appPath.getAppDir().absolutePath() + UpdaterConfig::OldDirSuffix)) {
+                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getAppApplication().getName() + UpdaterConfig::BuildDirSuffix), m_appPath.getAppDir().absolutePath())) {
+                    FileUtils::removeDirRecursively(m_appPath.getAppDir().absolutePath() + UpdaterConfig::OldDirSuffix);
                 }
             }
 
             L_INFO("Installing " + Application::getLoaderApplication().getName());
-            if (QDir().rename(m_appPath.getLoaderDir().absolutePath(), m_appPath.getLoaderDir().absolutePath() + "-old")) {
-                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getLoaderApplication().getName() + "-build"), m_appPath.getLoaderDir().absolutePath())) {
-                    FileUtils::removeDirRecursively(m_appPath.getLoaderDir().absolutePath() + "-old");
+            if (QDir().rename(m_appPath.getLoaderDir().absolutePath(), m_appPath.getLoaderDir().absolutePath() + UpdaterConfig::OldDirSuffix)) {
+                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getLoaderApplication().getName() + UpdaterConfig::BuildDirSuffix), m_appPath.getLoaderDir().absolutePath())) {
+                    FileUtils::removeDirRecursively(m_appPath.getLoaderDir().absolutePath() + UpdaterConfig::OldDirSuffix);
                 }
             }
             // extract app from dmg (macos).
@@ -239,7 +239,7 @@ void AppUpdater::applicationDownloadFinished()
             if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
                 L_INFO("Installing " + Application::getUpdaterApplication().getName());
                 // les versions locales et distantes doivent être différentes
-                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getUpdaterApplication().getName() + "-build" + QDir::separator() + m_remoteUpdaterVersion),
+                if (QDir().rename(m_appPath.getTempDir().absoluteFilePath(Application::getUpdaterApplication().getName() + UpdaterConfig::BuildDirSuffix + QDir::separator() + m_remoteUpdaterVersion),
                              m_appPath.getUpdaterDir().absoluteFilePath(m_remoteUpdaterVersion))) {
                 }
                 // extract app from dmg (macos).
@@ -272,15 +272,15 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
         if (_application == Application::getAppApplication()) {
             tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::AppDir));
             appDir = QDir(m_appPath.getAppDir());
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + "-build");
+            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
         } else if (_application == Application::getLoaderApplication()) {
             tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::LoaderDir));
             appDir = QDir(m_appPath.getLoaderDir());
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + "-build");
+            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
         } else if (_application == Application::getUpdaterApplication()) {
             tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::UpdaterDir));
             appDir = QDir(m_appPath.getUpdaterDir().absoluteFilePath(m_remoteUpdaterVersion));
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + "-build" + QDir::separator() + m_remoteUpdaterVersion);
+            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix + QDir::separator() + m_remoteUpdaterVersion);
         }
     } else {
         return buildOk;

@@ -16,3 +16,6 @@ const QString UpdaterConfig::LoaderCnlpLocalFilename("loader.cnlp");
 
 const QString UpdaterConfig::UpdaterCnlpRemoteFilename("updater.cnlp.php");
 const QString UpdaterConfig::UpdaterCnlpLocalFilename("updater.cnlp");
+
+const QString UpdaterConfig::BuildDirSuffix("-build");
+const QString UpdaterConfig::OldDirSuffix("-old");
