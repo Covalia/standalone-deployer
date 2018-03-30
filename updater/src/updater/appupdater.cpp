@@ -111,9 +111,17 @@ void AppUpdater::cnlpDownloadFinished()
     DeploymentXML loaderXml(loaderCnlpPath);
 
     if (applicationXml.read() && updaterXml.read() && loaderXml.read()) {
+        // retrieving remote updater version.
+        QMap<Application, QList<Download> >::key_iterator iterator = updaterXml.getApplications().keyBegin();
+        while (iterator != updaterXml.getApplications().keyEnd()) {
+            const Application app = *iterator;
+            if (app.getName() == Application::getUpdaterApplication().getName()) {
+                m_remoteUpdaterVersion = app.getVersion();
+            }
+            ++iterator;
+        }
 
-        m_remoteUpdaterVersion = updaterXml.getVersion();
-        Settings *settings = Settings::getInstance();
+        Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
 
         const Application appApplication = Application::getAppApplication();
