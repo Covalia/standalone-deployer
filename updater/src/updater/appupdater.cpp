@@ -296,10 +296,14 @@ void AppUpdater::applicationDownloadFinished()
                         appInstalledOk = false;
                     }
                 }
+            } else {
+                L_INFO("Application does not need to be updated.");
             }
 
             if (appInstalledOk) {
-                L_INFO("NO ERROR ON APPLICATION INSTALLATION");
+                L_INFO("No error reported on application installation.");
+            } else {
+                L_ERROR("Errors have been reported on application installation.");
             }
 
             bool loaderInstalledOk = true;
@@ -354,10 +358,14 @@ void AppUpdater::applicationDownloadFinished()
                         loaderInstalledOk = false;
                     }
                 }
+            } else {
+                L_INFO("Loader does not need to be updated.");
             }
 
             if (loaderInstalledOk) {
-                L_INFO("NO ERROR ON LOADER INSTALLATION");
+                L_INFO("No error reported on loader installation.");
+            } else {
+                L_ERROR("Errors have been reported on loader installation.");
             }
 
             bool updaterInstalledOk = true;
@@ -411,10 +419,14 @@ void AppUpdater::applicationDownloadFinished()
                 } else {
                     L_WARN("Remote and local updaters differ but have same version number, no possible update.");
                 }
+            } else {
+                L_INFO("Updater does not need to be updated.");
             }
 
             if (updaterInstalledOk) {
-                L_INFO("NO ERROR ON UPDATER INSTALLATION");
+                L_INFO("No error reported on updater installation.");
+            } else {
+                L_ERROR("Errors have been reported on updater installation.");
             }
 
             if (appInstalledOk && loaderInstalledOk && updaterInstalledOk) {
