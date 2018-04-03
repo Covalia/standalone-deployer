@@ -174,6 +174,7 @@ void AppUpdater::applicationDownloadFinished()
         const Application application = iterator.key();
         const QList<QString> downloadedFiles = iterator.value();
 
+        // foreach application, checking each file
         foreach(QString downloadedFile, downloadedFiles) {
             if (application == Application::getAppApplication()
                 || application == Application::getLoaderApplication()
@@ -188,21 +189,35 @@ void AppUpdater::applicationDownloadFinished()
                     dir = QDir(m_appPath.getTempDir()).absoluteFilePath(IOConfig::UpdaterDir);
                 }
 
+                // temporary location of downloaded file
                 QString localFile = dir.absoluteFilePath(downloadedFile);
 
                 if (QFile::exists(localFile)) {
+                    // if this local temporary file exists
+                    // checking its hashmac
                     QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
+                    // we find the download corresponding to the downloadedFile to get its expected hashmac
+                    bool found = false;
                     foreach(Download download, m_cnlpParsedFiles[application]) {
                         if (download.getHref() == downloadedFile) {
+                            found = true;
                             if (hashmac != download.getHashMac()) {
-                                L_INFO("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
+                                L_WARN("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
                                 downloadsOk = false;
                             }
                             break;
                         }
+
+                    }
+                    if (!found) {
+                        // we print a warning if downloaded file was not found in the parsed downloads list
+                        // we just log it, in case this happens, but this mustn't
+                        L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
                     }
                 } else {
+                    // if this file does not exist, we get an error
+                    L_ERROR("Downloaded file does not exist " + localFile);
                     downloadsOk = false;
                 }
             }
