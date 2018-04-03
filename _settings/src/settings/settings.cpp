@@ -109,7 +109,7 @@ bool Settings::isWritable()
     return m_settings->isWritable();
 }
 
-void Settings::writeSettings()
+bool Settings::writeSettings()
 {
     L_INFO("Starting to write all settings");
     QMutexLocker locker(&sm_settingsMutex);
@@ -175,6 +175,7 @@ void Settings::writeSettings()
 
     // write immediately in .ini file
     m_settings->sync();
+    return (m_settings->status() == QSettings::NoError);
 }
 
 void Settings::readSettings()

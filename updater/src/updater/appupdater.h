@@ -31,10 +31,13 @@ private slots:
     void cnlpDownloadFinished();
     void applicationDownloadFinished();
 
-    static QList<QString> getLocalFiles(const Application &_application);
-    static QMap<Application, QList<QString> > getLocalFiles();
+    QList<QString> getLocalFiles(const Application &_application);
+    QMap<Application, QList<QString> > getLocalFiles();
     void processCnlpDownloadFileList();
     bool buildApplicationInTempDirectory(const Application &_application);
+
+    // return true if the application has changed
+    bool doesAppNeedToBeRebuild(const Application &_application);
 
 private:
     DownloadManager * m_updater;
@@ -44,9 +47,14 @@ private:
     QString m_remoteUpdaterVersion;
     QString m_localUpdaterVersion;
 
+    // list of remote files to download
     QMap<Application, QList<Download> > m_cnlpParsedFiles;
+    // list of application files to download, those who have changed
     QMap<Application, QList<QString> > m_filesToDownload;
+    // list of application files to keep, those who haven't changed
     QMap<Application, QList<QString> > m_filesToKeep;
+    // list of remaining application files, those who need to be removed
+    QMap<Application, QList<QString> > m_remainingFiles;
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);

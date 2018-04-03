@@ -76,7 +76,7 @@ class Settings
 
         bool isWritable();
 
-        void writeSettings();
+        bool writeSettings();
 
         void readSettings();
 
