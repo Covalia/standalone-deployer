@@ -99,9 +99,9 @@ void AppUpdater::cnlpDownloadFinished()
     disconnect(m_updater, SIGNAL(downloadsFinished()),
                this, SLOT(cnlpDownloadFinished()));
 
-    QString applicationCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::AppCnlpLocalFilename);
-    QString updaterCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::UpdaterCnlpLocalFilename);
-    QString loaderCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::LoaderCnlpLocalFilename);
+    const QString applicationCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::AppCnlpLocalFilename);
+    const QString updaterCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::UpdaterCnlpLocalFilename);
+    const QString loaderCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::LoaderCnlpLocalFilename);
     L_INFO("Files to read: " + applicationCnlpPath);
     L_INFO("Files to read: " + updaterCnlpPath);
     L_INFO("Files to read: " + loaderCnlpPath);
@@ -137,9 +137,9 @@ void AppUpdater::cnlpDownloadFinished()
 #ifdef Q_OS_WIN
             osValue = DeploymentXML::OsWindowsValue;
 #endif
-        QList<Download> appDownloads = applicationXml.getDownloads(appApplication, osValue);
-        QList<Download> updaterDownloads = updaterXml.getDownloads(updaterApplication, osValue);
-        QList<Download> loaderDownloads = loaderXml.getDownloads(loaderApplication, osValue);
+        const QList<Download> appDownloads = applicationXml.getDownloads(appApplication, osValue);
+        const QList<Download> updaterDownloads = updaterXml.getDownloads(updaterApplication, osValue);
+        const QList<Download> loaderDownloads = loaderXml.getDownloads(loaderApplication, osValue);
 
         m_cnlpParsedFiles.clear();
         m_cnlpParsedFiles.insert(appApplication, appDownloads);
