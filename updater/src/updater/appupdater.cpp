@@ -430,10 +430,60 @@ void AppUpdater::applicationDownloadFinished()
             }
 
             if (appInstalledOk && loaderInstalledOk && updaterInstalledOk) {
-                L_INFO("COPY CNLP FILES");
-            }
+                // application, loader and updater didn't throw error, updating cnlp files.
 
-            L_INFO("START THE APPLICATION");
+                L_INFO("Installing Cnlp files.");
+
+                const QString cnlpInstallDir = m_appPath.getCnlpDir().absolutePath();
+                const QString cnlpOldDir = m_appPath.getCnlpDir().absolutePath() + UpdaterConfig::OldDirSuffix;
+                const QString cnlpBuildDir = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpName);
+
+                bool cnlpInstalledOk = true;
+
+                // remove an old cnlp directory if it already exists
+                if (FileUtils::directoryExists(cnlpOldDir)) {
+                    L_INFO("Existing old cnlp directory needs to be removed: " + cnlpOldDir);
+
+                    if (FileUtils::removeDirRecursively(cnlpOldDir)) {
+                        L_INFO("Removed " + cnlpOldDir);
+                    } else {
+                        L_ERROR("Unable to remove " + cnlpOldDir);
+                        cnlpInstalledOk = false;
+                    }
+                }
+
+                if (cnlpInstalledOk) {
+                    // we continue only if the old existing directory has been deleted
+
+                    // firstly, we rename the old cnlp directory.
+                    if (QDir().rename(cnlpInstallDir, cnlpOldDir)) {
+                        L_INFO("Renamed " + cnlpInstallDir + " to " + cnlpOldDir);
+                        if (QDir().rename(cnlpBuildDir, cnlpInstallDir)) {
+                            L_INFO("Renamed " + cnlpBuildDir + " to " + cnlpInstallDir);
+                            if (FileUtils::removeDirRecursively(cnlpOldDir)) {
+                                L_INFO("Removed " + cnlpOldDir);
+                            } else {
+                                L_WARN("Unable to remove " + cnlpOldDir);
+                                // not an error
+                            }
+                        } else {
+                            L_ERROR("Unable to rename " + cnlpBuildDir + " to " + cnlpInstallDir);
+                            cnlpInstalledOk = false;
+                        }
+                    } else {
+                        L_ERROR("Unable to rename " + cnlpInstallDir + " to " + cnlpOldDir);
+                        cnlpInstalledOk = false;
+                    }
+                }
+
+                if (cnlpInstalledOk) {
+                    L_INFO("No error reported on cnlp installation.");
+
+                    L_INFO("START THE APPLICATION");
+                } else {
+                    L_ERROR("Errors have been reported on cnlp installation.");
+                }
+            }
         } else {
             L_INFO("BUILD KO !!!!");
         }
