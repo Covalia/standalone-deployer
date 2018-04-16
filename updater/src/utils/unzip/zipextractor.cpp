@@ -1,5 +1,5 @@
 #include "utils/unzip/zipextractor.h"
-#include "utils/qarchive/qarchive.h"
+#include "utils/unzip/qarchive/qarchive.h"
 #include "log/logger.h"
 
 ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, QObject * _parent) :

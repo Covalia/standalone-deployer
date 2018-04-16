@@ -8,7 +8,7 @@ namespace QArchive {
 class Extractor;
 }
 
-class ZipExtractor : QObject {
+class ZipExtractor : public QObject {
     Q_OBJECT
 
     public:
