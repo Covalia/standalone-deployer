@@ -13,7 +13,8 @@ QMutex Settings::sm_settingsMutex;
 Settings::Settings() :
     m_settings(0),
     m_applicationName("Application"),
-    m_updaterVersion("???"),
+    m_updaterVersion(""),
+    m_javaVersion(""),
     m_proxyUse(false),
     m_proxyAuto(false),
     m_proxyManual(false),
@@ -117,6 +118,7 @@ bool Settings::writeSettings()
     m_settings->beginGroup(GROUP_INFO);
     putSetting(S_APPLICATION_NAME, m_applicationName);
     putSetting(S_UPDATER_VERSION, m_updaterVersion);
+    putSetting(S_JAVA_VERSION, m_javaVersion);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -186,6 +188,7 @@ void Settings::readSettings()
     m_settings->beginGroup(GROUP_INFO);
     m_applicationName = getSetting(S_APPLICATION_NAME, m_applicationName).toString();
     m_updaterVersion = getSetting(S_UPDATER_VERSION, m_updaterVersion).toString();
+    m_javaVersion = getSetting(S_JAVA_VERSION, m_javaVersion).toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_PROXY);
@@ -250,6 +253,7 @@ QString Settings::paramListString()
 
     s = s + "applicationName = " + m_applicationName + "\n";
     s = s + "updaterVersion = " + m_updaterVersion + "\n";
+    s = s + "javaVersion = " + m_javaVersion + "\n";
     s = s + "proxyUse = " + QString::number(m_proxyUse) + "\n";
     s = s + "proxyAuto = " + QString::number(m_proxyAuto) + "\n";
     s = s + "proxyManual = " + QString::number(m_proxyManual)  + "\n";
@@ -382,6 +386,15 @@ QString Settings::getUpdaterVersion() const
 void Settings::setUpdaterVersion(const QString &updaterVersion)
 {
     m_updaterVersion = updaterVersion;
+}
+
+QString Settings::getJavaVersion() const {
+    return m_javaVersion;
+}
+
+void Settings::setJavaVersion(const QString &_javaVersion)
+{
+    m_javaVersion = _javaVersion;
 }
 
 QString Settings::getApplicationName() const
