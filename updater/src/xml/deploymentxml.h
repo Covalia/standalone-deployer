@@ -42,7 +42,6 @@ class DeploymentXML : public QObject
         QList<QString> getArguments() const;
         QMap<Application, QList<Download> > getApplications() const;
         QList<Download> getDownloads(const Application &_application, const QString &_os) const;
-        QMap<QString, JavaUpdate> getJavaUpdates() const;
         QString getMemory() const;
 
         static const QString RDeploymentTag;
@@ -74,9 +73,6 @@ class DeploymentXML : public QObject
         static const QString MemoryTag;
         static const QString VersionTag;
 
-        static const QString JavaTag;
-        static const QString JavaVersionAttribute;
-
     private:
 
         QFile m_xmlFile;
@@ -85,7 +81,6 @@ class DeploymentXML : public QObject
         QString m_version;
         QList<QString> m_arguments;
         QMap<Application, QList<Download> > m_applications;
-        QMap<QString, JavaUpdate> m_javaUpdates;
 
         /**
          * @brief read deplyment tag in xml (main tag)
@@ -104,12 +99,6 @@ class DeploymentXML : public QObject
          * @return true if success analysis
          */
         bool processMemory();
-
-        /**
-         * @brief read java tag in xml
-         * @return true if success analysis
-         */
-        bool processJava();
 
         /**
          * @brief read all arguments tags

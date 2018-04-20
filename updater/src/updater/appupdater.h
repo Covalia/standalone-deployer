@@ -39,6 +39,8 @@ private slots:
     // return true if the application has changed
     bool doesAppNeedToBeRebuild(const Application &_application);
 
+    bool prepareJava(const QString &_version, bool _forceOverwrite);
+
 private:
     DownloadManager * m_updater;
     QUrl m_appUrl;
@@ -46,6 +48,8 @@ private:
 
     QString m_remoteUpdaterVersion;
     QString m_localUpdaterVersion;
+    QString m_remoteJavaVersion;
+    QString m_localJavaVersion;
 
     // list of remote files to download
     QMap<Application, QList<Download> > m_cnlpParsedFiles;

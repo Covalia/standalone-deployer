@@ -30,6 +30,10 @@ class Application
         {
             return Application(IOConfig::CnlpName, "", "");
         }
+        static Application getJavaApplication()
+        {
+            return Application(IOConfig::JavaName, "", "");
+        }
         static Application getEmptyApplication()
         {
             return Application("", "", "");

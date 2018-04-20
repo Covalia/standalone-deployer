@@ -1,6 +1,7 @@
 #include "xml/deploymentxml.h"
 #include "updater/config.h"
 #include "io/config.h"
+#include "log/logger.h"
 #include <QFile>
 
 const QString DeploymentXML::RDeploymentTag("deployment");
@@ -32,9 +33,6 @@ const QString DeploymentXML::ArgumentTag("argument");
 const QString DeploymentXML::MemoryTag("memory");
 const QString DeploymentXML::VersionTag("version");
 
-const QString DeploymentXML::JavaTag("java");
-const QString DeploymentXML::JavaVersionAttribute("version");
-
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
     m_xmlFile(_pathCnlp)
@@ -42,7 +40,6 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     m_memory = "512";
     m_version = "";
     m_applications = QMap<Application, QList<Download> >();
-    m_javaUpdates = QMap<QString, JavaUpdate>();
     m_arguments = QList<QString>();
 }
 
@@ -53,7 +50,7 @@ DeploymentXML::~DeploymentXML()
 bool DeploymentXML::read()
 {
     if (!m_xmlFile.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Cannot read file" << m_xmlFile.errorString();
+        L_ERROR("Cannot read file " + m_xmlFile.errorString());
         return false;
     }
 
@@ -61,7 +58,9 @@ bool DeploymentXML::read()
 
     // TODO vérifier qu'on traite bien les erreurs XML
     bool result = processDeployment();
-
+    if (!result) {
+        L_ERROR("Error processing deployment file.");
+    }
     m_xmlFile.close();
 
     return result;
@@ -71,11 +70,6 @@ QString DeploymentXML::readNextText()
 {
     m_xmlReader.readNext();
     return m_xmlReader.text().toString();
-}
-
-QMap<QString, JavaUpdate> DeploymentXML::getJavaUpdates() const
-{
-    return m_javaUpdates;
 }
 
 QMap<Application, QList<Download> > DeploymentXML::getApplications() const
@@ -130,9 +124,6 @@ bool DeploymentXML::processDeployment()
         } else if (m_xmlReader.name() == MemoryTag) {
             result &= processMemory();
             m_xmlReader.skipCurrentElement();
-        } else if (m_xmlReader.name() == JavaTag) {
-            result &= processJava();
-            m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == ArgumentsTag) {
             result &= processArguments();
         } else if (m_xmlReader.name() == DownloadsTag) {
@@ -162,42 +153,6 @@ bool DeploymentXML::processMemory()
     m_memory = readNextText();
     return true;
 }
-
-bool DeploymentXML::processJava()
-{
-    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != JavaTag) {
-        return false;
-    }
-
-    QString javaVersion = "";
-    QString javaFile = "";
-    QString javaHash = "";
-    QString javaOs = "";
-
-    // TODO false si les attributs n'existent pas
-    if (m_xmlReader.attributes().hasAttribute(JavaVersionAttribute)) {
-        javaVersion = m_xmlReader.attributes().value(JavaVersionAttribute).toString();
-    }
-
-    if (m_xmlReader.attributes().hasAttribute(HrefAttribute)) {
-        javaFile = m_xmlReader.attributes().value(HrefAttribute).toString();
-    }
-
-    if (m_xmlReader.attributes().hasAttribute(HashAttribute)) {
-        javaHash = m_xmlReader.attributes().value(HashAttribute).toString();
-    }
-
-    if (m_xmlReader.attributes().hasAttribute(OsAttribute)) {
-        javaOs = m_xmlReader.attributes().value(OsAttribute).toString();
-    }
-
-    if (!javaVersion.isEmpty() && !javaFile.isEmpty() && !javaHash.isEmpty() && !javaOs.isEmpty()) {
-        JavaUpdate ju(javaVersion, javaFile, javaHash);
-        m_javaUpdates.insert(javaOs, ju);
-    }
-
-    return true;
-} // DeploymentXML::processJava
 
 bool DeploymentXML::processArguments()
 {
@@ -273,11 +228,13 @@ bool DeploymentXML::processApplication()
         application = Application::getLoaderApplication();
     } else if (name == IOConfig::UpdaterName) {
         application = Application::getUpdaterApplication();
+    } else if (name == IOConfig::JavaName) {
+        application = Application::getJavaApplication();
     }
 
     bool result = false;
 
-    if (name == IOConfig::AppName || name == IOConfig::LoaderName || name == IOConfig::UpdaterName) {
+    if (name == IOConfig::AppName || name == IOConfig::LoaderName || name == IOConfig::UpdaterName || name == IOConfig::JavaName) {
         application.setVersion(version);
         application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 
@@ -305,6 +262,7 @@ Download DeploymentXML::processDownload()
     QString os = OsAnyValue;
     bool native = false;
     bool main = false;
+    QString version = "";
 
     if (m_xmlReader.attributes().hasAttribute(HrefAttribute)) {
         href = m_xmlReader.attributes().value(HrefAttribute).toString();
@@ -331,5 +289,9 @@ Download DeploymentXML::processDownload()
         main = true;
     }
 
-    return Download(href, hashMac, os, native, main);
+    if (m_xmlReader.attributes().hasAttribute(VersionAttribute)) {
+        version = m_xmlReader.attributes().value(VersionAttribute).toString();
+    }
+
+    return Download(href, hashMac, os, version, native, main);
 } // DeploymentXML::processDownload

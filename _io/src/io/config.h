@@ -35,6 +35,8 @@ public:
     /// Nom cnlp
     static const QString CnlpName;
 
+    /// Java application name.
+    static const QString JavaName;
 
     /// relative path of application installation application
     static const QString AppDir;
@@ -90,6 +92,10 @@ public:
 
     /// DMG images Mac OS extension
     static const QString MacOsDmgExtension;
+
+    /// Java sub directory name.
+    static const QString JavaSubDirName;
+
 
     /// Name of configuration file
     static const QString ConfigurationFile;

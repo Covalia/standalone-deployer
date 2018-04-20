@@ -35,6 +35,11 @@ public:
     /// Nom fichier updater local.
     static const QString UpdaterCnlpLocalFilename;
 
+    /// Remote java cnlp filename.
+    static const QString JavaCnlpRemoteFilename;
+    /// Local java cnlp filename.
+    static const QString JavaCnlpLocalFilename;
+
     /// Build directory suffix.
     static const QString BuildDirSuffix;
     /// Old directory suffix.
