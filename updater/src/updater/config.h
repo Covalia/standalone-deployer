@@ -14,25 +14,25 @@ public:
     /// Chemin de l'installation
     static const QString InstallationDir;
 
-    /// User-Agent de l'updater
+    /// Updater User-Agent.
     static const QString UserAgentValue;
 
-    /// Remote deploy root directory
+    /// Remote deploy root directory.
     static const QString DeployRootPath;
 
-    /// Nom fichier application distant.
+    /// Remote application cnlp filename.
     static const QString AppCnlpRemoteFilename;
-    /// Nom fichier application local.
+    /// Local application cnlp filename.
     static const QString AppCnlpLocalFilename;
 
-    /// Nom fichier loader distant.
+    /// Remote loader cnlp filename.
     static const QString LoaderCnlpRemoteFilename;
-    /// Nom fichier loader local.
+    /// Local loader cnlp filename.
     static const QString LoaderCnlpLocalFilename;
 
-    /// Nom fichier updater distant.
+    /// Remote updater cnlp filename.
     static const QString UpdaterCnlpRemoteFilename;
-    /// Nom fichier updater local.
+    /// Local updater cnlp filename.
     static const QString UpdaterCnlpLocalFilename;
 
     /// Remote java cnlp filename.

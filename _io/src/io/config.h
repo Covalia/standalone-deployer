@@ -13,35 +13,36 @@ public:
         Installer
     };
 
-    /// relative path of application installation application
+    /// Relative path of application installation application
     static const QString InstallerVersion;
 
-    /// relative path of application configuration
+    /// Relative path of application configuration
     static const QString UpdateVersion;
 
     /// Relative path of application extensions
     static const QString LoaderVersion;
 
 
-    /// Nom loader.
+    /// Loader application name.
     static const QString LoaderName;
 
-    /// Nom updater.
+    /// Updater application name.
     static const QString UpdaterName;
 
-    /// Nom application.
+    /// Application application name.
     static const QString AppName;
 
-    /// Nom cnlp
+    /// Cnlp application name.
     static const QString CnlpName;
 
     /// Java application name.
     static const QString JavaName;
 
-    /// relative path of application installation application
+
+    /// Relative path of application installation application
     static const QString AppDir;
 
-    /// relative path of application configuration
+    /// Relative path of application configuration
     static const QString ConfigurationDir;
 
     /// Relative path of application extensions
@@ -78,10 +79,10 @@ public:
     static const QString DataDir;
 
 
-    /// Loader file name
+    /// Loader filename
     static const QString LoaderFile;
 
-    /// Updater Loader file name
+    /// Updater filename
     static const QString UpdaterFile;
 
     /// Executables windows extension
