@@ -30,7 +30,6 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
 
 SOURCES += src/lang/languagemanager.cpp
 SOURCES += src/settings/resourcessettings.cpp

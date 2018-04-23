@@ -39,10 +39,10 @@ DEPENDPATH += src
 
 # attention, l'ordre est important.
 INCLUDEPATH += ../_io/src
-LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
-LIBS += -L../_settings/bin -lsettings
 INCLUDEPATH += ../_logger/src
+LIBS += -L../_io/bin -lio
+LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
 
 macx {

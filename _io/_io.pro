@@ -32,7 +32,6 @@ DEPENDPATH += .
 DEPENDPATH += src
 
 INCLUDEPATH += ../_logger/src
-LIBS += -L../_logger/bin -llogger
 
 SOURCES += src/io/config.cpp
 SOURCES += src/io/fileutils.cpp
