@@ -221,6 +221,14 @@ bool AppPath::prepareUpdater(QString _version)
     return false;
 }
 
+bool AppPath::prepareJava(const QString &_version, bool _forceOverwrite)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->prepareJava(_version, _forceOverwrite);
+    }
+    return false;
+}
+
 bool AppPath::startLoader(QStringList _args)
 {
     if (m_appPathImpl) {

@@ -39,7 +39,6 @@ private slots:
     // return true if the application has changed
     bool doesAppNeedToBeRebuild(const Application &_application);
 
-    bool prepareJava(const QString &_version, bool _forceOverwrite);
 
 private:
     DownloadManager * m_updater;

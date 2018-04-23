@@ -47,6 +47,7 @@ class AppPath {
         // will extract app from dmg on macos, nothing on windows
         bool prepareLoader();
         bool prepareUpdater(QString _version);
+        bool prepareJava(const QString &_version, bool _forceOverwrite);
 
         bool startLoader(QStringList _args);
         bool startUpdater(QString _version, QStringList _args);

@@ -2,7 +2,6 @@ QT += core
 QT += gui
 QT += widgets
 QT += network
-QT += concurrent
 
 CONFIG += warn_on
 CONFIG += debug_and_release
@@ -37,7 +36,6 @@ Debug:MOC_DIR = debug/moc
 
 INCLUDEPATH += .
 INCLUDEPATH += src
-INCLUDEPATH += headers/libarchive
 
 DEPENDPATH += .
 DEPENDPATH += src
@@ -74,7 +72,6 @@ SOURCES += src/updater/config.cpp
 SOURCES += src/updater/hash_key.cpp
 SOURCES += src/utils.cpp
 SOURCES += src/utils/hashmac/hashmac512.cpp
-SOURCES += src/utils/unzip/zipextractor.cpp
 SOURCES += src/xml/data/application.cpp
 SOURCES += src/xml/data/download.cpp
 SOURCES += src/xml/data/javaupdate.cpp
@@ -90,8 +87,6 @@ HEADERS += src/updater/config.h
 HEADERS += src/updater/hash_key.h
 HEADERS += src/utils.h
 HEADERS += src/utils/hashmac/hashmac512.h
-HEADERS += src/utils/unzip/qarchive/qarchive.h
-HEADERS += src/utils/unzip/zipextractor.h
 HEADERS += src/xml/data/application.h
 HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h

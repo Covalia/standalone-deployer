@@ -7,11 +7,8 @@
 #include "utils/hashmac/hashmac512.h"
 #include "io/fileutils.h"
 #include "settings/settings.h"
-#include "utils/unzip/zipextractor.h"
 
 #include <QDirIterator>
-#include <QTimer>
-#include <QEventLoop>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
     m_updater(0),
@@ -487,7 +484,7 @@ void AppUpdater::applicationDownloadFinished()
                         L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
                         // nothing to remove. deletion will be done at next launch.
                         // extract zip.
-                        if (prepareJava(m_remoteJavaVersion, true)) {
+                        if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
                             L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
                             // write new java version number
                             Settings * settings = Settings::getInstance();
@@ -515,7 +512,7 @@ void AppUpdater::applicationDownloadFinished()
 
                     if (!FileUtils::directoryExists(javaDistDir)) {
                         L_INFO("Java dist directory does not exist. " + javaDistDir);
-                        if (prepareJava(m_remoteJavaVersion, false)) {
+                        if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
                             L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
                         } else {
                             L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
@@ -859,88 +856,6 @@ bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
     if (m_filesToDownload.contains(_application)) {
         return !m_filesToDownload[_application].isEmpty()
                || !m_remainingFiles[_application].isEmpty();
-    }
-
-    return false;
-}
-
-bool AppUpdater::prepareJava(const QString &_version, bool _forceOverwrite)
-{
-    QDir javaVersionDir = m_appPath.getJavaDir().absoluteFilePath(_version);
-
-    L_INFO("Java version path: " + javaVersionDir.absolutePath());
-
-    if (_forceOverwrite) {
-        L_INFO("Force overwrite of Java dist directory: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-        if (FileUtils::removeDirRecursively(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
-            L_INFO("Java dist directory removed.");
-        } else {
-            L_ERROR("Java dist directory cannot be removed.");
-        }
-    }
-
-    if (javaVersionDir.exists()) {
-        // the java version directory exists
-        L_INFO("Java version path exists.");
-
-        if (FileUtils::directoryExists(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
-            // directory containing an extracted version of java exists
-            // nothing to do
-            L_INFO("Java dist directory already exists. " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-            return true;
-        } else {
-            // directory containing an extracted version of java does not exist
-            L_INFO("Java dist directory does not exist. " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-            if (QDir().mkpath(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
-                L_INFO("Java dist directory created: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-
-                QDirIterator it(javaVersionDir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot);
-                while (it.hasNext()) {
-                    const QString file = javaVersionDir.relativeFilePath(it.next());
-                    if (file.endsWith(".zip")) {
-                        L_INFO("Found zip to extract: " + file);
-                        // extract zip to dist
-                        ZipExtractor zip(javaVersionDir.absoluteFilePath(file), javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-
-                        // we wait for a signal with QEventLoop and QTimer.
-                        QTimer timer;
-                        timer.setSingleShot(true);
-                        QEventLoop loop;
-                        connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
-                        connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-                        timer.start(60000);
-
-                        // start extraction
-                        zip.extract();
-
-                        loop.exec();
-
-                        if (timer.isActive()) {
-                            if (zip.isOk()) {
-                                L_INFO("OK");
-                                return true;
-                            } else {
-                                L_ERROR("KO");
-                                return false;
-                            }
-                        } else {
-                            L_ERROR("Timeout");
-                            return false;
-                        }
-                        break;
-                    }
-                }
-
-                L_ERROR("No zip found.");
-                return false;
-            } else {
-                L_ERROR("Unable to create Java dist directory: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
-                return false;
-            }
-        }
-    } else {
-        L_ERROR("Java version path does not exist.");
-        return false;
     }
 
     return false;

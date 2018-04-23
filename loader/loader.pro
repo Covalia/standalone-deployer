@@ -45,6 +45,14 @@ LIBS += -L../_settings/bin -lsettings
 INCLUDEPATH += ../_logger/src
 LIBS += -L../_logger/bin -llogger
 
+macx {
+LIBS += -L./libs/libarchive/macosx -larchive
+}
+win32 {
+# attention, l'ordre est important.
+LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
+}
+
 SOURCES += src/main.cpp
 SOURCES += src/loadermanager.cpp
 SOURCES += src/utils.cpp

@@ -51,6 +51,7 @@ class AppPathImpl {
 
         virtual bool prepareLoader();
         virtual bool prepareUpdater(QString _version);
+        virtual bool prepareJava(const QString &_version, bool _forceOverwrite);
 
         virtual bool startLoader(QStringList _args);
         virtual bool startUpdater(QString _version, QStringList _args);

@@ -1,4 +1,5 @@
 QT += core
+QT += concurrent
 
 CONFIG += warn_on
 CONFIG += debug_and_release
@@ -25,6 +26,7 @@ Debug:MOC_DIR = debug/moc
 
 INCLUDEPATH += .
 INCLUDEPATH += src
+INCLUDEPATH += headers/libarchive
 
 DEPENDPATH += .
 DEPENDPATH += src
@@ -34,6 +36,7 @@ LIBS += -L../_logger/bin -llogger
 
 SOURCES += src/io/config.cpp
 SOURCES += src/io/fileutils.cpp
+SOURCES += src/io/unzip/zipextractor.cpp
 SOURCES += src/factories/factory/factory.cpp
 SOURCES += src/factories/apppath/apppath.cpp
 SOURCES += src/factories/apppath/apppathimpl.cpp
@@ -42,6 +45,8 @@ SOURCES += src/factories/shortcut/shortcutimpl.cpp
 
 HEADERS += src/io/config.h
 HEADERS += src/io/fileutils.h
+HEADERS += src/io/unzip/qarchive/qarchive.h
+HEADERS += src/io/unzip/zipextractor.h
 HEADERS += src/factories/factory/factory.h
 HEADERS += src/factories/apppath/apppath.h
 HEADERS += src/factories/apppath/apppathimpl.h
