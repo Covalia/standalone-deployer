@@ -118,14 +118,7 @@ void AppUpdater::cnlpDownloadFinished()
 
     if (applicationXml.read() && updaterXml.read() && loaderXml.read() && javaXml.read()) {
         // retrieving remote updater version.
-        QMap<Application, QList<Download> >::key_iterator iterator = updaterXml.getApplications().keyBegin();
-        while (iterator != updaterXml.getApplications().keyEnd()) {
-            const Application app = *iterator;
-            if (app.getName() == Application::getUpdaterApplication().getName()) {
-                m_remoteUpdaterVersion = app.getVersion();
-            }
-            ++iterator;
-        }
+        m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
@@ -145,10 +138,10 @@ void AppUpdater::cnlpDownloadFinished()
 #ifdef Q_OS_WIN
             osValue = DeploymentXML::OsWindowsValue;
 #endif
-        const QList<Download> appDownloads = applicationXml.getDownloads(appApplication, osValue);
-        const QList<Download> updaterDownloads = updaterXml.getDownloads(updaterApplication, osValue);
-        const QList<Download> loaderDownloads = loaderXml.getDownloads(loaderApplication, osValue);
-        const QList<Download> javaDownloads = javaXml.getDownloads(javaApplication, osValue);
+        const QList<Download> appDownloads = applicationXml.getDownloads(osValue);
+        const QList<Download> updaterDownloads = updaterXml.getDownloads(osValue);
+        const QList<Download> loaderDownloads = loaderXml.getDownloads(osValue);
+        const QList<Download> javaDownloads = javaXml.getDownloads(osValue);
 
         // retrieving remote java version.
         m_remoteJavaVersion = "";

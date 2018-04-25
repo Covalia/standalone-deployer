@@ -40,8 +40,8 @@ class DeploymentXML : public QObject
 
         QString getVersion() const;
         QList<QString> getArguments() const;
-        QMap<Application, QList<Download> > getApplications() const;
-        QList<Download> getDownloads(const Application &_application, const QString &_os) const;
+        Application getApplication() const;
+        QList<Download> getDownloads(const QString &_os) const;
         QString getMemory() const;
 
         static const QString RDeploymentTag;
@@ -80,7 +80,9 @@ class DeploymentXML : public QObject
         QString m_memory;
         QString m_version;
         QList<QString> m_arguments;
-        QMap<Application, QList<Download> > m_applications;
+
+        Application m_application;
+        QList<Download> m_downloads;
 
         /**
          * @brief read deplyment tag in xml (main tag)

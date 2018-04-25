@@ -35,11 +35,12 @@ const QString DeploymentXML::VersionTag("version");
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
-    m_xmlFile(_pathCnlp)
+    m_xmlFile(_pathCnlp),
+    m_application(Application::getEmptyApplication())
 {
     m_memory = "512";
     m_version = "";
-    m_applications = QMap<Application, QList<Download> >();
+    m_downloads = QList<Download>();
     m_arguments = QList<QString>();
 }
 
@@ -72,16 +73,16 @@ QString DeploymentXML::readNextText()
     return m_xmlReader.text().toString();
 }
 
-QMap<Application, QList<Download> > DeploymentXML::getApplications() const
+Application DeploymentXML::getApplication() const
 {
-    return m_applications;
+    return m_application;
 }
 
-QList<Download> DeploymentXML::getDownloads(const Application &_application, const QString &_os) const
+QList<Download> DeploymentXML::getDownloads(const QString &_os) const
 {
     QList<Download> downloads;
 
-    foreach(Download download, m_applications.value(_application)) {
+    foreach(Download download, m_downloads) {
         if (download.getOs() == _os || download.getOs() == OsAnyValue) {
             downloads.append(download);
         }
@@ -238,16 +239,16 @@ bool DeploymentXML::processApplication()
         application.setVersion(version);
         application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 
-        QList<Download> downloads;
+        m_downloads.clear();
+        m_application = application;
 
         while (m_xmlReader.readNextStartElement()) {
             if ((m_xmlReader.name() == JarTag) || (m_xmlReader.name() == FileTag)) {
                 Download download = processDownload();
-                downloads << download;
+                m_downloads << download;
             }
             m_xmlReader.skipCurrentElement();
         }
-        m_applications.insert(application, downloads);
 
         result = true;
     }
