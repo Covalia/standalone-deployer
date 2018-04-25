@@ -102,10 +102,10 @@ void AppUpdater::cnlpDownloadFinished()
     disconnect(m_updater, SIGNAL(downloadsFinished()),
                this, SLOT(cnlpDownloadFinished()));
 
-    const QString applicationCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::AppCnlpLocalFilename);
-    const QString updaterCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::UpdaterCnlpLocalFilename);
-    const QString loaderCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::LoaderCnlpLocalFilename);
-    const QString javaCnlpPath = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpDir + QString("/") + UpdaterConfig::JavaCnlpLocalFilename);
+    const QString applicationCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::AppCnlpLocalFilename);
+    const QString updaterCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::UpdaterCnlpLocalFilename);
+    const QString loaderCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::LoaderCnlpLocalFilename);
+    const QString javaCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::JavaCnlpLocalFilename);
     L_INFO("File to read: " + applicationCnlpPath);
     L_INFO("File to read: " + updaterCnlpPath);
     L_INFO("File to read: " + loaderCnlpPath);
@@ -194,13 +194,13 @@ void AppUpdater::applicationDownloadFinished()
                 QDir dir;
 
                 if (application == Application::getAppApplication()) {
-                    dir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::AppDir));
+                    dir = QDir(m_appPath.getTempAppDir());
                 } else if (application == Application::getLoaderApplication()) {
-                    dir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::LoaderDir));
+                    dir = QDir(m_appPath.getTempLoaderDir());
                 } else if (application == Application::getUpdaterApplication()) {
-                    dir = QDir(m_appPath.getTempDir()).absoluteFilePath(IOConfig::UpdaterDir);
+                    dir = QDir(m_appPath.getTempUpdaterDir());
                 } else if (application == Application::getJavaApplication()) {
-                    dir = QDir(m_appPath.getTempDir()).absoluteFilePath(IOConfig::JavaDir);
+                    dir = QDir(m_appPath.getTempJavaDir());
                 }
 
                 // temporary location of downloaded file
@@ -276,8 +276,8 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Installing " + Application::getAppApplication().getName());
 
                 const QString appInstallDir = m_appPath.getAppDir().absolutePath();
-                const QString appOldDir = m_appPath.getAppDir().absolutePath() + UpdaterConfig::OldDirSuffix;
-                const QString appBuildDir = m_appPath.getTempDir().absoluteFilePath(Application::getAppApplication().getName() + UpdaterConfig::BuildDirSuffix);
+                const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
+                const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
 
                 // remove an old app directory if it already exists
                 if (FileUtils::directoryExists(appOldDir)) {
@@ -331,8 +331,8 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Installing " + Application::getLoaderApplication().getName());
 
                 const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
-                const QString loaderOldDir = m_appPath.getLoaderDir().absolutePath() + UpdaterConfig::OldDirSuffix;
-                const QString loaderBuildDir = m_appPath.getTempDir().absoluteFilePath(Application::getLoaderApplication().getName() + UpdaterConfig::BuildDirSuffix);
+                const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
+                const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
 
                 // remove an old loader directory if it already exists
                 if (FileUtils::directoryExists(loaderOldDir)) {
@@ -395,7 +395,7 @@ void AppUpdater::applicationDownloadFinished()
                     L_INFO("Installing " + Application::getUpdaterApplication().getName());
 
                     const QString updaterInstallDir = m_appPath.getUpdaterDir().absoluteFilePath(m_remoteUpdaterVersion);
-                    const QString updaterBuildDir = m_appPath.getTempDir().absoluteFilePath(Application::getUpdaterApplication().getName() + UpdaterConfig::BuildDirSuffix);
+                    const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
 
                     if (FileUtils::directoryExists(updaterInstallDir)) {
                         // it should not exist with the previous condition, but in case it exists
@@ -457,7 +457,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Installing " + Application::getJavaApplication().getName());
 
                 const QString javaInstallDir = m_appPath.getJavaDir().absoluteFilePath(m_remoteJavaVersion);
-                const QString javaBuildDir = m_appPath.getTempDir().absoluteFilePath(Application::getJavaApplication().getName() + UpdaterConfig::BuildDirSuffix);
+                const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
 
                 if (FileUtils::directoryExists(javaInstallDir)) {
                     // remove existing java dir if it exists
@@ -527,8 +527,8 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Installing Cnlp files.");
 
                 const QString cnlpInstallDir = m_appPath.getCnlpDir().absolutePath();
-                const QString cnlpOldDir = m_appPath.getCnlpDir().absolutePath() + UpdaterConfig::OldDirSuffix;
-                const QString cnlpBuildDir = m_appPath.getTempDir().absoluteFilePath(IOConfig::CnlpName);
+                const QString cnlpOldDir = m_appPath.getCnlpOldDir().absolutePath();
+                const QString cnlpBuildDir = m_appPath.getTempCnlpDir().absolutePath();
 
                 bool cnlpInstalledOk = true;
 
@@ -595,21 +595,21 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
         _application == Application::getUpdaterApplication() ||
         _application == Application::getJavaApplication()) {
         if (_application == Application::getAppApplication()) {
-            tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::AppDir));
+            tempAppDir = m_appPath.getTempAppDir();
             appDir = QDir(m_appPath.getAppDir());
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
+            appBuild = m_appPath.getTempAppBuildDir().absolutePath();
         } else if (_application == Application::getLoaderApplication()) {
-            tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::LoaderDir));
+            tempAppDir = m_appPath.getTempLoaderDir();
             appDir = QDir(m_appPath.getLoaderDir());
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
+            appBuild = m_appPath.getTempLoaderBuildDir().absolutePath();
         } else if (_application == Application::getUpdaterApplication()) {
-            tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::UpdaterDir));
+            tempAppDir = m_appPath.getTempUpdaterDir();
             appDir = QDir(m_appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion));
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
+            appBuild = m_appPath.getTempUpdaterBuildDir().absolutePath();
         } else if (_application == Application::getJavaApplication()) {
-            tempAppDir = QDir(m_appPath.getTempDir().absoluteFilePath(IOConfig::JavaDir));
+            tempAppDir = m_appPath.getTempJavaDir();
             appDir = QDir(m_appPath.getJavaDir().absoluteFilePath(m_localJavaVersion));
-            appBuild = m_appPath.getTempDir().absoluteFilePath(_application.getName() + UpdaterConfig::BuildDirSuffix);
+            appBuild = m_appPath.getTempJavaBuildDir().absolutePath();
         }
     } else {
         // nothing to do, return true

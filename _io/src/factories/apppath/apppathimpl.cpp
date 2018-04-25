@@ -7,6 +7,9 @@
 
 #include <QDebug>
 
+const QString AppPathImpl::BuildDirSuffix("-build");
+const QString AppPathImpl::OldDirSuffix("-old");
+
 const QString AppPathImpl::ResourceBinPrefix(":/bin/");
 
 AppPathImpl::AppPathImpl(IOConfig::AppComponent _app)
@@ -58,6 +61,11 @@ QDir AppPathImpl::getAppDir()
     return QDir(m_installationDir.filePath(IOConfig::AppDir));
 }
 
+QDir AppPathImpl::getAppOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
+}
+
 QDir AppPathImpl::getConfigurationDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::ConfigurationDir));
@@ -93,9 +101,59 @@ QDir AppPathImpl::getTempDir()
     return QDir(m_installationDir.filePath(IOConfig::TempDir));
 }
 
+QDir AppPathImpl::getTempAppDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::AppDir));
+}
+
+QDir AppPathImpl::getTempAppBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::AppDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempCnlpDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::CnlpDir));
+}
+
+QDir AppPathImpl::getTempJavaDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::JavaDir));
+}
+
+QDir AppPathImpl::getTempJavaBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::JavaDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempLoaderDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::LoaderDir));
+}
+
+QDir AppPathImpl::getTempLoaderBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::LoaderDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempUpdaterDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::UpdaterDir));
+}
+
+QDir AppPathImpl::getTempUpdaterBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
+}
+
 QDir AppPathImpl::getCnlpDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::CnlpDir));
+}
+
+QDir AppPathImpl::getCnlpOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::CnlpDir + AppPathImpl::OldDirSuffix));
 }
 
 QDir AppPathImpl::getDataDir()
@@ -111,6 +169,11 @@ QDir AppPathImpl::getUpdaterDir()
 QDir AppPathImpl::getLoaderDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::LoaderDir));
+}
+
+QDir AppPathImpl::getLoaderOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::LoaderDir + AppPathImpl::OldDirSuffix));
 }
 
 QSharedPointer<QFile> AppPathImpl::getConfigurationFile()

@@ -40,10 +40,6 @@ public:
     /// Local java cnlp filename.
     static const QString JavaCnlpLocalFilename;
 
-    /// Build directory suffix.
-    static const QString BuildDirSuffix;
-    /// Old directory suffix.
-    static const QString OldDirSuffix;
 };
 
 #endif // ifndef UPDATER__CONFIG_H

@@ -24,6 +24,7 @@ class AppPath {
         QString getLoaderVersion();
 
         QDir getAppDir();
+        QDir getAppOldDir();
         QDir getConfigurationDir();
         QDir getExtensionDir();
         QDir getImagesDir();
@@ -31,11 +32,22 @@ class AppPath {
         QDir getJavaDir();
         QDir getLogsDir();
         QDir getTempDir();
+        QDir getTempAppDir();
+        QDir getTempAppBuildDir();
+        QDir getTempCnlpDir();
+        QDir getTempJavaDir();
+        QDir getTempJavaBuildDir();
+        QDir getTempLoaderDir();
+        QDir getTempLoaderBuildDir();
+        QDir getTempUpdaterDir();
+        QDir getTempUpdaterBuildDir();
         QDir getCnlpDir();
+        QDir getCnlpOldDir();
         QDir getDataDir();
 
         QDir getUpdaterDir();
         QDir getLoaderDir();
+        QDir getLoaderOldDir();
 
         QSharedPointer<QFile> getLoaderResourcesFile();
         QSharedPointer<QFile> getUpdaterResourcesFile();
