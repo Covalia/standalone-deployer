@@ -30,6 +30,7 @@ bool WindowsAppPathImpl::makeAppDirectories()
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::JavaDir);
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LogsDir);
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::TempDir);
+    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::CnlpDir);
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::DataDir);
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::UpdaterDir);
     result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LoaderDir);

@@ -30,6 +30,7 @@ Logger::Logger(QString pathLog)
     enableLogLevels_console.logLevel_FUNCTION = false;
 
     simpleqtlogger::SimpleQtLogger::createInstance(qApp)->setLogFileName(pathLog, LOG_FILE_SIZE, LOG_FILES_MAX);
+    simpleqtlogger::SimpleQtLogger::getInstance()->setLogFormat_file("<TS> [<LL>] <TEXT>", "<TS> [<LL>] <TEXT>");
     simpleqtlogger::SimpleQtLogger::getInstance()->setLogLevels_file(enableLogLevels_file);
     simpleqtlogger::SimpleQtLogger::getInstance()->setLogLevels_console(enableLogLevels_console);
     simpleqtlogger::SimpleQtLogger::getInstance()->setLogLevels_qDebug(enableLogLevels_qDebug);

@@ -42,11 +42,19 @@ DEPENDPATH += src
 
 # attention, l'ordre est important.
 INCLUDEPATH += ../_io/src
-LIBS += -L../_io/bin -lio
 INCLUDEPATH += ../_settings/src
-LIBS += -L../_settings/bin -lsettings
 INCLUDEPATH += ../_logger/src
+LIBS += -L../_io/bin -lio
+LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
+
+macx {
+LIBS += -L./libs/libarchive/macosx -larchive
+}
+win32 {
+# attention, l'ordre est important.
+LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
+}
 
 FORMS += ui/about.ui
 FORMS += ui/askpopup.ui

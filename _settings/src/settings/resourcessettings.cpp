@@ -27,7 +27,6 @@ ResourcesSettings::ResourcesSettings() :
     m_default_data_path_simple_install("$INSTALL_PATH/Data"),
     m_default_data_path_custom_install("$INSTALL_PATH/Data"),
     m_possible_change_data_location(false),
-    m_hash_key(""),
     m_encrypted_password_key("0x0c2cd4a4bcb9f023"),
     m_color_panel_background_border("#364058"),
     m_color_panel_background("#2d364c"),
@@ -102,7 +101,6 @@ void ResourcesSettings::readSettings()
     m_default_data_path_custom_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_CUSTOM_INSTALL, m_default_data_path_custom_install).toString());
     m_possible_change_data_location = m_settings->value(P_POSSIBLE_CHANGE_DATA_LOCATION, m_possible_change_data_location).toBool();
 
-    m_hash_key = m_settings->value(P_HASH_KEY, m_hash_key).toString();
     m_encrypted_password_key = m_settings->value(P_ENCRYPTED_PASSWORD_KEY, m_encrypted_password_key).toString();
 
     m_color_panel_background_border = m_settings->value(P_COLOR_PANEL_BACKGROUND_BORDER, m_color_panel_background_border).toString();
@@ -196,16 +194,6 @@ QString ResourcesSettings::getEncrypted_password_key() const
 void ResourcesSettings::setEncrypted_password_key(const QString &encrypted_password_key)
 {
     m_encrypted_password_key = encrypted_password_key;
-}
-
-QString ResourcesSettings::getHash_key() const
-{
-    return m_hash_key;
-}
-
-void ResourcesSettings::setHash_key(const QString &hash_key)
-{
-    m_hash_key = hash_key;
 }
 
 QString ResourcesSettings::getIp_server() const

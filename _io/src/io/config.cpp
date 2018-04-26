@@ -4,22 +4,31 @@ const QString IOConfig::InstallerVersion("1.0");
 const QString IOConfig::UpdateVersion("1.0");
 const QString IOConfig::LoaderVersion("1.0");
 
-const QString IOConfig::AppDir("Application");
-const QString IOConfig::ConfigurationDir("Config");
-const QString IOConfig::ExtensionDir("Extension");
-const QString IOConfig::ImagesDir("Images");
-const QString IOConfig::SlidesDir("Slides");
-const QString IOConfig::JavaDir("Java");
-const QString IOConfig::LogsDir("Logs");
-const QString IOConfig::TempDir("Temp");
-const QString IOConfig::MountDir("Mount");
-const QString IOConfig::UpdaterDir("Updater");
-const QString IOConfig::LoaderDir("Loader");
-const QString IOConfig::DataDir("Data");
+const QString IOConfig::LoaderName("loader");
+const QString IOConfig::UpdaterName("updater");
+const QString IOConfig::AppName("application");
+const QString IOConfig::CnlpName("cnlp");
+const QString IOConfig::JavaName("java");
 
-const QString IOConfig::LoaderFile("loader");
-const QString IOConfig::UpdaterFile("updater");
+const QString IOConfig::AppDir = IOConfig::AppName;
+const QString IOConfig::ConfigurationDir("config");
+const QString IOConfig::ExtensionDir("extension");
+const QString IOConfig::ImagesDir("images");
+const QString IOConfig::SlidesDir("slides");
+const QString IOConfig::JavaDir("java");
+const QString IOConfig::LogsDir("logs");
+const QString IOConfig::TempDir("temp");
+const QString IOConfig::CnlpDir = IOConfig::CnlpName;
+const QString IOConfig::MountDir("mount");
+const QString IOConfig::UpdaterDir = IOConfig::UpdaterName;
+const QString IOConfig::LoaderDir = IOConfig::LoaderName;
+const QString IOConfig::DataDir("data");
+
+const QString IOConfig::LoaderFile = IOConfig::LoaderName;
+const QString IOConfig::UpdaterFile = IOConfig::UpdaterName;
 const QString IOConfig::WindowsAppExtension(".exe");
 const QString IOConfig::MacOsAppExtension(".app");
 const QString IOConfig::MacOsDmgExtension(".dmg");
+const QString IOConfig::JavaSubDirName("dist");
+
 const QString IOConfig::ConfigurationFile("standalone-deployer.ini");

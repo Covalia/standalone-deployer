@@ -13,21 +13,36 @@ public:
         Installer
     };
 
-    /// relative path of application installation application
+    /// Relative path of application installation application
     static const QString InstallerVersion;
 
-    /// relative path of application configuration
+    /// Relative path of application configuration
     static const QString UpdateVersion;
 
     /// Relative path of application extensions
     static const QString LoaderVersion;
 
 
+    /// Loader application name.
+    static const QString LoaderName;
 
-    /// relative path of application installation application
+    /// Updater application name.
+    static const QString UpdaterName;
+
+    /// Application application name.
+    static const QString AppName;
+
+    /// Cnlp application name.
+    static const QString CnlpName;
+
+    /// Java application name.
+    static const QString JavaName;
+
+
+    /// Relative path of application installation application
     static const QString AppDir;
 
-    /// relative path of application configuration
+    /// Relative path of application configuration
     static const QString ConfigurationDir;
 
     /// Relative path of application extensions
@@ -48,6 +63,9 @@ public:
     /// Relative path of the temporary directory of the application
     static const QString TempDir;
 
+    /// Relative path of the Cnlp directory
+    static const QString CnlpDir;
+
     /// Relative path of the mount directory of the application, macos only
     static const QString MountDir;
 
@@ -61,10 +79,10 @@ public:
     static const QString DataDir;
 
 
-    /// Loader file name
+    /// Loader filename
     static const QString LoaderFile;
 
-    /// Updater Loader file name
+    /// Updater filename
     static const QString UpdaterFile;
 
     /// Executables windows extension
@@ -75,6 +93,10 @@ public:
 
     /// DMG images Mac OS extension
     static const QString MacOsDmgExtension;
+
+    /// Java sub directory name.
+    static const QString JavaSubDirName;
+
 
     /// Name of configuration file
     static const QString ConfigurationFile;

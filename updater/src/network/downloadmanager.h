@@ -7,10 +7,11 @@
 #include <QTime>
 #include <QUrl>
 #include <QDir>
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
+#include "xml/data/application.h"
 
+class QNetworkReply;
 class QSaveFile;
 class QAuthenticator;
 
@@ -22,9 +23,10 @@ public:
     explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
     virtual ~DownloadManager();
 
-    void setUrlListToDownload(const QString &_appName, const QList<QUrl> &_urlList);
+    void setUrlListToDownload(const QMap<Application, QList<QUrl> > &_downloads);
+    void setUrlListToDownload(const QMap<Application, QList<QString> > &_downloads);
 
-    QSet<QUrl> getUrlsInError() const;
+    QSet<QPair<Application, QUrl> > getUrlsInError() const;
 
     static const short MaxAttemptNumber = 3;
 
@@ -58,9 +60,11 @@ private:
     void headsFinished();
 
     static bool createDirIfNotExists(const QDir &_dir);
-    static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir, const QString &_appName);
+    static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
 
+    // url of deployment
     QUrl m_baseUrl;
+
     QNetworkAccessManager m_manager;
 
     qint64 m_totalBytesToDownload;
@@ -69,15 +73,15 @@ private:
     short m_currentAttempt;
     short m_currentAuthAttempt;
 
-    QMap<QUrl, long> m_mapUrlContentLength;
+    QSet<QPair<Application, QUrl> > m_errorSet;
 
-    QSet<QUrl> m_errorSet;
-
+    Application m_currentApplication;
     QNetworkReply * m_currentReply;
 
     QString m_appName;
-    QQueue<QUrl> m_headQueue;
-    QQueue<QUrl> m_downloadQueue;
+
+    QQueue<QPair<Application, QUrl> > m_headQueue;
+    QQueue<QPair<Application, QUrl> > m_downloadQueue;
 
     QSaveFile * m_saveFile;
     QDir m_temporaryDir;

@@ -1,17 +1,18 @@
-#include "utils/unzip/zipextractor.h"
-#include "utils/qarchive/qarchive.h"
+#include "io/unzip/zipextractor.h"
+#include "io/unzip/qarchive/qarchive.h"
 #include "log/logger.h"
 
 ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, QObject * _parent) :
     QObject(_parent),
     m_extractDir(_extractDir),
-    m_extractor(0)
+    m_extractor(0),
+    ok(false)
 {
     L_INFO("Initializing extraction of " + _zipPath + " to directory " + _extractDir);
 
     if (!_zipPath.isEmpty() && _zipPath.endsWith(".zip", Qt::CaseInsensitive)) {
         m_extractor = new QArchive::Extractor(_zipPath, _extractDir);
-        connect(m_extractor, SIGNAL(finished()), this, SLOT(extract_finished()));
+        connect(m_extractor, SIGNAL(finished()), this, SLOT(extract_success()));
 
         // emitted when something goes wrong
         connect(m_extractor, SIGNAL(error(short,const QString&)),
@@ -51,9 +52,11 @@ void ZipExtractor::extract()
     }
 } // ZipExtractor::extract
 
-void ZipExtractor::extract_finished()
+void ZipExtractor::extract_success()
 {
     L_INFO("Extraction finished.");
+    ok = true;
+    emit success();
     emit finished();
 }
 
@@ -76,5 +79,11 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
             break;
     }
 
+    ok = false;
     emit error();
+    emit finished();
 } // ZipExtractor::extract_error
+
+bool ZipExtractor::isOk() const {
+    return ok;
+}

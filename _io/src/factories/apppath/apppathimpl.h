@@ -29,6 +29,7 @@ class AppPathImpl {
         virtual QString getLoaderVersion();
 
         virtual QDir getAppDir();
+        virtual QDir getAppOldDir();
         virtual QDir getConfigurationDir();
         virtual QDir getExtensionDir();
         virtual QDir getImagesDir();
@@ -36,9 +37,21 @@ class AppPathImpl {
         virtual QDir getJavaDir();
         virtual QDir getLogsDir();
         virtual QDir getTempDir();
+        virtual QDir getTempAppDir();
+        virtual QDir getTempAppBuildDir();
+        virtual QDir getTempCnlpDir();
+        virtual QDir getTempJavaDir();
+        virtual QDir getTempJavaBuildDir();
+        virtual QDir getTempLoaderDir();
+        virtual QDir getTempLoaderBuildDir();
+        virtual QDir getTempUpdaterDir();
+        virtual QDir getTempUpdaterBuildDir();
+        virtual QDir getCnlpDir();
+        virtual QDir getCnlpOldDir();
         virtual QDir getDataDir();
         virtual QDir getUpdaterDir();
         virtual QDir getLoaderDir();
+        virtual QDir getLoaderOldDir();
 
         virtual QSharedPointer<QFile> getLoaderResourcesFile() = 0;
         virtual QSharedPointer<QFile> getUpdaterResourcesFile() = 0;
@@ -50,6 +63,7 @@ class AppPathImpl {
 
         virtual bool prepareLoader();
         virtual bool prepareUpdater(QString _version);
+        virtual bool prepareJava(const QString &_version, bool _forceOverwrite);
 
         virtual bool startLoader(QStringList _args);
         virtual bool startUpdater(QString _version, QStringList _args);
@@ -59,6 +73,12 @@ class AppPathImpl {
         virtual bool makeDirectoryIfNotExists(QDir _directory, const QString &_subDir);
 
     protected:
+
+        /// Build directory suffix.
+        static const QString BuildDirSuffix;
+        /// Old directory suffix.
+        static const QString OldDirSuffix;
+
         QDir m_installationDir;
         virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args) = 0;
         bool cdUp(QDir &_dir, int _numUp);

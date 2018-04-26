@@ -77,6 +77,14 @@ QDir AppPath::getAppDir()
     return QDir();
 }
 
+QDir AppPath::getAppOldDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getAppOldDir();
+    }
+    return QDir();
+}
+
 QDir AppPath::getConfigurationDir()
 {
     if (m_appPathImpl) {
@@ -133,6 +141,94 @@ QDir AppPath::getTempDir()
     return QDir();
 }
 
+QDir AppPath::getTempAppDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempAppDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempAppBuildDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempAppBuildDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempCnlpDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempCnlpDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempJavaDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempJavaDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempJavaBuildDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempJavaBuildDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempLoaderDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempLoaderDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempLoaderBuildDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempLoaderBuildDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempUpdaterDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempUpdaterDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getTempUpdaterBuildDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempUpdaterBuildDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getCnlpDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getCnlpDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getCnlpOldDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getCnlpOldDir();
+    }
+    return QDir();
+}
+
 QDir AppPath::getDataDir()
 {
     if (m_appPathImpl) {
@@ -153,6 +249,14 @@ QDir AppPath::getLoaderDir()
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLoaderDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getLoaderOldDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getLoaderOldDir();
     }
     return QDir();
 }
@@ -209,6 +313,14 @@ bool AppPath::prepareUpdater(QString _version)
 {
     if (m_appPathImpl) {
         return m_appPathImpl->prepareUpdater(_version);
+    }
+    return false;
+}
+
+bool AppPath::prepareJava(const QString &_version, bool _forceOverwrite)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->prepareJava(_version, _forceOverwrite);
     }
     return false;
 }

@@ -1,5 +1,14 @@
 #include "factories/apppath/apppathimpl.h"
+#include "io/fileutils.h"
+#include "io/unzip/zipextractor.h"
+#include <QDirIterator>
+#include <QTimer>
+#include <QEventLoop>
+
 #include <QDebug>
+
+const QString AppPathImpl::BuildDirSuffix("-build");
+const QString AppPathImpl::OldDirSuffix("-old");
 
 const QString AppPathImpl::ResourceBinPrefix(":/bin/");
 
@@ -52,6 +61,11 @@ QDir AppPathImpl::getAppDir()
     return QDir(m_installationDir.filePath(IOConfig::AppDir));
 }
 
+QDir AppPathImpl::getAppOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
+}
+
 QDir AppPathImpl::getConfigurationDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::ConfigurationDir));
@@ -87,6 +101,61 @@ QDir AppPathImpl::getTempDir()
     return QDir(m_installationDir.filePath(IOConfig::TempDir));
 }
 
+QDir AppPathImpl::getTempAppDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::AppDir));
+}
+
+QDir AppPathImpl::getTempAppBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::AppDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempCnlpDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::CnlpDir));
+}
+
+QDir AppPathImpl::getTempJavaDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::JavaDir));
+}
+
+QDir AppPathImpl::getTempJavaBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::JavaDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempLoaderDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::LoaderDir));
+}
+
+QDir AppPathImpl::getTempLoaderBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::LoaderDir + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempUpdaterDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::UpdaterDir));
+}
+
+QDir AppPathImpl::getTempUpdaterBuildDir()
+{
+    return QDir(getTempDir().filePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getCnlpDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::CnlpDir));
+}
+
+QDir AppPathImpl::getCnlpOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::CnlpDir + AppPathImpl::OldDirSuffix));
+}
+
 QDir AppPathImpl::getDataDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::DataDir));
@@ -100,6 +169,11 @@ QDir AppPathImpl::getUpdaterDir()
 QDir AppPathImpl::getLoaderDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::LoaderDir));
+}
+
+QDir AppPathImpl::getLoaderOldDir()
+{
+    return QDir(m_installationDir.filePath(IOConfig::LoaderDir + AppPathImpl::OldDirSuffix));
 }
 
 QSharedPointer<QFile> AppPathImpl::getConfigurationFile()
@@ -160,6 +234,88 @@ bool AppPathImpl::prepareLoader()
 bool AppPathImpl::prepareUpdater(QString _version)
 {
     return true;
+}
+
+bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
+{
+    QDir javaVersionDir = getJavaDir().absoluteFilePath(_version);
+
+    L_INFO("Java version path: " + javaVersionDir.absolutePath());
+
+    if (_forceOverwrite) {
+        L_INFO("Force overwrite of Java dist directory: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+        if (FileUtils::removeDirRecursively(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
+            L_INFO("Java dist directory removed.");
+        } else {
+            L_ERROR("Java dist directory cannot be removed.");
+        }
+    }
+
+    if (javaVersionDir.exists()) {
+        // the java version directory exists
+        L_INFO("Java version path exists.");
+
+        if (FileUtils::directoryExists(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
+            // directory containing an extracted version of java exists
+            // nothing to do
+            L_INFO("Java dist directory already exists. " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+            return true;
+        } else {
+            // directory containing an extracted version of java does not exist
+            L_INFO("Java dist directory does not exist. " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+            if (QDir().mkpath(javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName))) {
+                L_INFO("Java dist directory created: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+
+                QDirIterator it(javaVersionDir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot);
+                while (it.hasNext()) {
+                    const QString file = javaVersionDir.relativeFilePath(it.next());
+                    if (file.endsWith(".zip")) {
+                        L_INFO("Found zip to extract: " + file);
+                        // extract zip to dist
+                        ZipExtractor zip(javaVersionDir.absoluteFilePath(file), javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+
+                        // we wait for a signal with QEventLoop and QTimer.
+                        QTimer timer;
+                        timer.setSingleShot(true);
+                        QEventLoop loop;
+                        QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
+                        QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+                        timer.start(60000);
+
+                        // start extraction
+                        zip.extract();
+
+                        loop.exec();
+
+                        if (timer.isActive()) {
+                            if (zip.isOk()) {
+                                L_INFO("OK");
+                                return true;
+                            } else {
+                                L_ERROR("KO");
+                                return false;
+                            }
+                        } else {
+                            L_ERROR("Timeout");
+                            return false;
+                        }
+                        break;
+                    }
+                }
+
+                L_ERROR("No zip found.");
+                return false;
+            } else {
+                L_ERROR("Unable to create Java dist directory: " + javaVersionDir.absoluteFilePath(IOConfig::JavaSubDirName));
+                return false;
+            }
+        }
+    } else {
+        L_ERROR("Java version path does not exist.");
+        return false;
+    }
+
+    return false;
 }
 
 bool AppPathImpl::startLoader(QStringList _args)
