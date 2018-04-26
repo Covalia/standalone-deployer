@@ -163,7 +163,10 @@ void AppUpdater::cnlpDownloadFinished()
                 SLOT(applicationDownloadFinished()));
         m_updater->setUrlListToDownload(m_filesToDownload);
     } else {
-        L_INFO("Unable to read the application cnlp files");
+
+        L_ERROR("Unable to read the application cnlp files");
+        // TODO handle error
+
     }
 }
 
@@ -571,15 +574,20 @@ void AppUpdater::applicationDownloadFinished()
                 if (cnlpInstalledOk) {
                     L_INFO("No error reported on cnlp installation.");
 
-                    L_INFO("START THE APPLICATION");
+                    L_INFO("Starting application.");
+                    // TODO start app with args
+
                 } else {
                     L_ERROR("Errors have been reported on cnlp installation.");
                 }
             }
         } else {
-            L_INFO("BUILD KO !!!!");
+            L_ERROR("Unable to build applications. Aborting.");
+            // TODO handle error
         }
     } else {
+        L_ERROR("Error occured when downloading files. Aborting.");
+        // TODO handle error
     }
 }
 
