@@ -49,7 +49,7 @@ QString AppPathImpl::getInstallerVersion()
 
 QString AppPathImpl::getUpdaterVersion()
 {
-    return IOConfig::UpdateVersion;
+    return IOConfig::UpdaterVersion;
 }
 
 QString AppPathImpl::getLoaderVersion()

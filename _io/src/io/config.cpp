@@ -1,7 +1,7 @@
 #include "io/config.h"
 
 const QString IOConfig::InstallerVersion("1.0");
-const QString IOConfig::UpdateVersion("1.0");
+const QString IOConfig::UpdaterVersion("1.0");
 const QString IOConfig::LoaderVersion("1.0");
 
 const QString IOConfig::LoaderName("loader");

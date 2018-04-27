@@ -17,7 +17,7 @@ public:
     static const QString InstallerVersion;
 
     /// Relative path of application configuration
-    static const QString UpdateVersion;
+    static const QString UpdaterVersion;
 
     /// Relative path of application extensions
     static const QString LoaderVersion;
