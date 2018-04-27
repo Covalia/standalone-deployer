@@ -320,12 +320,12 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
 
 bool AppPathImpl::startLoader(QStringList _args)
 {
-    return startApplication(getLoaderFile(), _args);
+    return startComponent(getLoaderFile(), _args);
 }
 
 bool AppPathImpl::startUpdater(QString _version, QStringList _args)
 {
-    return startApplication(getUpdaterFile(_version), _args);
+    return startComponent(getUpdaterFile(_version), _args);
 }
 
 bool AppPathImpl::cdUp(QDir &_dir, int _numUp)

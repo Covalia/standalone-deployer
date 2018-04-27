@@ -70,7 +70,7 @@ QSharedPointer<QFile> MacosAppPathImpl::getUpdaterAppFile(QString _updaterVersio
     return QSharedPointer<QFile>(new QFile(m_installationDir.absoluteFilePath(IOConfig::UpdaterDir + QDir::separator() + _updaterVersion + QDir::separator() + IOConfig::UpdaterFile + IOConfig::MacOsAppExtension)));
 }
 
-bool MacosAppPathImpl::startApplication(QSharedPointer<QFile> _app, QStringList _args)
+bool MacosAppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
 {
     if (!_app->exists()) {
         L_ERROR("An error occured when launching " + _app->fileName() + ". The app dir doesn't exist.");
@@ -174,7 +174,7 @@ bool MacosAppPathImpl::startLoader(QStringList _args)
     if (dmgPath && appPath) {
         const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::LoaderFile + QDir::separator() + IOConfig::LoaderFile + IOConfig::MacOsAppExtension);
         result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, false);
-        result &= startApplication(appPath, _args);
+        result &= startComponent(appPath, _args);
     }
 
     return result;
@@ -190,7 +190,7 @@ bool MacosAppPathImpl::startUpdater(QString _version, QStringList _args)
     if (dmgPath && appPath) {
         const QString appInDmgPath = getMountDir().absoluteFilePath(IOConfig::UpdaterFile + QDir::separator() + IOConfig::UpdaterFile + IOConfig::MacOsAppExtension);
         result = extractAppFromDmgIfNotExist(app, *dmgPath, *appPath, appInDmgPath, false);
-        result &= startApplication(appPath, _args);
+        result &= startComponent(appPath, _args);
     }
 
     return result;

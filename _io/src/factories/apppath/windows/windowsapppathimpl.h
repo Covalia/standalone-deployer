@@ -13,7 +13,7 @@ class WindowsAppPathImpl : public AppPathImpl {
         virtual QSharedPointer<QFile> getUpdaterFile(QString _updaterVersion);
 
     protected:
-        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args);
+        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
 };
 
 #endif

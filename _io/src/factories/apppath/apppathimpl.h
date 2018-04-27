@@ -80,7 +80,7 @@ class AppPathImpl {
         static const QString OldDirSuffix;
 
         QDir m_installationDir;
-        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args) = 0;
+        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args) = 0;
         bool cdUp(QDir &_dir, int _numUp);
 };
 

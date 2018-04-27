@@ -19,7 +19,7 @@ class MacosAppPathImpl : public AppPathImpl {
         virtual bool startUpdater(QString _version, QStringList _args);
 
     protected:
-        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args);
+        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
 
     private:
         QDir getMountDir();
