@@ -125,6 +125,22 @@ QDir AppPath::getJavaDir()
     return QDir();
 }
 
+QDir AppPath::getJavaVersionDir(const QString &_version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getJavaVersionDir(_version);
+    }
+    return QDir();
+}
+
+QDir AppPath::getJavaDistDir(const QString &_version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getJavaDistDir(_version);
+    }
+    return QDir();
+}
+
 QDir AppPath::getLogsDir()
 {
     if (m_appPathImpl) {
@@ -241,6 +257,14 @@ QDir AppPath::getUpdaterDir()
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getUpdaterDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getUpdaterVersionDir(const QString &_version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getUpdaterVersionDir(_version);
     }
     return QDir();
 }

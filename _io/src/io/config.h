@@ -94,9 +94,6 @@ public:
     /// DMG images Mac OS extension
     static const QString MacOsDmgExtension;
 
-    /// Java sub directory name.
-    static const QString JavaSubDirName;
-
 
     /// Name of configuration file
     static const QString ConfigurationFile;

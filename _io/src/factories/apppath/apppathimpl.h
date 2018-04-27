@@ -12,6 +12,9 @@
 class AppPathImpl {
     public:
 
+        /// Java sub directory name.
+        static const QString JavaSubDirName;
+
         static const QString ResourceBinPrefix;
 
         // Tout le code en commun vient ici
@@ -35,6 +38,8 @@ class AppPathImpl {
         virtual QDir getImagesDir();
         virtual QDir getSlidesDir();
         virtual QDir getJavaDir();
+        virtual QDir getJavaVersionDir(const QString &_version);
+        virtual QDir getJavaDistDir(const QString &_version);
         virtual QDir getLogsDir();
         virtual QDir getTempDir();
         virtual QDir getTempAppDir();
@@ -50,6 +55,7 @@ class AppPathImpl {
         virtual QDir getCnlpOldDir();
         virtual QDir getDataDir();
         virtual QDir getUpdaterDir();
+        virtual QDir getUpdaterVersionDir(const QString &_version);
         virtual QDir getLoaderDir();
         virtual QDir getLoaderOldDir();
 

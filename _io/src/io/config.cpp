@@ -29,6 +29,5 @@ const QString IOConfig::UpdaterFile = IOConfig::UpdaterName;
 const QString IOConfig::WindowsAppExtension(".exe");
 const QString IOConfig::MacOsAppExtension(".app");
 const QString IOConfig::MacOsDmgExtension(".dmg");
-const QString IOConfig::JavaSubDirName("dist");
 
 const QString IOConfig::ConfigurationFile("standalone-deployer.ini");

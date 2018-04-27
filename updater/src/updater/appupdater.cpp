@@ -397,7 +397,7 @@ void AppUpdater::applicationDownloadFinished()
                 if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
                     L_INFO("Installing " + Application::getUpdaterApplication().getName());
 
-                    const QString updaterInstallDir = m_appPath.getUpdaterDir().absoluteFilePath(m_remoteUpdaterVersion);
+                    const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
                     const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
 
                     if (FileUtils::directoryExists(updaterInstallDir)) {
@@ -459,7 +459,7 @@ void AppUpdater::applicationDownloadFinished()
                 // we can overwrite java because it must not be used by us.
                 L_INFO("Installing " + Application::getJavaApplication().getName());
 
-                const QString javaInstallDir = m_appPath.getJavaDir().absoluteFilePath(m_remoteJavaVersion);
+                const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
                 const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
 
                 if (FileUtils::directoryExists(javaInstallDir)) {
@@ -504,7 +504,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Java does not need to be updated.");
 
                 if (javaInstalledOk) {
-                    const QString javaDistDir = m_appPath.getJavaDir().absoluteFilePath(m_remoteJavaVersion + QDir::separator() + IOConfig::JavaSubDirName);
+                    const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
 
                     if (!FileUtils::directoryExists(javaDistDir)) {
                         L_INFO("Java dist directory does not exist. " + javaDistDir);
@@ -596,7 +596,7 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
     bool buildOk = true;
     QDir tempAppDir;
     QDir appDir;
-    QString appBuild;
+    QDir appBuildDir;
 
     if (_application == Application::getAppApplication() ||
         _application == Application::getLoaderApplication() ||
@@ -605,19 +605,19 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
         if (_application == Application::getAppApplication()) {
             tempAppDir = m_appPath.getTempAppDir();
             appDir = QDir(m_appPath.getAppDir());
-            appBuild = m_appPath.getTempAppBuildDir().absolutePath();
+            appBuildDir = m_appPath.getTempAppBuildDir();
         } else if (_application == Application::getLoaderApplication()) {
             tempAppDir = m_appPath.getTempLoaderDir();
             appDir = QDir(m_appPath.getLoaderDir());
-            appBuild = m_appPath.getTempLoaderBuildDir().absolutePath();
+            appBuildDir = m_appPath.getTempLoaderBuildDir();
         } else if (_application == Application::getUpdaterApplication()) {
             tempAppDir = m_appPath.getTempUpdaterDir();
-            appDir = QDir(m_appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion));
-            appBuild = m_appPath.getTempUpdaterBuildDir().absolutePath();
+            appDir = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            appBuildDir = m_appPath.getTempUpdaterBuildDir();
         } else if (_application == Application::getJavaApplication()) {
             tempAppDir = m_appPath.getTempJavaDir();
-            appDir = QDir(m_appPath.getJavaDir().absoluteFilePath(m_localJavaVersion));
-            appBuild = m_appPath.getTempJavaBuildDir().absolutePath();
+            appDir = m_appPath.getJavaVersionDir(m_localJavaVersion);
+            appBuildDir = m_appPath.getTempJavaBuildDir();
         }
     } else {
         // nothing to do, return true
@@ -625,17 +625,17 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
     }
 
     // remove temp/{application}-build directory
-    L_INFO("Removing previous build directory: " + appBuild);
-    FileUtils::removeDirRecursively(appBuild);
+    L_INFO("Removing previous build directory: " + appBuildDir.absolutePath());
+    FileUtils::removeDirRecursively(appBuildDir.absolutePath());
 
-    if (QDir().mkpath(appBuild)) {
-        L_INFO("Creating empty build directory: " + appBuild);
+    if (QDir().mkpath(appBuildDir.absolutePath())) {
+        L_INFO("Creating empty build directory: " + appBuildDir.absolutePath());
 
         const QList<QString> downloadedFiles = m_filesToDownload[_application];
 
         foreach(QString downloadedFile, downloadedFiles) {
             QString localSourceFile = tempAppDir.absoluteFilePath(downloadedFile);
-            QString destinationFile = appBuild + QDir::separator() + downloadedFile;
+            QString destinationFile = appBuildDir.absoluteFilePath(downloadedFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("download source: " + localSourceFile);
@@ -658,7 +658,7 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
 
         foreach(QString keepFile, keepFiles) {
             QString localSourceFile = appDir.absoluteFilePath(keepFile);
-            QString destinationFile = appBuild + QDir::separator() + keepFile;
+            QString destinationFile = appBuildDir.absoluteFilePath(keepFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("keep source: " + localSourceFile);
@@ -701,9 +701,9 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
         } else if (_application == Application::getLoaderApplication()) {
             dir = QDir(appPath.getLoaderDir());
         } else if (_application == Application::getUpdaterApplication()) {
-            dir = QDir(appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion));
+            dir = appPath.getUpdaterVersionDir(m_localUpdaterVersion);
         } else if (_application == Application::getJavaApplication()) {
-            dir = QDir(appPath.getJavaDir().absoluteFilePath(m_localJavaVersion));
+            dir = appPath.getJavaVersionDir(m_localJavaVersion);
         }
 
         QDirIterator it(dir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
@@ -742,7 +742,7 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
 
             // and java/<java-version>/dist/
             if (_application == Application::getJavaApplication()
-                && filename.startsWith(IOConfig::JavaSubDirName + QDir::separator())) {
+                && filename.startsWith(AppPathImpl::JavaSubDirName + QDir::separator())) {
                 L_INFO("Ignoring file: " + filename);
                 continue;
             }
@@ -806,9 +806,9 @@ void AppUpdater::processCnlpDownloadFileList()
                 } else if (application == Application::getLoaderApplication()) {
                     localFile = m_appPath.getLoaderDir().absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getUpdaterApplication()) {
-                    localFile = m_appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion + QDir::separator() + parsedDownload.getHref());
+                    localFile = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getJavaApplication()) {
-                    localFile = m_appPath.getJavaDir().absoluteFilePath(m_localJavaVersion + QDir::separator() + parsedDownload.getHref());
+                    localFile = m_appPath.getJavaVersionDir(m_localJavaVersion).absoluteFilePath(parsedDownload.getHref());
                 }
 
                 // must be true but we test anyway

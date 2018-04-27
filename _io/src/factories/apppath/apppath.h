@@ -30,6 +30,8 @@ class AppPath {
         QDir getImagesDir();
         QDir getSlidesDir();
         QDir getJavaDir();
+        QDir getJavaVersionDir(const QString &_version);
+        QDir getJavaDistDir(const QString &_version);
         QDir getLogsDir();
         QDir getTempDir();
         QDir getTempAppDir();
@@ -46,6 +48,7 @@ class AppPath {
         QDir getDataDir();
 
         QDir getUpdaterDir();
+        QDir getUpdaterVersionDir(const QString &_version);
         QDir getLoaderDir();
         QDir getLoaderOldDir();
 
