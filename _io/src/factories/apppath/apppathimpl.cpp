@@ -241,6 +241,7 @@ bool AppPathImpl::prepareLoader()
 
 bool AppPathImpl::prepareUpdater(QString _version)
 {
+    Q_UNUSED(_version)
     return true;
 }
 
