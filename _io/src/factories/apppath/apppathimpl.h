@@ -76,7 +76,7 @@ class AppPathImpl {
 
         virtual QPair<bool, QString> extractResource(QFile &_sourceFile, QFile &_destFile);
 
-        virtual bool makeDirectoryIfNotExists(QDir _directory, const QString &_subDir);
+        virtual bool makeDirectoryIfNotExisting(const QDir &_directory);
 
     protected:
 

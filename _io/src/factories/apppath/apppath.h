@@ -69,7 +69,7 @@ class AppPath {
 
         QPair<bool, QString> extractResource(QFile &_sourceFile, QFile &_destFile);
 
-        bool makeDirectoryIfNotExists(QDir _directory, const QString &_subDir);
+        bool makeDirectoryIfNotExisting(const QDir &_directory);
 
     private:
         QSharedPointer<AppPathImpl> m_appPathImpl;

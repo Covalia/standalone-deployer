@@ -175,7 +175,7 @@ void InstallManager::moveLogIntoInstallFolder()
 
 bool InstallManager::createUpdaterFolderVersion()
 {
-    bool success = m_appPath.makeDirectoryIfNotExists(m_appPath.getUpdaterDir(), m_appPath.getUpdaterVersion());
+    bool success = m_appPath.makeDirectoryIfNotExisting(m_appPath.getUpdaterVersionDir(m_appPath.getUpdaterVersion()));
 
     m_settings->setUpdaterVersion(m_appPath.getUpdaterVersion());
     return success;

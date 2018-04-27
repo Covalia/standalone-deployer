@@ -374,10 +374,10 @@ QPair<bool, QString> AppPath::extractResource(QFile &_sourceFile, QFile &_destFi
     return pair;
 }
 
-bool AppPath::makeDirectoryIfNotExists(QDir _directory, const QString &_subDir)
+bool AppPath::makeDirectoryIfNotExisting(const QDir &_directory)
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->makeDirectoryIfNotExists(_directory, _subDir);
+        return m_appPathImpl->makeDirectoryIfNotExisting(_directory);
     }
     return false;
 }

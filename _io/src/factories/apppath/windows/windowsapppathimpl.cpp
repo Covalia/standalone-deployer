@@ -22,18 +22,18 @@ bool WindowsAppPathImpl::makeAppDirectories()
 {
     bool result = true;
 
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::AppDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ConfigurationDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ExtensionDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::ImagesDir);
-    result &= makeDirectoryIfNotExists(getImagesDir(), IOConfig::SlidesDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::JavaDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LogsDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::TempDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::CnlpDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::DataDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::UpdaterDir);
-    result &= makeDirectoryIfNotExists(m_installationDir, IOConfig::LoaderDir);
+    result &= makeDirectoryIfNotExisting(getAppDir());
+    result &= makeDirectoryIfNotExisting(getConfigurationDir());
+    result &= makeDirectoryIfNotExisting(getExtensionDir());
+    result &= makeDirectoryIfNotExisting(getImagesDir());
+    result &= makeDirectoryIfNotExisting(QDir(getImagesDir().absoluteFilePath(IOConfig::SlidesDir))); // TODO
+    result &= makeDirectoryIfNotExisting(getJavaDir());
+    result &= makeDirectoryIfNotExisting(getLogsDir());
+    result &= makeDirectoryIfNotExisting(getTempDir());
+    result &= makeDirectoryIfNotExisting(getCnlpDir());
+    result &= makeDirectoryIfNotExisting(getDataDir());
+    result &= makeDirectoryIfNotExisting(getUpdaterDir());
+    result &= makeDirectoryIfNotExisting(getLoaderDir());
 
     return result;
 }

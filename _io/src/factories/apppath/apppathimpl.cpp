@@ -225,18 +225,10 @@ QPair<bool, QString> AppPathImpl::extractResource(QFile &_sourceFile, QFile &_de
     }
 }
 
-bool AppPathImpl::makeDirectoryIfNotExists(QDir _directory, const QString &_subDir)
+bool AppPathImpl::makeDirectoryIfNotExisting(const QDir &_directory)
 {
-    QDir directory(_directory.filePath(_subDir));
-
-    if (_directory.exists(_subDir)) {
-        // si le répertoire est en réalité un fichier, pas bon, il faut nettoyer
-        // TODO check les répertoires parent ??
-        _directory.remove(_subDir);
-    }
-
-    if (!directory.exists()) {
-        return QDir().mkpath(directory.path());
+    if (!FileUtils::directoryExists(_directory.path())) {
+        return QDir().mkpath(_directory.path());
     } else {
         return true;
     }
