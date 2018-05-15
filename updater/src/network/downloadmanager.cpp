@@ -493,11 +493,11 @@ bool DownloadManager::createDirIfNotExists(const QDir &_dir)
     if (_dir.exists()) {
         return true;
     } else {
-        bool created = QDir().mkpath(_dir.path());
+        bool created = QDir().mkpath(_dir.absolutePath());
         if (created) {
-            L_INFO("Success while creating parent directory: " + _dir.path());
+            L_INFO("Success while creating parent directory: " + _dir.absolutePath());
         } else {
-            L_INFO("Error while creating parent directory: " + _dir.path());
+            L_INFO("Error while creating parent directory: " + _dir.absolutePath());
         }
         return created;
     }

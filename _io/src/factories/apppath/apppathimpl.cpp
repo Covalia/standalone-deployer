@@ -38,7 +38,7 @@ bool AppPathImpl::createDirectoryIfNotExist()
     QDir directory(m_installationDir);
 
     if (!directory.exists()) {
-        return QDir().mkpath(directory.path());
+        return QDir().mkpath(directory.absolutePath());
     }
     return true;
 }
@@ -60,12 +60,12 @@ QString AppPathImpl::getLoaderVersion()
 
 QDir AppPathImpl::getAppDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::AppDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::AppDir));
 }
 
 QDir AppPathImpl::getAppOldDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
 }
 
 QDir AppPathImpl::getAppNativesDir()
@@ -75,27 +75,27 @@ QDir AppPathImpl::getAppNativesDir()
 
 QDir AppPathImpl::getConfigurationDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::ConfigurationDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::ConfigurationDir));
 }
 
 QDir AppPathImpl::getExtensionDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::ExtensionDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::ExtensionDir));
 }
 
 QDir AppPathImpl::getImagesDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::ImagesDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::ImagesDir));
 }
 
 QDir AppPathImpl::getSlidesDir()
 {
-    return QDir(getImagesDir().filePath(IOConfig::SlidesDir));
+    return QDir(getImagesDir().absoluteFilePath(IOConfig::SlidesDir));
 }
 
 QDir AppPathImpl::getJavaDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::JavaDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::JavaDir));
 }
 
 QDir AppPathImpl::getJavaVersionDir(const QString &_version)
@@ -110,77 +110,77 @@ QDir AppPathImpl::getJavaDistDir(const QString &_version)
 
 QDir AppPathImpl::getLogsDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::LogsDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::LogsDir));
 }
 
 QDir AppPathImpl::getTempDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::TempDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::TempDir));
 }
 
 QDir AppPathImpl::getTempAppDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::AppDir));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::AppDir));
 }
 
 QDir AppPathImpl::getTempAppBuildDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::AppDir + AppPathImpl::BuildDirSuffix));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::AppDir + AppPathImpl::BuildDirSuffix));
 }
 
 QDir AppPathImpl::getTempCnlpDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::CnlpDir));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::CnlpDir));
 }
 
 QDir AppPathImpl::getTempJavaDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::JavaDir));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::JavaDir));
 }
 
 QDir AppPathImpl::getTempJavaBuildDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::JavaDir + AppPathImpl::BuildDirSuffix));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::JavaDir + AppPathImpl::BuildDirSuffix));
 }
 
 QDir AppPathImpl::getTempLoaderDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::LoaderDir));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::LoaderDir));
 }
 
 QDir AppPathImpl::getTempLoaderBuildDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::LoaderDir + AppPathImpl::BuildDirSuffix));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::LoaderDir + AppPathImpl::BuildDirSuffix));
 }
 
 QDir AppPathImpl::getTempUpdaterDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::UpdaterDir));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::UpdaterDir));
 }
 
 QDir AppPathImpl::getTempUpdaterBuildDir()
 {
-    return QDir(getTempDir().filePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
+    return QDir(getTempDir().absoluteFilePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
 }
 
 QDir AppPathImpl::getCnlpDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::CnlpDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::CnlpDir));
 }
 
 QDir AppPathImpl::getCnlpOldDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::CnlpDir + AppPathImpl::OldDirSuffix));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::CnlpDir + AppPathImpl::OldDirSuffix));
 }
 
 QDir AppPathImpl::getDataDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::DataDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::DataDir));
 }
 
 QDir AppPathImpl::getUpdaterDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::UpdaterDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::UpdaterDir));
 }
 
 QDir AppPathImpl::getUpdaterVersionDir(const QString &_version)
@@ -190,12 +190,12 @@ QDir AppPathImpl::getUpdaterVersionDir(const QString &_version)
 
 QDir AppPathImpl::getLoaderDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::LoaderDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::LoaderDir));
 }
 
 QDir AppPathImpl::getLoaderOldDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::LoaderDir + AppPathImpl::OldDirSuffix));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::LoaderDir + AppPathImpl::OldDirSuffix));
 }
 
 QSharedPointer<QFile> AppPathImpl::getConfigurationFile()
@@ -233,8 +233,8 @@ QPair<bool, QString> AppPathImpl::extractResource(QFile &_sourceFile, QFile &_de
 
 bool AppPathImpl::makeDirectoryIfNotExisting(const QDir &_directory)
 {
-    if (!FileUtils::directoryExists(_directory.path())) {
-        return QDir().mkpath(_directory.path());
+    if (!FileUtils::directoryExists(_directory.absolutePath())) {
+        return QDir().mkpath(_directory.absolutePath());
     } else {
         return true;
     }

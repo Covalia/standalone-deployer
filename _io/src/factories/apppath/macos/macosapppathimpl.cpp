@@ -228,5 +228,5 @@ bool MacosAppPathImpl::closeDmgFile(const QFile &_dmgFile)
 
 QDir MacosAppPathImpl::getMountDir()
 {
-    return QDir(m_installationDir.filePath(IOConfig::MountDir));
+    return QDir(m_installationDir.absoluteFilePath(IOConfig::MountDir));
 }

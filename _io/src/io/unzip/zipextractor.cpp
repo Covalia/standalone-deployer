@@ -40,7 +40,7 @@ void ZipExtractor::extract()
 
         if (!directory.exists()) {
             L_INFO("Java version directory does not exist, creating.");
-            QDir().mkpath(directory.path());
+            QDir().mkpath(directory.absolutePath());
         }
 
         L_INFO("Starting extraction...");
