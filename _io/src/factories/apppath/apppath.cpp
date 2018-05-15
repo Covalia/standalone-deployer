@@ -85,6 +85,15 @@ QDir AppPath::getAppOldDir()
     return QDir();
 }
 
+QDir AppPath::getAppNativesDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getAppNativesDir();
+    }
+    return QDir();
+}
+
+
 QDir AppPath::getConfigurationDir()
 {
     if (m_appPathImpl) {

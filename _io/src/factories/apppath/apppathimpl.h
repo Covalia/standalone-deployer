@@ -33,6 +33,7 @@ class AppPathImpl {
 
         virtual QDir getAppDir();
         virtual QDir getAppOldDir();
+        virtual QDir getAppNativesDir();
         virtual QDir getConfigurationDir();
         virtual QDir getExtensionDir();
         virtual QDir getImagesDir();
@@ -84,6 +85,8 @@ class AppPathImpl {
         static const QString BuildDirSuffix;
         /// Old directory suffix.
         static const QString OldDirSuffix;
+        /// Application natives directory name
+        static const QString NativesDirName;
 
         QDir m_installationDir;
         virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args) = 0;

@@ -25,6 +25,7 @@ class AppPath {
 
         QDir getAppDir();
         QDir getAppOldDir();
+        QDir getAppNativesDir();
         QDir getConfigurationDir();
         QDir getExtensionDir();
         QDir getImagesDir();

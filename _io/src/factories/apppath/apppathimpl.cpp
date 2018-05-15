@@ -12,6 +12,7 @@ const QString AppPathImpl::ResourceBinPrefix(":/bin/");
 
 const QString AppPathImpl::BuildDirSuffix("-build");
 const QString AppPathImpl::OldDirSuffix("-old");
+const QString AppPathImpl::NativesDirName("natives");
 
 AppPathImpl::AppPathImpl(IOConfig::AppComponent _app)
 {
@@ -65,6 +66,11 @@ QDir AppPathImpl::getAppDir()
 QDir AppPathImpl::getAppOldDir()
 {
     return QDir(m_installationDir.filePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
+}
+
+QDir AppPathImpl::getAppNativesDir()
+{
+    return QDir(getAppDir().absoluteFilePath(NativesDirName));
 }
 
 QDir AppPathImpl::getConfigurationDir()
