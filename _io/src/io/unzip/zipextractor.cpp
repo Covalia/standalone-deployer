@@ -10,7 +10,8 @@ ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, 
 {
     L_INFO("Initializing extraction of " + _zipPath + " to directory " + _extractDir);
 
-    if (!_zipPath.isEmpty() && _zipPath.endsWith(".zip", Qt::CaseInsensitive)) {
+    if (!_zipPath.isEmpty() && (_zipPath.toLower().endsWith(".zip", Qt::CaseInsensitive)
+                                || _zipPath.toLower().endsWith(".jar", Qt::CaseInsensitive))) {
         m_extractor = new QArchive::Extractor(_zipPath, _extractDir);
         connect(m_extractor, SIGNAL(finished()), this, SLOT(extract_success()));
 
@@ -84,6 +85,7 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
     emit finished();
 } // ZipExtractor::extract_error
 
-bool ZipExtractor::isOk() const {
+bool ZipExtractor::isOk() const
+{
     return ok;
 }
