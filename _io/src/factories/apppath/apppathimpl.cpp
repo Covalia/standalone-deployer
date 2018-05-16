@@ -370,6 +370,9 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
     arguments << _classPath;
     arguments << _mainClass;
 
+    // append arguments received.
+    arguments << _arguments;
+
     const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
     L_INFO("Java executable: " + java_command);
 

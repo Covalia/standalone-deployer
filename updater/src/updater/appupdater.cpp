@@ -20,7 +20,8 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
     m_remoteJavaVersion(""),
     m_localJavaVersion(""),
     m_encoding(""),
-    m_mainClass("")
+    m_mainClass(""),
+    m_memory("")
 {
     m_appUrl = _appUrl;
 
@@ -128,6 +129,13 @@ void AppUpdater::cnlpDownloadFinished()
         m_encoding = applicationXml.getEncoding();
         // retrieving application main class
         m_mainClass = applicationXml.getMainClass();
+
+        // retrieving cnlp arguments
+        m_arguments.clear();
+        m_arguments << applicationXml.getArguments();
+
+        // retrieving memory needed
+        m_memory = applicationXml.getMemory();
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
@@ -657,8 +665,7 @@ void AppUpdater::applicationDownloadFinished()
                         }
 
                         Settings * settings = Settings::getInstance();
-                        QStringList arguments;
-                        m_appPath.startApplication(settings->getJavaVersion(), "900", classpath, m_mainClass, m_encoding, arguments);
+                        m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass, m_encoding, m_arguments);
                     }
                 } else {
                     L_ERROR("Errors have been reported on cnlp installation.");

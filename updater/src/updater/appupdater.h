@@ -64,6 +64,12 @@ private:
     // main class to start
     QString m_mainClass;
 
+    // received arguments list from cnlp
+    QStringList m_arguments;
+
+    // memory to set when starting application
+    QString m_memory;
+
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
     void downloadSpeedMessage(const QString &_speed);
