@@ -305,14 +305,14 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
 
                         if (timer.isActive()) {
                             if (zip.isOk()) {
-                                L_INFO("OK");
+                                L_INFO(javaVersionDir.absoluteFilePath(file) + " extracted to " + javaDistDir.absolutePath());
                                 return true;
                             } else {
-                                L_ERROR("KO");
+                                L_ERROR(javaVersionDir.absoluteFilePath(file) + " can not be extracted to " + javaDistDir.absolutePath());
                                 return false;
                             }
                         } else {
-                            L_ERROR("Timeout");
+                            L_ERROR("Timeout when waiting for extraction of " + javaVersionDir.absoluteFilePath(file));
                             return false;
                         }
                         break;
