@@ -59,6 +59,11 @@ private:
     // list of remaining application files, those who need to be removed
     QMap<Application, QList<QString> > m_remainingFiles;
 
+    // encoding to use to start application
+    QString m_encoding;
+    // main class to start
+    QString m_mainClass;
+
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
     void downloadSpeedMessage(const QString &_speed);

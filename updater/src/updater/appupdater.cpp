@@ -7,8 +7,10 @@
 #include "utils/hashmac/hashmac512.h"
 #include "io/fileutils.h"
 #include "settings/settings.h"
+#include "io/unzip/zipextractor.h"
 
 #include <QDirIterator>
+#include <QTimer>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
     m_updater(0),
@@ -16,7 +18,9 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
     m_remoteUpdaterVersion(""),
     m_localUpdaterVersion(""),
     m_remoteJavaVersion(""),
-    m_localJavaVersion("")
+    m_localJavaVersion(""),
+    m_encoding(""),
+    m_mainClass("")
 {
     m_appUrl = _appUrl;
 
@@ -119,6 +123,11 @@ void AppUpdater::cnlpDownloadFinished()
     if (applicationXml.read() && updaterXml.read() && loaderXml.read() && javaXml.read()) {
         // retrieving remote updater version.
         m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
+
+        // retrieving application encoding
+        m_encoding = applicationXml.getEncoding();
+        // retrieving application main class
+        m_mainClass = applicationXml.getMainClass();
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
@@ -577,6 +586,80 @@ void AppUpdater::applicationDownloadFinished()
                     L_INFO("Starting application.");
                     // TODO start app with args
 
+                    bool native_extracted = true;
+
+                    const QString extractDir = m_appPath.getAppNativesDir().absolutePath();
+
+                    // find the native jar and extract it
+                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                        if (download.isNative()) {
+                            const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+
+                            // extract zip to dist
+                            ZipExtractor zip(fileToExtract, extractDir);
+
+                            // we wait for a signal with QEventLoop and QTimer.
+                            QTimer timer;
+                            timer.setSingleShot(true);
+                            QEventLoop loop;
+                            QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
+                            QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+                            timer.start(60000);
+
+                            // start extraction
+                            zip.extract();
+
+                            loop.exec();
+
+                            if (timer.isActive()) {
+                                if (zip.isOk()) {
+                                    L_INFO(fileToExtract + " extracted to " + extractDir);
+                                } else {
+                                    L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
+                                    native_extracted = false;
+                                    break;
+                                }
+                            } else {
+                                L_ERROR("Timeout when waiting for extraction of " + fileToExtract);
+                                native_extracted = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (native_extracted) {
+                        // TODO refactor into an helper class?
+                #ifdef Q_OS_MACOS
+                            const QString osValue = DeploymentXML::OsMacOsValue;
+                            const QString classpathSeparator = ":";
+                #endif
+
+                #ifdef Q_OS_WIN
+                            const QString osValue = DeploymentXML::OsWindowsValue;
+                            const QString classpathSeparator = ";";
+                #endif
+
+                        QString classpath = "";
+
+                        // build the classpath string
+                        const QDir installDir = m_appPath.getInstallationDir();
+                        foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                            if (download.isMain() || (!download.isNative() && download.getOs() == osValue)) {
+                                const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+                                const QString relativeFile = installDir.relativeFilePath(fileToExtract);
+                                L_INFO("Add " + relativeFile + " to classpath.");
+                                if (classpath.isEmpty()) {
+                                    classpath += relativeFile;
+                                } else {
+                                    classpath += classpathSeparator + relativeFile;
+                                }
+                            }
+                        }
+
+                        Settings * settings = Settings::getInstance();
+                        QStringList arguments;
+                        m_appPath.startApplication(settings->getJavaVersion(), "900", classpath, m_mainClass, m_encoding, arguments);
+                    }
                 } else {
                     L_ERROR("Errors have been reported on cnlp installation.");
                 }

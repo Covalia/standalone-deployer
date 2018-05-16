@@ -72,6 +72,8 @@ class AppPath {
 
         bool makeDirectoryIfNotExisting(const QDir &_directory);
 
+        bool startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath, const QString &_mainClass, const QString &_encoding, const QStringList &_arguments);
+
     private:
         QSharedPointer<AppPathImpl> m_appPathImpl;
 };

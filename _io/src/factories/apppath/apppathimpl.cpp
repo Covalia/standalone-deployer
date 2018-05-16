@@ -354,3 +354,33 @@ bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
     }
     return result;
 }
+
+bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath, const QString &_mainClass, const QString &_encoding, const QStringList &_arguments)
+{
+    QStringList arguments;
+    const QDir installDir = getInstallationDir();
+
+    // we won't accept zero value, so no need to test for conversion result.
+    if (_xmxMemory.toInt() > 0) {
+        arguments << "-Xmx" + _xmxMemory + "M";
+    }
+    arguments << "-Dfile.encoding=" + _encoding;
+    arguments << "-Djava.library.path=" + installDir.relativeFilePath(getAppNativesDir().absolutePath());
+    arguments << "-cp";
+    arguments << _classPath;
+    arguments << _mainClass;
+
+    const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
+    L_INFO("Java executable: " + java_command);
+
+    QProcess process;
+    bool result = process.startDetached(java_command, arguments, installDir.absolutePath());
+
+    if (result) {
+        L_INFO("Process is started...");
+    } else {
+        L_ERROR("Process can not start: " + process.errorString());
+    }
+
+    return result;
+}

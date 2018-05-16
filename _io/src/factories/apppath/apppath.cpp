@@ -390,3 +390,11 @@ bool AppPath::makeDirectoryIfNotExisting(const QDir &_directory)
     }
     return false;
 }
+
+bool AppPath::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath, const QString &_mainClass, const QString &_encoding, const QStringList &_arguments)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startApplication(_javaVersion, _xmxMemory, _classPath, _mainClass, _encoding, _arguments);
+    }
+    return false;
+}
