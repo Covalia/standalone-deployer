@@ -14,7 +14,7 @@ AppPath::~AppPath()
 {
 }
 
-QDir AppPath::getInstallationDir()
+QDir AppPath::getInstallationDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getInstallationDir();
@@ -69,7 +69,7 @@ QString AppPath::getLoaderVersion()
     return "";
 }
 
-QDir AppPath::getAppDir()
+QDir AppPath::getAppDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getAppDir();
@@ -77,7 +77,7 @@ QDir AppPath::getAppDir()
     return QDir();
 }
 
-QDir AppPath::getAppOldDir()
+QDir AppPath::getAppOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getAppOldDir();
@@ -85,7 +85,7 @@ QDir AppPath::getAppOldDir()
     return QDir();
 }
 
-QDir AppPath::getAppNativesDir()
+QDir AppPath::getAppNativesDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getAppNativesDir();
@@ -94,7 +94,7 @@ QDir AppPath::getAppNativesDir()
 }
 
 
-QDir AppPath::getConfigurationDir()
+QDir AppPath::getConfigurationDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getConfigurationDir();
@@ -102,7 +102,7 @@ QDir AppPath::getConfigurationDir()
     return QDir();
 }
 
-QDir AppPath::getExtensionDir()
+QDir AppPath::getExtensionDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getExtensionDir();
@@ -110,7 +110,7 @@ QDir AppPath::getExtensionDir()
     return QDir();
 }
 
-QDir AppPath::getImagesDir()
+QDir AppPath::getImagesDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getImagesDir();
@@ -118,7 +118,7 @@ QDir AppPath::getImagesDir()
     return QDir();
 }
 
-QDir AppPath::getSlidesDir()
+QDir AppPath::getSlidesDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getSlidesDir();
@@ -126,7 +126,7 @@ QDir AppPath::getSlidesDir()
     return QDir();
 }
 
-QDir AppPath::getJavaDir()
+QDir AppPath::getJavaDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getJavaDir();
@@ -134,7 +134,7 @@ QDir AppPath::getJavaDir()
     return QDir();
 }
 
-QDir AppPath::getJavaVersionDir(const QString &_version)
+QDir AppPath::getJavaVersionDir(const QString &_version) const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getJavaVersionDir(_version);
@@ -142,7 +142,7 @@ QDir AppPath::getJavaVersionDir(const QString &_version)
     return QDir();
 }
 
-QDir AppPath::getJavaDistDir(const QString &_version)
+QDir AppPath::getJavaDistDir(const QString &_version) const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getJavaDistDir(_version);
@@ -150,7 +150,7 @@ QDir AppPath::getJavaDistDir(const QString &_version)
     return QDir();
 }
 
-QDir AppPath::getLogsDir()
+QDir AppPath::getLogsDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLogsDir();
@@ -158,7 +158,7 @@ QDir AppPath::getLogsDir()
     return QDir();
 }
 
-QDir AppPath::getTempDir()
+QDir AppPath::getTempDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempDir();
@@ -166,7 +166,7 @@ QDir AppPath::getTempDir()
     return QDir();
 }
 
-QDir AppPath::getTempAppDir()
+QDir AppPath::getTempAppDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempAppDir();
@@ -174,7 +174,7 @@ QDir AppPath::getTempAppDir()
     return QDir();
 }
 
-QDir AppPath::getTempAppBuildDir()
+QDir AppPath::getTempAppBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempAppBuildDir();
@@ -182,7 +182,7 @@ QDir AppPath::getTempAppBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempCnlpDir()
+QDir AppPath::getTempCnlpDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempCnlpDir();
@@ -190,7 +190,7 @@ QDir AppPath::getTempCnlpDir()
     return QDir();
 }
 
-QDir AppPath::getTempJavaDir()
+QDir AppPath::getTempJavaDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempJavaDir();
@@ -198,7 +198,7 @@ QDir AppPath::getTempJavaDir()
     return QDir();
 }
 
-QDir AppPath::getTempJavaBuildDir()
+QDir AppPath::getTempJavaBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempJavaBuildDir();
@@ -206,7 +206,7 @@ QDir AppPath::getTempJavaBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempLoaderDir()
+QDir AppPath::getTempLoaderDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempLoaderDir();
@@ -214,7 +214,7 @@ QDir AppPath::getTempLoaderDir()
     return QDir();
 }
 
-QDir AppPath::getTempLoaderBuildDir()
+QDir AppPath::getTempLoaderBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempLoaderBuildDir();
@@ -222,7 +222,7 @@ QDir AppPath::getTempLoaderBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempUpdaterDir()
+QDir AppPath::getTempUpdaterDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempUpdaterDir();
@@ -230,7 +230,7 @@ QDir AppPath::getTempUpdaterDir()
     return QDir();
 }
 
-QDir AppPath::getTempUpdaterBuildDir()
+QDir AppPath::getTempUpdaterBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempUpdaterBuildDir();
@@ -238,7 +238,7 @@ QDir AppPath::getTempUpdaterBuildDir()
     return QDir();
 }
 
-QDir AppPath::getCnlpDir()
+QDir AppPath::getCnlpDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getCnlpDir();
@@ -246,7 +246,7 @@ QDir AppPath::getCnlpDir()
     return QDir();
 }
 
-QDir AppPath::getCnlpOldDir()
+QDir AppPath::getCnlpOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getCnlpOldDir();
@@ -254,7 +254,7 @@ QDir AppPath::getCnlpOldDir()
     return QDir();
 }
 
-QDir AppPath::getDataDir()
+QDir AppPath::getDataDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getDataDir();
@@ -262,7 +262,7 @@ QDir AppPath::getDataDir()
     return QDir();
 }
 
-QDir AppPath::getUpdaterDir()
+QDir AppPath::getUpdaterDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getUpdaterDir();
@@ -270,7 +270,7 @@ QDir AppPath::getUpdaterDir()
     return QDir();
 }
 
-QDir AppPath::getUpdaterVersionDir(const QString &_version)
+QDir AppPath::getUpdaterVersionDir(const QString &_version) const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getUpdaterVersionDir(_version);
@@ -278,7 +278,7 @@ QDir AppPath::getUpdaterVersionDir(const QString &_version)
     return QDir();
 }
 
-QDir AppPath::getLoaderDir()
+QDir AppPath::getLoaderDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLoaderDir();
@@ -286,7 +286,7 @@ QDir AppPath::getLoaderDir()
     return QDir();
 }
 
-QDir AppPath::getLoaderOldDir()
+QDir AppPath::getLoaderOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLoaderOldDir();

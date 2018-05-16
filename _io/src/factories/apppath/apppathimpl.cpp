@@ -23,7 +23,7 @@ AppPathImpl::~AppPathImpl()
 {
 }
 
-QDir AppPathImpl::getInstallationDir()
+QDir AppPathImpl::getInstallationDir() const
 {
     return m_installationDir;
 }
@@ -58,142 +58,142 @@ QString AppPathImpl::getLoaderVersion()
     return IOConfig::LoaderVersion;
 }
 
-QDir AppPathImpl::getAppDir()
+QDir AppPathImpl::getAppDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::AppDir));
 }
 
-QDir AppPathImpl::getAppOldDir()
+QDir AppPathImpl::getAppOldDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::AppDir + AppPathImpl::OldDirSuffix));
 }
 
-QDir AppPathImpl::getAppNativesDir()
+QDir AppPathImpl::getAppNativesDir() const
 {
     return QDir(getAppDir().absoluteFilePath(NativesDirName));
 }
 
-QDir AppPathImpl::getConfigurationDir()
+QDir AppPathImpl::getConfigurationDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::ConfigurationDir));
 }
 
-QDir AppPathImpl::getExtensionDir()
+QDir AppPathImpl::getExtensionDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::ExtensionDir));
 }
 
-QDir AppPathImpl::getImagesDir()
+QDir AppPathImpl::getImagesDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::ImagesDir));
 }
 
-QDir AppPathImpl::getSlidesDir()
+QDir AppPathImpl::getSlidesDir() const
 {
     return QDir(getImagesDir().absoluteFilePath(IOConfig::SlidesDir));
 }
 
-QDir AppPathImpl::getJavaDir()
+QDir AppPathImpl::getJavaDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::JavaDir));
 }
 
-QDir AppPathImpl::getJavaVersionDir(const QString &_version)
+QDir AppPathImpl::getJavaVersionDir(const QString &_version) const
 {
     return QDir(getJavaDir().absoluteFilePath(_version));
 }
 
-QDir AppPathImpl::getJavaDistDir(const QString &_version)
+QDir AppPathImpl::getJavaDistDir(const QString &_version) const
 {
     return QDir(getJavaVersionDir(_version).absoluteFilePath(AppPathImpl::JavaSubDirName));
 }
 
-QDir AppPathImpl::getLogsDir()
+QDir AppPathImpl::getLogsDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::LogsDir));
 }
 
-QDir AppPathImpl::getTempDir()
+QDir AppPathImpl::getTempDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::TempDir));
 }
 
-QDir AppPathImpl::getTempAppDir()
+QDir AppPathImpl::getTempAppDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::AppDir));
 }
 
-QDir AppPathImpl::getTempAppBuildDir()
+QDir AppPathImpl::getTempAppBuildDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::AppDir + AppPathImpl::BuildDirSuffix));
 }
 
-QDir AppPathImpl::getTempCnlpDir()
+QDir AppPathImpl::getTempCnlpDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::CnlpDir));
 }
 
-QDir AppPathImpl::getTempJavaDir()
+QDir AppPathImpl::getTempJavaDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::JavaDir));
 }
 
-QDir AppPathImpl::getTempJavaBuildDir()
+QDir AppPathImpl::getTempJavaBuildDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::JavaDir + AppPathImpl::BuildDirSuffix));
 }
 
-QDir AppPathImpl::getTempLoaderDir()
+QDir AppPathImpl::getTempLoaderDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::LoaderDir));
 }
 
-QDir AppPathImpl::getTempLoaderBuildDir()
+QDir AppPathImpl::getTempLoaderBuildDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::LoaderDir + AppPathImpl::BuildDirSuffix));
 }
 
-QDir AppPathImpl::getTempUpdaterDir()
+QDir AppPathImpl::getTempUpdaterDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::UpdaterDir));
 }
 
-QDir AppPathImpl::getTempUpdaterBuildDir()
+QDir AppPathImpl::getTempUpdaterBuildDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
 }
 
-QDir AppPathImpl::getCnlpDir()
+QDir AppPathImpl::getCnlpDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::CnlpDir));
 }
 
-QDir AppPathImpl::getCnlpOldDir()
+QDir AppPathImpl::getCnlpOldDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::CnlpDir + AppPathImpl::OldDirSuffix));
 }
 
-QDir AppPathImpl::getDataDir()
+QDir AppPathImpl::getDataDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::DataDir));
 }
 
-QDir AppPathImpl::getUpdaterDir()
+QDir AppPathImpl::getUpdaterDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::UpdaterDir));
 }
 
-QDir AppPathImpl::getUpdaterVersionDir(const QString &_version)
+QDir AppPathImpl::getUpdaterVersionDir(const QString &_version) const
 {
     return QDir(getUpdaterDir().absoluteFilePath(_version));
 }
 
-QDir AppPathImpl::getLoaderDir()
+QDir AppPathImpl::getLoaderDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::LoaderDir));
 }
 
-QDir AppPathImpl::getLoaderOldDir()
+QDir AppPathImpl::getLoaderOldDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::LoaderDir + AppPathImpl::OldDirSuffix));
 }

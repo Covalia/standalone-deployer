@@ -14,6 +14,7 @@ class WindowsAppPathImpl : public AppPathImpl {
 
     protected:
         virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
+        virtual QString getJavaExecutablePath(const QString &_javaVersion) const;
 };
 
 #endif

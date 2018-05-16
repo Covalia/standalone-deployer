@@ -13,7 +13,7 @@ class AppPath {
         AppPath(IOConfig::AppComponent _app);
         virtual ~AppPath();
 
-        QDir getInstallationDir();
+        QDir getInstallationDir() const;
         void setInstallationDir(QDir _path);
 
         bool createDirectoryIfNotExist();
@@ -23,35 +23,35 @@ class AppPath {
         QString getUpdaterVersion();
         QString getLoaderVersion();
 
-        QDir getAppDir();
-        QDir getAppOldDir();
-        QDir getAppNativesDir();
-        QDir getConfigurationDir();
-        QDir getExtensionDir();
-        QDir getImagesDir();
-        QDir getSlidesDir();
-        QDir getJavaDir();
-        QDir getJavaVersionDir(const QString &_version);
-        QDir getJavaDistDir(const QString &_version);
-        QDir getLogsDir();
-        QDir getTempDir();
-        QDir getTempAppDir();
-        QDir getTempAppBuildDir();
-        QDir getTempCnlpDir();
-        QDir getTempJavaDir();
-        QDir getTempJavaBuildDir();
-        QDir getTempLoaderDir();
-        QDir getTempLoaderBuildDir();
-        QDir getTempUpdaterDir();
-        QDir getTempUpdaterBuildDir();
-        QDir getCnlpDir();
-        QDir getCnlpOldDir();
-        QDir getDataDir();
+        QDir getAppDir() const;
+        QDir getAppOldDir() const;
+        QDir getAppNativesDir() const;
+        QDir getConfigurationDir() const;
+        QDir getExtensionDir() const;
+        QDir getImagesDir() const;
+        QDir getSlidesDir() const;
+        QDir getJavaDir() const;
+        QDir getJavaVersionDir(const QString &_version) const;
+        QDir getJavaDistDir(const QString &_version) const;
+        QDir getLogsDir() const;
+        QDir getTempDir() const;
+        QDir getTempAppDir() const;
+        QDir getTempAppBuildDir() const;
+        QDir getTempCnlpDir() const;
+        QDir getTempJavaDir() const;
+        QDir getTempJavaBuildDir() const;
+        QDir getTempLoaderDir() const;
+        QDir getTempLoaderBuildDir() const;
+        QDir getTempUpdaterDir() const;
+        QDir getTempUpdaterBuildDir() const;
+        QDir getCnlpDir() const;
+        QDir getCnlpOldDir() const;
+        QDir getDataDir() const;
 
-        QDir getUpdaterDir();
-        QDir getUpdaterVersionDir(const QString &_version);
-        QDir getLoaderDir();
-        QDir getLoaderOldDir();
+        QDir getUpdaterDir() const;
+        QDir getUpdaterVersionDir(const QString &_version) const;
+        QDir getLoaderDir() const;
+        QDir getLoaderOldDir() const;
 
         QSharedPointer<QFile> getLoaderResourcesFile();
         QSharedPointer<QFile> getUpdaterResourcesFile();

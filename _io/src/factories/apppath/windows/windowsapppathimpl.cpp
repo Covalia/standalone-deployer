@@ -69,3 +69,8 @@ bool WindowsAppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList 
     QProcess process;
     return process.startDetached(_app->fileName(), _args);
 }
+
+QString WindowsAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) const
+{
+    return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("javaw"));
+}

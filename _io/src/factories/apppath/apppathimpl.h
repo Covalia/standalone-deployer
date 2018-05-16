@@ -20,7 +20,7 @@ class AppPathImpl {
         // Tout le code en commun vient ici
         AppPathImpl(IOConfig::AppComponent _app);
         virtual ~AppPathImpl();
-        virtual QDir getInstallationDir();
+        virtual QDir getInstallationDir() const;
         // set install root path, call only from installer
         virtual void setInstallationDir(QDir _path);
 
@@ -31,34 +31,34 @@ class AppPathImpl {
         virtual QString getUpdaterVersion();
         virtual QString getLoaderVersion();
 
-        virtual QDir getAppDir();
-        virtual QDir getAppOldDir();
-        virtual QDir getAppNativesDir();
-        virtual QDir getConfigurationDir();
-        virtual QDir getExtensionDir();
-        virtual QDir getImagesDir();
-        virtual QDir getSlidesDir();
-        virtual QDir getJavaDir();
-        virtual QDir getJavaVersionDir(const QString &_version);
-        virtual QDir getJavaDistDir(const QString &_version);
-        virtual QDir getLogsDir();
-        virtual QDir getTempDir();
-        virtual QDir getTempAppDir();
-        virtual QDir getTempAppBuildDir();
-        virtual QDir getTempCnlpDir();
-        virtual QDir getTempJavaDir();
-        virtual QDir getTempJavaBuildDir();
-        virtual QDir getTempLoaderDir();
-        virtual QDir getTempLoaderBuildDir();
-        virtual QDir getTempUpdaterDir();
-        virtual QDir getTempUpdaterBuildDir();
-        virtual QDir getCnlpDir();
-        virtual QDir getCnlpOldDir();
-        virtual QDir getDataDir();
-        virtual QDir getUpdaterDir();
-        virtual QDir getUpdaterVersionDir(const QString &_version);
-        virtual QDir getLoaderDir();
-        virtual QDir getLoaderOldDir();
+        virtual QDir getAppDir() const;
+        virtual QDir getAppOldDir() const;
+        virtual QDir getAppNativesDir() const;
+        virtual QDir getConfigurationDir() const;
+        virtual QDir getExtensionDir() const;
+        virtual QDir getImagesDir() const;
+        virtual QDir getSlidesDir() const;
+        virtual QDir getJavaDir() const;
+        virtual QDir getJavaVersionDir(const QString &_version) const;
+        virtual QDir getJavaDistDir(const QString &_version) const;
+        virtual QDir getLogsDir() const;
+        virtual QDir getTempDir() const;
+        virtual QDir getTempAppDir() const;
+        virtual QDir getTempAppBuildDir() const;
+        virtual QDir getTempCnlpDir() const;
+        virtual QDir getTempJavaDir() const;
+        virtual QDir getTempJavaBuildDir() const;
+        virtual QDir getTempLoaderDir() const;
+        virtual QDir getTempLoaderBuildDir() const;
+        virtual QDir getTempUpdaterDir() const;
+        virtual QDir getTempUpdaterBuildDir() const;
+        virtual QDir getCnlpDir() const;
+        virtual QDir getCnlpOldDir() const;
+        virtual QDir getDataDir() const;
+        virtual QDir getUpdaterDir() const;
+        virtual QDir getUpdaterVersionDir(const QString &_version) const;
+        virtual QDir getLoaderDir() const;
+        virtual QDir getLoaderOldDir() const;
 
         virtual QSharedPointer<QFile> getLoaderResourcesFile() = 0;
         virtual QSharedPointer<QFile> getUpdaterResourcesFile() = 0;
@@ -91,6 +91,8 @@ class AppPathImpl {
         QDir m_installationDir;
         virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args) = 0;
         bool cdUp(QDir &_dir, int _numUp);
+
+        virtual QString getJavaExecutablePath(const QString &_javaVersion) const = 0;
 };
 
 #endif

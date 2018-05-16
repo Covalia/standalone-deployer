@@ -230,3 +230,8 @@ QDir MacosAppPathImpl::getMountDir()
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::MountDir));
 }
+
+QString MacosAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) const
+{
+    return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("java"));
+}
