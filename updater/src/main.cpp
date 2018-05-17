@@ -9,6 +9,7 @@
 #include "log/logger.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
+#include "settings/commandlinesingleton.h"
 #include "utils.h"
 
 /*!
@@ -64,15 +65,14 @@ int main(int argc, char * argv[])
     // init language with locale in settings
     LanguageManager::updateLanguage(LanguageManager::getStringLanguageFromEnum(settings->getLanguage()));
 
-    QStringList args = qApp->arguments();
-    args.removeFirst();
-    if (args.contains("-debug")) {
-        L_INFO("Updater Arguments = " + args.join(" "));
-    }
+    QStringList arguments = qApp->arguments();
+    arguments.removeFirst();
+    CommandLineSingleton::getInstance()->setArguments(arguments);
 
-//    Splashscreen splashscreen;
-//    splashscreen.show();
-//    splashscreen.center();
+    if (CommandLineSingleton::getInstance()->isDebugMode()) {
+        L_INFO("Updater Arguments: " + CommandLineSingleton::getInstance()->getAllArguments().join(" "));
+        L_INFO("Query Arguments: " + CommandLineSingleton::getInstance()->getApplicationHttpArguments());
+    }
 
     MainWindow window;
     window.show();
