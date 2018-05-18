@@ -8,6 +8,7 @@
 #include "io/fileutils.h"
 #include "settings/settings.h"
 #include "io/unzip/zipextractor.h"
+#include "settings/commandlinesingleton.h"
 
 #include <QDirIterator>
 #include <QTimer>
@@ -61,7 +62,7 @@ void AppUpdater::start()
 
     QList<QUrl> downloads;
     // TODO disable progress bar for cnlp files
-    downloads << QUrl(UpdaterConfig::AppCnlpRemoteFilename);
+    downloads << QUrl(UpdaterConfig::AppCnlpRemoteFilename + CommandLineSingleton::getInstance()->getApplicationHttpArguments());
     downloads << QUrl(UpdaterConfig::LoaderCnlpRemoteFilename);
     downloads << QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename);
     downloads << QUrl(UpdaterConfig::JavaCnlpRemoteFilename);
