@@ -43,6 +43,8 @@ class DeploymentXML : public QObject
         Application getApplication() const;
         QList<Download> getDownloads(const QString &_os) const;
         QString getMemory() const;
+        QString getEncoding() const;
+        QString getMainClass() const;
 
         static const QString RDeploymentTag;
         static const QString DownloadsTag;
@@ -72,6 +74,8 @@ class DeploymentXML : public QObject
 
         static const QString MemoryTag;
         static const QString VersionTag;
+        static const QString EncodingTag;
+        static const QString MainClassTag;
 
     private:
 
@@ -79,6 +83,8 @@ class DeploymentXML : public QObject
         QXmlStreamReader m_xmlReader;
         QString m_memory;
         QString m_version;
+        QString m_encoding;
+        QString m_mainClass;
         QList<QString> m_arguments;
 
         Application m_application;
@@ -101,6 +107,18 @@ class DeploymentXML : public QObject
          * @return true if success analysis
          */
         bool processMemory();
+
+        /**
+         * @brief read encoding tag in xml
+         * @return true if success analysis
+         */
+        bool processEncoding();
+
+        /**
+         * @brief read mainClass tag in xml
+         * @return true if success analysis
+         */
+        bool processMainClass();
 
         /**
          * @brief read all arguments tags

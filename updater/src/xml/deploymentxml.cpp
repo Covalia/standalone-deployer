@@ -32,6 +32,8 @@ const QString DeploymentXML::ArgumentTag("argument");
 
 const QString DeploymentXML::MemoryTag("memory");
 const QString DeploymentXML::VersionTag("version");
+const QString DeploymentXML::EncodingTag("encoding");
+const QString DeploymentXML::MainClassTag("mainclass");
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
@@ -40,6 +42,8 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
 {
     m_memory = "512";
     m_version = "";
+    m_encoding = "";
+    m_mainClass = "";
     m_downloads = QList<Download>();
     m_arguments = QList<QString>();
 }
@@ -96,6 +100,16 @@ QString DeploymentXML::getMemory() const
     return m_memory;
 }
 
+QString DeploymentXML::getEncoding() const
+{
+    return m_encoding;
+}
+
+QString DeploymentXML::getMainClass() const
+{
+    return m_mainClass;
+}
+
 QList<QString> DeploymentXML::getArguments() const
 {
     return m_arguments;
@@ -125,6 +139,12 @@ bool DeploymentXML::processDeployment()
         } else if (m_xmlReader.name() == MemoryTag) {
             result &= processMemory();
             m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == EncodingTag) {
+            result &= processEncoding();
+            m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == MainClassTag) {
+            result &= processMainClass();
+            m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == ArgumentsTag) {
             result &= processArguments();
         } else if (m_xmlReader.name() == DownloadsTag) {
@@ -152,6 +172,24 @@ bool DeploymentXML::processMemory()
         return false;
     }
     m_memory = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processEncoding()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != EncodingTag) {
+        return false;
+    }
+    m_encoding = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processMainClass()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != MainClassTag) {
+        return false;
+    }
+    m_mainClass = readNextText();
     return true;
 }
 
