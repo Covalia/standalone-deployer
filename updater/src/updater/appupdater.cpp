@@ -666,7 +666,8 @@ void AppUpdater::applicationDownloadFinished()
                         }
 
                         Settings * settings = Settings::getInstance();
-                        m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass, m_encoding, m_arguments);
+                        m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
+                                                   m_encoding, settings->getDataLocation(), m_arguments);
                     }
                 } else {
                     L_ERROR("Errors have been reported on cnlp installation.");

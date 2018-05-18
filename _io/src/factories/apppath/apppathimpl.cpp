@@ -355,7 +355,9 @@ bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
     return result;
 }
 
-bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath, const QString &_mainClass, const QString &_encoding, const QStringList &_arguments)
+bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                   const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
+                                   const QStringList &_arguments)
 {
     QStringList arguments;
     const QDir installDir = getInstallationDir();
@@ -369,6 +371,7 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
     arguments << "-cp";
     arguments << _classPath;
     arguments << _mainClass;
+    arguments << "--dataLocation=" + _dataLocation;
 
     // append arguments received.
     arguments << _arguments;

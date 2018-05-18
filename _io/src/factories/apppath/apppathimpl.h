@@ -79,7 +79,9 @@ class AppPathImpl {
 
         virtual bool makeDirectoryIfNotExisting(const QDir &_directory);
 
-        virtual bool startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath, const QString &_mainClass, const QString &_encoding, const QStringList &_arguments);
+        virtual bool startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                      const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
+                                      const QStringList &_arguments);
 
     protected:
 
