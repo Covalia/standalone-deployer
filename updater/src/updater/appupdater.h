@@ -39,6 +39,8 @@ private slots:
     // return true if the application has changed
     bool doesAppNeedToBeRebuild(const Application &_application);
 
+    // check if downloads are ok (hashmac is good for each file).
+    bool checkDownloadsAreOk() const;
 
 private:
     DownloadManager * m_updater;

@@ -196,72 +196,7 @@ void AppUpdater::applicationDownloadFinished()
 
     L_INFO("Files successfully downloaded");
 
-    // reading hash key only once
-    const QString hash_key = HashKey::readHashKey();
-
-    bool downloadsOk = true;
-
-    // check downloaded hash mac
-    QMap<Application, QList<QString> >::const_iterator iterator = m_filesToDownload.constBegin();
-    while (iterator != m_filesToDownload.constEnd()) {
-        const Application application = iterator.key();
-        const QList<QString> downloadedFiles = iterator.value();
-
-        // foreach application, checking each file
-        foreach(QString downloadedFile, downloadedFiles) {
-            if (application == Application::getAppApplication()
-                || application == Application::getLoaderApplication()
-                || application == Application::getUpdaterApplication()
-                || application == Application::getJavaApplication()) {
-                QDir dir;
-
-                if (application == Application::getAppApplication()) {
-                    dir = QDir(m_appPath.getTempAppDir());
-                } else if (application == Application::getLoaderApplication()) {
-                    dir = QDir(m_appPath.getTempLoaderDir());
-                } else if (application == Application::getUpdaterApplication()) {
-                    dir = QDir(m_appPath.getTempUpdaterDir());
-                } else if (application == Application::getJavaApplication()) {
-                    dir = QDir(m_appPath.getTempJavaDir());
-                }
-
-                // temporary location of downloaded file
-                QString localFile = dir.absoluteFilePath(downloadedFile);
-
-                if (QFile::exists(localFile)) {
-                    // if this local temporary file exists
-                    // checking its hashmac
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-
-                    // we find the download corresponding to the downloadedFile to get its expected hashmac
-                    bool found = false;
-                    foreach(Download download, m_cnlpParsedFiles[application]) {
-                        if (download.getHref() == downloadedFile) {
-                            found = true;
-                            if (hashmac != download.getHashMac()) {
-                                L_WARN("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
-                                downloadsOk = false;
-                            }
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        // we print a warning if downloaded file was not found in the parsed downloads list
-                        // we just log it, in case this happens, but this mustn't
-                        L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
-                    }
-                } else {
-                    // if this file does not exist, we get an error
-                    L_ERROR("Downloaded file does not exist " + localFile);
-                    downloadsOk = false;
-                }
-            }
-        }
-
-        ++iterator;
-    }
-
-    if (downloadsOk) {
+    if (checkDownloadsAreOk()) {
         // all downloads are done
 
         bool buildOk = true;
@@ -911,6 +846,7 @@ void AppUpdater::processCnlpDownloadFileList()
         // local files of the current application, installed only
         QList<QString> localFilesOfCurrentApplication = allLocalFiles[application];
 
+        // check files to keep or download
         foreach(Download parsedDownload, parsedDownloads) {
             L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac());
 
@@ -975,4 +911,74 @@ bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
     }
 
     return false;
+}
+
+bool AppUpdater::checkDownloadsAreOk() const
+{
+    // reading hash key only once
+    const QString hash_key = HashKey::readHashKey();
+
+    bool downloadsOk = true;
+
+    // check downloaded hash mac
+    QMap<Application, QList<QString> >::const_iterator iterator = m_filesToDownload.constBegin();
+    while (iterator != m_filesToDownload.constEnd()) {
+        const Application application = iterator.key();
+        const QList<QString> downloadedFiles = iterator.value();
+
+        // foreach application, checking each file
+        foreach(QString downloadedFile, downloadedFiles) {
+            if (application == Application::getAppApplication()
+                || application == Application::getLoaderApplication()
+                || application == Application::getUpdaterApplication()
+                || application == Application::getJavaApplication()) {
+                QDir dir;
+
+                if (application == Application::getAppApplication()) {
+                    dir = QDir(m_appPath.getTempAppDir());
+                } else if (application == Application::getLoaderApplication()) {
+                    dir = QDir(m_appPath.getTempLoaderDir());
+                } else if (application == Application::getUpdaterApplication()) {
+                    dir = QDir(m_appPath.getTempUpdaterDir());
+                } else if (application == Application::getJavaApplication()) {
+                    dir = QDir(m_appPath.getTempJavaDir());
+                }
+
+                // temporary location of downloaded file
+                QString localFile = dir.absoluteFilePath(downloadedFile);
+
+                if (QFile::exists(localFile)) {
+                    // if this local temporary file exists
+                    // checking its hashmac
+                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+
+                    // we find the download corresponding to the downloadedFile to get its expected hashmac
+                    bool found = false;
+                    foreach(Download download, m_cnlpParsedFiles[application]) {
+                        if (download.getHref() == downloadedFile) {
+                            found = true;
+                            if (hashmac != download.getHashMac()) {
+                                L_WARN("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
+                                downloadsOk = false;
+                            }
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        // we print a warning if downloaded file was not found in the parsed downloads list
+                        // we just log it, in case this happens, but this mustn't
+                        L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
+                    }
+                } else {
+                    // if this file does not exist, we get an error
+                    L_ERROR("Downloaded file does not exist " + localFile);
+                    downloadsOk = false;
+                }
+            }
+        }
+
+        ++iterator;
+    }
+
+    return downloadsOk;
 }
