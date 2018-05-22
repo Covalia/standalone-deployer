@@ -226,61 +226,7 @@ void AppUpdater::applicationDownloadFinished()
         if (buildOk) {
             // build is ok
 
-            bool loaderInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                L_INFO("Installing " + Application::getLoaderApplication().getName());
-
-                const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
-                const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
-                const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
-
-                // remove an old loader directory if it already exists
-                if (FileUtils::directoryExists(loaderOldDir)) {
-                    L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
-
-                    if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                        L_INFO("Removed " + loaderOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + loaderOldDir);
-                        loaderInstalledOk = false;
-                    }
-                }
-
-                if (loaderInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old app directory.
-                    if (QDir().rename(loaderInstallDir, loaderOldDir)) {
-                        L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
-                        if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
-                            L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
-                            if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                                L_INFO("Removed " + loaderOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + loaderOldDir);
-                                // not an error
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
-                            loaderInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
-                        loaderInstalledOk = false;
-                    }
-                    // extract app from dmg (macos).
-                    if (m_appPath.prepareLoader()) {
-                        L_INFO("Loader prepared.");
-                    } else {
-                        L_ERROR("Unable to prepare Loader.");
-                        loaderInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Loader does not need to be updated.");
-            }
+            bool loaderInstalledOk = installLoader();
 
             if (loaderInstalledOk) {
                 L_INFO("No error reported on loader installation.");
@@ -981,4 +927,65 @@ bool AppUpdater::checkDownloadsAreOk() const
     }
 
     return downloadsOk;
+}
+
+bool AppUpdater::installLoader()
+{
+    bool loaderInstalledOk = true;
+    if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
+        // if this app needed to be rebuild, we now install it.
+
+        L_INFO("Installing " + Application::getLoaderApplication().getName());
+
+        const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
+        const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
+        const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
+
+        // remove an old loader directory if it already exists
+        if (FileUtils::directoryExists(loaderOldDir)) {
+            L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
+
+            if (FileUtils::removeDirRecursively(loaderOldDir)) {
+                L_INFO("Removed " + loaderOldDir);
+            } else {
+                L_ERROR("Unable to remove " + loaderOldDir);
+                loaderInstalledOk = false;
+            }
+        }
+
+        if (loaderInstalledOk) {
+            // we continue only if the old existing directory has been deleted
+
+            // firstly, we rename the old app directory.
+            if (QDir().rename(loaderInstallDir, loaderOldDir)) {
+                L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
+                if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
+                    L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
+                    if (FileUtils::removeDirRecursively(loaderOldDir)) {
+                        L_INFO("Removed " + loaderOldDir);
+                    } else {
+                        L_WARN("Unable to remove " + loaderOldDir);
+                        // not an error
+                    }
+                } else {
+                    L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
+                    loaderInstalledOk = false;
+                }
+            } else {
+                L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
+                loaderInstalledOk = false;
+            }
+            // extract app from dmg (macos).
+            if (m_appPath.prepareLoader()) {
+                L_INFO("Loader prepared.");
+            } else {
+                L_ERROR("Unable to prepare Loader.");
+                loaderInstalledOk = false;
+            }
+        }
+    } else {
+        L_INFO("Loader does not need to be updated.");
+    }
+
+    return loaderInstalledOk;
 }

@@ -41,6 +41,7 @@ private slots:
 
     // check if downloads are ok (hashmac is good for each file).
     bool checkDownloadsAreOk() const;
+    bool installLoader();
 
 private:
     DownloadManager * m_updater;
