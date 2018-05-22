@@ -599,41 +599,48 @@ void AppUpdater::applicationDownloadFinished()
 
                     const QString extractDir = m_appPath.getAppNativesDir().absolutePath();
 
-                    // find the native jar and extract it
-                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
-                        if (download.isNative()) {
-                            const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+                    // optimisation: if extractDir already exists, no extraction is done
+                    if (!FileUtils::directoryExists(extractDir)) {
+                        L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
 
-                            // extract zip to dist
-                            ZipExtractor zip(fileToExtract, extractDir);
+                        // find the native jar and extract it
+                        foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                            if (download.isNative()) {
+                                const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
 
-                            // we wait for a signal with QEventLoop and QTimer.
-                            QTimer timer;
-                            timer.setSingleShot(true);
-                            QEventLoop loop;
-                            QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
-                            QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-                            timer.start(60000);
+                                // extract zip to dist
+                                ZipExtractor zip(fileToExtract, extractDir);
 
-                            // start extraction
-                            zip.extract();
+                                // we wait for a signal with QEventLoop and QTimer.
+                                QTimer timer;
+                                timer.setSingleShot(true);
+                                QEventLoop loop;
+                                QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
+                                QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+                                timer.start(60000);
 
-                            loop.exec();
+                                // start extraction
+                                zip.extract();
 
-                            if (timer.isActive()) {
-                                if (zip.isOk()) {
-                                    L_INFO(fileToExtract + " extracted to " + extractDir);
+                                loop.exec();
+
+                                if (timer.isActive()) {
+                                    if (zip.isOk()) {
+                                        L_INFO(fileToExtract + " extracted to " + extractDir);
+                                    } else {
+                                        L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
+                                        native_extracted = false;
+                                        break;
+                                    }
                                 } else {
-                                    L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
+                                    L_ERROR("Timeout when waiting for extraction of " + fileToExtract);
                                     native_extracted = false;
                                     break;
                                 }
-                            } else {
-                                L_ERROR("Timeout when waiting for extraction of " + fileToExtract);
-                                native_extracted = false;
-                                break;
                             }
                         }
+                    } else {
+                        L_INFO("Natives directory " + extractDir + " already exists. No extraction done.");
                     }
 
                     if (native_extracted) {
@@ -835,6 +842,13 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
             // and java/<java-version>/dist/
             if (_application == Application::getJavaApplication()
                 && filename.startsWith(AppPathImpl::JavaSubDirName + QDir::separator())) {
+                L_INFO("Ignoring file: " + filename);
+                continue;
+            }
+
+            // and application/natives/
+            if (_application == Application::getAppApplication()
+                && filename.startsWith(AppPathImpl::NativesDirName + QDir::separator())) {
                 L_INFO("Ignoring file: " + filename);
                 continue;
             }

@@ -8,11 +8,11 @@
 #include <QDebug>
 
 const QString AppPathImpl::JavaSubDirName("dist");
+const QString AppPathImpl::NativesDirName("natives");
 const QString AppPathImpl::ResourceBinPrefix(":/bin/");
 
 const QString AppPathImpl::BuildDirSuffix("-build");
 const QString AppPathImpl::OldDirSuffix("-old");
-const QString AppPathImpl::NativesDirName("natives");
 
 AppPathImpl::AppPathImpl(IOConfig::AppComponent _app)
 {
