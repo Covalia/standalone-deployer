@@ -43,6 +43,7 @@ private slots:
     bool checkDownloadsAreOk() const;
     bool installLoader();
     bool installUpdater();
+    bool installJava();
 
 private:
     DownloadManager * m_updater;

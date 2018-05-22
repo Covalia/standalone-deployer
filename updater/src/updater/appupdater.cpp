@@ -242,71 +242,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on updater installation.");
             }
 
-            bool javaInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                // we can overwrite java because it must not be used by us.
-                L_INFO("Installing " + Application::getJavaApplication().getName());
-
-                const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
-                const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
-
-                if (FileUtils::directoryExists(javaInstallDir)) {
-                    // remove existing java dir if it exists
-                    if (FileUtils::removeDirRecursively(javaInstallDir)) {
-                        L_INFO("Removed " + javaInstallDir);
-                    } else {
-                        L_ERROR("Unable to remove " + javaInstallDir);
-                        javaInstalledOk = false;
-                    }
-                }
-
-                if (javaInstalledOk) {
-                    // we continue only if there is no error
-
-                    // local and remote versions differ
-                    if (QDir().rename(javaBuildDir, javaInstallDir)) {
-                        L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
-                        // nothing to remove. deletion will be done at next launch.
-                        // extract zip.
-                        if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
-                            L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
-                            // write new java version number
-                            Settings * settings = Settings::getInstance();
-                            settings->setJavaVersion(m_remoteJavaVersion);
-                            if (settings->writeSettings()) {
-                                L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
-                            } else {
-                                L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
-                                javaInstalledOk = false;
-                            }
-                        } else {
-                            L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
-                            javaInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
-                        javaInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Java does not need to be updated.");
-
-                if (javaInstalledOk) {
-                    const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
-
-                    if (!FileUtils::directoryExists(javaDistDir)) {
-                        L_INFO("Java dist directory does not exist. " + javaDistDir);
-                        if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
-                            L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
-                        } else {
-                            L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
-                            javaInstalledOk = false;
-                        }
-                    }
-                }
-            }
+            bool javaInstalledOk = installJava();
 
             if (javaInstalledOk) {
                 L_INFO("No error reported on java installation.");
@@ -995,4 +931,75 @@ bool AppUpdater::installUpdater()
     }
 
     return updaterInstalledOk;
+}
+
+bool AppUpdater::installJava()
+{
+    bool javaInstalledOk = true;
+    if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
+        // if this app needed to be rebuild, we now install it.
+
+        // we can overwrite java because it must not be used by us.
+        L_INFO("Installing " + Application::getJavaApplication().getName());
+
+        const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
+        const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
+
+        if (FileUtils::directoryExists(javaInstallDir)) {
+            // remove existing java dir if it exists
+            if (FileUtils::removeDirRecursively(javaInstallDir)) {
+                L_INFO("Removed " + javaInstallDir);
+            } else {
+                L_ERROR("Unable to remove " + javaInstallDir);
+                javaInstalledOk = false;
+            }
+        }
+
+        if (javaInstalledOk) {
+            // we continue only if there is no error
+
+            // local and remote versions differ
+            if (QDir().rename(javaBuildDir, javaInstallDir)) {
+                L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
+                // nothing to remove. deletion will be done at next launch.
+                // extract zip.
+                if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
+                    L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
+                    // write new java version number
+                    Settings * settings = Settings::getInstance();
+                    settings->setJavaVersion(m_remoteJavaVersion);
+                    if (settings->writeSettings()) {
+                        L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
+                    } else {
+                        L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
+                        javaInstalledOk = false;
+                    }
+                } else {
+                    L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
+                    javaInstalledOk = false;
+                }
+            } else {
+                L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
+                javaInstalledOk = false;
+            }
+        }
+    } else {
+        L_INFO("Java does not need to be updated.");
+
+        if (javaInstalledOk) {
+            const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
+
+            if (!FileUtils::directoryExists(javaDistDir)) {
+                L_INFO("Java dist directory does not exist. " + javaDistDir);
+                if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
+                    L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
+                } else {
+                    L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
+                    javaInstalledOk = false;
+                }
+            }
+        }
+    }
+
+    return javaInstalledOk;
 }
