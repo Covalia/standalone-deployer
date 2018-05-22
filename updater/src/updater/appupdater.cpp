@@ -12,6 +12,7 @@
 
 #include <QDirIterator>
 #include <QTimer>
+#include <QCoreApplication>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
     m_updater(0),
@@ -673,8 +674,15 @@ void AppUpdater::applicationDownloadFinished()
                         }
 
                         Settings * settings = Settings::getInstance();
-                        m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
-                                                   m_encoding, settings->getDataLocation(), m_arguments);
+                        if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
+                                                   m_encoding, settings->getDataLocation(), m_arguments)) {
+                            // quit application
+                            L_INFO("Quit application.");
+                            QCoreApplication::quit();
+                        } else {
+                            L_ERROR("Unable to start application. Exiting.");
+                            QCoreApplication::quit();
+                        }
                     }
                 } else {
                     L_ERROR("Errors have been reported on cnlp installation.");
