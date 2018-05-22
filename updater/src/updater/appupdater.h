@@ -44,6 +44,7 @@ private slots:
     bool installLoader();
     bool installUpdater();
     bool installJava();
+    bool installApp();
 
 private:
     DownloadManager * m_updater;

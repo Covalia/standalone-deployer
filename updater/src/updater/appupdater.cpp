@@ -250,54 +250,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on java installation.");
             }
 
-            bool appInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                L_INFO("Installing " + Application::getAppApplication().getName());
-
-                const QString appInstallDir = m_appPath.getAppDir().absolutePath();
-                const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
-                const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
-
-                // remove an old app directory if it already exists
-                if (FileUtils::directoryExists(appOldDir)) {
-                    L_INFO("Existing old application directory needs to be removed: " + appOldDir);
-
-                    if (FileUtils::removeDirRecursively(appOldDir)) {
-                        L_INFO("Removed " + appOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-
-                if (appInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old app directory.
-                    if (QDir().rename(appInstallDir, appOldDir)) {
-                        L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
-                        if (QDir().rename(appBuildDir, appInstallDir)) {
-                            L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
-                            if (FileUtils::removeDirRecursively(appOldDir)) {
-                                L_INFO("Removed " + appOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + appOldDir);
-                                // not an error
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
-                            appInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Application does not need to be updated.");
-            }
+            bool appInstalledOk = installApp();
 
             if (appInstalledOk) {
                 L_INFO("No error reported on application installation.");
@@ -1002,4 +955,58 @@ bool AppUpdater::installJava()
     }
 
     return javaInstalledOk;
+}
+
+bool AppUpdater::installApp()
+{
+    bool appInstalledOk = true;
+    if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
+        // if this app needed to be rebuild, we now install it.
+
+        L_INFO("Installing " + Application::getAppApplication().getName());
+
+        const QString appInstallDir = m_appPath.getAppDir().absolutePath();
+        const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
+        const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
+
+        // remove an old app directory if it already exists
+        if (FileUtils::directoryExists(appOldDir)) {
+            L_INFO("Existing old application directory needs to be removed: " + appOldDir);
+
+            if (FileUtils::removeDirRecursively(appOldDir)) {
+                L_INFO("Removed " + appOldDir);
+            } else {
+                L_ERROR("Unable to remove " + appOldDir);
+                appInstalledOk = false;
+            }
+        }
+
+        if (appInstalledOk) {
+            // we continue only if the old existing directory has been deleted
+
+            // firstly, we rename the old app directory.
+            if (QDir().rename(appInstallDir, appOldDir)) {
+                L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
+                if (QDir().rename(appBuildDir, appInstallDir)) {
+                    L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
+                    if (FileUtils::removeDirRecursively(appOldDir)) {
+                        L_INFO("Removed " + appOldDir);
+                    } else {
+                        L_WARN("Unable to remove " + appOldDir);
+                        // not an error
+                    }
+                } else {
+                    L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
+                    appInstalledOk = false;
+                }
+            } else {
+                L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
+                appInstalledOk = false;
+            }
+        }
+    } else {
+        L_INFO("Application does not need to be updated.");
+    }
+
+    return appInstalledOk;
 }
