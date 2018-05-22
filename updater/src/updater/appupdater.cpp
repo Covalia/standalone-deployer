@@ -234,62 +234,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on loader installation.");
             }
 
-            bool updaterInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                // we can not overwrite ourselves
-                if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
-                    L_INFO("Installing " + Application::getUpdaterApplication().getName());
-
-                    const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
-                    const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
-
-                    if (FileUtils::directoryExists(updaterInstallDir)) {
-                        // it should not exist with the previous condition, but in case it exists
-                        // (it is not used because local and remote versions differ), we need to remove it
-                        if (FileUtils::removeDirRecursively(updaterInstallDir)) {
-                            L_INFO("Removed " + updaterInstallDir);
-                        } else {
-                            L_ERROR("Unable to remove " + updaterInstallDir);
-                            updaterInstalledOk = false;
-                        }
-                    }
-
-                    if (updaterInstalledOk) {
-                        // we continue only if there is no error
-
-                        // local and remote versions differ
-                        if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
-                            L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
-                            // nothing to remove. deletion will be done at next launch.
-                            // extract app from dmg (macos).
-                            if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
-                                L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
-                                // write new updater version number
-                                Settings * settings = Settings::getInstance();
-                                settings->setUpdaterVersion(m_remoteUpdaterVersion);
-                                if (settings->writeSettings()) {
-                                    L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
-                                } else {
-                                    L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
-                                    updaterInstalledOk = false;
-                                }
-                            } else {
-                                L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
-                                updaterInstalledOk = false;
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
-                            updaterInstalledOk = false;
-                        }
-                    }
-                } else {
-                    L_WARN("Remote and local updaters differ but have same version number, no possible update.");
-                }
-            } else {
-                L_INFO("Updater does not need to be updated.");
-            }
+            bool updaterInstalledOk = installUpdater();
 
             if (updaterInstalledOk) {
                 L_INFO("No error reported on updater installation.");
@@ -988,4 +933,66 @@ bool AppUpdater::installLoader()
     }
 
     return loaderInstalledOk;
+}
+
+bool AppUpdater::installUpdater()
+{
+    bool updaterInstalledOk = true;
+    if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
+        // if this app needed to be rebuild, we now install it.
+
+        // we can not overwrite ourselves
+        if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
+            L_INFO("Installing " + Application::getUpdaterApplication().getName());
+
+            const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
+            const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
+
+            if (FileUtils::directoryExists(updaterInstallDir)) {
+                // it should not exist with the previous condition, but in case it exists
+                // (it is not used because local and remote versions differ), we need to remove it
+                if (FileUtils::removeDirRecursively(updaterInstallDir)) {
+                    L_INFO("Removed " + updaterInstallDir);
+                } else {
+                    L_ERROR("Unable to remove " + updaterInstallDir);
+                    updaterInstalledOk = false;
+                }
+            }
+
+            if (updaterInstalledOk) {
+                // we continue only if there is no error
+
+                // local and remote versions differ
+                if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
+                    L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
+                    // nothing to remove. deletion will be done at next launch.
+                    // extract app from dmg (macos).
+                    if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
+                        L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
+                        // write new updater version number
+                        Settings * settings = Settings::getInstance();
+                        settings->setUpdaterVersion(m_remoteUpdaterVersion);
+                        if (settings->writeSettings()) {
+                            L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
+                        } else {
+                            L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
+                            updaterInstalledOk = false;
+                        }
+                    } else {
+                        L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
+                        updaterInstalledOk = false;
+                    }
+                } else {
+                    L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
+                    updaterInstalledOk = false;
+                }
+            }
+        } else {
+            L_WARN("Remote and local updaters differ but have same version number, no possible update.");
+        }
+    } else {
+        L_INFO("Updater does not need to be updated.");
+    }
+
+    return updaterInstalledOk;
 }
