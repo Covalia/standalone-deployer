@@ -109,14 +109,14 @@ void AppUpdater::cnlpDownloadFinished()
     disconnect(m_updater, SIGNAL(downloadsFinished()),
                this, SLOT(cnlpDownloadFinished()));
 
-    const QString applicationCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::AppCnlpLocalFilename);
-    const QString updaterCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::UpdaterCnlpLocalFilename);
     const QString loaderCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::LoaderCnlpLocalFilename);
+    const QString updaterCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::UpdaterCnlpLocalFilename);
     const QString javaCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::JavaCnlpLocalFilename);
-    L_INFO("File to read: " + applicationCnlpPath);
-    L_INFO("File to read: " + updaterCnlpPath);
+    const QString applicationCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::AppCnlpLocalFilename);
     L_INFO("File to read: " + loaderCnlpPath);
+    L_INFO("File to read: " + updaterCnlpPath);
     L_INFO("File to read: " + javaCnlpPath);
+    L_INFO("File to read: " + applicationCnlpPath);
 
     DeploymentXML applicationXml(applicationCnlpPath);
     DeploymentXML updaterXml(updaterCnlpPath);
@@ -267,11 +267,6 @@ void AppUpdater::applicationDownloadFinished()
         bool buildOk = true;
 
         // we install only if the download list is not empty or if the remain list is not empty.
-        if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-            L_INFO("Need to rebuild and install " + Application::getAppApplication().getName());
-            buildOk &= buildApplicationInTempDirectory(Application::getAppApplication());
-            L_INFO(Application::getAppApplication().getName() + " build result: " + QString::number(buildOk));
-        }
         if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
             L_INFO("Need to rebuild and install " + Application::getLoaderApplication().getName());
             buildOk &= buildApplicationInTempDirectory(Application::getLoaderApplication());
@@ -287,64 +282,14 @@ void AppUpdater::applicationDownloadFinished()
             buildOk &= buildApplicationInTempDirectory(Application::getJavaApplication());
             L_INFO(Application::getJavaApplication().getName() + " build result: " + QString::number(buildOk));
         }
+        if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
+            L_INFO("Need to rebuild and install " + Application::getAppApplication().getName());
+            buildOk &= buildApplicationInTempDirectory(Application::getAppApplication());
+            L_INFO(Application::getAppApplication().getName() + " build result: " + QString::number(buildOk));
+        }
 
         if (buildOk) {
             // build is ok
-
-            bool appInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                L_INFO("Installing " + Application::getAppApplication().getName());
-
-                const QString appInstallDir = m_appPath.getAppDir().absolutePath();
-                const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
-                const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
-
-                // remove an old app directory if it already exists
-                if (FileUtils::directoryExists(appOldDir)) {
-                    L_INFO("Existing old application directory needs to be removed: " + appOldDir);
-
-                    if (FileUtils::removeDirRecursively(appOldDir)) {
-                        L_INFO("Removed " + appOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-
-                if (appInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old app directory.
-                    if (QDir().rename(appInstallDir, appOldDir)) {
-                        L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
-                        if (QDir().rename(appBuildDir, appInstallDir)) {
-                            L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
-                            if (FileUtils::removeDirRecursively(appOldDir)) {
-                                L_INFO("Removed " + appOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + appOldDir);
-                                // not an error
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
-                            appInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Application does not need to be updated.");
-            }
-
-            if (appInstalledOk) {
-                L_INFO("No error reported on application installation.");
-            } else {
-                L_ERROR("Errors have been reported on application installation.");
-            }
 
             bool loaderInstalledOk = true;
             if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
@@ -543,7 +488,62 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on java installation.");
             }
 
-            if (appInstalledOk && loaderInstalledOk && updaterInstalledOk && javaInstalledOk) {
+            bool appInstalledOk = true;
+            if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
+                // if this app needed to be rebuild, we now install it.
+
+                L_INFO("Installing " + Application::getAppApplication().getName());
+
+                const QString appInstallDir = m_appPath.getAppDir().absolutePath();
+                const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
+                const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
+
+                // remove an old app directory if it already exists
+                if (FileUtils::directoryExists(appOldDir)) {
+                    L_INFO("Existing old application directory needs to be removed: " + appOldDir);
+
+                    if (FileUtils::removeDirRecursively(appOldDir)) {
+                        L_INFO("Removed " + appOldDir);
+                    } else {
+                        L_ERROR("Unable to remove " + appOldDir);
+                        appInstalledOk = false;
+                    }
+                }
+
+                if (appInstalledOk) {
+                    // we continue only if the old existing directory has been deleted
+
+                    // firstly, we rename the old app directory.
+                    if (QDir().rename(appInstallDir, appOldDir)) {
+                        L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
+                        if (QDir().rename(appBuildDir, appInstallDir)) {
+                            L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
+                            if (FileUtils::removeDirRecursively(appOldDir)) {
+                                L_INFO("Removed " + appOldDir);
+                            } else {
+                                L_WARN("Unable to remove " + appOldDir);
+                                // not an error
+                            }
+                        } else {
+                            L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
+                            appInstalledOk = false;
+                        }
+                    } else {
+                        L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
+                        appInstalledOk = false;
+                    }
+                }
+            } else {
+                L_INFO("Application does not need to be updated.");
+            }
+
+            if (appInstalledOk) {
+                L_INFO("No error reported on application installation.");
+            } else {
+                L_ERROR("Errors have been reported on application installation.");
+            }
+
+            if (loaderInstalledOk && updaterInstalledOk && javaInstalledOk && appInstalledOk) {
                 // application, loader and updater didn't throw error, updating cnlp files.
 
                 L_INFO("Installing Cnlp files.");
@@ -594,7 +594,8 @@ void AppUpdater::applicationDownloadFinished()
                     L_INFO("No error reported on cnlp installation.");
 
                     L_INFO("Starting application.");
-                    // TODO start app with args
+
+                    // start app with args
 
                     bool native_extracted = true;
 
