@@ -303,13 +303,6 @@ QProgressBar::chunk:horizontal {
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="pushButton">
-                  <property name="text">
-                   <string>Download</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="0" colspan="3">
                  <widget class="QProgressBar" name="singleProgressBar">
                   <property name="styleSheet">

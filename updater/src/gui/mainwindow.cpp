@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget * _parent) :
 {
     m_ui->setupUi(this);
 
-    m_ui->pushButton->setAccessibleName("pageButton");
     StyleManager::transformStyle(this);
 
     AppPath appPath = Utils::getAppPath();
@@ -50,7 +49,6 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_timer->start(5000);
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
-    connect(m_ui->pushButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
 
     connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));
@@ -87,6 +85,7 @@ void MainWindow::showEvent(QShowEvent * _event)
 {
     QMainWindow::showEvent(_event);
     updateSlideShow();
+    startUpdate();
 }
 
 
@@ -135,7 +134,7 @@ void MainWindow::center()
     move(geometry.topLeft());
 }
 
-void MainWindow::buttonClicked()
+void MainWindow::startUpdate()
 {
     m_appUpdater->start();
 }
