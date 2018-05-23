@@ -34,6 +34,13 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_timer(0),
     m_appUpdater(0)
 {
+
+    setAttribute(Qt::WA_QuitOnClose);
+    setWindowFlags(Qt::FramelessWindowHint);
+
+    setAttribute(Qt::WA_QuitOnClose);
+    setWindowFlags(Qt::FramelessWindowHint);
+
     m_ui->setupUi(this);
 
     StyleManager::transformStyle(this);
@@ -42,13 +49,15 @@ MainWindow::MainWindow(QWidget * _parent) :
     m_ui->closeButton->setIcon(QIcon(appPath.getImagesDir().absoluteFilePath("close.png")));
     m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("logo_title.png")));
 
-    m_appUpdater = new AppUpdater(UpdaterConfig::AppUrl, UpdaterConfig::InstallationDir, this);
+    QTimer::singleShot(0, this, SLOT(updateSlideShow()));
 
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateSlideShow()));
     m_timer->start(5000);
 
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
+
+    m_appUpdater = new AppUpdater(UpdaterConfig::AppUrl, UpdaterConfig::InstallationDir, this);
 
     connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));
@@ -64,11 +73,8 @@ MainWindow::MainWindow(QWidget * _parent) :
     connect(m_appUpdater, SIGNAL(remainingTimeMessage(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
 
-    setAttribute(Qt::WA_QuitOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
+    QTimer::singleShot(0, this, SLOT(startUpdate()));
 
-    setAttribute(Qt::WA_QuitOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
 }
 
 /*!
@@ -80,14 +86,6 @@ MainWindow::~MainWindow()
     delete m_appUpdater;
     delete m_timer;
 }
-
-void MainWindow::showEvent(QShowEvent * _event)
-{
-    QMainWindow::showEvent(_event);
-    updateSlideShow();
-    startUpdate();
-}
-
 
 void MainWindow::closeEvent(QCloseEvent * _event)
 {
@@ -244,7 +242,7 @@ void MainWindow::updateSlideShow(int _index)
 {
     if (!m_imagesList.isEmpty()) {
         const QSize maxSize = m_ui->labelImage->size();
-        QPixmap pixmap = m_imagesList.at(_index);
+        const QPixmap &pixmap = m_imagesList.at(_index);
         QPixmap resizedPixmap = pixmap.scaled(maxSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         m_ui->labelImage->setPixmap(resizedPixmap);
         m_buttonsList.at(_index)->setChecked(true);
@@ -255,9 +253,9 @@ void MainWindow::updateSlideShow()
 {
     if (m_imagesList.isEmpty()) {
         loadSlideShowImagesFromResources();
-    } else {
-        update_counter++;
-        update_counter %= m_imagesList.size();
-        updateSlideShow(update_counter);
     }
+
+    update_counter++;
+    update_counter %= m_imagesList.size();
+    updateSlideShow(update_counter);
 }

@@ -26,10 +26,9 @@ class MainWindow : public QMainWindow
         void center();
 
     protected:
-        void mousePressEvent(QMouseEvent *);
-        void mouseMoveEvent(QMouseEvent *);
-
-        virtual void showEvent(QShowEvent *event);
+        virtual void mousePressEvent(QMouseEvent *);
+        virtual void mouseMoveEvent(QMouseEvent *);
+        virtual void closeEvent(QCloseEvent *);
 
     private slots:
         void startUpdate();
@@ -53,7 +52,6 @@ class MainWindow : public QMainWindow
         bool m_alreadyClosedOnMacOs = false;
         AppUpdater * m_appUpdater;
 
-        virtual void closeEvent(QCloseEvent *);
         void loadSlideShowImagesFromResources();
 };
 
