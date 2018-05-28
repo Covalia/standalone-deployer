@@ -126,6 +126,7 @@ void AppUpdater::cnlpDownloadFinished()
     if (applicationXml.read() && updaterXml.read() && loaderXml.read() && javaXml.read()) {
         // retrieving remote updater version.
         m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
+        L_INFO("Remote updater version: " + m_remoteUpdaterVersion);
 
         // retrieving application encoding
         m_encoding = applicationXml.getEncoding();
@@ -141,7 +142,9 @@ void AppUpdater::cnlpDownloadFinished()
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
+        L_INFO("Local updater version: " + m_localUpdaterVersion);
         m_localJavaVersion = settings->getJavaVersion();
+        L_INFO("Local java version: " + m_localJavaVersion);
 
         const Application appApplication = Application::getAppApplication();
         const Application updaterApplication = Application::getUpdaterApplication();
@@ -167,6 +170,7 @@ void AppUpdater::cnlpDownloadFinished()
         for (int i = 0; i < javaDownloads.size(); ++i) {
             m_remoteJavaVersion = javaDownloads[i].getVersion();
             // only one java version for one operating system
+            L_INFO("Remote java version: " + m_remoteJavaVersion);
             break;
         }
 
