@@ -67,16 +67,16 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
 
     switch (_errorCode) {
         case QArchive::ARCHIVE_READ_ERROR:
-            qDebug() << "unable to find archive :: " << _file;
+            L_ERROR("unable to find archive: " + _file);
             break;
         case QArchive::ARCHIVE_QUALITY_ERROR:
-            qDebug() << "bad archive! :: " << _file;
+            L_ERROR("bad archive: " + _file);
             break;
         case QArchive::ARCHIVE_UNCAUGHT_ERROR:
-            qDebug() << "fatal error. :: " << _file;
+            L_ERROR("fatal error: " + _file);
             break;
         default:
-            qDebug() << "unknown error. :: " << _file;
+            L_ERROR("unknown error: " + _file);
             break;
     }
 

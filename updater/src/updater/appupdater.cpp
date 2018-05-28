@@ -11,7 +11,6 @@
 #include "settings/commandlinesingleton.h"
 
 #include <QDirIterator>
-#include <QTimer>
 #include <QCoreApplication>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
@@ -332,29 +331,13 @@ void AppUpdater::applicationDownloadFinished()
                                 // extract zip to dist
                                 ZipExtractor zip(fileToExtract, extractDir);
 
-                                // we wait for a signal with QEventLoop and QTimer.
-                                QTimer timer;
-                                timer.setSingleShot(true);
-                                QEventLoop loop;
-                                QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
-                                QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-                                timer.start(60000);
-
                                 // start extraction
                                 zip.extract();
 
-                                loop.exec();
-
-                                if (timer.isActive()) {
-                                    if (zip.isOk()) {
-                                        L_INFO(fileToExtract + " extracted to " + extractDir);
-                                    } else {
-                                        L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
-                                        native_extracted = false;
-                                        break;
-                                    }
+                                if (zip.isOk()) {
+                                    L_INFO(fileToExtract + " extracted to " + extractDir);
                                 } else {
-                                    L_ERROR("Timeout when waiting for extraction of " + fileToExtract);
+                                    L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
                                     native_extracted = false;
                                     break;
                                 }

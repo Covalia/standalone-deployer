@@ -2,8 +2,6 @@
 #include "io/fileutils.h"
 #include "io/unzip/zipextractor.h"
 #include <QDirIterator>
-#include <QTimer>
-#include <QEventLoop>
 
 #include <QDebug>
 
@@ -290,29 +288,13 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
                         // extract zip to dist
                         ZipExtractor zip(javaVersionDir.absoluteFilePath(file), javaDistDir.absolutePath());
 
-                        // we wait for a signal with QEventLoop and QTimer.
-                        QTimer timer;
-                        timer.setSingleShot(true);
-                        QEventLoop loop;
-                        QObject::connect(&zip, SIGNAL(finished()), &loop, SLOT(quit()));
-                        QObject::connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-                        timer.start(60000);
-
                         // start extraction
                         zip.extract();
-
-                        loop.exec();
-
-                        if (timer.isActive()) {
-                            if (zip.isOk()) {
-                                L_INFO(javaVersionDir.absoluteFilePath(file) + " extracted to " + javaDistDir.absolutePath());
-                                return true;
-                            } else {
-                                L_ERROR(javaVersionDir.absoluteFilePath(file) + " can not be extracted to " + javaDistDir.absolutePath());
-                                return false;
-                            }
+                        if (zip.isOk()) {
+                            L_INFO(javaVersionDir.absoluteFilePath(file) + " extracted to " + javaDistDir.absolutePath());
+                            return true;
                         } else {
-                            L_ERROR("Timeout when waiting for extraction of " + javaVersionDir.absoluteFilePath(file));
+                            L_ERROR(javaVersionDir.absoluteFilePath(file) + " can not be extracted to " + javaDistDir.absolutePath());
                             return false;
                         }
                         break;
