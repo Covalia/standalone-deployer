@@ -58,16 +58,14 @@ QSharedPointer<QFile> WindowsAppPathImpl::getUpdaterFile(QString _updaterVersion
     return QSharedPointer<QFile>(new QFile(m_installationDir.absoluteFilePath(IOConfig::UpdaterDir + QDir::separator() + _updaterVersion + QDir::separator() + IOConfig::UpdaterFile + IOConfig::WindowsAppExtension)));
 }
 
-bool WindowsAppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
+bool WindowsAppPathImpl::startLoader(QStringList _args)
 {
-    if (!_app->exists()) {
-        L_ERROR("An error occured when launching " + _app->fileName() + ". The exe file doesn't exist.");
-        return false;
-    }
+    return startComponent(getLoaderFile(), _args);
+}
 
-    L_INFO("Launching file " + _app->fileName());
-    QProcess process;
-    return process.startDetached(_app->fileName(), _args);
+bool WindowsAppPathImpl::startUpdater(QString _version, QStringList _args)
+{
+    return startComponent(getUpdaterFile(_version), _args);
 }
 
 QString WindowsAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) const

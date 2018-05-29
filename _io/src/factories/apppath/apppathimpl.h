@@ -75,8 +75,8 @@ class AppPathImpl {
         virtual bool prepareUpdater(QString _version);
         virtual bool prepareJava(const QString &_version, bool _forceOverwrite);
 
-        virtual bool startLoader(QStringList _args);
-        virtual bool startUpdater(QString _version, QStringList _args);
+        virtual bool startLoader(QStringList _args) = 0;
+        virtual bool startUpdater(QString _version, QStringList _args) = 0;
 
         virtual QPair<bool, QString> extractResource(QFile &_sourceFile, QFile &_destFile);
 
@@ -94,7 +94,7 @@ class AppPathImpl {
         static const QString OldDirSuffix;
 
         QDir m_installationDir;
-        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args) = 0;
+        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
         bool cdUp(QDir &_dir, int _numUp);
 
         virtual QString getJavaExecutablePath(const QString &_javaVersion) const = 0;

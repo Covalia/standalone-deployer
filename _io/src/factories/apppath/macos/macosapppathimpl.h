@@ -19,7 +19,6 @@ class MacosAppPathImpl : public AppPathImpl {
         virtual bool startUpdater(QString _version, QStringList _args);
 
     protected:
-        virtual bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
         virtual QString getJavaExecutablePath(const QString &_javaVersion) const;
 
     private:

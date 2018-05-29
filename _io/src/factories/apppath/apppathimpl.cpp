@@ -316,16 +316,6 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
     return false;
 }
 
-bool AppPathImpl::startLoader(QStringList _args)
-{
-    return startComponent(getLoaderFile(), _args);
-}
-
-bool AppPathImpl::startUpdater(QString _version, QStringList _args)
-{
-    return startComponent(getUpdaterFile(_version), _args);
-}
-
 bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
 {
     bool result = true;
@@ -335,6 +325,18 @@ bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
         _numUp--;
     }
     return result;
+}
+
+bool AppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
+{
+    if (!_app->exists()) {
+        L_ERROR("An error occured when launching " + _app->fileName() + ". The exe file doesn't exist.");
+        return false;
+    }
+
+    L_INFO("Launching file " + _app->fileName());
+    QProcess process;
+    return process.startDetached(_app->fileName(), _args);
 }
 
 bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
