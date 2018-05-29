@@ -30,6 +30,7 @@ bool LoaderManager::launchUpdater()
         L_INFO("Loader Arguments = " + args.join(" "));
     }
 
+    L_INFO("Starting Updater " + settings->getUpdaterVersion());
     bool success = appPath.startUpdater(settings->getUpdaterVersion(), args);
     if (!success) {
         L_ERROR("Error when launching updater");
