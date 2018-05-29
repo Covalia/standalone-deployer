@@ -26,7 +26,7 @@ bool LoaderManager::launchUpdater()
     QStringList args = qApp->arguments();
     args.removeFirst();
 
-    if (args.contains("-debug")) {
+    if (args.contains("--debug")) {
         L_INFO("Loader Arguments = " + args.join(" "));
     }
 
