@@ -525,19 +525,19 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
                 // on macos, we ignore updater/<version>/updater.app/
                 if (_application == Application::getUpdaterApplication()
                     && filename.startsWith(IOConfig::UpdaterName + IOConfig::MacOsAppExtension + QDir::separator())) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in Updater: " + filename);
                     continue;
                 }
                 // and loader/loader.app/
                 if (_application == Application::getLoaderApplication()
                     && filename.startsWith(IOConfig::LoaderName + IOConfig::MacOsAppExtension + QDir::separator())) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in Loader: " + filename);
                     continue;
                 }
 
                 // and .DS_Store on macos
                 if (filename.toLower().endsWith(".ds_store")) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in " + _application.getName() + ": " + filename);
                     continue;
                 }
 #endif
@@ -545,7 +545,7 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
 #ifdef Q_OS_WIN
                 // and Thumbs.db on windows
                 if (filename.toLower().endsWith("thumbs.db")) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in " + _application.getName() + ": " + filename);
                     continue;
                 }
 #endif
@@ -553,14 +553,14 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
             // and java/<java-version>/dist/
             if (_application == Application::getJavaApplication()
                 && filename.startsWith(AppPathImpl::JavaSubDirName + QDir::separator())) {
-                L_INFO("Ignoring file: " + filename);
+                L_INFO("Ignoring file in Java: " + filename);
                 continue;
             }
 
             // and application/natives/
             if (_application == Application::getAppApplication()
                 && filename.startsWith(AppPathImpl::NativesDirName + QDir::separator())) {
-                L_INFO("Ignoring file: " + filename);
+                L_INFO("Ignoring file in Application: " + filename);
                 continue;
             }
 
