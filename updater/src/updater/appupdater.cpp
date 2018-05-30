@@ -204,191 +204,202 @@ void AppUpdater::applicationDownloadFinished()
 
         bool buildOk = true;
 
+        bool loaderInstalledOk = true;
+        bool updaterInstalledOk = true;
+        bool javaInstalledOk = true;
+        bool appInstalledOk = true;
+
         // we install only if the download list is not empty or if the remain list is not empty.
         if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
             L_INFO("Need to rebuild and install " + Application::getLoaderApplication().getName());
             buildOk &= buildApplicationInTempDirectory(Application::getLoaderApplication());
             L_INFO(Application::getLoaderApplication().getName() + " build result: " + QString::number(buildOk));
+
+            loaderInstalledOk = installLoader();
+            if (loaderInstalledOk) {
+                L_INFO("No error reported on loader installation.");
+
+                // install loader cnlp file
+                if (installCnlpFile(UpdaterConfig::LoaderCnlpLocalFilename)) {
+                    L_INFO("Need a restart for Loader.");
+                    // restart process
+                    QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
+                    if (m_appPath.startLoader(args)) {
+                        if (CommandLineSingleton::getInstance()->isDebugMode()) {
+                            // debug mode, print args
+                            L_INFO("Restart loader with: " + args.join(" "));
+                        } else {
+                            L_INFO("Restart loader...");
+                        }
+                    } else {
+                        L_ERROR("Loader restart failed.");
+                    }
+                } else {
+                    L_ERROR("Error installing loader cnlp.");
+                }
+
+                QCoreApplication::quit();
+                return;
+            } else {
+                L_ERROR("Errors have been reported on loader installation.");
+            }
         }
+
         if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
             L_INFO("Need to rebuild and install " + Application::getUpdaterApplication().getName());
             buildOk &= buildApplicationInTempDirectory(Application::getUpdaterApplication());
             L_INFO(Application::getUpdaterApplication().getName() + " build result: " + QString::number(buildOk));
+
+            updaterInstalledOk = installUpdater();
+            if (updaterInstalledOk) {
+                L_INFO("No error reported on updater installation.");
+
+                // install updater cnlp file
+                if (installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename)) {
+                    L_INFO("Need a restart for Updater.");
+                    // restart process
+                    QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
+                    if (m_appPath.startLoader(args)) {
+                        if (CommandLineSingleton::getInstance()->isDebugMode()) {
+                            // debug mode, print args
+                            L_INFO("Restart loader with: " + args.join(" "));
+                        } else {
+                            L_INFO("Restart loader...");
+                        }
+                    } else {
+                        L_ERROR("Loader restart failed.");
+                    }
+                } else {
+                    L_ERROR("Error installing updater cnlp.");
+                }
+
+                QCoreApplication::quit();
+                return;
+            } else {
+                L_ERROR("Errors have been reported on updater installation.");
+            }
         }
+
         if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
             L_INFO("Need to rebuild and install " + Application::getJavaApplication().getName());
             buildOk &= buildApplicationInTempDirectory(Application::getJavaApplication());
             L_INFO(Application::getJavaApplication().getName() + " build result: " + QString::number(buildOk));
+
+            javaInstalledOk = installJava();
+            if (javaInstalledOk) {
+                L_INFO("No error reported on java installation.");
+
+                // install java cnlp file
+                if (!installCnlpFile(UpdaterConfig::JavaCnlpLocalFilename)) {
+                    L_ERROR("Error installing java cnlp.");
+                }
+            } else {
+                L_ERROR("Errors have been reported on java installation.");
+            }
         }
+
         if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
             L_INFO("Need to rebuild and install " + Application::getAppApplication().getName());
             buildOk &= buildApplicationInTempDirectory(Application::getAppApplication());
             L_INFO(Application::getAppApplication().getName() + " build result: " + QString::number(buildOk));
+
+            appInstalledOk = installApp();
+            if (appInstalledOk) {
+                L_INFO("No error reported on application installation.");
+
+                // install app cnlp file
+                if (!installCnlpFile(UpdaterConfig::AppCnlpLocalFilename)) {
+                    L_ERROR("Error installing application cnlp.");
+                }
+            } else {
+                L_ERROR("Errors have been reported on application installation.");
+            }
         }
 
         if (buildOk) {
             // build is ok
 
-            bool loaderInstalledOk = installLoader();
-
-            if (loaderInstalledOk) {
-                L_INFO("No error reported on loader installation.");
-            } else {
-                L_ERROR("Errors have been reported on loader installation.");
-            }
-
-            bool updaterInstalledOk = installUpdater();
-
-            if (updaterInstalledOk) {
-                L_INFO("No error reported on updater installation.");
-            } else {
-                L_ERROR("Errors have been reported on updater installation.");
-            }
-
-            bool javaInstalledOk = installJava();
-
-            if (javaInstalledOk) {
-                L_INFO("No error reported on java installation.");
-            } else {
-                L_ERROR("Errors have been reported on java installation.");
-            }
-
-            bool appInstalledOk = installApp();
-
-            if (appInstalledOk) {
-                L_INFO("No error reported on application installation.");
-            } else {
-                L_ERROR("Errors have been reported on application installation.");
-            }
+            bool appInstalledOk = true;
 
             if (loaderInstalledOk && updaterInstalledOk && javaInstalledOk && appInstalledOk) {
                 // application, loader and updater didn't throw error, updating cnlp files.
 
-                L_INFO("Installing Cnlp files.");
+                L_INFO("Starting application.");
 
-                const QString cnlpInstallDir = m_appPath.getCnlpDir().absolutePath();
-                const QString cnlpOldDir = m_appPath.getCnlpOldDir().absolutePath();
-                const QString cnlpBuildDir = m_appPath.getTempCnlpDir().absolutePath();
+                // start app with args
 
-                bool cnlpInstalledOk = true;
+                bool native_extracted = true;
 
-                // remove an old cnlp directory if it already exists
-                if (FileUtils::directoryExists(cnlpOldDir)) {
-                    L_INFO("Existing old cnlp directory needs to be removed: " + cnlpOldDir);
+                const QString extractDir = m_appPath.getAppNativesDir().absolutePath();
 
-                    if (FileUtils::removeDirRecursively(cnlpOldDir)) {
-                        L_INFO("Removed " + cnlpOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + cnlpOldDir);
-                        cnlpInstalledOk = false;
-                    }
-                }
+                // optimisation: if extractDir already exists, no extraction is done
+                if (!FileUtils::directoryExists(extractDir)) {
+                    L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
 
-                if (cnlpInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
+                    // find the native jar and extract it
+                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                        if (download.isNative()) {
+                            const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
 
-                    // firstly, we rename the old cnlp directory.
-                    if (QDir().rename(cnlpInstallDir, cnlpOldDir)) {
-                        L_INFO("Renamed " + cnlpInstallDir + " to " + cnlpOldDir);
-                        if (QDir().rename(cnlpBuildDir, cnlpInstallDir)) {
-                            L_INFO("Renamed " + cnlpBuildDir + " to " + cnlpInstallDir);
-                            if (FileUtils::removeDirRecursively(cnlpOldDir)) {
-                                L_INFO("Removed " + cnlpOldDir);
+                            // extract zip to dist
+                            ZipExtractor zip(fileToExtract, extractDir);
+
+                            // start extraction
+                            zip.extract();
+
+                            if (zip.isOk()) {
+                                L_INFO(fileToExtract + " extracted to " + extractDir);
                             } else {
-                                L_WARN("Unable to remove " + cnlpOldDir);
-                                // not an error
+                                L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
+                                native_extracted = false;
+                                break;
                             }
-                        } else {
-                            L_ERROR("Unable to rename " + cnlpBuildDir + " to " + cnlpInstallDir);
-                            cnlpInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + cnlpInstallDir + " to " + cnlpOldDir);
-                        cnlpInstalledOk = false;
-                    }
-                }
-
-                if (cnlpInstalledOk) {
-                    L_INFO("No error reported on cnlp installation.");
-
-                    L_INFO("Starting application.");
-
-                    // start app with args
-
-                    bool native_extracted = true;
-
-                    const QString extractDir = m_appPath.getAppNativesDir().absolutePath();
-
-                    // optimisation: if extractDir already exists, no extraction is done
-                    if (!FileUtils::directoryExists(extractDir)) {
-                        L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
-
-                        // find the native jar and extract it
-                        foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
-                            if (download.isNative()) {
-                                const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
-
-                                // extract zip to dist
-                                ZipExtractor zip(fileToExtract, extractDir);
-
-                                // start extraction
-                                zip.extract();
-
-                                if (zip.isOk()) {
-                                    L_INFO(fileToExtract + " extracted to " + extractDir);
-                                } else {
-                                    L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
-                                    native_extracted = false;
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        L_INFO("Natives directory " + extractDir + " already exists. No extraction done.");
-                    }
-
-                    if (native_extracted) {
-                        // TODO refactor into an helper class?
-                #ifdef Q_OS_MACOS
-                            const QString osValue = DeploymentXML::OsMacOsValue;
-                            const QString classpathSeparator = ":";
-                #endif
-
-                #ifdef Q_OS_WIN
-                            const QString osValue = DeploymentXML::OsWindowsValue;
-                            const QString classpathSeparator = ";";
-                #endif
-
-                        QString classpath = "";
-
-                        // build the classpath string
-                        const QDir installDir = m_appPath.getInstallationDir();
-                        foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
-                            if (download.isMain() || (!download.isNative() && download.getOs() == osValue)) {
-                                const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
-                                const QString relativeFile = installDir.relativeFilePath(fileToExtract);
-                                L_INFO("Add " + relativeFile + " to classpath.");
-                                if (classpath.isEmpty()) {
-                                    classpath += relativeFile;
-                                } else {
-                                    classpath += classpathSeparator + relativeFile;
-                                }
-                            }
-                        }
-
-                        Settings * settings = Settings::getInstance();
-                        if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
-                                                   m_encoding, settings->getDataLocation(), m_arguments)) {
-                            // quit application
-                            L_INFO("Quit application.");
-                            QCoreApplication::quit();
-                        } else {
-                            L_ERROR("Unable to start application. Exiting.");
-                            QCoreApplication::quit();
                         }
                     }
                 } else {
-                    L_ERROR("Errors have been reported on cnlp installation.");
+                    L_INFO("Natives directory " + extractDir + " already exists. No extraction done.");
+                }
+
+                if (native_extracted) {
+                    // TODO refactor into an helper class?
+                #ifdef Q_OS_MACOS
+                        const QString osValue = DeploymentXML::OsMacOsValue;
+                        const QString classpathSeparator = ":";
+                #endif
+
+                #ifdef Q_OS_WIN
+                        const QString osValue = DeploymentXML::OsWindowsValue;
+                        const QString classpathSeparator = ";";
+                #endif
+
+                    QString classpath = "";
+
+                    // build the classpath string
+                    const QDir installDir = m_appPath.getInstallationDir();
+                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                        if (download.isMain() || (!download.isNative() && download.getOs() == osValue)) {
+                            const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+                            const QString relativeFile = installDir.relativeFilePath(fileToExtract);
+                            L_INFO("Add " + relativeFile + " to classpath.");
+                            if (classpath.isEmpty()) {
+                                classpath += relativeFile;
+                            } else {
+                                classpath += classpathSeparator + relativeFile;
+                            }
+                        }
+                    }
+
+                    Settings * settings = Settings::getInstance();
+                    if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
+                                                   m_encoding, settings->getDataLocation(), m_arguments)) {
+                        // quit application
+                        L_INFO("Quit application.");
+                    } else {
+                        L_ERROR("Unable to start application. Exiting.");
+                    }
+
+                    QCoreApplication::quit();
+                    return;
                 }
             }
         } else {
@@ -996,4 +1007,33 @@ bool AppUpdater::installApp()
     }
 
     return appInstalledOk;
+}
+
+bool AppUpdater::installCnlpFile(const QString &_file)
+{
+    const QString cnlpInstallFile = m_appPath.getCnlpDir().absoluteFilePath(_file);
+    const QString cnlpBuildFile = m_appPath.getTempCnlpDir().absoluteFilePath(_file);
+
+    bool cnlpInstalledOk = true;
+
+    if (QFile::exists(cnlpInstallFile)) {
+        L_INFO(cnlpInstallFile + " already exists. Removing.");
+        if (QFile::remove(cnlpInstallFile)) {
+            L_INFO(cnlpInstallFile + " removed.");
+        } else {
+            L_ERROR("Unable to remove " + cnlpInstallFile);
+            cnlpInstalledOk = false;
+        }
+    }
+
+    if (cnlpInstalledOk) {
+        if (QFile::copy(cnlpBuildFile, cnlpInstallFile)) {
+            L_INFO("Copy " + cnlpBuildFile + " to " + cnlpInstallFile);
+        } else {
+            L_ERROR("Unable to copy " + cnlpBuildFile + " to " + cnlpInstallFile);
+            cnlpInstalledOk = false;
+        }
+    }
+
+    return cnlpInstalledOk;
 }

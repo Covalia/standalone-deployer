@@ -45,6 +45,7 @@ private slots:
     bool installUpdater();
     bool installJava();
     bool installApp();
+    bool installCnlpFile(const QString &_file);
 
 private:
     DownloadManager * m_updater;
