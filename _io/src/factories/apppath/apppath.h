@@ -76,6 +76,8 @@ class AppPath {
                               const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
                               const QStringList &_arguments);
 
+        QString getClasspathSeparator() const;
+
     private:
         QSharedPointer<AppPathImpl> m_appPathImpl;
 };

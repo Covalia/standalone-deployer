@@ -364,13 +364,13 @@ void AppUpdater::applicationDownloadFinished()
                     // TODO refactor into an helper class?
                 #ifdef Q_OS_MACOS
                         const QString osValue = DeploymentXML::OsMacOsValue;
-                        const QString classpathSeparator = ":";
                 #endif
 
                 #ifdef Q_OS_WIN
                         const QString osValue = DeploymentXML::OsWindowsValue;
-                        const QString classpathSeparator = ";";
                 #endif
+
+                    const QString classpathSeparator = m_appPath.getClasspathSeparator();
 
                     QString classpath = "";
 

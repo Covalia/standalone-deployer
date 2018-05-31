@@ -18,6 +18,8 @@ class MacosAppPathImpl : public AppPathImpl {
         virtual bool startLoader(QStringList _args);
         virtual bool startUpdater(QString _version, QStringList _args);
 
+        virtual QString getClasspathSeparator() const;
+
     protected:
         virtual QString getJavaExecutablePath(const QString &_javaVersion) const;
 

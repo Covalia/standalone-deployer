@@ -72,3 +72,8 @@ QString WindowsAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) c
 {
     return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("javaw"));
 }
+
+QString WindowsAppPathImpl::getClasspathSeparator() const
+{
+    return ";";
+}

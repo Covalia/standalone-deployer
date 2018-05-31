@@ -400,3 +400,11 @@ bool AppPath::startApplication(const QString &_javaVersion, const QString &_xmxM
     }
     return false;
 }
+
+QString AppPath::getClasspathSeparator() const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getClasspathSeparator();
+    }
+    return "";
+}

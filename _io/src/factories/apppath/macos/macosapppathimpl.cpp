@@ -221,3 +221,8 @@ QString MacosAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) con
 {
     return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("java"));
 }
+
+QString MacosAppPathImpl::getClasspathSeparator() const
+{
+    return ":";
+}

@@ -86,6 +86,8 @@ class AppPathImpl {
                                       const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
                                       const QStringList &_arguments);
 
+        virtual QString getClasspathSeparator() const = 0;
+
     protected:
 
         /// Build directory suffix.
