@@ -185,10 +185,8 @@ void AppUpdater::cnlpDownloadFinished()
                 SLOT(applicationDownloadFinished()));
         m_updater->setUrlListToDownload(m_filesToDownload);
     } else {
-
         L_ERROR("Unable to read the application cnlp files");
         // TODO handle error
-
     }
 }
 
@@ -322,11 +320,13 @@ void AppUpdater::applicationDownloadFinished()
             bool appInstalledOk = true;
 
             if (loaderInstalledOk && updaterInstalledOk && javaInstalledOk && appInstalledOk) {
-                // application, loader and updater didn't throw error, updating cnlp files.
+                // application, loader and updater didn't throw error.
 
-                L_INFO("Starting application.");
-
-                // start app with args
+                // rewrite cnlp files, in case they was removed manually
+                installCnlpFile(UpdaterConfig::LoaderCnlpLocalFilename);
+                installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename);
+                installCnlpFile(UpdaterConfig::JavaCnlpLocalFilename);
+                installCnlpFile(UpdaterConfig::AppCnlpLocalFilename);
 
                 bool native_extracted = true;
 
@@ -764,6 +764,7 @@ bool AppUpdater::checkDownloadsAreOk() const
 bool AppUpdater::installLoader()
 {
     bool loaderInstalledOk = true;
+
     if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
         // if this app needed to be rebuild, we now install it.
 
@@ -825,6 +826,7 @@ bool AppUpdater::installLoader()
 bool AppUpdater::installUpdater()
 {
     bool updaterInstalledOk = true;
+
     if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
         // if this app needed to be rebuild, we now install it.
 
@@ -887,6 +889,7 @@ bool AppUpdater::installUpdater()
 bool AppUpdater::installJava()
 {
     bool javaInstalledOk = true;
+
     if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
         // if this app needed to be rebuild, we now install it.
 
@@ -958,6 +961,7 @@ bool AppUpdater::installJava()
 bool AppUpdater::installApp()
 {
     bool appInstalledOk = true;
+
     if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
         // if this app needed to be rebuild, we now install it.
 
