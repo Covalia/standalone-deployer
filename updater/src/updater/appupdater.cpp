@@ -150,19 +150,10 @@ void AppUpdater::cnlpDownloadFinished()
         const Application loaderApplication = Application::getLoaderApplication();
         const Application javaApplication = Application::getJavaApplication();
 
-        // TODO refactor into an helper class?
-        QString osValue;
-#ifdef Q_OS_MACOS
-            osValue = DeploymentXML::OsMacOsValue;
-#endif
-
-#ifdef Q_OS_WIN
-            osValue = DeploymentXML::OsWindowsValue;
-#endif
-        const QList<Download> appDownloads = applicationXml.getDownloads(osValue);
-        const QList<Download> updaterDownloads = updaterXml.getDownloads(osValue);
-        const QList<Download> loaderDownloads = loaderXml.getDownloads(osValue);
-        const QList<Download> javaDownloads = javaXml.getDownloads(osValue);
+        const QList<Download> appDownloads = applicationXml.getDownloads();
+        const QList<Download> updaterDownloads = updaterXml.getDownloads();
+        const QList<Download> loaderDownloads = loaderXml.getDownloads();
+        const QList<Download> javaDownloads = javaXml.getDownloads();
 
         // retrieving remote java version.
         m_remoteJavaVersion = "";
@@ -361,14 +352,6 @@ void AppUpdater::applicationDownloadFinished()
                 }
 
                 if (native_extracted) {
-                    // TODO refactor into an helper class?
-                #ifdef Q_OS_MACOS
-                        const QString osValue = DeploymentXML::OsMacOsValue;
-                #endif
-
-                #ifdef Q_OS_WIN
-                        const QString osValue = DeploymentXML::OsWindowsValue;
-                #endif
 
                     const QString classpathSeparator = m_appPath.getClasspathSeparator();
 
@@ -377,7 +360,7 @@ void AppUpdater::applicationDownloadFinished()
                     // build the classpath string
                     const QDir installDir = m_appPath.getInstallationDir();
                     foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
-                        if (download.isMain() || (!download.isNative() && download.getOs() == osValue)) {
+                        if (download.isMain() || (!download.isNative() && download.getOs() == DeploymentXML::getCurrentOsValue())) {
                             const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
                             const QString relativeFile = installDir.relativeFilePath(fileToExtract);
                             L_INFO("Add " + relativeFile + " to classpath.");

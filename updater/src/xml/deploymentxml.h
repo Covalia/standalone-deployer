@@ -41,10 +41,12 @@ class DeploymentXML : public QObject
         QString getVersion() const;
         QList<QString> getArguments() const;
         Application getApplication() const;
-        QList<Download> getDownloads(const QString &_os) const;
+        QList<Download> getDownloads() const;
         QString getMemory() const;
         QString getEncoding() const;
         QString getMainClass() const;
+
+        static QString getCurrentOsValue();
 
         static const QString RDeploymentTag;
         static const QString DownloadsTag;

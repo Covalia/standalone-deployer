@@ -82,12 +82,21 @@ Application DeploymentXML::getApplication() const
     return m_application;
 }
 
-QList<Download> DeploymentXML::getDownloads(const QString &_os) const
+QList<Download> DeploymentXML::getDownloads() const
 {
     QList<Download> downloads;
 
+    QString osValue;
+#ifdef Q_OS_MACOS
+        osValue = OsMacOsValue;
+#endif
+
+#ifdef Q_OS_WIN
+        osValue = OsWindowsValue;
+#endif
+
     foreach(Download download, m_downloads) {
-        if (download.getOs() == _os || download.getOs() == OsAnyValue) {
+        if (download.getOs() == osValue || download.getOs() == OsAnyValue) {
             downloads.append(download);
         }
     }
@@ -108,6 +117,17 @@ QString DeploymentXML::getEncoding() const
 QString DeploymentXML::getMainClass() const
 {
     return m_mainClass;
+}
+
+QString DeploymentXML::getCurrentOsValue()
+{
+#ifdef Q_OS_MACOS
+        return OsMacOsValue;
+#endif
+
+#ifdef Q_OS_WIN
+        return OsWindowsValue;
+#endif
 }
 
 QList<QString> DeploymentXML::getArguments() const
