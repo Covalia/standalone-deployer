@@ -47,6 +47,9 @@ private slots:
     bool installApp();
     bool installCnlpFile(const QString &_file);
 
+    static QMap<Application, QList<QString> > getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
+                                                                       const QMap<Application, QList<Download> > _cnlpParsedFiles);
+
 private:
     DownloadManager * m_updater;
     QUrl m_appUrl;
