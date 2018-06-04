@@ -27,30 +27,11 @@ private slots:
     void updateRemainingTimeMessage(const QString &_time);
     void updateDownloadFileMessage(const QString &_file);
     void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-
     void cnlpDownloadFinished();
     void applicationDownloadFinished();
 
-    QList<QString> getLocalFiles(const Application &_application);
-    QMap<Application, QList<QString> > getLocalFiles();
-    void processCnlpDownloadFileList();
-    bool buildApplicationInTempDirectory(const Application &_application);
-
-    // return true if the application has changed
-    bool doesAppNeedToBeRebuild(const Application &_application);
-
-    // check if downloads are ok (hashmac is good for each file).
-    bool checkDownloadsAreOk() const;
-    bool installLoader();
-    bool installUpdater();
-    bool installJava();
-    bool installApp();
-    bool installCnlpFile(const QString &_file);
-
-    static QMap<Application, QList<QString> > getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
-                                                                       const QMap<Application, QList<Download> > _cnlpParsedFiles);
-
 private:
+
     DownloadManager * m_updater;
     QUrl m_appUrl;
     AppPath m_appPath;
@@ -79,6 +60,25 @@ private:
 
     // memory to set when starting application
     QString m_memory;
+
+    QList<QString> getLocalFiles(const Application &_application);
+    QMap<Application, QList<QString> > getLocalFiles();
+    void processCnlpDownloadFileList();
+    bool buildApplicationInTempDirectory(const Application &_application);
+
+    // return true if the application has changed
+    bool doesAppNeedToBeRebuild(const Application &_application);
+
+    // check if downloads are ok (hashmac is good for each file).
+    bool checkDownloadsAreOk() const;
+    bool installLoader();
+    bool installUpdater();
+    bool installJava();
+    bool installApp();
+    bool installCnlpFile(const QString &_file);
+
+    static QMap<Application, QList<QString> > getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
+                                                                       const QMap<Application, QList<Download> > _cnlpParsedFiles);
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
