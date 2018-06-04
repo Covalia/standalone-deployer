@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QMessageAuthenticationCode>
 
-QString HashMac512::hashFromFile(const QString &_filePath, const QString &_secret)
+HashMacString HashMac512::hashFromFile(const QString &_filePath, const QString &_secret)
 {
     QFile file(_filePath);
 
@@ -10,8 +10,8 @@ QString HashMac512::hashFromFile(const QString &_filePath, const QString &_secre
         const QByteArray content = file.readAll();
         file.close();
 
-        return QMessageAuthenticationCode::hash(content, _secret.toUtf8(), QCryptographicHash::Sha512).toHex();
+        return HashMacString(QMessageAuthenticationCode::hash(content, _secret.toUtf8(), QCryptographicHash::Sha512).toHex());
     }
 
-    return "";
+    return HashMacString("");
 }

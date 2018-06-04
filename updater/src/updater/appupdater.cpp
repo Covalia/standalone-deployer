@@ -612,7 +612,7 @@ void AppUpdater::processCnlpDownloadFileList()
 
         // check files to keep or download
         foreach(Download parsedDownload, parsedDownloads) {
-            L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac());
+            L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac().shortHashMac());
 
             if (localFilesOfCurrentApplication.contains(parsedDownload.getHref())) {
                 QString localFile = "";
@@ -628,8 +628,8 @@ void AppUpdater::processCnlpDownloadFileList()
 
                 // must be true but we test anyway
                 if (QFile::exists(localFile)) {
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-                    L_INFO("Local file: " + localFile + " has hashmac: " + hashmac);
+                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                    L_INFO("Local file: " + localFile + " has hashmac: " + hashmac.shortHashMac());
 
                     if (hashmac == parsedDownload.getHashMac()) {
                         L_INFO("Local and remote files are identical. Add to keep list.");
@@ -714,7 +714,7 @@ bool AppUpdater::checkDownloadsAreOk() const
                 if (QFile::exists(localFile)) {
                     // if this local temporary file exists
                     // checking its hashmac
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
                     // we find the download corresponding to the downloadedFile to get its expected hashmac
                     bool found = false;
@@ -722,7 +722,7 @@ bool AppUpdater::checkDownloadsAreOk() const
                         if (download.getHref() == downloadedFile) {
                             found = true;
                             if (hashmac != download.getHashMac()) {
-                                L_WARN("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
+                                L_WARN("Bad hashmac, expected: " + download.getHashMac().shortHashMac() + ", found: " + hashmac.shortHashMac() + " for file: " + localFile);
                                 downloadsOk = false;
                             }
                             break;
@@ -1073,7 +1073,7 @@ QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const
                 if (QFile::exists(localFile)) {
                     // if this local temporary file exists
                     // checking its hashmac
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
                     // we find the download corresponding to the downloadedFile to get its expected hashmac
                     bool found = false;

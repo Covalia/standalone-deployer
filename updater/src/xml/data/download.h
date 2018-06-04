@@ -2,6 +2,7 @@
 #define UPDATER__DOWNLOAD_H
 
 #include <QString>
+#include "utils/hashmac/hashmac512.h"
 
 /**
  * @class Download
@@ -19,20 +20,20 @@ class Download
                  bool _main);
 
         QString getHref() const;
-        QString getHashMac() const;
+        HashMacString getHashMac() const;
         QString getOs() const;
         QString getVersion() const;
         bool isNative() const;
         bool isMain() const;
 
         operator QString() const {
-            return "Download [href=" + m_href + ", hashMac=" + m_hashMac + ", os=" + m_os
+            return "Download [href=" + m_href + ", hashMac=" + m_hashMac.shortHashMac() + ", os=" + m_os
                    + ", version=" + m_version + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
         }
 
     private:
         QString m_href;
-        QString m_hashMac;
+        HashMacString m_hashMac;
         QString m_os;
         QString m_version;
         bool m_native;

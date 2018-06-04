@@ -20,7 +20,7 @@ QString Download::getHref() const
     return m_href;
 }
 
-QString Download::getHashMac() const
+HashMacString Download::getHashMac() const
 {
     return m_hashMac;
 }
