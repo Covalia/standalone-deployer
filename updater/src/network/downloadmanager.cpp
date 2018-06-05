@@ -71,23 +71,22 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
         // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
-        QMap<Application, QList<QUrl> >::const_iterator iterator = _downloadsMap.constBegin();
-        while (iterator != _downloadsMap.constEnd()) {
-
+        QMapIterator<Application, QList<QUrl> > iterator(_downloadsMap);
+        while (iterator.hasNext()) {
+            iterator.next();
             const Application application = iterator.key();
-            const QList<QUrl> downloads = iterator.value();
+            const QList<QUrl> & downloads = iterator.value();
 
             foreach(QUrl url, downloads) {
                 // concatenation base avec url
                 const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
+
                 L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
                 QPair<Application, QUrl> pair(application, buildUrl);
                 m_headQueue.enqueue(pair);
                 m_downloadQueue.enqueue(pair);
-
             }
 
-            ++iterator;
         }
 
         // lancement les requêtes head
@@ -99,11 +98,11 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString
 {
     QMap<Application, QList<QUrl> > urlMap;
 
-    QMap<Application, QList<QString> >::const_iterator iterator = _downloadsMap.constBegin();
-    while (iterator != _downloadsMap.constEnd()) {
-
+    QMapIterator<Application, QList<QString> > iterator(_downloadsMap);
+    while (iterator.hasNext()) {
+        iterator.next();
         const Application application = iterator.key();
-        const QList<QString> downloads = iterator.value();
+        const QList<QString> & downloads = iterator.value();
 
         urlMap.insert(application, QList<QUrl>());
 
@@ -111,7 +110,6 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString
             urlMap[application].append(QUrl(url));
         }
 
-        ++iterator;
     }
 
     setUrlListToDownload(urlMap);
