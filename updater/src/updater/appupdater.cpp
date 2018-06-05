@@ -594,9 +594,11 @@ void AppUpdater::processCnlpDownloadFileList()
     const QMap<Application, QList<QString> > allLocalFiles = AppUpdater::getLocalFiles();
 
     // iterate over files read from cnlp files
-    QMap<Application, QList<Download> >::const_iterator iterator = m_cnlpParsedFiles.constBegin();
+    QMapIterator<Application, QList<Download> > iterator(m_cnlpParsedFiles);
 
-    while (iterator != m_cnlpParsedFiles.constEnd()) {
+    while (iterator.hasNext()) {
+        iterator.next();
+
         const Application application = iterator.key();
 
         L_INFO("Processing Application: " + application.getName());
@@ -605,7 +607,7 @@ void AppUpdater::processCnlpDownloadFileList()
         m_filesToDownload.insert(application, QList<QString>());
         m_filesToKeep.insert(application, QList<QString>());
 
-        const QList<Download> parsedDownloads = iterator.value();
+        const QList<Download> & parsedDownloads = iterator.value();
 
         // local files of the current application, installed only
         QList<QString> localFilesOfCurrentApplication = allLocalFiles[application];
@@ -662,8 +664,6 @@ void AppUpdater::processCnlpDownloadFileList()
 
         // remaining files, those who no longer need to be in the app
         m_remainingFiles[application] = localFilesOfCurrentApplication;
-
-        ++iterator;
     }
 }
 
