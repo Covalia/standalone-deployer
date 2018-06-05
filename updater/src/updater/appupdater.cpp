@@ -685,10 +685,11 @@ bool AppUpdater::checkDownloadsAreOk() const
     bool downloadsOk = true;
 
     // check downloaded hash mac
-    QMap<Application, QList<QString> >::const_iterator iterator = m_filesToDownload.constBegin();
-    while (iterator != m_filesToDownload.constEnd()) {
+    QMapIterator<Application, QList<QString> > iterator(m_filesToDownload);
+    while (iterator.hasNext()) {
+        iterator.next();
         const Application application = iterator.key();
-        const QList<QString> downloadedFiles = iterator.value();
+        const QList<QString> & downloadedFiles = iterator.value();
 
         // foreach application, checking each file
         foreach(QString downloadedFile, downloadedFiles) {
@@ -740,8 +741,6 @@ bool AppUpdater::checkDownloadsAreOk() const
                 }
             }
         }
-
-        ++iterator;
     }
 
     return downloadsOk;
