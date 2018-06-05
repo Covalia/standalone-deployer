@@ -37,7 +37,9 @@ QString CommandLineSingleton::getApplicationHttpArguments() const
     QString query = "";
     QString separator = "?";
     QString start = "--";
-    foreach(QString arg, arguments) {
+    QStringListIterator iterator(arguments);
+    while (iterator.hasNext()) {
+        const QString arg = iterator.next();
         if (arg.startsWith(start)) {
             query += separator;
             query += arg.right(arg.length() - start.length());
