@@ -77,8 +77,10 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
             const Application application = iterator.key();
             const QList<QUrl> & downloads = iterator.value();
 
-            foreach(QUrl url, downloads) {
+            QListIterator<QUrl> downloadIterator(downloads);
+            while (downloadIterator.hasNext()) {
                 // concatenation base avec url
+                const QUrl url = downloadIterator.next();
                 const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
 
                 L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
@@ -86,7 +88,6 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
                 m_headQueue.enqueue(pair);
                 m_downloadQueue.enqueue(pair);
             }
-
         }
 
         // lancement les requêtes head
@@ -106,10 +107,10 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString
 
         urlMap.insert(application, QList<QUrl>());
 
-        foreach(QString url, downloads) {
-            urlMap[application].append(QUrl(url));
+        QListIterator<QString> downloadIterator(downloads);
+        while (downloadIterator.hasNext()) {
+            urlMap[application].append(QUrl(downloadIterator.next()));
         }
-
     }
 
     setUrlListToDownload(urlMap);

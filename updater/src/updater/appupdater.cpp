@@ -175,7 +175,7 @@ void AppUpdater::cnlpDownloadFinished()
         connect(m_updater, SIGNAL(downloadsFinished()),
                 SLOT(applicationDownloadFinished()));
 
-        QMap<Application, QList<QString> > nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
+        const QMap<Application, QList<QString> > nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
 
         m_updater->setUrlListToDownload(nonAlreadyDownloadedFiles);
     } else {
