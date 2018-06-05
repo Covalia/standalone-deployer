@@ -95,7 +95,9 @@ QList<Download> DeploymentXML::getDownloads() const
         osValue = OsWindowsValue;
 #endif
 
-    foreach(Download download, m_downloads) {
+    QListIterator<Download> iterator(m_downloads);
+    while(iterator.hasNext()) {
+        const Download & download = iterator.next();
         if (download.getOs() == osValue || download.getOs() == OsAnyValue) {
             downloads.append(download);
         }
