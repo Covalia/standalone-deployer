@@ -440,9 +440,11 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
 
         const QList<QString> downloadedFiles = m_filesToDownload[_application];
 
-        foreach(QString downloadedFile, downloadedFiles) {
-            QString localSourceFile = tempAppDir.absoluteFilePath(downloadedFile);
-            QString destinationFile = appBuildDir.absoluteFilePath(downloadedFile);
+        QListIterator<QString> downloadedIterator(downloadedFiles);
+        while (downloadedIterator.hasNext()) {
+            const QString downloadedFile = downloadedIterator.next();
+            const QString localSourceFile = tempAppDir.absoluteFilePath(downloadedFile);
+            const QString destinationFile = appBuildDir.absoluteFilePath(downloadedFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("download source: " + localSourceFile);
@@ -463,9 +465,11 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
 
         const QList<QString> keepFiles = m_filesToKeep[_application];
 
-        foreach(QString keepFile, keepFiles) {
-            QString localSourceFile = appDir.absoluteFilePath(keepFile);
-            QString destinationFile = appBuildDir.absoluteFilePath(keepFile);
+        QListIterator<QString> keepIterator(keepFiles);
+        while (keepIterator.hasNext()) {
+            const QString keepFile = keepIterator.next();
+            const QString localSourceFile = appDir.absoluteFilePath(keepFile);
+            const QString destinationFile = appBuildDir.absoluteFilePath(keepFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("keep source: " + localSourceFile);
