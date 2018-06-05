@@ -1029,7 +1029,7 @@ bool AppUpdater::installCnlpFile(const QString &_file)
 }
 
 QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
-                                                                        const QMap<Application, QList<Download> > _cnlpParsedFiles)
+                                                                           const QMap<Application, QList<Download> > _cnlpParsedFiles)
 {
     // copy list
     QMap<Application, QList<QString> > outMap = _fullDownloadMap;
@@ -1038,8 +1038,9 @@ QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const
     const QString hash_key = HashKey::readHashKey();
 
     // check downloaded hash mac
-    QMap<Application, QList<QString> >::iterator iterator = outMap.begin();
-    while (iterator != outMap.end()) {
+    QMutableMapIterator<Application, QList<QString> > iterator(outMap);
+    while (iterator.hasNext()) {
+        iterator.next();
         const Application application = iterator.key();
         QList<QString> & downloadedFiles = iterator.value();
 
@@ -1091,8 +1092,6 @@ QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const
                 }
             }
         }
-
-        ++iterator;
     }
 
     return outMap;
