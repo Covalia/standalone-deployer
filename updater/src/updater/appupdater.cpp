@@ -383,6 +383,13 @@ void AppUpdater::applicationDownloadFinished()
                     Settings * settings = Settings::getInstance();
                     if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
                                                    m_encoding, settings->getDataLocation(), m_arguments)) {
+                        // clean temp directory
+                        if (FileUtils::removeDirRecursively(m_appPath.getTempDir().absolutePath())) {
+                            L_INFO("Cleaned " + m_appPath.getTempDir().absolutePath());
+                        } else {
+                            L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
+                        }
+
                         // quit application
                         L_INFO("Quit application.");
                     } else {
