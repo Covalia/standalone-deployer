@@ -331,7 +331,10 @@ void AppUpdater::applicationDownloadFinished()
                     L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
 
                     // find the native jar and extract it
-                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                    QListIterator<Download> iterator(m_cnlpParsedFiles[Application::getAppApplication()]);
+                    while (iterator.hasNext()) {
+                        const Download & download = iterator.next();
+
                         if (download.isNative()) {
                             const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
 
@@ -355,14 +358,16 @@ void AppUpdater::applicationDownloadFinished()
                 }
 
                 if (native_extracted) {
-
                     const QString classpathSeparator = m_appPath.getClasspathSeparator();
 
                     QString classpath = "";
 
                     // build the classpath string
                     const QDir installDir = m_appPath.getInstallationDir();
-                    foreach(Download download, m_cnlpParsedFiles[Application::getAppApplication()]) {
+                    QListIterator<Download> iterator(m_cnlpParsedFiles[Application::getAppApplication()]);
+                    while (iterator.hasNext()) {
+                        const Download & download = iterator.next();
+
                         if (download.isMain() || (!download.isNative() && download.getOs() == DeploymentXML::getCurrentOsValue())) {
                             const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
                             const QString relativeFile = installDir.relativeFilePath(fileToExtract);
@@ -617,7 +622,10 @@ void AppUpdater::processCnlpDownloadFileList()
         QList<QString> localFilesOfCurrentApplication = allLocalFiles[application];
 
         // check files to keep or download
-        foreach(Download parsedDownload, parsedDownloads) {
+        QListIterator<Download> parsedIterator(parsedDownloads);
+        while (parsedIterator.hasNext()) {
+            const Download & parsedDownload = parsedIterator.next();
+
             L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac().shortHashMac());
 
             if (localFilesOfCurrentApplication.contains(parsedDownload.getHref())) {
@@ -695,8 +703,11 @@ bool AppUpdater::checkDownloadsAreOk() const
         const Application application = iterator.key();
         const QList<QString> & downloadedFiles = iterator.value();
 
-        // foreach application, checking each file
-        foreach(QString downloadedFile, downloadedFiles) {
+        // for each application, checking each file
+        QListIterator<QString> downloadedIterator(downloadedFiles);
+        while (downloadedIterator.hasNext()) {
+            const QString downloadedFile = downloadedIterator.next();
+
             if (application == Application::getAppApplication()
                 || application == Application::getLoaderApplication()
                 || application == Application::getUpdaterApplication()
@@ -723,7 +734,9 @@ bool AppUpdater::checkDownloadsAreOk() const
 
                     // we find the download corresponding to the downloadedFile to get its expected hashmac
                     bool found = false;
-                    foreach(Download download, m_cnlpParsedFiles[application]) {
+                    QListIterator<Download> parsedIterator(m_cnlpParsedFiles[application]);
+                    while (parsedIterator.hasNext()) {
+                        const Download & download = parsedIterator.next();
                         if (download.getHref() == downloadedFile) {
                             found = true;
                             if (hashmac != download.getHashMac()) {
@@ -1049,7 +1062,7 @@ QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const
 
         // Remove all odd numbers from a QList<int>
         QMutableListIterator<QString> fileIterator(downloadedFiles);
-        // foreach application, checking each file
+        // for each application, checking each file
         while (fileIterator.hasNext()) {
             QString downloadedFile = fileIterator.next();
 
@@ -1081,7 +1094,9 @@ QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const
 
                     // we find the download corresponding to the downloadedFile to get its expected hashmac
                     bool found = false;
-                    foreach(Download download, _cnlpParsedFiles[application]) {
+                    QListIterator<Download> parsedIterator(_cnlpParsedFiles[application]);
+                    while (parsedIterator.hasNext()) {
+                        const Download & download = parsedIterator.next();
                         if (download.getHref() == downloadedFile) {
                             found = true;
                             if (hashmac == download.getHashMac()) {
