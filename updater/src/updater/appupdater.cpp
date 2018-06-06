@@ -301,6 +301,22 @@ void AppUpdater::applicationDownloadFinished()
             } else {
                 L_ERROR("Errors have been reported on java build.");
             }
+        } else {
+            L_INFO("Java does not need to be updated.");
+
+            if (javaInstalledOk) {
+                const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
+
+                if (!FileUtils::directoryExists(javaDistDir)) {
+                    L_INFO("Java dist directory does not exist. " + javaDistDir);
+                    if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
+                        L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
+                    } else {
+                        L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
+                        javaInstalledOk = false;
+                    }
+                }
+            }
         }
 
         if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
@@ -784,61 +800,56 @@ bool AppUpdater::checkDownloadsAreOk() const
 
 bool AppUpdater::installLoader()
 {
+    // called only if loader needs to be rebuild, so we now install it.
     bool loaderInstalledOk = true;
 
-    if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
-        // if this app needed to be rebuild, we now install it.
+    L_INFO("Installing " + Application::getLoaderApplication().getName());
 
-        L_INFO("Installing " + Application::getLoaderApplication().getName());
+    const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
+    const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
+    const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
 
-        const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
-        const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
-        const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
+    // remove an old loader directory if it already exists
+    if (FileUtils::directoryExists(loaderOldDir)) {
+        L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
 
-        // remove an old loader directory if it already exists
-        if (FileUtils::directoryExists(loaderOldDir)) {
-            L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
-
-            if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                L_INFO("Removed " + loaderOldDir);
-            } else {
-                L_ERROR("Unable to remove " + loaderOldDir);
-                loaderInstalledOk = false;
-            }
+        if (FileUtils::removeDirRecursively(loaderOldDir)) {
+            L_INFO("Removed " + loaderOldDir);
+        } else {
+            L_ERROR("Unable to remove " + loaderOldDir);
+            loaderInstalledOk = false;
         }
+    }
 
-        if (loaderInstalledOk) {
-            // we continue only if the old existing directory has been deleted
+    if (loaderInstalledOk) {
+        // we continue only if the old existing directory has been deleted
 
-            // firstly, we rename the old app directory.
-            if (QDir().rename(loaderInstallDir, loaderOldDir)) {
-                L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
-                if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
-                    L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
-                    if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                        L_INFO("Removed " + loaderOldDir);
-                    } else {
-                        L_WARN("Unable to remove " + loaderOldDir);
-                        // not an error
-                    }
+        // firstly, we rename the old app directory.
+        if (QDir().rename(loaderInstallDir, loaderOldDir)) {
+            L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
+            if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
+                L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
+                if (FileUtils::removeDirRecursively(loaderOldDir)) {
+                    L_INFO("Removed " + loaderOldDir);
                 } else {
-                    L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
-                    loaderInstalledOk = false;
+                    L_WARN("Unable to remove " + loaderOldDir);
+                    // not an error
                 }
             } else {
-                L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
+                L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
                 loaderInstalledOk = false;
             }
-            // extract app from dmg (macos).
-            if (m_appPath.prepareLoader()) {
-                L_INFO("Loader prepared.");
-            } else {
-                L_ERROR("Unable to prepare Loader.");
-                loaderInstalledOk = false;
-            }
+        } else {
+            L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
+            loaderInstalledOk = false;
         }
-    } else {
-        L_INFO("Loader does not need to be updated.");
+        // extract app from dmg (macos).
+        if (m_appPath.prepareLoader()) {
+            L_INFO("Loader prepared.");
+        } else {
+            L_ERROR("Unable to prepare Loader.");
+            loaderInstalledOk = false;
+        }
     }
 
     return loaderInstalledOk;
@@ -846,62 +857,57 @@ bool AppUpdater::installLoader()
 
 bool AppUpdater::installUpdater()
 {
+    // called only if updated needs to be rebuild, so we now install it.
     bool updaterInstalledOk = true;
 
-    if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
-        // if this app needed to be rebuild, we now install it.
+    // we can not overwrite ourselves
+    if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
+        L_INFO("Installing " + Application::getUpdaterApplication().getName());
 
-        // we can not overwrite ourselves
-        if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
-            L_INFO("Installing " + Application::getUpdaterApplication().getName());
+        const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
+        const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
 
-            const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
-            const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
-
-            if (FileUtils::directoryExists(updaterInstallDir)) {
-                // it should not exist with the previous condition, but in case it exists
-                // (it is not used because local and remote versions differ), we need to remove it
-                if (FileUtils::removeDirRecursively(updaterInstallDir)) {
-                    L_INFO("Removed " + updaterInstallDir);
-                } else {
-                    L_ERROR("Unable to remove " + updaterInstallDir);
-                    updaterInstalledOk = false;
-                }
+        if (FileUtils::directoryExists(updaterInstallDir)) {
+            // it should not exist with the previous condition, but in case it exists
+            // (it is not used because local and remote versions differ), we need to remove it
+            if (FileUtils::removeDirRecursively(updaterInstallDir)) {
+                L_INFO("Removed " + updaterInstallDir);
+            } else {
+                L_ERROR("Unable to remove " + updaterInstallDir);
+                updaterInstalledOk = false;
             }
+        }
 
-            if (updaterInstalledOk) {
-                // we continue only if there is no error
+        if (updaterInstalledOk) {
+            // we continue only if there is no error
 
-                // local and remote versions differ
-                if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
-                    L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
-                    // nothing to remove. deletion will be done at next launch.
-                    // extract app from dmg (macos).
-                    if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
-                        L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
-                        // write new updater version number
-                        Settings * settings = Settings::getInstance();
-                        settings->setUpdaterVersion(m_remoteUpdaterVersion);
-                        if (settings->writeSettings()) {
-                            L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
-                        } else {
-                            L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
-                            updaterInstalledOk = false;
-                        }
+            // local and remote versions differ
+            if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
+                L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
+                // nothing to remove. deletion will be done at next launch.
+                // extract app from dmg (macos).
+                if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
+                    L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
+                    // write new updater version number
+                    Settings * settings = Settings::getInstance();
+                    settings->setUpdaterVersion(m_remoteUpdaterVersion);
+                    if (settings->writeSettings()) {
+                        L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
                     } else {
-                        L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
+                        L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
                         updaterInstalledOk = false;
                     }
                 } else {
-                    L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
+                    L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
                     updaterInstalledOk = false;
                 }
+            } else {
+                L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
+                updaterInstalledOk = false;
             }
-        } else {
-            L_WARN("Remote and local updaters differ but have same version number, no possible update.");
         }
     } else {
-        L_INFO("Updater does not need to be updated.");
+        L_WARN("Remote and local updaters differ but have same version number, no possible update.");
     }
 
     return updaterInstalledOk;
@@ -909,70 +915,51 @@ bool AppUpdater::installUpdater()
 
 bool AppUpdater::installJava()
 {
+    // called only if java needs to be rebuild, so we now install it.
     bool javaInstalledOk = true;
 
-    if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
-        // if this app needed to be rebuild, we now install it.
+    // we can overwrite java because it must not be used by us.
+    L_INFO("Installing " + Application::getJavaApplication().getName());
 
-        // we can overwrite java because it must not be used by us.
-        L_INFO("Installing " + Application::getJavaApplication().getName());
+    const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
+    const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
 
-        const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
-        const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
-
-        if (FileUtils::directoryExists(javaInstallDir)) {
-            // remove existing java dir if it exists
-            if (FileUtils::removeDirRecursively(javaInstallDir)) {
-                L_INFO("Removed " + javaInstallDir);
-            } else {
-                L_ERROR("Unable to remove " + javaInstallDir);
-                javaInstalledOk = false;
-            }
+    if (FileUtils::directoryExists(javaInstallDir)) {
+        // remove existing java dir if it exists
+        if (FileUtils::removeDirRecursively(javaInstallDir)) {
+            L_INFO("Removed " + javaInstallDir);
+        } else {
+            L_ERROR("Unable to remove " + javaInstallDir);
+            javaInstalledOk = false;
         }
+    }
 
-        if (javaInstalledOk) {
-            // we continue only if there is no error
+    if (javaInstalledOk) {
+        // we continue only if there is no error
 
-            // local and remote versions differ
-            if (QDir().rename(javaBuildDir, javaInstallDir)) {
-                L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
-                // nothing to remove. deletion will be done at next launch.
-                // extract zip.
-                if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
-                    L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
-                    // write new java version number
-                    Settings * settings = Settings::getInstance();
-                    settings->setJavaVersion(m_remoteJavaVersion);
-                    if (settings->writeSettings()) {
-                        L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
-                    } else {
-                        L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
-                        javaInstalledOk = false;
-                    }
+        // local and remote versions differ
+        if (QDir().rename(javaBuildDir, javaInstallDir)) {
+            L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
+            // nothing to remove. deletion will be done at next launch.
+            // extract zip.
+            if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
+                L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
+                // write new java version number
+                Settings * settings = Settings::getInstance();
+                settings->setJavaVersion(m_remoteJavaVersion);
+                if (settings->writeSettings()) {
+                    L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
                 } else {
-                    L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
+                    L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
                     javaInstalledOk = false;
                 }
             } else {
-                L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
+                L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
                 javaInstalledOk = false;
             }
-        }
-    } else {
-        L_INFO("Java does not need to be updated.");
-
-        if (javaInstalledOk) {
-            const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
-
-            if (!FileUtils::directoryExists(javaDistDir)) {
-                L_INFO("Java dist directory does not exist. " + javaDistDir);
-                if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
-                    L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
-                } else {
-                    L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
-                    javaInstalledOk = false;
-                }
-            }
+        } else {
+            L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
+            javaInstalledOk = false;
         }
     }
 
@@ -981,54 +968,49 @@ bool AppUpdater::installJava()
 
 bool AppUpdater::installApp()
 {
+    // called only if app needs to be rebuild, so we now install it.
     bool appInstalledOk = true;
 
-    if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-        // if this app needed to be rebuild, we now install it.
+    L_INFO("Installing " + Application::getAppApplication().getName());
 
-        L_INFO("Installing " + Application::getAppApplication().getName());
+    const QString appInstallDir = m_appPath.getAppDir().absolutePath();
+    const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
+    const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
 
-        const QString appInstallDir = m_appPath.getAppDir().absolutePath();
-        const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
-        const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
+    // remove an old app directory if it already exists
+    if (FileUtils::directoryExists(appOldDir)) {
+        L_INFO("Existing old application directory needs to be removed: " + appOldDir);
 
-        // remove an old app directory if it already exists
-        if (FileUtils::directoryExists(appOldDir)) {
-            L_INFO("Existing old application directory needs to be removed: " + appOldDir);
-
-            if (FileUtils::removeDirRecursively(appOldDir)) {
-                L_INFO("Removed " + appOldDir);
-            } else {
-                L_ERROR("Unable to remove " + appOldDir);
-                appInstalledOk = false;
-            }
+        if (FileUtils::removeDirRecursively(appOldDir)) {
+            L_INFO("Removed " + appOldDir);
+        } else {
+            L_ERROR("Unable to remove " + appOldDir);
+            appInstalledOk = false;
         }
+    }
 
-        if (appInstalledOk) {
-            // we continue only if the old existing directory has been deleted
+    if (appInstalledOk) {
+        // we continue only if the old existing directory has been deleted
 
-            // firstly, we rename the old app directory.
-            if (QDir().rename(appInstallDir, appOldDir)) {
-                L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
-                if (QDir().rename(appBuildDir, appInstallDir)) {
-                    L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
-                    if (FileUtils::removeDirRecursively(appOldDir)) {
-                        L_INFO("Removed " + appOldDir);
-                    } else {
-                        L_WARN("Unable to remove " + appOldDir);
-                        // not an error
-                    }
+        // firstly, we rename the old app directory.
+        if (QDir().rename(appInstallDir, appOldDir)) {
+            L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
+            if (QDir().rename(appBuildDir, appInstallDir)) {
+                L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
+                if (FileUtils::removeDirRecursively(appOldDir)) {
+                    L_INFO("Removed " + appOldDir);
                 } else {
-                    L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
-                    appInstalledOk = false;
+                    L_WARN("Unable to remove " + appOldDir);
+                    // not an error
                 }
             } else {
-                L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
+                L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
                 appInstalledOk = false;
             }
+        } else {
+            L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
+            appInstalledOk = false;
         }
-    } else {
-        L_INFO("Application does not need to be updated.");
     }
 
     return appInstalledOk;
