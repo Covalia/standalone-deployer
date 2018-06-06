@@ -607,7 +607,7 @@ void AppUpdater::processCnlpDownloadFileList()
     const QString hash_key = HashKey::readHashKey();
 
     // list of all local files (installed and in temporary directory)
-    const QMap<Application, QList<QString> > allLocalFiles = AppUpdater::getLocalFiles();
+    QMap<Application, QList<QString> > allLocalFiles = AppUpdater::getLocalFiles();
 
     // iterate over files read from cnlp files
     QMapIterator<Application, QList<Download> > iterator(m_cnlpParsedFiles);
@@ -626,7 +626,7 @@ void AppUpdater::processCnlpDownloadFileList()
         const QList<Download> & parsedDownloads = iterator.value();
 
         // local files of the current application, installed only
-        QList<QString> localFilesOfCurrentApplication = allLocalFiles[application];
+        QList<QString> & localFilesOfCurrentApplication = allLocalFiles[application];
 
         // check files to keep or download
         QListIterator<Download> parsedIterator(parsedDownloads);
