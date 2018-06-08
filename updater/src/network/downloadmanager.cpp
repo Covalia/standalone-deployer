@@ -56,7 +56,7 @@ DownloadManager::~DownloadManager()
     delete m_saveFile;
 }
 
-void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> > &_downloadsMap)
+void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloadsMap)
 {
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
@@ -71,23 +71,19 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
         // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
-        QMapIterator<Application, QList<QUrl> > iterator(_downloadsMap);
+        QMapIterator<Application, QUrl> iterator(_downloadsMap);
         while (iterator.hasNext()) {
             iterator.next();
-            const Application application = iterator.key();
-            const QList<QUrl> & downloads = iterator.value();
+            const Application & application = iterator.key();
+            const QUrl url = iterator.value();
 
-            QListIterator<QUrl> downloadIterator(downloads);
-            while (downloadIterator.hasNext()) {
-                // concatenation base avec url
-                const QUrl url = downloadIterator.next();
-                const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
+            // concatenation base avec url
+            const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
 
-                L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
-                QPair<Application, QUrl> pair(application, buildUrl);
-                m_headQueue.enqueue(pair);
-                m_downloadQueue.enqueue(pair);
-            }
+            L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
+            QPair<Application, QUrl> pair(application, buildUrl);
+            m_headQueue.enqueue(pair);
+            m_downloadQueue.enqueue(pair);
         }
 
         // lancement les requêtes head
@@ -95,22 +91,17 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
     }
 }
 
-void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString> > &_downloadsMap)
+void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString> &_downloadsMap)
 {
-    QMap<Application, QList<QUrl> > urlMap;
+    QMultiMap<Application, QUrl> urlMap;
 
-    QMapIterator<Application, QList<QString> > iterator(_downloadsMap);
+    QMapIterator<Application, QString> iterator(_downloadsMap);
     while (iterator.hasNext()) {
         iterator.next();
-        const Application application = iterator.key();
-        const QList<QString> & downloads = iterator.value();
+        const Application & application = iterator.key();
+        const QString & url = iterator.value();
 
-        urlMap.insert(application, QList<QUrl>());
-
-        QListIterator<QString> downloadIterator(downloads);
-        while (downloadIterator.hasNext()) {
-            urlMap[application].append(QUrl(downloadIterator.next()));
-        }
+        urlMap.insert(application, QUrl(url));
     }
 
     setUrlListToDownload(urlMap);
@@ -235,6 +226,7 @@ void DownloadManager::headMetaDataChanged()
 {
     QVariant statusVariant = m_currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     int status = statusVariant.toInt();
+
     QPair<Application, QUrl> currentUrlPair(m_currentApplication, m_currentReply->url());
 
     L_INFO("Status: " + QString::number(status) + " - " + currentUrlPair.second.toEncoded().constData());

@@ -23,8 +23,8 @@ public:
     explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
     virtual ~DownloadManager();
 
-    void setUrlListToDownload(const QMap<Application, QList<QUrl> > &_downloads);
-    void setUrlListToDownload(const QMap<Application, QList<QString> > &_downloads);
+    void setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloads);
+    void setUrlListToDownload(const QMultiMap<Application, QString> &_downloads);
 
     QSet<QPair<Application, QUrl> > getUrlsInError() const;
 

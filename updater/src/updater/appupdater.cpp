@@ -60,15 +60,12 @@ void AppUpdater::start()
 
     bool result = m_appPath.makeAppDirectories();
 
-    QList<QUrl> downloads;
     // TODO disable progress bar for cnlp files
-    downloads << QUrl(UpdaterConfig::AppCnlpRemoteFilename + CommandLineSingleton::getInstance()->getApplicationHttpArguments());
-    downloads << QUrl(UpdaterConfig::LoaderCnlpRemoteFilename);
-    downloads << QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename);
-    downloads << QUrl(UpdaterConfig::JavaCnlpRemoteFilename);
-
-    QMap<Application, QList<QUrl> > map;
-    map.insert(Application::getCnlpApplication(), downloads);
+    QMultiMap<Application, QUrl> map;
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::AppCnlpRemoteFilename + CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::LoaderCnlpRemoteFilename));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::JavaCnlpRemoteFilename));
 
     connect(m_updater, SIGNAL(downloadsFinished()),
             SLOT(cnlpDownloadFinished()));
@@ -117,12 +114,12 @@ void AppUpdater::cnlpDownloadFinished()
     L_INFO("File to read: " + javaCnlpPath);
     L_INFO("File to read: " + applicationCnlpPath);
 
-    DeploymentXML applicationXml(applicationCnlpPath);
-    DeploymentXML updaterXml(updaterCnlpPath);
     DeploymentXML loaderXml(loaderCnlpPath);
+    DeploymentXML updaterXml(updaterCnlpPath);
     DeploymentXML javaXml(javaCnlpPath);
+    DeploymentXML applicationXml(applicationCnlpPath);
 
-    if (applicationXml.read() && updaterXml.read() && loaderXml.read() && javaXml.read()) {
+    if (loaderXml.read() && updaterXml.read() && javaXml.read() && applicationXml.read()) {
         // retrieving remote updater version.
         m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
         L_INFO("Remote updater version: " + m_remoteUpdaterVersion);
@@ -145,15 +142,15 @@ void AppUpdater::cnlpDownloadFinished()
         m_localJavaVersion = settings->getJavaVersion();
         L_INFO("Local java version: " + m_localJavaVersion);
 
-        const Application appApplication = Application::getAppApplication();
-        const Application updaterApplication = Application::getUpdaterApplication();
         const Application loaderApplication = Application::getLoaderApplication();
+        const Application updaterApplication = Application::getUpdaterApplication();
         const Application javaApplication = Application::getJavaApplication();
+        const Application appApplication = Application::getAppApplication();
 
-        const QList<Download> appDownloads = applicationXml.getDownloads();
-        const QList<Download> updaterDownloads = updaterXml.getDownloads();
         const QList<Download> loaderDownloads = loaderXml.getDownloads();
+        const QList<Download> updaterDownloads = updaterXml.getDownloads();
         const QList<Download> javaDownloads = javaXml.getDownloads();
+        const QList<Download> appDownloads = applicationXml.getDownloads();
 
         // retrieving remote java version.
         m_remoteJavaVersion = "";
@@ -165,17 +162,37 @@ void AppUpdater::cnlpDownloadFinished()
         }
 
         m_cnlpParsedFiles.clear();
-        m_cnlpParsedFiles.insert(appApplication, appDownloads);
-        m_cnlpParsedFiles.insert(updaterApplication, updaterDownloads);
-        m_cnlpParsedFiles.insert(loaderApplication, loaderDownloads);
-        m_cnlpParsedFiles.insert(javaApplication, javaDownloads);
+        {
+            QListIterator<Download> iterator(loaderDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(loaderApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(updaterDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(updaterApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(javaDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(javaApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(appDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(appApplication, iterator.next());
+            }
+        }
 
         processCnlpDownloadFileList();
 
         connect(m_updater, SIGNAL(downloadsFinished()),
                 SLOT(applicationDownloadFinished()));
 
-        const QMap<Application, QList<QString> > nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
+        const QMultiMap<Application, QString> nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
 
         m_updater->setUrlListToDownload(nonAlreadyDownloadedFiles);
     } else {
@@ -360,7 +377,7 @@ void AppUpdater::applicationDownloadFinished()
                 L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
 
                 // find the native jar and extract it
-                QListIterator<Download> iterator(m_cnlpParsedFiles[Application::getAppApplication()]);
+                QListIterator<Download> iterator(m_cnlpParsedFiles.values(Application::getAppApplication()));
                 while (iterator.hasNext()) {
                     const Download & download = iterator.next();
 
@@ -393,7 +410,7 @@ void AppUpdater::applicationDownloadFinished()
 
                 // build the classpath string
                 const QDir installDir = m_appPath.getInstallationDir();
-                QListIterator<Download> iterator(m_cnlpParsedFiles[Application::getAppApplication()]);
+                QListIterator<Download> iterator(m_cnlpParsedFiles.values(Application::getAppApplication()));
                 while (iterator.hasNext()) {
                     const Download & download = iterator.next();
 
@@ -478,7 +495,7 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
     if (QDir().mkpath(appBuildDir.absolutePath())) {
         L_INFO("Creating empty build directory: " + appBuildDir.absolutePath());
 
-        const QList<QString> downloadedFiles = m_filesToDownload[_application];
+        const QList<QString> downloadedFiles = m_filesToDownload.values(_application);
 
         QListIterator<QString> downloadedIterator(downloadedFiles);
         while (downloadedIterator.hasNext()) {
@@ -503,7 +520,7 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
             }
         }
 
-        const QList<QString> keepFiles = m_filesToKeep[_application];
+        const QList<QString> keepFiles = m_filesToKeep.values(_application);
 
         QListIterator<QString> keepIterator(keepFiles);
         while (keepIterator.hasNext()) {
@@ -612,14 +629,38 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
     return fileList;
 }
 
-QMap<Application, QList<QString> > AppUpdater::getLocalFiles()
+QMultiMap<Application, QString> AppUpdater::getLocalFiles()
 {
-    QMap<Application, QList<QString> > fileList;
+    QMultiMap<Application, QString> fileList;
 
-    fileList.insert(Application::getLoaderApplication(), getLocalFiles(Application::getLoaderApplication()));
-    fileList.insert(Application::getUpdaterApplication(), getLocalFiles(Application::getUpdaterApplication()));
-    fileList.insert(Application::getAppApplication(), getLocalFiles(Application::getAppApplication()));
-    fileList.insert(Application::getJavaApplication(), getLocalFiles(Application::getJavaApplication()));
+    {
+        const Application loaderApplication = Application::getLoaderApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getLoaderApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(loaderApplication, iterator.next());
+        }
+    }
+    {
+        const Application updaterApplication = Application::getUpdaterApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getUpdaterApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(updaterApplication, iterator.next());
+        }
+    }
+    {
+        const Application javaApplication = Application::getJavaApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getJavaApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(javaApplication, iterator.next());
+        }
+    }
+    {
+        const Application appApplication = Application::getAppApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getAppApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(appApplication, iterator.next());
+        }
+    }
 
     return fileList;
 }
@@ -635,26 +676,19 @@ void AppUpdater::processCnlpDownloadFileList()
     const QString hash_key = HashKey::readHashKey();
 
     // list of all local files (installed and in temporary directory)
-    QMap<Application, QList<QString> > allLocalFiles = AppUpdater::getLocalFiles();
+    QMultiMap<Application, QString> allLocalFiles = AppUpdater::getLocalFiles();
 
     // iterate over files read from cnlp files
-    QMapIterator<Application, QList<Download> > iterator(m_cnlpParsedFiles);
-
-    while (iterator.hasNext()) {
-        iterator.next();
-
-        const Application application = iterator.key();
+    QSetIterator<Application> applicationIterator(QSet<Application>::fromList(m_cnlpParsedFiles.keys()));
+    while (applicationIterator.hasNext()) {
+        const Application & application = applicationIterator.next();
 
         L_INFO("Processing Application: " + application.getName());
 
-        // lists init
-        m_filesToDownload.insert(application, QList<QString>());
-        m_filesToKeep.insert(application, QList<QString>());
-
-        const QList<Download> & parsedDownloads = iterator.value();
+        const QList<Download> & parsedDownloads = m_cnlpParsedFiles.values(application);
 
         // local files of the current application, installed only
-        QList<QString> & localFilesOfCurrentApplication = allLocalFiles[application];
+        QList<QString> localFilesOfCurrentApplication = allLocalFiles.values(application);
 
         // check files to keep or download
         QListIterator<Download> parsedIterator(parsedDownloads);
@@ -683,42 +717,45 @@ void AppUpdater::processCnlpDownloadFileList()
                     if (hashmac == parsedDownload.getHashMac()) {
                         L_INFO("Local and remote files are identical. Add to keep list.");
                         // add file to download list because file is out of date
-                        m_filesToKeep[application].append(parsedDownload.getHref());
+                        m_filesToKeep.insert(application, parsedDownload.getHref());
                         // remove from the local list
                         localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                     } else {
                         L_INFO("Local and remote files differ. Add to download list.");
                         // add file to download list because file is out of date
-                        m_filesToDownload[application].append(parsedDownload.getHref());
+                        m_filesToDownload.insert(application, parsedDownload.getHref());
                         // remove from the local list
                         localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                     }
                 } else {
                     L_INFO("Local file does not exist. Add to download list.");
                     // add file to download list because it doesn't exist
-                    m_filesToDownload[application].append(parsedDownload.getHref());
+                    m_filesToDownload.insert(application, parsedDownload.getHref());
                     // remove from the local list
                     localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                 }
             } else {
                 L_INFO("Local file does not exist. Add to download list.");
                 // add file to download list because it doesn't exist
-                m_filesToDownload[application].append(parsedDownload.getHref());
+                m_filesToDownload.insert(application, parsedDownload.getHref());
                 // remove from the local list
                 localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
             }
         }
 
         // remaining files, those who no longer need to be in the app
-        m_remainingFiles[application] = localFilesOfCurrentApplication;
+        QListIterator<QString> iterator(localFilesOfCurrentApplication);
+        while (iterator.hasNext()) {
+            m_remainingFiles.insert(application, iterator.next());
+        }
     }
 }
 
 bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
 {
     if (m_filesToDownload.contains(_application)) {
-        return !m_filesToDownload[_application].isEmpty()
-               || !m_remainingFiles[_application].isEmpty();
+        return !m_filesToDownload.values(_application).isEmpty()
+               || !m_remainingFiles.values(_application).isEmpty();
     }
 
     return false;
@@ -732,65 +769,59 @@ bool AppUpdater::checkDownloadsAreOk() const
     bool downloadsOk = true;
 
     // check downloaded hash mac
-    QMapIterator<Application, QList<QString> > iterator(m_filesToDownload);
+    QMapIterator<Application, QString> iterator(m_filesToDownload);
     while (iterator.hasNext()) {
         iterator.next();
-        const Application application = iterator.key();
-        const QList<QString> & downloadedFiles = iterator.value();
+        const Application & application = iterator.key();
+        const QString downloadedFile = iterator.value();
 
-        // for each application, checking each file
-        QListIterator<QString> downloadedIterator(downloadedFiles);
-        while (downloadedIterator.hasNext()) {
-            const QString downloadedFile = downloadedIterator.next();
+        if (application == Application::getAppApplication()
+            || application == Application::getLoaderApplication()
+            || application == Application::getUpdaterApplication()
+            || application == Application::getJavaApplication()) {
+            QDir dir;
 
-            if (application == Application::getAppApplication()
-                || application == Application::getLoaderApplication()
-                || application == Application::getUpdaterApplication()
-                || application == Application::getJavaApplication()) {
-                QDir dir;
+            if (application == Application::getAppApplication()) {
+                dir = QDir(m_appPath.getTempAppDir());
+            } else if (application == Application::getLoaderApplication()) {
+                dir = QDir(m_appPath.getTempLoaderDir());
+            } else if (application == Application::getUpdaterApplication()) {
+                dir = QDir(m_appPath.getTempUpdaterDir());
+            } else if (application == Application::getJavaApplication()) {
+                dir = QDir(m_appPath.getTempJavaDir());
+            }
 
-                if (application == Application::getAppApplication()) {
-                    dir = QDir(m_appPath.getTempAppDir());
-                } else if (application == Application::getLoaderApplication()) {
-                    dir = QDir(m_appPath.getTempLoaderDir());
-                } else if (application == Application::getUpdaterApplication()) {
-                    dir = QDir(m_appPath.getTempUpdaterDir());
-                } else if (application == Application::getJavaApplication()) {
-                    dir = QDir(m_appPath.getTempJavaDir());
-                }
+            // temporary location of downloaded file
+            QString localFile = dir.absoluteFilePath(downloadedFile);
 
-                // temporary location of downloaded file
-                QString localFile = dir.absoluteFilePath(downloadedFile);
+            if (QFile::exists(localFile)) {
+                // if this local temporary file exists
+                // checking its hashmac
+                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
-                if (QFile::exists(localFile)) {
-                    // if this local temporary file exists
-                    // checking its hashmac
-                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-
-                    // we find the download corresponding to the downloadedFile to get its expected hashmac
-                    bool found = false;
-                    QListIterator<Download> parsedIterator(m_cnlpParsedFiles[application]);
-                    while (parsedIterator.hasNext()) {
-                        const Download & download = parsedIterator.next();
-                        if (download.getHref() == downloadedFile) {
-                            found = true;
-                            if (hashmac != download.getHashMac()) {
-                                L_WARN("Bad hashmac, expected: " + download.getHashMac().shortHashMac() + ", found: " + hashmac.shortHashMac() + " for file: " + localFile);
-                                downloadsOk = false;
-                            }
-                            break;
+                // we find the download corresponding to the downloadedFile to get its expected hashmac
+                bool found = false;
+                QListIterator<Download> parsedIterator(m_cnlpParsedFiles.values(application));
+                while (parsedIterator.hasNext()) {
+                    const Download & download = parsedIterator.next();
+                    if (download.getHref() == downloadedFile) {
+                        found = true;
+                        if (hashmac != download.getHashMac()) {
+                            L_WARN("Bad hashmac, expected: " + download.getHashMac().shortHashMac() + ", found: " + hashmac.shortHashMac() + " for file: " + localFile);
+                            downloadsOk = false;
                         }
+                        break;
                     }
-                    if (!found) {
-                        // we print a warning if downloaded file was not found in the parsed downloads list
-                        // we just log it, in case this happens, but this mustn't
-                        L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
-                    }
-                } else {
-                    // if this file does not exist, we get an error
-                    L_ERROR("Downloaded file does not exist " + localFile);
-                    downloadsOk = false;
                 }
+                if (!found) {
+                    // we print a warning if downloaded file was not found in the parsed downloads list
+                    // we just log it, in case this happens, but this mustn't
+                    L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
+                }
+            } else {
+                // if this file does not exist, we get an error
+                L_ERROR("Downloaded file does not exist " + localFile);
+                downloadsOk = false;
             }
         }
     }
@@ -1045,68 +1076,61 @@ bool AppUpdater::installCnlpFile(const QString &_file)
     return cnlpInstalledOk;
 }
 
-QMap<Application, QList<QString> > AppUpdater::getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
-                                                                           const QMap<Application, QList<Download> > _cnlpParsedFiles)
+QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QMultiMap<Application, QString> _fullDownloadMap,
+                                                                        const QMultiMap<Application, Download> _cnlpParsedFiles)
 {
     // copy list
-    QMap<Application, QList<QString> > outMap = _fullDownloadMap;
+    QMultiMap<Application, QString> outMap = _fullDownloadMap;
 
     // reading hash key only once
     const QString hash_key = HashKey::readHashKey();
 
     // check downloaded hash mac
-    QMutableMapIterator<Application, QList<QString> > iterator(outMap);
+    QMutableMapIterator<Application, QString> iterator(outMap);
     while (iterator.hasNext()) {
         iterator.next();
-        const Application application = iterator.key();
-        QList<QString> & downloadedFiles = iterator.value();
+        const Application & application = iterator.key();
+        const QString downloadedFile = iterator.value();
 
-        // Remove all odd numbers from a QList<int>
-        QMutableListIterator<QString> fileIterator(downloadedFiles);
-        // for each application, checking each file
-        while (fileIterator.hasNext()) {
-            QString downloadedFile = fileIterator.next();
+        if (application == Application::getAppApplication()
+            || application == Application::getLoaderApplication()
+            || application == Application::getUpdaterApplication()
+            || application == Application::getJavaApplication()) {
+            QDir dir;
 
-            if (application == Application::getAppApplication()
-                || application == Application::getLoaderApplication()
-                || application == Application::getUpdaterApplication()
-                || application == Application::getJavaApplication()) {
-                QDir dir;
+            const AppPath appPath = Utils::getAppPath();
 
-                const AppPath appPath = Utils::getAppPath();
+            if (application == Application::getAppApplication()) {
+                dir = QDir(appPath.getTempAppDir());
+            } else if (application == Application::getLoaderApplication()) {
+                dir = QDir(appPath.getTempLoaderDir());
+            } else if (application == Application::getUpdaterApplication()) {
+                dir = QDir(appPath.getTempUpdaterDir());
+            } else if (application == Application::getJavaApplication()) {
+                dir = QDir(appPath.getTempJavaDir());
+            }
 
-                if (application == Application::getAppApplication()) {
-                    dir = QDir(appPath.getTempAppDir());
-                } else if (application == Application::getLoaderApplication()) {
-                    dir = QDir(appPath.getTempLoaderDir());
-                } else if (application == Application::getUpdaterApplication()) {
-                    dir = QDir(appPath.getTempUpdaterDir());
-                } else if (application == Application::getJavaApplication()) {
-                    dir = QDir(appPath.getTempJavaDir());
-                }
+            // temporary location of downloaded file
+            const QString localFile = dir.absoluteFilePath(downloadedFile);
 
-                // temporary location of downloaded file
-                QString localFile = dir.absoluteFilePath(downloadedFile);
+            if (QFile::exists(localFile)) {
+                // if this local temporary file exists
+                // checking its hashmac
+                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
-                if (QFile::exists(localFile)) {
-                    // if this local temporary file exists
-                    // checking its hashmac
-                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-
-                    // we find the download corresponding to the downloadedFile to get its expected hashmac
-                    bool found = false;
-                    QListIterator<Download> parsedIterator(_cnlpParsedFiles[application]);
-                    while (parsedIterator.hasNext()) {
-                        const Download & download = parsedIterator.next();
-                        if (download.getHref() == downloadedFile) {
-                            found = true;
-                            if (hashmac == download.getHashMac()) {
-                                L_INFO("File for application: " + application.getName() + " already downloaded: " + download.getHref());
-                                // remove this from temp list
-                                fileIterator.remove();
-                            }
-                            break;
+                // we find the download corresponding to the downloadedFile to get its expected hashmac
+                bool found = false;
+                QListIterator<Download> parsedIterator(_cnlpParsedFiles.values(application));
+                while (parsedIterator.hasNext()) {
+                    const Download & download = parsedIterator.next();
+                    if (download.getHref() == downloadedFile) {
+                        found = true;
+                        if (hashmac == download.getHashMac()) {
+                            L_INFO("File for application: " + application.getName() + " already downloaded: " + download.getHref());
+                            // remove this from temp list
+                            iterator.remove();
                         }
+                        break;
                     }
                 }
             }

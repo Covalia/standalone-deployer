@@ -4,7 +4,6 @@
 #include <QString>
 #include <QXmlStreamReader>
 #include <QList>
-#include <QMap>
 #include <QFile>
 #include <QDebug>
 #include "xml/data/download.h"

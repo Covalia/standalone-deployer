@@ -5,7 +5,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QList>
-#include <QMap>
+#include <QMultiMap>
 #include "xml/data/application.h"
 #include "xml/data/download.h"
 #include "utils.h"
@@ -42,13 +42,13 @@ private:
     QString m_localJavaVersion;
 
     // list of remote files to download
-    QMap<Application, QList<Download> > m_cnlpParsedFiles;
+    QMultiMap<Application, Download> m_cnlpParsedFiles;
     // list of application files to download, those who have changed
-    QMap<Application, QList<QString> > m_filesToDownload;
+    QMultiMap<Application, QString> m_filesToDownload;
     // list of application files to keep, those who haven't changed
-    QMap<Application, QList<QString> > m_filesToKeep;
+    QMultiMap<Application, QString> m_filesToKeep;
     // list of remaining application files, those who need to be removed
-    QMap<Application, QList<QString> > m_remainingFiles;
+    QMultiMap<Application, QString> m_remainingFiles;
 
     // encoding to use to start application
     QString m_encoding;
@@ -62,7 +62,7 @@ private:
     QString m_memory;
 
     QList<QString> getLocalFiles(const Application &_application);
-    QMap<Application, QList<QString> > getLocalFiles();
+    QMultiMap<Application, QString> getLocalFiles();
     void processCnlpDownloadFileList();
     bool buildApplicationInTempDirectory(const Application &_application);
 
@@ -77,8 +77,8 @@ private:
     bool installApp();
     bool installCnlpFile(const QString &_file);
 
-    static QMap<Application, QList<QString> > getFilesNonAlreadyInTempDir(const QMap<Application, QList<QString> > _fullDownloadMap,
-                                                                       const QMap<Application, QList<Download> > _cnlpParsedFiles);
+    static QMultiMap<Application, QString> getFilesNonAlreadyInTempDir(const QMultiMap<Application, QString> _fullDownloadMap,
+                                                                       const QMultiMap<Application, Download> _cnlpParsedFiles);
 
 signals:
     void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
