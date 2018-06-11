@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDir>
+#include <QLockFile>
 #include <QtDebug>
 
 #include "gui/mainwindow.h"
@@ -44,6 +45,12 @@ int main(int argc, char * argv[])
 
     AppPath appPath = Utils::getAppPath();
     qDebug() << "-- Installation root: " << appPath.getInstallationDir().absolutePath();
+
+    QLockFile lockFile(appPath.getInstallationDir().absoluteFilePath("lockfile"));
+    if (!lockFile.tryLock(100)) {
+        qDebug() << "-- Only one instance permitted, exiting.";
+        return 0;
+    }
 
     new Logger(appPath.getLogsDir().absoluteFilePath("updater.log"));
 
