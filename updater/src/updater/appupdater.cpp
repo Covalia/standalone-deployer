@@ -322,15 +322,34 @@ void AppUpdater::applicationDownloadFinished()
             L_INFO("Java does not need to be updated.");
 
             if (javaInstalledOk) {
-                const QString javaDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
+                const QString javaRemoteVersionDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
 
-                if (!FileUtils::directoryExists(javaDistDir)) {
-                    L_INFO("Java dist directory does not exist. " + javaDistDir);
-                    if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
-                        L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
-                    } else {
-                        L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
-                        javaInstalledOk = false;
+                if (!FileUtils::directoryExists(javaRemoteVersionDir)) {
+                    L_WARN("Remote version was not installed into: " + javaRemoteVersionDir + " maybe because version names differ but not hashes.");
+
+                    // remote version not installed because local version is the same file
+                    const QString javaLocalDistDir = m_appPath.getJavaDistDir(m_localJavaVersion).absolutePath();
+                    if (!FileUtils::directoryExists(javaLocalDistDir)) {
+                        L_INFO("Java local dist directory does not exist. " + javaLocalDistDir);
+                        if (m_appPath.prepareJava(m_localJavaVersion, false)) {
+                            L_INFO("Java local " + m_localJavaVersion + " soft prepared.");
+                        } else {
+                            L_INFO("Unable to soft prepare Java local " + m_localJavaVersion + ".");
+                            javaInstalledOk = false;
+                        }
+                    }
+                } else {
+                    // remote version installed because local and remote version are differents
+                    const QString javaRemoteDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
+
+                    if (!FileUtils::directoryExists(javaRemoteDistDir)) {
+                        L_INFO("Java dist directory does not exist. " + javaRemoteDistDir);
+                        if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
+                            L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
+                        } else {
+                            L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
+                            javaInstalledOk = false;
+                        }
                     }
                 }
             }
