@@ -772,12 +772,8 @@ void AppUpdater::processCnlpDownloadFileList()
 
 bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
 {
-    if (m_filesToDownload.contains(_application)) {
-        return !m_filesToDownload.values(_application).isEmpty()
-               || !m_remainingFiles.values(_application).isEmpty();
-    }
-
-    return false;
+    return !m_filesToDownload.values(_application).isEmpty()
+           || !m_remainingFiles.values(_application).isEmpty();
 }
 
 bool AppUpdater::checkDownloadsAreOk() const
