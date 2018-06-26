@@ -32,7 +32,7 @@ class Application
         }
         static Application getJavaApplication()
         {
-            return Application(IOConfig::JavaName, "", "");
+            return Application(IOConfig::JavaName, UpdaterConfig::JavaCnlpRemoteFilename, UpdaterConfig::JavaCnlpLocalFilename);
         }
         static Application getEmptyApplication()
         {
@@ -43,17 +43,14 @@ class Application
         QString getVersion() const;
         QString getCnlpRemoteFileName() const;
         QString getCnlpLocalFileName() const;
-        QString getUpdaterExtensionClasspath() const;
 
         void setVersion(const QString &_version);
-        void setUpdaterExtensionClasspath(const QString &_updaterExtensionClasspath);
 
         operator QString() const {
             return "Application [name=" + m_name +
                    ", version=" + m_version +
                    ", cnlpRemoteFileName=" + m_cnlpRemoteFileName +
-                   ", cnlpLocalFileName=" + m_cnlpLocalFileName +
-                   ", updaterExtensionClasspath=" + m_updaterExtensionClasspath + "]";
+                   ", cnlpLocalFileName=" + m_cnlpLocalFileName + "]";
         }
 
     private:
@@ -66,7 +63,6 @@ class Application
         QString m_version;
         QString m_cnlpRemoteFileName;
         QString m_cnlpLocalFileName;
-        QString m_updaterExtensionClasspath;
 };
 
 inline bool operator<(const Application &_e1, const Application &_e2)
@@ -79,8 +75,7 @@ inline bool operator==(const Application &_e1, const Application &_e2)
     return _e1.getName() == _e2.getName()
            && _e1.getVersion() == _e2.getVersion()
            && _e1.getCnlpRemoteFileName() == _e2.getCnlpRemoteFileName()
-           && _e1.getCnlpLocalFileName() == _e2.getCnlpLocalFileName()
-           && _e1.getUpdaterExtensionClasspath() == _e2.getUpdaterExtensionClasspath();
+           && _e1.getCnlpLocalFileName() == _e2.getCnlpLocalFileName();
 }
 
 inline bool operator!=(const Application &_e1, const Application &_e2)
@@ -88,8 +83,7 @@ inline bool operator!=(const Application &_e1, const Application &_e2)
     return _e1.getName() != _e2.getName()
             || _e1.getVersion() != _e2.getVersion()
             || _e1.getCnlpRemoteFileName() != _e2.getCnlpRemoteFileName()
-            || _e1.getCnlpLocalFileName() != _e2.getCnlpLocalFileName()
-            || _e1.getUpdaterExtensionClasspath() != _e2.getUpdaterExtensionClasspath();
+            || _e1.getCnlpLocalFileName() != _e2.getCnlpLocalFileName();
 }
 
 inline uint qHash(const Application &_key, uint _seed)
@@ -97,8 +91,7 @@ inline uint qHash(const Application &_key, uint _seed)
     return qHash(_key.getName(), _seed)
            ^ qHash(_key.getVersion(), _seed)
            ^ qHash(_key.getCnlpRemoteFileName(), _seed)
-           ^ qHash(_key.getCnlpLocalFileName(), _seed)
-           ^ qHash(_key.getUpdaterExtensionClasspath(), _seed);
+           ^ qHash(_key.getCnlpLocalFileName(), _seed);
 }
 
 #endif // ifndef UPDATER__APPLICATION_H

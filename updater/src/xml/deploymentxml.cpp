@@ -25,8 +25,6 @@ const QString DeploymentXML::FileTag("file");
 const QString DeploymentXML::VersionAttribute("version");
 const QString DeploymentXML::NameAttribute("name");
 
-const QString DeploymentXML::UpdaterExtensionClasspathAttribute("updaterExtensionClasspath");
-
 const QString DeploymentXML::ArgumentsTag("arguments");
 const QString DeploymentXML::ArgumentTag("argument");
 
@@ -270,7 +268,6 @@ bool DeploymentXML::processApplication()
 
     QString name = "";
     QString version = "";
-    QString updaterExtensionClasspath = "";
 
     // TODO check attributes et return false
     if (m_xmlReader.attributes().hasAttribute(NameAttribute)) {
@@ -278,9 +275,6 @@ bool DeploymentXML::processApplication()
     }
     if (m_xmlReader.attributes().hasAttribute(VersionAttribute)) {
         version = m_xmlReader.attributes().value(VersionAttribute).toString();
-    }
-    if (m_xmlReader.attributes().hasAttribute(UpdaterExtensionClasspathAttribute)) {
-        updaterExtensionClasspath = m_xmlReader.attributes().value(UpdaterExtensionClasspathAttribute).toString();
     }
 
     if (name == IOConfig::AppName) {
@@ -297,7 +291,6 @@ bool DeploymentXML::processApplication()
 
     if (name == IOConfig::AppName || name == IOConfig::LoaderName || name == IOConfig::UpdaterName || name == IOConfig::JavaName) {
         application.setVersion(version);
-        application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 
         m_downloads.clear();
         m_application = application;

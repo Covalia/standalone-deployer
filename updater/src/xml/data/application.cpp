@@ -6,8 +6,7 @@ Application::Application(QString _name,
     m_name(_name),
     m_version(""),
     m_cnlpRemoteFileName(_cnlpRemoteFileName),
-    m_cnlpLocalFileName(_cnlpLocalFileName),
-    m_updaterExtensionClasspath("")
+    m_cnlpLocalFileName(_cnlpLocalFileName)
 {
 }
 
@@ -34,14 +33,4 @@ QString Application::getCnlpRemoteFileName() const
 QString Application::getCnlpLocalFileName() const
 {
     return m_cnlpLocalFileName;
-}
-
-QString Application::getUpdaterExtensionClasspath() const
-{
-    return m_updaterExtensionClasspath;
-}
-
-void Application::setUpdaterExtensionClasspath(const QString &_updaterExtensionClasspath)
-{
-    m_updaterExtensionClasspath = _updaterExtensionClasspath;
 }

@@ -68,8 +68,6 @@ class DeploymentXML : public QObject
         static const QString VersionAttribute;
         static const QString NameAttribute;
 
-        static const QString UpdaterExtensionClasspathAttribute;
-
         static const QString ArgumentsTag;
         static const QString ArgumentTag;
 
