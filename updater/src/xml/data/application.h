@@ -67,7 +67,25 @@ class Application
 
 inline bool operator<(const Application &_e1, const Application &_e2)
 {
-    return _e1.getName() < _e2.getName();
+    if (_e1.getName() < _e2.getName()) {
+        return true;
+    } else {
+        if (_e1.getVersion() < _e2.getVersion()) {
+            return true;
+        } else {
+            if (_e1.getCnlpRemoteFileName() < _e2.getCnlpRemoteFileName()) {
+                return true;
+            }
+            else {
+                if (_e1.getCnlpLocalFileName() < _e2.getCnlpLocalFileName()) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+    }
 }
 
 inline bool operator==(const Application &_e1, const Application &_e2)
