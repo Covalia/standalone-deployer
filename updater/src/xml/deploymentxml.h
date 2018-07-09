@@ -44,6 +44,7 @@ class DeploymentXML : public QObject
         QString getMemory() const;
         QString getEncoding() const;
         QString getMainClass() const;
+        QString getRunnerClass() const;
 
         static QString getCurrentOsValue();
 
@@ -75,6 +76,7 @@ class DeploymentXML : public QObject
         static const QString VersionTag;
         static const QString EncodingTag;
         static const QString MainClassTag;
+        static const QString RunnerClassTag;
 
     private:
 
@@ -84,6 +86,7 @@ class DeploymentXML : public QObject
         QString m_version;
         QString m_encoding;
         QString m_mainClass;
+        QString m_runnerClass;
         QList<QString> m_arguments;
 
         Application m_application;
@@ -118,6 +121,12 @@ class DeploymentXML : public QObject
          * @return true if success analysis
          */
         bool processMainClass();
+
+        /**
+         * @brief read runnerClass tag in xml
+         * @return true if success analysis
+         */
+        bool processRunnerClass();
 
         /**
          * @brief read all arguments tags

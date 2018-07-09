@@ -32,6 +32,7 @@ const QString DeploymentXML::MemoryTag("memory");
 const QString DeploymentXML::VersionTag("version");
 const QString DeploymentXML::EncodingTag("encoding");
 const QString DeploymentXML::MainClassTag("mainclass");
+const QString DeploymentXML::RunnerClassTag("runnerclass");
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
@@ -42,6 +43,7 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     m_version = "";
     m_encoding = "";
     m_mainClass = "";
+    m_runnerClass = "";
     m_downloads = QList<Download>();
     m_arguments = QList<QString>();
 }
@@ -119,6 +121,11 @@ QString DeploymentXML::getMainClass() const
     return m_mainClass;
 }
 
+QString DeploymentXML::getRunnerClass() const
+{
+    return m_runnerClass;
+}
+
 QString DeploymentXML::getCurrentOsValue()
 {
 #ifdef Q_OS_MACOS
@@ -165,6 +172,9 @@ bool DeploymentXML::processDeployment()
         } else if (m_xmlReader.name() == MainClassTag) {
             result &= processMainClass();
             m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == RunnerClassTag) {
+            result &= processRunnerClass();
+            m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == ArgumentsTag) {
             result &= processArguments();
         } else if (m_xmlReader.name() == DownloadsTag) {
@@ -210,6 +220,15 @@ bool DeploymentXML::processMainClass()
         return false;
     }
     m_mainClass = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processRunnerClass()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != RunnerClassTag) {
+        return false;
+    }
+    m_runnerClass = readNextText();
     return true;
 }
 
