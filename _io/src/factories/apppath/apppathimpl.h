@@ -55,6 +55,7 @@ class AppPathImpl {
         virtual QDir getTempLoaderBuildDir() const;
         virtual QDir getTempUpdaterDir() const;
         virtual QDir getTempUpdaterBuildDir() const;
+        virtual QDir getTempDataBuildDir() const;
         virtual QDir getCnlpDir() const;
         virtual QDir getCnlpOldDir() const;
         virtual QDir getDataDir() const;
@@ -85,6 +86,9 @@ class AppPathImpl {
         virtual bool startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
                                       const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
                                       const QStringList &_arguments);
+
+        virtual bool startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                           const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation);
 
         virtual QString getClasspathSeparator() const = 0;
 

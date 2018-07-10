@@ -238,6 +238,14 @@ QDir AppPath::getTempUpdaterBuildDir() const
     return QDir();
 }
 
+QDir AppPath::getTempDataBuildDir() const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempDataBuildDir();
+    }
+    return QDir();
+}
+
 QDir AppPath::getCnlpDir() const
 {
     if (m_appPathImpl) {
@@ -397,6 +405,16 @@ bool AppPath::startApplication(const QString &_javaVersion, const QString &_xmxM
 {
     if (m_appPathImpl) {
         return m_appPathImpl->startApplication(_javaVersion, _xmxMemory, _classPath, _mainClass, _encoding, _dataLocation, _arguments);
+    }
+    return false;
+}
+
+bool AppPath::startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                   const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startPostInstallTasks(_javaVersion, _xmxMemory, _classPath,
+                                                    _runnerClass, _encoding, _dataLocation);
     }
     return false;
 }

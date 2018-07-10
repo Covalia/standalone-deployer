@@ -1,6 +1,7 @@
 #include "factories/apppath/apppathimpl.h"
 #include "io/fileutils.h"
 #include "io/unzip/zipextractor.h"
+#include "log/logger.h"
 #include <QDirIterator>
 
 #include <QDebug>
@@ -159,6 +160,11 @@ QDir AppPathImpl::getTempUpdaterDir() const
 QDir AppPathImpl::getTempUpdaterBuildDir() const
 {
     return QDir(getTempDir().absoluteFilePath(IOConfig::UpdaterDir  + AppPathImpl::BuildDirSuffix));
+}
+
+QDir AppPathImpl::getTempDataBuildDir() const
+{
+    return QDir(getTempDir().absoluteFilePath(IOConfig::DataDir  + AppPathImpl::BuildDirSuffix));
 }
 
 QDir AppPathImpl::getCnlpDir() const
@@ -370,6 +376,52 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
         L_INFO("Process is started...");
     } else {
         L_ERROR("Process can not start: " + process.errorString());
+    }
+
+    return result;
+}
+
+bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                        const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation){
+    QStringList arguments;
+    const QDir installDir = getInstallationDir();
+
+    // we won't accept zero value, so no need to test for conversion result.
+    if (_xmxMemory.toInt() > 0) {
+        arguments << "-Xmx" + _xmxMemory + "M";
+    }
+
+    arguments << "-Dfile.encoding=" + _encoding;
+    arguments << "-cp";
+    arguments << _classPath;
+    arguments << _runnerClass;
+    arguments << getAppDir().absolutePath();
+
+    arguments << getTempDataBuildDir().absolutePath();
+    arguments << _dataLocation;
+
+    for (int i = 0; i < arguments.length(); i++) {
+        L_DEBUG(arguments.at(i));
+    }
+
+    const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
+    L_INFO("Java executable: " + java_command);
+
+    QProcess process;
+    process.setWorkingDirectory(installDir.absolutePath());
+    process.start(java_command, arguments);
+    process.setReadChannel(QProcess::StandardOutput);
+    bool result = process.waitForFinished();
+
+    while (process.canReadLine()) {
+       QString line = QString::fromLocal8Bit(process.readLine());
+       L_INFO(line);
+    }
+
+    if (result) {
+        L_INFO("Post Install Process has finished...");
+    } else {
+        L_ERROR("Error starting Post Install Process: " + process.errorString());
     }
 
     return result;

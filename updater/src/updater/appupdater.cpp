@@ -22,6 +22,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
     m_localJavaVersion(""),
     m_encoding(""),
     m_mainClass(""),
+    m_runnerClass(""),
     m_memory("")
 {
     m_appUrl = _appUrl;
@@ -128,6 +129,8 @@ void AppUpdater::cnlpDownloadFinished()
         m_encoding = applicationXml.getEncoding();
         // retrieving application main class
         m_mainClass = applicationXml.getMainClass();
+        // retrieving application runner class
+        m_runnerClass = applicationXml.getRunnerClass();
 
         // retrieving cnlp arguments
         m_arguments.clear();
@@ -446,6 +449,10 @@ void AppUpdater::applicationDownloadFinished()
                 }
 
                 Settings * settings = Settings::getInstance();
+
+                m_appPath.startPostInstallTasks(settings->getJavaVersion(), m_memory, classpath,
+                                                m_runnerClass, m_encoding, settings->getDataLocation());
+
                 if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
                                                m_encoding, settings->getDataLocation(), m_arguments)) {
                     // clean temp directory

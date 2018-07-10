@@ -54,6 +54,8 @@ private:
     QString m_encoding;
     // main class to start
     QString m_mainClass;
+    // post class runner to start
+    QString m_runnerClass;
 
     // received arguments list from cnlp
     QStringList m_arguments;
