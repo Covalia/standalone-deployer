@@ -77,11 +77,6 @@ QDir AppPathImpl::getConfigurationDir() const
     return QDir(m_installationDir.absoluteFilePath(IOConfig::ConfigurationDir));
 }
 
-QDir AppPathImpl::getExtensionDir() const
-{
-    return QDir(m_installationDir.absoluteFilePath(IOConfig::ExtensionDir));
-}
-
 QDir AppPathImpl::getImagesDir() const
 {
     return QDir(m_installationDir.absoluteFilePath(IOConfig::ImagesDir));

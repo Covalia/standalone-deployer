@@ -30,7 +30,6 @@ Settings::Settings() :
     m_shortcutOfflineName("Application offline"),
     m_shortcutOfflineArgs("--offline=true"),
     m_shortcutAllUser(false),
-    m_classpathExtension(""),
     m_dataLocation(""),
     m_installLocation(""),
     m_serverURL(""),
@@ -145,10 +144,6 @@ bool Settings::writeSettings()
     putSetting(S_SHORTCUT_ALL_USER, m_shortcutAllUser);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_CLASSPATH);
-    putSetting(S_CLASSPATH_EXTENSION, m_classpathExtension);
-    m_settings->endGroup();
-
     m_settings->beginGroup(GROUP_DATA);
     putSetting(S_DATA_LOCATION, m_dataLocation);
     putSetting(S_INSTALL_LOCATION, m_installLocation);
@@ -215,10 +210,6 @@ void Settings::readSettings()
     m_shortcutAllUser = getSetting(S_SHORTCUT_ALL_USER, m_shortcutAllUser).toBool();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_CLASSPATH);
-    m_classpathExtension = getSetting(S_CLASSPATH_EXTENSION, "").toString();
-    m_settings->endGroup();
-
     m_settings->beginGroup(GROUP_DATA);
     m_dataLocation = getSetting(S_DATA_LOCATION, m_dataLocation).toString();
     m_installLocation = getSetting(S_INSTALL_LOCATION, m_installLocation).toString();
@@ -269,7 +260,6 @@ QString Settings::paramListString()
     s = s + "shortcutOffineName = " + m_shortcutOfflineName + "\n";
     s = s + "shortcutOfflineArgs = " + m_shortcutOfflineArgs + "\n";
     s = s + "shortcutAllUser = " + QString::number(m_shortcutAllUser) + "\n";
-    s = s + "classpathExtension = " + m_classpathExtension + "\n";
     s = s + "dataLocation = " + m_dataLocation + "\n";
     s = s + "installLocation = " + m_installLocation + "\n";
     s = s + "serverURL = " + m_serverURL + "\n";
@@ -445,16 +435,6 @@ void Settings::setInstallLocation(const QString &installLocation)
 void Settings::setDataLocation(const QString &dataLocation)
 {
     m_dataLocation = dataLocation;
-}
-
-QString Settings::getClasspathExtension() const
-{
-    return m_classpathExtension;
-}
-
-void Settings::setClasspathExtension(const QString &classpathExtension)
-{
-    m_classpathExtension = classpathExtension;
 }
 
 bool Settings::isShortcutAllUser() const

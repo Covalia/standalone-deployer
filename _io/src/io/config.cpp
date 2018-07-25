@@ -12,7 +12,6 @@ const QString IOConfig::JavaName("java");
 
 const QString IOConfig::AppDir = IOConfig::AppName;
 const QString IOConfig::ConfigurationDir("config");
-const QString IOConfig::ExtensionDir("extension");
 const QString IOConfig::ImagesDir("images");
 const QString IOConfig::SlidesDir("slides");
 const QString IOConfig::JavaDir("java");

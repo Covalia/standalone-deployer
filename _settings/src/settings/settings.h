@@ -14,7 +14,6 @@ static QString GROUP_INFO = "INFO";
 static QString GROUP_PROXY = "PROXY";
 static QString GROUP_LANGUAGE = "LANGUAGE";
 static QString GROUP_SHORTCUT = "SHORTCUT";
-static QString GROUP_CLASSPATH = "CLASSPATH";
 static QString GROUP_DATA = "DATA";
 static QString GROUP_SERVER = "SERVER";
 static QString GROUP_START = "START";
@@ -41,8 +40,6 @@ static QString S_SHORTCUT_NAME = "shortcutName";
 static QString S_SHORTCUT_OFFLINE_NAME = "shortcutOfflineName";
 static QString S_SHORTCUT_OFFLINE_ARGS = "shortcutOfflineArgs";
 static QString S_SHORTCUT_ALL_USER = "shortcutAllUser";
-
-static QString S_CLASSPATH_EXTENSION = "classpathExtension";
 
 static QString S_INSTALL_LOCATION = "installLocation";
 static QString S_DATA_LOCATION = "dataLocation";
@@ -115,9 +112,6 @@ class Settings
 
         bool isShortcutAllUser() const;
         void setShortcutAllUser(bool shortcutAllUser);
-
-        QString getClasspathExtension() const;
-        void setClasspathExtension(const QString &classpathExtension);
 
         QString getDataLocation() const;
         void setDataLocation(const QString &dataLocation);
@@ -260,9 +254,6 @@ private:
         QString m_shortcutOfflineName;
         QString m_shortcutOfflineArgs;
         bool m_shortcutAllUser;
-
-        // classpath updater
-        QString m_classpathExtension;
 
         // data
         QString m_dataLocation;

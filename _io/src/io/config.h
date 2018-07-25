@@ -45,9 +45,6 @@ public:
     /// Relative path of application configuration
     static const QString ConfigurationDir;
 
-    /// Relative path of application extensions
-    static const QString ExtensionDir;
-
     /// Relative path of Image
     static const QString ImagesDir;
 

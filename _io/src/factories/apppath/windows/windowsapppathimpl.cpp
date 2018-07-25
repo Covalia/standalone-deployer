@@ -24,7 +24,6 @@ bool WindowsAppPathImpl::makeAppDirectories()
 
     result &= makeDirectoryIfNotExisting(getAppDir());
     result &= makeDirectoryIfNotExisting(getConfigurationDir());
-    result &= makeDirectoryIfNotExisting(getExtensionDir());
     result &= makeDirectoryIfNotExisting(getImagesDir());
     result &= makeDirectoryIfNotExisting(QDir(getImagesDir().absoluteFilePath(IOConfig::SlidesDir))); // TODO
     result &= makeDirectoryIfNotExisting(getJavaDir());

@@ -38,7 +38,6 @@ class AppPathImpl {
         virtual QDir getAppOldDir() const;
         virtual QDir getAppNativesDir() const;
         virtual QDir getConfigurationDir() const;
-        virtual QDir getExtensionDir() const;
         virtual QDir getImagesDir() const;
         virtual QDir getSlidesDir() const;
         virtual QDir getJavaDir() const;

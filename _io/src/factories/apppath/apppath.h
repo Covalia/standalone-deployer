@@ -27,7 +27,6 @@ class AppPath {
         QDir getAppOldDir() const;
         QDir getAppNativesDir() const;
         QDir getConfigurationDir() const;
-        QDir getExtensionDir() const;
         QDir getImagesDir() const;
         QDir getSlidesDir() const;
         QDir getJavaDir() const;

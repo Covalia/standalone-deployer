@@ -102,14 +102,6 @@ QDir AppPath::getConfigurationDir() const
     return QDir();
 }
 
-QDir AppPath::getExtensionDir() const
-{
-    if (m_appPathImpl) {
-        return m_appPathImpl->getExtensionDir();
-    }
-    return QDir();
-}
-
 QDir AppPath::getImagesDir() const
 {
     if (m_appPathImpl) {
