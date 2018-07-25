@@ -450,22 +450,26 @@ void AppUpdater::applicationDownloadFinished()
 
                 Settings * settings = Settings::getInstance();
 
-                m_appPath.startPostInstallTasks(settings->getJavaVersion(), m_memory, classpath,
-                                                m_runnerClass, m_encoding, settings->getDataLocation());
+                if (m_appPath.startPostInstallTasks(settings->getJavaVersion(), m_memory, classpath,
+                                                    m_runnerClass, m_encoding, settings->getDataLocation())) {
+                    L_INFO("Post install tasks started and finished.");
 
-                if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
-                                               m_encoding, settings->getDataLocation(), m_arguments)) {
-                    // clean temp directory
-                    if (FileUtils::removeDirRecursively(m_appPath.getTempDir().absolutePath())) {
-                        L_INFO("Cleaned " + m_appPath.getTempDir().absolutePath());
+                    if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
+                                                   m_encoding, settings->getDataLocation(), m_arguments)) {
+                        // clean temp directory
+                        if (FileUtils::removeDirRecursively(m_appPath.getTempDir().absolutePath())) {
+                            L_INFO("Cleaned " + m_appPath.getTempDir().absolutePath());
+                        } else {
+                            L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
+                        }
+
+                        // quit application
+                        L_INFO("Quit application.");
                     } else {
-                        L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
+                        L_ERROR("Unable to start application. Exiting.");
                     }
-
-                    // quit application
-                    L_INFO("Quit application.");
                 } else {
-                    L_ERROR("Unable to start application. Exiting.");
+                    L_ERROR("Error while running post install tasks. Exiting.");
                 }
 
                 QCoreApplication::quit();
