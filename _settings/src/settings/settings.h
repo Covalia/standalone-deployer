@@ -44,7 +44,7 @@ static QString S_SHORTCUT_ALL_USER = "shortcutAllUser";
 static QString S_INSTALL_LOCATION = "installLocation";
 static QString S_DATA_LOCATION = "dataLocation";
 
-static QString S_SERVER_URL = "serverURL";
+static QString S_DEPLOYMENT_URL = "deployment_url";
 
 static QString S_RUN_AT_START = "runAtStart";
 
@@ -116,8 +116,8 @@ class Settings
         QString getDataLocation() const;
         void setDataLocation(const QString &dataLocation);
 
-        QString getServerURL() const;
-        void setServerURL(const QString &serverURL);
+        QString getDeploymentUrl() const;
+        void setDeploymentUrl(const QString &deploymentUrl);
 
         bool isRunAtStart() const;
         void setRunAtStart(const bool &runAtStart);
@@ -260,7 +260,7 @@ private:
         QString m_installLocation;
 
         // server
-        QString m_serverURL;
+        QString m_deploymentUrl;
 
         // start
         bool m_runAtStart;

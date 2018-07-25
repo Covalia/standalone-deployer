@@ -37,7 +37,7 @@ void InstallManager::initInstallation()
     m_projectSettings->initSettings(":/project.ini");
     m_projectSettings->readSettings();
     m_projectSettings->sendToSettings();
-    L_INFO("Ip=" + m_projectSettings->getIp_server());
+    L_INFO("Ip=" + m_projectSettings->getDeployment_Url());
 
     L_INFO("Parsing command line");
     CommandLineParser * lineParser = new CommandLineParser();

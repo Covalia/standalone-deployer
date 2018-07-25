@@ -13,7 +13,7 @@ QMutex ResourcesSettings::sm_settingsMutex;
 
 ResourcesSettings::ResourcesSettings() :
     m_settings(0),
-    m_ip_server(""),
+    m_deployment_url(""),
     m_app_name("Application"),
     m_language("en_US"),
     m_shortcut_name("Application"),
@@ -82,7 +82,7 @@ void ResourcesSettings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_ip_server = m_settings->value(P_IP_SERVER, m_ip_server).toString();
+    m_deployment_url = m_settings->value(P_DEPLOYMENT_URL, m_deployment_url).toString();
     m_app_name = m_settings->value(P_APPLICATION_NAME, m_app_name).toString();
     m_language = m_settings->value(P_LANGUAGE, m_language).toString();
 
@@ -118,7 +118,7 @@ void ResourcesSettings::sendToSettings()
     Settings * settings = Settings::getInstance();
 
     settings->setApplicationName(m_app_name);
-    settings->setServerURL(m_ip_server);
+    settings->setDeploymentUrl(m_deployment_url);
     settings->setLanguage(LanguageManager::getLanguageFromLocale(m_language));
     settings->setShortcutName(m_shortcut_name);
     settings->setShortcutOnline(m_shortcut_online);
@@ -196,14 +196,14 @@ void ResourcesSettings::setEncrypted_password_key(const QString &encrypted_passw
     m_encrypted_password_key = encrypted_password_key;
 }
 
-QString ResourcesSettings::getIp_server() const
+QString ResourcesSettings::getDeployment_Url() const
 {
-    return m_ip_server;
+    return m_deployment_url;
 }
 
-void ResourcesSettings::setIp_server(const QString &ip_server)
+void ResourcesSettings::setDeployment_Url(const QString &deployment_url)
 {
-    m_ip_server = ip_server;
+    m_deployment_url = deployment_url;
 }
 
 QString ResourcesSettings::getApp_name() const

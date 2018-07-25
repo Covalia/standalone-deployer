@@ -5,7 +5,7 @@
 #include <QSettings>
 #include <QMutex>
 
-static QString P_IP_SERVER = "ip_server";
+static QString P_DEPLOYMENT_URL = "deployment_url";
 static QString P_APPLICATION_NAME = "application_name";
 static QString P_LANGUAGE = "language";
 
@@ -95,8 +95,8 @@ class ResourcesSettings
         QString getApp_name() const;
         void setApp_name(const QString &app_name);
 
-        QString getIp_server() const;
-        void setIp_server(const QString &ip_server);
+        QString getDeployment_Url() const;
+        void setDeployment_Url(const QString &deployment_url);
 
         QString getDefault_data_path_simple_install() const;
         void setDefault_data_path_simple_install(const QString &default_data_path_simple_install);
@@ -148,7 +148,7 @@ private:
          */
         QSettings * m_settings;
 
-        QString m_ip_server;
+        QString m_deployment_url;
         QString m_app_name;
         QString m_language;
         QString m_shortcut_name;

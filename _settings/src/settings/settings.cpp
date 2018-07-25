@@ -32,7 +32,7 @@ Settings::Settings() :
     m_shortcutAllUser(false),
     m_dataLocation(""),
     m_installLocation(""),
-    m_serverURL(""),
+    m_deploymentUrl(""),
     m_runAtStart(false),
     m_colorPanelBackgroundBorder("#364058"),
     m_colorPanelBackground("#2d364c"),
@@ -150,7 +150,7 @@ bool Settings::writeSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_SERVER);
-    putSetting(S_SERVER_URL, m_serverURL);
+    putSetting(S_DEPLOYMENT_URL, m_deploymentUrl);
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_START);
@@ -216,7 +216,7 @@ void Settings::readSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_SERVER);
-    m_serverURL = getSetting(S_SERVER_URL, "").toString();
+    m_deploymentUrl = getSetting(S_DEPLOYMENT_URL, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GROUP_START);
@@ -262,7 +262,7 @@ QString Settings::paramListString()
     s = s + "shortcutAllUser = " + QString::number(m_shortcutAllUser) + "\n";
     s = s + "dataLocation = " + m_dataLocation + "\n";
     s = s + "installLocation = " + m_installLocation + "\n";
-    s = s + "serverURL = " + m_serverURL + "\n";
+    s = s + "serverURL = " + m_deploymentUrl + "\n";
     s = s + "runAtStart = " + QString::number(m_runAtStart) + "\n";
 
     return s;
@@ -407,14 +407,14 @@ void Settings::setRunAtStart(const bool &runAtStart)
     m_runAtStart = runAtStart;
 }
 
-QString Settings::getServerURL() const
+QString Settings::getDeploymentUrl() const
 {
-    return m_serverURL;
+    return m_deploymentUrl;
 }
 
-void Settings::setServerURL(const QString &serverURL)
+void Settings::setDeploymentUrl(const QString &deploymentUrl)
 {
-    m_serverURL = serverURL;
+    m_deploymentUrl = deploymentUrl;
 }
 
 QString Settings::getDataLocation() const
