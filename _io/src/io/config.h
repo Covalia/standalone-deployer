@@ -13,13 +13,13 @@ public:
         Installer
     };
 
-    /// Relative path of application installation application
+    /// Installer version number
     static const QString InstallerVersion;
 
-    /// Relative path of application configuration
+    /// Updater version number
     static const QString UpdaterVersion;
 
-    /// Relative path of application extensions
+    /// Loader version number
     static const QString LoaderVersion;
 
 
