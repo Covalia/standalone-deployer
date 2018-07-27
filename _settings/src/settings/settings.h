@@ -231,7 +231,7 @@ class Settings
         QString m_deploymentUrl;
         QString m_appName;
 
-        Language m_lang;
+        QString m_lang;
 
         bool m_shortcutOnline;
         bool m_shortcutOffline;

@@ -37,25 +37,24 @@ void LanguageManager::updateLanguage(QString locale)
 
 Language LanguageManager::getLanguageFromLocale(QString locale)
 {
-    if(locale == "en_US"){
+    if (locale == "en_US") {
         return Language::English;
-    }
-    else if(locale == "fr_FR"){
+    } else if (locale == "fr_FR") {
         return Language::French;
-    }
-    else{
+    } else {
         L_WARN("Language witch locale " + locale + " is not supported by application");
         return Language::English;
     }
 }
 
-QString LanguageManager::getStringLanguageFromEnum(Language language){
-    switch(language){
-        case English :
-            return "English";
-        case French :
-            return "Francais";
-        default :
-            return "Default";
+QString LanguageManager::getLocaleFromLanguage(Language language)
+{
+    switch (language) {
+        case English:
+            return "en_US";
+        case French:
+            return "fr_FR";
+        default:
+            return "en_US";
     }
 }

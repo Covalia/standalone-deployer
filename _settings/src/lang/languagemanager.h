@@ -15,7 +15,7 @@ class LanguageManager
         static void updateLanguage(QString locale);
 
         static Language getLanguageFromLocale(QString locale);
-        static QString getStringLanguageFromEnum(Language language);
+        static QString getLocaleFromLanguage(Language language);
 
     private:
         static QTranslator translator;

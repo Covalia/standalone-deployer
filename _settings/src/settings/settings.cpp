@@ -61,7 +61,7 @@ Settings::Settings() :
     m_settings(0),
     m_deploymentUrl(""),
     m_appName("Application"),
-    m_lang(Language::English),
+    m_lang(LanguageManager::getLocaleFromLanguage(Language::English)),
     m_shortcutOnline(false),
     m_shortcutOffline(false),
     m_shortcutName("Application"),
@@ -245,7 +245,7 @@ void Settings::readSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupLang);
-    m_lang = Language(getSetting(Lang, 0).toInt());
+    m_lang = getSetting(Lang, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupShortcut);
@@ -299,7 +299,7 @@ QString Settings::paramListString()
     s = s + "proxy_authentification = " + QString::number(m_proxyAuthentification) + "\n";
     s = s + "proxy_login = " + m_proxyLogin + "\n";
     s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
-    s = s + "lang = " + LanguageManager::getStringLanguageFromEnum(m_lang) + "\n";
+    s = s + "lang = " + m_lang + "\n";
     s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
     s = s + "shortcut_online = " + QString::number(m_shortcutOnline) + "\n";
     s = s + "shortcut_name = " + m_shortcutName + "\n";
@@ -526,12 +526,12 @@ void Settings::setShortcutName(const QString &shortcutName)
 
 Language Settings::getLang() const
 {
-    return m_lang;
+    return LanguageManager::getLanguageFromLocale(m_lang);
 }
 
 void Settings::setLang(const Language &lang)
 {
-    m_lang = lang;
+    m_lang = LanguageManager::getLocaleFromLanguage(lang);
 }
 
 QString Settings::getProxyPassword() const
