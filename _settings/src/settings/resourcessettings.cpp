@@ -20,7 +20,6 @@ const QString ResourcesSettings::ShortcutOfflineArgs("shortcut_offline_args");
 const QString ResourcesSettings::RunAtStart("run_at_start");
 
 const QString ResourcesSettings::DefaultInstallationPath("default_installation_path");
-const QString ResourcesSettings::DefaultInstallationFolderName("default_installation_folder_name");
 
 const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_data_path_simple_install");
 const QString ResourcesSettings::DefaultCustomInstallDataPath("default_data_path_custom_install");
@@ -61,9 +60,8 @@ ResourcesSettings::ResourcesSettings() :
     m_disabledColor("#656976"),
     m_windowBorderWidth("0"),
     m_defaultInstallationPath("$HOME"),
-    m_defaultInstallationFolderName("Application"),
-    m_defaultSimpleInstallDataPath("$INSTALL_PATH/Data"),
-    m_defaultCustomInstallDataPath("$INSTALL_PATH/Data"),
+    m_defaultSimpleInstallDataPath("$INSTALL_PATH/data"),
+    m_defaultCustomInstallDataPath("$INSTALL_PATH/data"),
     m_changeDataLocationAllowed(false),
     m_encryptedPasswordKey("0x0c2cd4a4bcb9f023")
 {
@@ -125,7 +123,6 @@ void ResourcesSettings::readSettings()
     m_runAtStart = m_settings->value(RunAtStart, m_runAtStart).toBool();
 
     m_defaultInstallationPath = getTransformedVariablePath(m_settings->value(DefaultInstallationPath, m_defaultInstallationPath).toString());
-    m_defaultInstallationFolderName = m_settings->value(DefaultInstallationFolderName, m_defaultInstallationFolderName).toString();
 
     m_defaultSimpleInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultSimpleInstallDataPath, m_defaultSimpleInstallDataPath).toString());
     m_defaultCustomInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultCustomInstallDataPath, m_defaultCustomInstallDataPath).toString());
@@ -159,7 +156,7 @@ void ResourcesSettings::sendToSettings()
     settings->setRunAtStart(m_runAtStart);
 
     // install path
-    settings->setInstallLocation(m_defaultInstallationPath + QDir::separator() + m_defaultInstallationFolderName);
+    settings->setInstallLocation(m_defaultInstallationPath);
 
     // data path
     // use simple by default
@@ -202,16 +199,6 @@ QString ResourcesSettings::getShortcutOfflineArgs() const
 void ResourcesSettings::setShortcutOfflineArgs(const QString &shortcutOfflineArgs)
 {
     m_shortcutOfflineArgs = shortcutOfflineArgs;
-}
-
-QString ResourcesSettings::getDefaultInstallationFolderName() const
-{
-    return m_defaultInstallationFolderName;
-}
-
-void ResourcesSettings::setDefaultInstallationFolderName(const QString &defaultInstallationFolderName)
-{
-    m_defaultInstallationFolderName = defaultInstallationFolderName;
 }
 
 QString ResourcesSettings::getEncryptedPasswordKey() const

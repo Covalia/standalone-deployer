@@ -22,7 +22,6 @@ class ResourcesSettings
         static const QString RunAtStart;
 
         static const QString DefaultInstallationPath;
-        static const QString DefaultInstallationFolderName;
 
         static const QString DefaultSimpleInstallDataPath;
         static const QString DefaultCustomInstallDataPath;
@@ -108,9 +107,6 @@ class ResourcesSettings
         QString getEncryptedPasswordKey() const;
         void setEncryptedPasswordKey(const QString &encryptedPasswordKey);
 
-        QString getDefaultInstallationFolderName() const;
-        void setDefaultInstallationFolderName(const QString &defaultInstallationFolderName);
-
         QString getShortcutOfflineArgs() const;
         void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
 
@@ -171,7 +167,6 @@ class ResourcesSettings
         QString m_windowBorderWidth;
 
         QString m_defaultInstallationPath;
-        QString m_defaultInstallationFolderName;
         QString m_defaultSimpleInstallDataPath;
         QString m_defaultCustomInstallDataPath;
         bool m_changeDataLocationAllowed;
