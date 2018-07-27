@@ -22,14 +22,14 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow{
-	background : @color-panel-background;
+	background : @panel-background-color;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QWidget#centralwidget{
-	background : @color-panel-background;
-	border: @border-windowpx solid @color-button-background;
+	background : @panel-background-color;
+	border: @window-border-widthpx solid @button-background-color;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -127,7 +127,7 @@
               <string notr="true"/>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: @color-text-on-background ;</string>
+              <string notr="true">color: @default-text-color ;</string>
              </property>
              <property name="text">
               <string notr="true">Installation of application</string>
@@ -154,11 +154,11 @@
 	background-color: transparent;
 	padding: 8px;
 	border: px0;
-	color : @color-text-gray;
+	color : @gray-text-color;
 }
 
 QPushButton:hover {
-	color : @color-text-on-background;
+	color : @default-text-color;
 }</string>
              </property>
              <property name="text">
@@ -173,7 +173,7 @@ QPushButton:hover {
 {
     subcontrol-origin: padding;
     subcontrol-position: top right;
-    selection-background-color: @color-text-gray;
+    selection-background-color: @gray-text-color;
     background-color: transparent;
     border-style: solid;
     padding: 1px 0px 1px 20px;
@@ -182,36 +182,36 @@ QPushButton:hover {
 
 QComboBox:hover, QPushButton:hover
 {
-	color: @color-text-gray;
-	background-color: @color-panel-background;
+	color: @gray-text-color;
+	background-color: @panel-background-color;
 }
 
 
 
 QComboBox:!on
 {
-    color:  @color-text-gray;
+    color:  @gray-text-color;
     background-color: transparent;
 }
 
 QComboBox QAbstractItemView{
 	padding : 10px;
-	background-color: @color-panel-background;
+	background-color: @panel-background-color;
 }
 
 QComboBox QAbstractItemView::item
 {
 	min-height: 25px;
-	color : @color-text-gray;
-	background-color: @color-panel-background;
+	color : @gray-text-color;
+	background-color: @panel-background-color;
 	border:0px;
 	text-align: center;
 }
 
 QListView::item:selected {
 	border-radius: 5px;
-	border: 1px solid @color-text-on-background;
-	color : @color-text-on-background;
+	border: 1px solid @default-text-color;
+	color : @default-text-color;
 }
 
 QListView {
@@ -260,7 +260,7 @@ QComboBox::down-arrow
 	margin: 1px;
 }
 QPushButton:hover {
-	background-color: @color-panel-background-border;
+	background-color: @inset-color;
 }</string>
              </property>
              <property name="text">

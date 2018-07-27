@@ -208,14 +208,14 @@ void MainWindow::loadSlideShowImagesFromResources()
 
         QString bSlideStyle = " QPushButton{                      \
                                     border-radius: 2px;                     \
-                                    background : @color-text-gray;          \
+                                    background : @gray-text-color;          \
                                     margin : 3px;                           \
                                 }                                           \
                                 QPushButton:hover {                         \
-                                    background : @color-text-on-background; \
+                                    background : @default-text-color; \
                                 }                                           \
                                 QPushButton:checked {                       \
-                                  background : @color-text-on-background;   \
+                                  background : @default-text-color;   \
                                 }";
         button->setStyleSheet(StyleManager::transformStyle(bSlideStyle));
         button->setCursor(Qt::PointingHandCursor);

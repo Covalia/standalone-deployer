@@ -23,7 +23,7 @@ QString CryptManager::decryptToString(const QString& text)
 quint64 CryptManager::getKey()
 {
     ResourcesSettings * resource = ResourcesSettings::getInstance();
-    QString key = resource->getEncrypted_password_key();
+    QString key = resource->getEncryptedPasswordKey();
     bool ok;
     quint64 quintKey = key.toLongLong(&ok, 16);
 

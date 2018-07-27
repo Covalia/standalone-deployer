@@ -130,7 +130,7 @@ void CommandLineParser::sendToSettings()
         settings->setShortcutOnline(parseBool(m_shortcut));
     }
     if (!isEmptyValue(m_allUserShortcut)) {
-        settings->setShortcutAllUser(parseBool(m_allUserShortcut));
+        settings->setShortcutForAllUsers(parseBool(m_allUserShortcut));
     }
 
     if (!isEmptyValue(m_runAtStart)) {

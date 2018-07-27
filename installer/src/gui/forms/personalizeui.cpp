@@ -25,10 +25,10 @@ PersonalizeUI::PersonalizeUI(QWidget * _parent) :
     Settings * settings = Settings::getInstance();
 
     ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->widgetDataInstallation->setVisible(resource->isPossible_change_data_location());
+    m_ui->widgetDataInstallation->setVisible(resource->isChangeDataLocationAllowed());
     // apply custom data path to setting
-    if (resource->isPossible_change_data_location()) {
-        settings->setDataLocation(resource->getDefault_data_path_custom_install());
+    if (resource->isChangeDataLocationAllowed()) {
+        settings->setDataLocation(resource->getDefaultCustomInstallDataPath());
     }
 
     m_ui->editLineFolderInstallation->setText(settings->getInstallLocation());

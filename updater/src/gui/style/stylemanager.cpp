@@ -6,7 +6,6 @@
 #include <QTextStream>
 #include <QTextCursor>
 #include <QFile>
-#include <QSettings>
 
 StyleManager::StyleManager()
 {
@@ -16,14 +15,14 @@ QString StyleManager::transformStyle(QString styleSheet)
 {
     Settings * settings = Settings::getInstance();
 
-    styleSheet.replace("@color-panel-background-border", settings->getColorPanelBackgroundBorder());
-    styleSheet.replace("@color-panel-background", settings->getColorPanelBackground());
-    styleSheet.replace("@color-button-background-over", settings->getColorButtonBackgroundOver());
-    styleSheet.replace("@color-button-background", settings->getColorButtonBackground());
-    styleSheet.replace("@color-text-on-background", settings->getColorTextOnBackground());
-    styleSheet.replace("@color-text-gray", settings->getColorTextGray());
-    styleSheet.replace("@color-disabled", settings->getColorDisabled());
-    styleSheet.replace("@border-window", settings->getBorderWindow());
+    styleSheet.replace("@inset-color", settings->getInsetColor());
+    styleSheet.replace("@panel-background-color", settings->getPanelBackgroundColor());
+    styleSheet.replace("@button-hover-background-color", settings->getButtonHoverBackgroundColor());
+    styleSheet.replace("@button-background-color", settings->getButtonBackgroundColor());
+    styleSheet.replace("@default-text-color", settings->getDefaultTextColor());
+    styleSheet.replace("@gray-text-color", settings->getGrayTextColor());
+    styleSheet.replace("@disabled-color", settings->getDisabledColor());
+    styleSheet.replace("@window-border-width", settings->getWindowBorderWidth());
 
     return styleSheet;
 }

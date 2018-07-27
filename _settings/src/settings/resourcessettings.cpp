@@ -7,35 +7,65 @@
 #include <QStandardPaths>
 #include <QDir>
 
+const QString ResourcesSettings::DeploymentUrl("deployment_url");
+const QString ResourcesSettings::AppName("app_name");
+const QString ResourcesSettings::Lang("lang");
+
+const QString ResourcesSettings::ShortcutName("shortcut_name");
+const QString ResourcesSettings::ShortcutOfflineName("shortcut_name_offline");
+const QString ResourcesSettings::ShortcutOnline("shortcut_online");
+const QString ResourcesSettings::ShortcutOffline("shortcut_offline");
+const QString ResourcesSettings::ShortcutOfflineArgs("shortcut_offline_args");
+
+const QString ResourcesSettings::RunAtStart("run_at_start");
+
+const QString ResourcesSettings::DefaultInstallationPath("default_installation_path");
+const QString ResourcesSettings::DefaultInstallationFolderName("default_installation_folder_name");
+
+const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_data_path_simple_install");
+const QString ResourcesSettings::DefaultCustomInstallDataPath("default_data_path_custom_install");
+const QString ResourcesSettings::ChangeDataLocationAllowed("possible_change_data_location");
+
+const QString ResourcesSettings::EncryptedPasswordKey("encrypted_password_key");
+
+const QString ResourcesSettings::InsetColor("inset_color");
+const QString ResourcesSettings::PanelBackgroundColor("panel_background_color");
+const QString ResourcesSettings::ButtonHoverBackgroundColor("button_hover_background_color");
+const QString ResourcesSettings::ButtonBackgroundColor("button_background_color");
+const QString ResourcesSettings::DefaultTextColor("default_text_color");
+const QString ResourcesSettings::GrayTextColor("gray_text_color");
+const QString ResourcesSettings::DisabledColor("disabled_color");
+const QString ResourcesSettings::WindowBorderWidth("window_border_width");
+
 ResourcesSettings * ResourcesSettings::sm_instance = 0;
 QMutex ResourcesSettings::sm_instanceMutex;
 QMutex ResourcesSettings::sm_settingsMutex;
 
 ResourcesSettings::ResourcesSettings() :
     m_settings(0),
-    m_deployment_url(""),
-    m_app_name("Application"),
-    m_language("en_US"),
-    m_shortcut_name("Application"),
-    m_shortcut_name_offline("Application Offline"),
-    m_shortcut_online(true),
-    m_shortcut_offline(false),
-    m_shortcut_offline_args("--offline=true"),
-    m_run_at_start(true),
-    m_default_installation_path("$HOME"),
-    m_default_installation_folder_name("Application"),
-    m_default_data_path_simple_install("$INSTALL_PATH/Data"),
-    m_default_data_path_custom_install("$INSTALL_PATH/Data"),
-    m_possible_change_data_location(false),
-    m_encrypted_password_key("0x0c2cd4a4bcb9f023"),
-    m_color_panel_background_border("#364058"),
-    m_color_panel_background("#2d364c"),
-    m_color_button_background_over("#2a7d7d"),
-    m_color_button_background("#339999"),
-    m_color_text_on_background("#eff0f2"),
-    m_color_text_gray("#9ea0a5"),
-    m_color_disabled("#656976"),
-    m_border_window("0")
+    m_deploymentUrl(""),
+    m_appName("Application"),
+    m_lang("en_US"),
+    m_shortcutOnline(true),
+    m_shortcutOffline(false),
+    m_shortcutName("Application"),
+    m_shortcutOfflineName("Application Offline"),
+    m_shortcutOfflineArgs("--offline=true"),
+    m_runAtStart(true),
+    m_insetColor("#364058"),
+    m_panelBackgroundColor("#2d364c"),
+    m_buttonHoverBackgroundColor("#2a7d7d"),
+    m_buttonBackgroundColor("#339999"),
+    m_defaultTextColor("#eff0f2"),
+    m_grayTextColor("#9ea0a5"),
+    m_disabledColor("#656976"),
+    m_windowBorderWidth("0"),
+    m_defaultInstallationPath("$HOME"),
+    m_defaultInstallationFolderName("Application"),
+    m_defaultSimpleInstallDataPath("$INSTALL_PATH/Data"),
+    m_defaultCustomInstallDataPath("$INSTALL_PATH/Data"),
+    m_changeDataLocationAllowed(false),
+    m_encryptedPasswordKey("0x0c2cd4a4bcb9f023")
 {
     L_INFO("Initialise ResourcesSettings singleton instance");
 }
@@ -82,306 +112,304 @@ void ResourcesSettings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_deployment_url = m_settings->value(P_DEPLOYMENT_URL, m_deployment_url).toString();
-    m_app_name = m_settings->value(P_APPLICATION_NAME, m_app_name).toString();
-    m_language = m_settings->value(P_LANGUAGE, m_language).toString();
+    m_deploymentUrl = m_settings->value(DeploymentUrl, m_deploymentUrl).toString();
+    m_appName = m_settings->value(AppName, m_appName).toString();
+    m_lang = m_settings->value(Lang, m_lang).toString();
 
-    m_shortcut_name = m_settings->value(P_SHORTCUT_NAME, m_shortcut_name).toString();
-    m_shortcut_name_offline = m_settings->value(P_SHORTCUT_NAME_OFFLINE, m_shortcut_name_offline).toString();
-    m_shortcut_online = m_settings->value(P_SHORTCUT_ONLINE, m_shortcut_online).toBool();
-    m_shortcut_offline = m_settings->value(P_SHORTCUT_OFFLINE, m_shortcut_offline).toBool();
-    m_shortcut_offline_args = m_settings->value(P_SHORTCUT_OFFLINE_ARGS, m_shortcut_offline_args).toString();
+    m_shortcutName = m_settings->value(ShortcutName, m_shortcutName).toString();
+    m_shortcutOfflineName = m_settings->value(ShortcutOfflineName, m_shortcutOfflineName).toString();
+    m_shortcutOnline = m_settings->value(ShortcutOnline, m_shortcutOnline).toBool();
+    m_shortcutOffline = m_settings->value(ShortcutOffline, m_shortcutOffline).toBool();
+    m_shortcutOfflineArgs = m_settings->value(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
 
-    m_run_at_start = m_settings->value(P_RUN_AT_START, m_run_at_start).toBool();
+    m_runAtStart = m_settings->value(RunAtStart, m_runAtStart).toBool();
 
-    m_default_installation_path = getTransformedVariablePath(m_settings->value(P_DEFAULT_INSTALLATION_PATH, m_default_installation_path).toString());
-    m_default_installation_folder_name = m_settings->value(P_DEFAULT_INSTALLATION_FOLDER_NAME, m_default_installation_folder_name).toString();
+    m_defaultInstallationPath = getTransformedVariablePath(m_settings->value(DefaultInstallationPath, m_defaultInstallationPath).toString());
+    m_defaultInstallationFolderName = m_settings->value(DefaultInstallationFolderName, m_defaultInstallationFolderName).toString();
 
-    m_default_data_path_simple_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_SIMPLE_INSTALL, m_default_data_path_simple_install).toString());
-    m_default_data_path_custom_install = getTransformedVariablePath(m_settings->value(P_DEFAULT_DATA_PATH_CUSTOM_INSTALL, m_default_data_path_custom_install).toString());
-    m_possible_change_data_location = m_settings->value(P_POSSIBLE_CHANGE_DATA_LOCATION, m_possible_change_data_location).toBool();
+    m_defaultSimpleInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultSimpleInstallDataPath, m_defaultSimpleInstallDataPath).toString());
+    m_defaultCustomInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultCustomInstallDataPath, m_defaultCustomInstallDataPath).toString());
+    m_changeDataLocationAllowed = m_settings->value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
 
-    m_encrypted_password_key = m_settings->value(P_ENCRYPTED_PASSWORD_KEY, m_encrypted_password_key).toString();
+    m_encryptedPasswordKey = m_settings->value(EncryptedPasswordKey, m_encryptedPasswordKey).toString();
 
-    m_color_panel_background_border = m_settings->value(P_COLOR_PANEL_BACKGROUND_BORDER, m_color_panel_background_border).toString();
-    m_color_panel_background = m_settings->value(P_COLOR_PANEL_BACKGROUND, m_color_panel_background).toString();
-    m_color_button_background_over = m_settings->value(P_COLOR_BUTTON_BACKGROUND_OVER, m_color_button_background_over).toString();
-    m_color_button_background = m_settings->value(P_COLOR_BUTTON_BACKGROUND, m_color_button_background).toString();
-    m_color_text_on_background = m_settings->value(P_COLOR_TEXT_ON_BACKGROUND, m_color_text_on_background).toString();
-    m_color_text_gray = m_settings->value(P_COLOR_TEXT_GRAY, m_color_text_gray).toString();
-    m_color_disabled = m_settings->value(P_COLOR_DISABLED, m_color_disabled).toString();
-    m_border_window = m_settings->value(P_BORDER_WINDOW, m_border_window).toString();
+    m_insetColor = m_settings->value(InsetColor, m_insetColor).toString();
+    m_panelBackgroundColor = m_settings->value(PanelBackgroundColor, m_panelBackgroundColor).toString();
+    m_buttonHoverBackgroundColor = m_settings->value(ButtonHoverBackgroundColor, m_buttonHoverBackgroundColor).toString();
+    m_buttonBackgroundColor = m_settings->value(ButtonBackgroundColor, m_buttonBackgroundColor).toString();
+    m_defaultTextColor = m_settings->value(DefaultTextColor, m_defaultTextColor).toString();
+    m_grayTextColor = m_settings->value(GrayTextColor, m_grayTextColor).toString();
+    m_disabledColor = m_settings->value(DisabledColor, m_disabledColor).toString();
+    m_windowBorderWidth = m_settings->value(WindowBorderWidth, m_windowBorderWidth).toString();
 }
 
 void ResourcesSettings::sendToSettings()
 {
     Settings * settings = Settings::getInstance();
 
-    settings->setApplicationName(m_app_name);
-    settings->setDeploymentUrl(m_deployment_url);
-    settings->setLanguage(LanguageManager::getLanguageFromLocale(m_language));
-    settings->setShortcutName(m_shortcut_name);
-    settings->setShortcutOnline(m_shortcut_online);
-    settings->setShortcutOffline(m_shortcut_offline);
-    settings->setShortcutOfflineName(m_shortcut_name_offline);
-    settings->setShortcutOfflineArgs(m_shortcut_offline_args);
+    settings->setAppName(m_appName);
+    settings->setDeploymentUrl(m_deploymentUrl);
+    settings->setLang(LanguageManager::getLanguageFromLocale(m_lang));
+    settings->setShortcutName(m_shortcutName);
+    settings->setShortcutOnline(m_shortcutOnline);
+    settings->setShortcutOffline(m_shortcutOffline);
+    settings->setShortcutOfflineName(m_shortcutOfflineName);
+    settings->setShortcutOfflineArgs(m_shortcutOfflineArgs);
 
-    settings->setRunAtStart(m_run_at_start);
+    settings->setRunAtStart(m_runAtStart);
 
     // install path
-    settings->setInstallLocation(m_default_installation_path + QDir::separator() + m_default_installation_folder_name);
+    settings->setInstallLocation(m_defaultInstallationPath + QDir::separator() + m_defaultInstallationFolderName);
 
     // data path
     // use simple by default
-    settings->setDataLocation(m_default_data_path_simple_install);
+    settings->setDataLocation(m_defaultSimpleInstallDataPath);
 
-    settings->setColorPanelBackgroundBorder(m_color_panel_background_border);
-    settings->setColorPanelBackground(m_color_panel_background);
-    settings->setColorButtonBackgroundOver(m_color_button_background_over);
-    settings->setColorButtonBackground(m_color_button_background);
-    settings->setColorTextOnBackground(m_color_text_on_background);
-    settings->setColorTextGray(m_color_text_gray);
-    settings->setColorDisabled(m_color_disabled);
-    settings->setBorderWindow(m_border_window);
-
-
+    settings->setInsetColor(m_insetColor);
+    settings->setPanelBackgroundColor(m_panelBackgroundColor);
+    settings->setButtonHoverBackgroundColor(m_buttonHoverBackgroundColor);
+    settings->setButtonBackgroundColor(m_buttonBackgroundColor);
+    settings->setDefaultTextColor(m_defaultTextColor);
+    settings->setGrayTextColor(m_grayTextColor);
+    settings->setDisabledColor(m_disabledColor);
+    settings->setWindowBorderWidth(m_windowBorderWidth);
 }
 
 QString ResourcesSettings::getTransformedVariablePath(QString _path)
 {
     _path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-    _path.replace(QString("$INSTALL_PATH"), m_default_installation_path);
+    _path.replace(QString("$INSTALL_PATH"), m_defaultInstallationPath);
     // TODO attention sous macos !
     _path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
     return _path;
 }
 
-bool ResourcesSettings::isRun_at_start() const
+bool ResourcesSettings::isRunAtStart() const
 {
-    return m_run_at_start;
+    return m_runAtStart;
 }
 
-void ResourcesSettings::setRun_at_start(bool run_at_start)
+void ResourcesSettings::setRunAtStart(bool runAtStart)
 {
-    m_run_at_start = run_at_start;
+    m_runAtStart = runAtStart;
 }
 
-QString ResourcesSettings::getShortcut_offline_args() const
+QString ResourcesSettings::getShortcutOfflineArgs() const
 {
-    return m_shortcut_offline_args;
+    return m_shortcutOfflineArgs;
 }
 
-void ResourcesSettings::setShortcut_offline_args(const QString &shortcut_offline_args)
+void ResourcesSettings::setShortcutOfflineArgs(const QString &shortcutOfflineArgs)
 {
-    m_shortcut_offline_args = shortcut_offline_args;
+    m_shortcutOfflineArgs = shortcutOfflineArgs;
 }
 
-QString ResourcesSettings::getDefault_installation_folder_name() const
+QString ResourcesSettings::getDefaultInstallationFolderName() const
 {
-    return m_default_installation_folder_name;
+    return m_defaultInstallationFolderName;
 }
 
-void ResourcesSettings::setDefault_installation_folder_name(const QString &default_installation_folder_name)
+void ResourcesSettings::setDefaultInstallationFolderName(const QString &defaultInstallationFolderName)
 {
-    m_default_installation_folder_name = default_installation_folder_name;
+    m_defaultInstallationFolderName = defaultInstallationFolderName;
 }
 
-QString ResourcesSettings::getEncrypted_password_key() const
+QString ResourcesSettings::getEncryptedPasswordKey() const
 {
-    return m_encrypted_password_key;
+    return m_encryptedPasswordKey;
 }
 
-void ResourcesSettings::setEncrypted_password_key(const QString &encrypted_password_key)
+void ResourcesSettings::setEncryptedPasswordKey(const QString &encryptedPasswordKey)
 {
-    m_encrypted_password_key = encrypted_password_key;
+    m_encryptedPasswordKey = encryptedPasswordKey;
 }
 
-QString ResourcesSettings::getDeployment_Url() const
+QString ResourcesSettings::getDeploymentUrl() const
 {
-    return m_deployment_url;
+    return m_deploymentUrl;
 }
 
-void ResourcesSettings::setDeployment_Url(const QString &deployment_url)
+void ResourcesSettings::setDeploymentUrl(const QString &deploymentUrl)
 {
-    m_deployment_url = deployment_url;
+    m_deploymentUrl = deploymentUrl;
 }
 
-QString ResourcesSettings::getApp_name() const
+QString ResourcesSettings::getAppName() const
 {
-    return m_app_name;
+    return m_appName;
 }
 
-void ResourcesSettings::setApp_name(const QString &app_name)
+void ResourcesSettings::setAppName(const QString &appName)
 {
-    m_app_name = app_name;
+    m_appName = appName;
 }
 
-QString ResourcesSettings::getLanguage() const
+QString ResourcesSettings::getLang() const
 {
-    return m_language;
+    return m_lang;
 }
 
-void ResourcesSettings::setLanguage(const QString &language)
+void ResourcesSettings::setLang(const QString &lang)
 {
-    m_language = language;
+    m_lang = lang;
 }
 
-QString ResourcesSettings::getShortcut_name() const
+QString ResourcesSettings::getShortcutName() const
 {
-    return m_shortcut_name;
+    return m_shortcutName;
 }
 
-void ResourcesSettings::setShortcut_name(const QString &shortcut_name)
+void ResourcesSettings::setShortcutName(const QString &shortcutName)
 {
-    m_shortcut_name = shortcut_name;
+    m_shortcutName = shortcutName;
 }
 
-QString ResourcesSettings::getShortcut_name_offline() const
+QString ResourcesSettings::getShortcutOfflineName() const
 {
-    return m_shortcut_name_offline;
+    return m_shortcutOfflineName;
 }
 
-void ResourcesSettings::setShortcut_name_offline(const QString &shortcut_name_offline)
+void ResourcesSettings::setShortcutOfflineName(const QString &shortcutOfflineName)
 {
-    m_shortcut_name_offline = shortcut_name_offline;
+    m_shortcutOfflineName = shortcutOfflineName;
 }
 
-bool ResourcesSettings::isShortcut_online() const
+bool ResourcesSettings::isShortcutOnline() const
 {
-    return m_shortcut_online;
+    return m_shortcutOnline;
 }
 
-void ResourcesSettings::setShortcut_online(bool shortcut_online)
+void ResourcesSettings::setShortcutOnline(bool shortcutOnline)
 {
-    m_shortcut_online = shortcut_online;
+    m_shortcutOnline = shortcutOnline;
 }
 
-bool ResourcesSettings::isShortcut_offline() const
+bool ResourcesSettings::isShortcutOffline() const
 {
-    return m_shortcut_offline;
+    return m_shortcutOffline;
 }
 
-void ResourcesSettings::setShortcut_offline(bool shortcut_offline)
+void ResourcesSettings::setShortcutOffline(bool shortcutOffline)
 {
-    m_shortcut_offline = shortcut_offline;
+    m_shortcutOffline = shortcutOffline;
 }
 
-QString ResourcesSettings::getDefault_installation_path() const
+QString ResourcesSettings::getDefaultInstallationPath() const
 {
-    return m_default_installation_path;
+    return m_defaultInstallationPath;
 }
 
-void ResourcesSettings::setDefault_installation_path(const QString &default_installation_path)
+void ResourcesSettings::setDefaultInstallationPath(const QString &defaultInstallationPath)
 {
-    m_default_installation_path = default_installation_path;
+    m_defaultInstallationPath = defaultInstallationPath;
 }
 
-bool ResourcesSettings::isPossible_change_data_location() const
+bool ResourcesSettings::isChangeDataLocationAllowed() const
 {
-    return m_possible_change_data_location;
+    return m_changeDataLocationAllowed;
 }
 
-void ResourcesSettings::setPossible_change_data_location(bool possible_change_data_location)
+void ResourcesSettings::setChangeDataLocationAllowed(bool changeDataLocationAllowed)
 {
-    m_possible_change_data_location = possible_change_data_location;
+    m_changeDataLocationAllowed = changeDataLocationAllowed;
 }
 
-QString ResourcesSettings::getDefault_data_path_custom_install() const
+QString ResourcesSettings::getDefaultCustomInstallDataPath() const
 {
-    return m_default_data_path_custom_install;
+    return m_defaultCustomInstallDataPath;
 }
 
-void ResourcesSettings::setDefault_data_path_custom_install(const QString &default_data_path_custom_install)
+void ResourcesSettings::setDefaultCustomInstallDataPath(const QString &defaultCustomInstallDataPath)
 {
-    m_default_data_path_custom_install = default_data_path_custom_install;
+    m_defaultCustomInstallDataPath = defaultCustomInstallDataPath;
 }
 
-QString ResourcesSettings::getDefault_data_path_simple_install() const
+QString ResourcesSettings::getDefaultSimpleInstallDataPath() const
 {
-    return m_default_data_path_simple_install;
+    return m_defaultSimpleInstallDataPath;
 }
 
-void ResourcesSettings::setDefault_data_path_simple_install(const QString &default_data_path_simple_install)
+void ResourcesSettings::setDefaultSimpleInstallDataPath(const QString &defaultSimpleInstallDataPath)
 {
-    m_default_data_path_simple_install = default_data_path_simple_install;
+    m_defaultSimpleInstallDataPath = defaultSimpleInstallDataPath;
 }
 
-QString ResourcesSettings::getColor_panel_background_border() const
+QString ResourcesSettings::getInsetColor() const
 {
-    return m_color_panel_background_border;
+    return m_insetColor;
 }
 
-void ResourcesSettings::setColor_panel_background_border(const QString &color_panel_background_border)
+void ResourcesSettings::setInsetColor(const QString &insetColor)
 {
-    m_color_panel_background_border = color_panel_background_border;
+    m_insetColor = insetColor;
 }
 
-QString ResourcesSettings::getColor_panel_background() const
+QString ResourcesSettings::getPanelBackgroundColor() const
 {
-    return m_color_panel_background;
+    return m_panelBackgroundColor;
 }
 
-void ResourcesSettings::setColor_panel_background(const QString &color_panel_background)
+void ResourcesSettings::setPanelBackgroundColor(const QString &panelBackgroundColor)
 {
-    m_color_panel_background = color_panel_background;
+    m_panelBackgroundColor = panelBackgroundColor;
 }
 
-QString ResourcesSettings::getColor_button_background_over() const
+QString ResourcesSettings::getButtonHoverBackgroundColor() const
 {
-    return m_color_button_background_over;
+    return m_buttonHoverBackgroundColor;
 }
 
-void ResourcesSettings::setColor_button_background_over(const QString &color_button_background_over)
+void ResourcesSettings::setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor)
 {
-    m_color_button_background_over = color_button_background_over;
+    m_buttonHoverBackgroundColor = buttonHoverBackgroundColor;
 }
 
-QString ResourcesSettings::getColor_button_background() const
+QString ResourcesSettings::getButtonBackgroundColor() const
 {
-    return m_color_button_background;
+    return m_buttonBackgroundColor;
 }
 
-void ResourcesSettings::setColor_button_background(const QString &color_button_background)
+void ResourcesSettings::setButtonBackgroundColor(const QString &buttonBackgroundColor)
 {
-    m_color_button_background = color_button_background;
+    m_buttonBackgroundColor = buttonBackgroundColor;
 }
 
-QString ResourcesSettings::getColor_text_on_background() const
+QString ResourcesSettings::getDefaultTextColor() const
 {
-    return m_color_text_on_background;
+    return m_defaultTextColor;
 }
 
-void ResourcesSettings::setColor_text_on_background(const QString &color_text_on_background)
+void ResourcesSettings::setDefaultTextColor(const QString &defaultTextColor)
 {
-    m_color_text_on_background = color_text_on_background;
+    m_defaultTextColor = defaultTextColor;
 }
 
-QString ResourcesSettings::getColor_text_gray() const
+QString ResourcesSettings::getGrayTextColor() const
 {
-    return m_color_text_gray;
+    return m_grayTextColor;
 }
 
-void ResourcesSettings::setColor_text_gray(const QString &color_text_gray)
+void ResourcesSettings::setGrayTextColor(const QString &grayTextColor)
 {
-    m_color_text_gray = color_text_gray;
+    m_grayTextColor = grayTextColor;
 }
 
-QString ResourcesSettings::getColor_disabled() const
+QString ResourcesSettings::getDisabledColor() const
 {
-    return m_color_disabled;
+    return m_disabledColor;
 }
 
-void ResourcesSettings::setColor_disabled(const QString &color_disabled)
+void ResourcesSettings::setDisabledColor(const QString &disabledColor)
 {
-    m_color_disabled = color_disabled;
+    m_disabledColor = disabledColor;
 }
 
-QString ResourcesSettings::getBorder_window() const
+QString ResourcesSettings::getWindowBorderWidth() const
 {
-    return m_border_window;
+    return m_windowBorderWidth;
 }
 
-void ResourcesSettings::setBorder_window(const QString &border_window)
+void ResourcesSettings::setWindowBorderWidth(const QString &windowBorderWidth)
 {
-    m_border_window = border_window;
+    m_windowBorderWidth = windowBorderWidth;
 }

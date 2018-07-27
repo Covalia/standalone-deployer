@@ -43,7 +43,7 @@
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: @color-text-on-background ;</string>
+        <string notr="true">color: @default-text-color ;</string>
        </property>
        <property name="text">
         <string>Welcome to the installation of @Application</string>
@@ -73,7 +73,7 @@
           <item>
            <widget class="QLabel" name="labelProduct">
             <property name="styleSheet">
-             <string notr="true">color : @color-text-gray;</string>
+             <string notr="true">color : @gray-text-color;</string>
             </property>
             <property name="text">
              <string>By installing this product, you agree</string>
@@ -88,13 +88,13 @@
             <property name="styleSheet">
              <string notr="true">QPushButton {
 	background-color: transparent;
-	color : @color-text-gray;
+	color : @gray-text-color;
 	border: px0;
 	text-decoration: underline;
 }
 
 QPushButton:hover {
-	color : @color-text-on-background;
+	color : @default-text-color;
 }</string>
             </property>
             <property name="text">
@@ -141,14 +141,14 @@ QPushButton:hover {
        <property name="styleSheet">
         <string notr="true">QPushButton {
 	background-color: transparent;
-	color : @color-text-on-background;
+	color : @default-text-color;
 	padding: 8px;
 	border: px0;
 	text-decoration: underline;
 }
 
 QPushButton:hover {
-	color : @color-text-gray;
+	color : @gray-text-color;
 }</string>
        </property>
        <property name="text">
