@@ -10,7 +10,8 @@ ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, 
 {
     L_INFO("Initializing extraction of " + _zipPath + " to directory " + _extractDir);
 
-    if (!_zipPath.isEmpty() && _zipPath.endsWith(".zip", Qt::CaseInsensitive)) {
+    if (!_zipPath.isEmpty() && (_zipPath.toLower().endsWith(".zip", Qt::CaseInsensitive)
+                                || _zipPath.toLower().endsWith(".jar", Qt::CaseInsensitive))) {
         m_extractor = new QArchive::Extractor(_zipPath, _extractDir);
         connect(m_extractor, SIGNAL(finished()), this, SLOT(extract_success()));
 
@@ -40,7 +41,7 @@ void ZipExtractor::extract()
 
         if (!directory.exists()) {
             L_INFO("Java version directory does not exist, creating.");
-            QDir().mkpath(directory.path());
+            QDir().mkpath(directory.absolutePath());
         }
 
         L_INFO("Starting extraction...");
@@ -66,16 +67,16 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
 
     switch (_errorCode) {
         case QArchive::ARCHIVE_READ_ERROR:
-            qDebug() << "unable to find archive :: " << _file;
+            L_ERROR("unable to find archive: " + _file);
             break;
         case QArchive::ARCHIVE_QUALITY_ERROR:
-            qDebug() << "bad archive! :: " << _file;
+            L_ERROR("bad archive: " + _file);
             break;
         case QArchive::ARCHIVE_UNCAUGHT_ERROR:
-            qDebug() << "fatal error. :: " << _file;
+            L_ERROR("fatal error: " + _file);
             break;
         default:
-            qDebug() << "unknown error. :: " << _file;
+            L_ERROR("unknown error: " + _file);
             break;
     }
 
@@ -84,6 +85,7 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
     emit finished();
 } // ZipExtractor::extract_error
 
-bool ZipExtractor::isOk() const {
+bool ZipExtractor::isOk() const
+{
     return ok;
 }

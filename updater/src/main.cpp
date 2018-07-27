@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDir>
+#include <QLockFile>
 #include <QtDebug>
 
 #include "gui/mainwindow.h"
@@ -9,6 +10,7 @@
 #include "log/logger.h"
 #include "settings/resourcessettings.h"
 #include "settings/settings.h"
+#include "settings/commandlinesingleton.h"
 #include "utils.h"
 
 /*!
@@ -44,6 +46,12 @@ int main(int argc, char * argv[])
     AppPath appPath = Utils::getAppPath();
     qDebug() << "-- Installation root: " << appPath.getInstallationDir().absolutePath();
 
+    QLockFile lockFile(appPath.getInstallationDir().absoluteFilePath("lockfile"));
+    if (!lockFile.tryLock(100)) {
+        qDebug() << "-- Only one instance permitted, exiting.";
+        return 0;
+    }
+
     new Logger(appPath.getLogsDir().absoluteFilePath("updater.log"));
 
     L_INFO("Updater started.");
@@ -62,17 +70,16 @@ int main(int argc, char * argv[])
     StyleManager::setGeneralStyle();
 
     // init language with locale in settings
-    LanguageManager::updateLanguage(LanguageManager::getStringLanguageFromEnum(settings->getLanguage()));
+    LanguageManager::updateLanguage(LanguageManager::getLocaleFromLanguage(settings->getLang()));
 
-    QStringList args = qApp->arguments();
-    args.removeFirst();
-    if (args.contains("-debug")) {
-        L_INFO("Updater Arguments = " + args.join(" "));
+    QStringList arguments = qApp->arguments();
+    arguments.removeFirst();
+    CommandLineSingleton::getInstance()->setArguments(arguments);
+
+    if (CommandLineSingleton::getInstance()->isDebugMode()) {
+        L_INFO("Updater Arguments: " + CommandLineSingleton::getInstance()->getAllArguments().join(" "));
+        L_INFO("Query Arguments: " + CommandLineSingleton::getInstance()->getApplicationHttpArguments());
     }
-
-//    Splashscreen splashscreen;
-//    splashscreen.show();
-//    splashscreen.center();
 
     MainWindow window;
     window.show();

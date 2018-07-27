@@ -16,8 +16,8 @@
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QWidget#centralwidget{
-	background : @color-panel-background;
-	border: @border-windowpx solid @color-button-background;
+	background : @panel-background-color;
+	border: @window-border-widthpx solid @button-background-color;
 }</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -125,7 +125,7 @@
              </property>
              <property name="styleSheet">
               <string notr="true">font-family: &quot;Helvetica&quot;, Helvetica, serif;
-color: @color-text-on-background ;</string>
+color: @default-text-color ;</string>
              </property>
              <property name="text">
               <string notr="true">Updater</string>
@@ -165,7 +165,7 @@ color: @color-text-on-background ;</string>
 	margin: 1px;
 }
 QPushButton:hover {
-	background-color: @color-panel-background-border;
+	background-color: @inset-color;
 }</string>
              </property>
              <property name="text">
@@ -249,7 +249,7 @@ QPushButton:hover {
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: @color-text-gray ;</string>
+              <string notr="true">color: @gray-text-color ;</string>
              </property>
              <property name="text">
               <string>Loading installation...</string>

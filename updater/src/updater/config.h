@@ -6,10 +6,6 @@
 class UpdaterConfig
 {
 public:
-    // TODO lire depuis la config.ini
-    /// URL de l'application
-    static const QString AppUrl;
-
     // TODO inutile
     /// Chemin de l'installation
     static const QString InstallationDir;

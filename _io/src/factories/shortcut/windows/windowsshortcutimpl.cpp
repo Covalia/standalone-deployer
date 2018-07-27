@@ -60,7 +60,7 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     // startMenu folder creation
     QString applicationFolder = folderPath + QDir::separator() + _startMenuFolderName;
 
-    bool successCreationStartMenuFolder = _appPath.makeDirectoryIfNotExists(folderPath, _startMenuFolderName);
+    bool successCreationStartMenuFolder = _appPath.makeDirectoryIfNotExisting(QDir(folderPath + QDir::separator() + _startMenuFolderName));
 
     if (!successCreationStartMenuFolder) {
         L_ERROR("Startmenu folder doesn't exist : " + applicationFolder +  " . Startmenu installation failure");

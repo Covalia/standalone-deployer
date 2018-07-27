@@ -69,7 +69,7 @@
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: @color-text-gray ;</string>
+        <string notr="true">color: @gray-text-color ;</string>
        </property>
        <property name="text">
         <string>Loading installation...</string>

@@ -14,7 +14,7 @@ AppPath::~AppPath()
 {
 }
 
-QDir AppPath::getInstallationDir()
+QDir AppPath::getInstallationDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getInstallationDir();
@@ -69,7 +69,7 @@ QString AppPath::getLoaderVersion()
     return "";
 }
 
-QDir AppPath::getAppDir()
+QDir AppPath::getAppDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getAppDir();
@@ -77,7 +77,7 @@ QDir AppPath::getAppDir()
     return QDir();
 }
 
-QDir AppPath::getAppOldDir()
+QDir AppPath::getAppOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getAppOldDir();
@@ -85,7 +85,16 @@ QDir AppPath::getAppOldDir()
     return QDir();
 }
 
-QDir AppPath::getConfigurationDir()
+QDir AppPath::getAppNativesDir() const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getAppNativesDir();
+    }
+    return QDir();
+}
+
+
+QDir AppPath::getConfigurationDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getConfigurationDir();
@@ -93,15 +102,7 @@ QDir AppPath::getConfigurationDir()
     return QDir();
 }
 
-QDir AppPath::getExtensionDir()
-{
-    if (m_appPathImpl) {
-        return m_appPathImpl->getExtensionDir();
-    }
-    return QDir();
-}
-
-QDir AppPath::getImagesDir()
+QDir AppPath::getImagesDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getImagesDir();
@@ -109,7 +110,7 @@ QDir AppPath::getImagesDir()
     return QDir();
 }
 
-QDir AppPath::getSlidesDir()
+QDir AppPath::getSlidesDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getSlidesDir();
@@ -117,7 +118,7 @@ QDir AppPath::getSlidesDir()
     return QDir();
 }
 
-QDir AppPath::getJavaDir()
+QDir AppPath::getJavaDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getJavaDir();
@@ -125,7 +126,23 @@ QDir AppPath::getJavaDir()
     return QDir();
 }
 
-QDir AppPath::getLogsDir()
+QDir AppPath::getJavaVersionDir(const QString &_version) const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getJavaVersionDir(_version);
+    }
+    return QDir();
+}
+
+QDir AppPath::getJavaDistDir(const QString &_version) const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getJavaDistDir(_version);
+    }
+    return QDir();
+}
+
+QDir AppPath::getLogsDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLogsDir();
@@ -133,7 +150,7 @@ QDir AppPath::getLogsDir()
     return QDir();
 }
 
-QDir AppPath::getTempDir()
+QDir AppPath::getTempDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempDir();
@@ -141,7 +158,7 @@ QDir AppPath::getTempDir()
     return QDir();
 }
 
-QDir AppPath::getTempAppDir()
+QDir AppPath::getTempAppDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempAppDir();
@@ -149,7 +166,7 @@ QDir AppPath::getTempAppDir()
     return QDir();
 }
 
-QDir AppPath::getTempAppBuildDir()
+QDir AppPath::getTempAppBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempAppBuildDir();
@@ -157,7 +174,7 @@ QDir AppPath::getTempAppBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempCnlpDir()
+QDir AppPath::getTempCnlpDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempCnlpDir();
@@ -165,7 +182,7 @@ QDir AppPath::getTempCnlpDir()
     return QDir();
 }
 
-QDir AppPath::getTempJavaDir()
+QDir AppPath::getTempJavaDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempJavaDir();
@@ -173,7 +190,7 @@ QDir AppPath::getTempJavaDir()
     return QDir();
 }
 
-QDir AppPath::getTempJavaBuildDir()
+QDir AppPath::getTempJavaBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempJavaBuildDir();
@@ -181,7 +198,7 @@ QDir AppPath::getTempJavaBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempLoaderDir()
+QDir AppPath::getTempLoaderDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempLoaderDir();
@@ -189,7 +206,7 @@ QDir AppPath::getTempLoaderDir()
     return QDir();
 }
 
-QDir AppPath::getTempLoaderBuildDir()
+QDir AppPath::getTempLoaderBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempLoaderBuildDir();
@@ -197,7 +214,7 @@ QDir AppPath::getTempLoaderBuildDir()
     return QDir();
 }
 
-QDir AppPath::getTempUpdaterDir()
+QDir AppPath::getTempUpdaterDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempUpdaterDir();
@@ -205,7 +222,7 @@ QDir AppPath::getTempUpdaterDir()
     return QDir();
 }
 
-QDir AppPath::getTempUpdaterBuildDir()
+QDir AppPath::getTempUpdaterBuildDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getTempUpdaterBuildDir();
@@ -213,7 +230,15 @@ QDir AppPath::getTempUpdaterBuildDir()
     return QDir();
 }
 
-QDir AppPath::getCnlpDir()
+QDir AppPath::getTempDataBuildDir() const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getTempDataBuildDir();
+    }
+    return QDir();
+}
+
+QDir AppPath::getCnlpDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getCnlpDir();
@@ -221,7 +246,7 @@ QDir AppPath::getCnlpDir()
     return QDir();
 }
 
-QDir AppPath::getCnlpOldDir()
+QDir AppPath::getCnlpOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getCnlpOldDir();
@@ -229,7 +254,7 @@ QDir AppPath::getCnlpOldDir()
     return QDir();
 }
 
-QDir AppPath::getDataDir()
+QDir AppPath::getDataDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getDataDir();
@@ -237,7 +262,7 @@ QDir AppPath::getDataDir()
     return QDir();
 }
 
-QDir AppPath::getUpdaterDir()
+QDir AppPath::getUpdaterDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getUpdaterDir();
@@ -245,7 +270,15 @@ QDir AppPath::getUpdaterDir()
     return QDir();
 }
 
-QDir AppPath::getLoaderDir()
+QDir AppPath::getUpdaterVersionDir(const QString &_version) const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getUpdaterVersionDir(_version);
+    }
+    return QDir();
+}
+
+QDir AppPath::getLoaderDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLoaderDir();
@@ -253,7 +286,7 @@ QDir AppPath::getLoaderDir()
     return QDir();
 }
 
-QDir AppPath::getLoaderOldDir()
+QDir AppPath::getLoaderOldDir() const
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getLoaderOldDir();
@@ -350,10 +383,38 @@ QPair<bool, QString> AppPath::extractResource(QFile &_sourceFile, QFile &_destFi
     return pair;
 }
 
-bool AppPath::makeDirectoryIfNotExists(QDir _directory, const QString &_subDir)
+bool AppPath::makeDirectoryIfNotExisting(const QDir &_directory)
 {
     if (m_appPathImpl) {
-        return m_appPathImpl->makeDirectoryIfNotExists(_directory, _subDir);
+        return m_appPathImpl->makeDirectoryIfNotExisting(_directory);
     }
     return false;
+}
+
+bool AppPath::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                               const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
+                               const QStringList &_arguments)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startApplication(_javaVersion, _xmxMemory, _classPath, _mainClass, _encoding, _dataLocation, _arguments);
+    }
+    return false;
+}
+
+bool AppPath::startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
+                                   const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->startPostInstallTasks(_javaVersion, _xmxMemory, _classPath,
+                                                    _runnerClass, _encoding, _dataLocation);
+    }
+    return false;
+}
+
+QString AppPath::getClasspathSeparator() const
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->getClasspathSeparator();
+    }
+    return "";
 }

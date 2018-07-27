@@ -1,7 +1,7 @@
 #include "io/config.h"
 
 const QString IOConfig::InstallerVersion("1.0");
-const QString IOConfig::UpdateVersion("1.0");
+const QString IOConfig::UpdaterVersion("1.0");
 const QString IOConfig::LoaderVersion("1.0");
 
 const QString IOConfig::LoaderName("loader");
@@ -12,7 +12,6 @@ const QString IOConfig::JavaName("java");
 
 const QString IOConfig::AppDir = IOConfig::AppName;
 const QString IOConfig::ConfigurationDir("config");
-const QString IOConfig::ExtensionDir("extension");
 const QString IOConfig::ImagesDir("images");
 const QString IOConfig::SlidesDir("slides");
 const QString IOConfig::JavaDir("java");
@@ -29,6 +28,5 @@ const QString IOConfig::UpdaterFile = IOConfig::UpdaterName;
 const QString IOConfig::WindowsAppExtension(".exe");
 const QString IOConfig::MacOsAppExtension(".app");
 const QString IOConfig::MacOsDmgExtension(".dmg");
-const QString IOConfig::JavaSubDirName("dist");
 
 const QString IOConfig::ConfigurationFile("standalone-deployer.ini");

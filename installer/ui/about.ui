@@ -49,7 +49,7 @@
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: @color-text-on-background ;</string>
+        <string notr="true">color: @default-text-color ;</string>
        </property>
        <property name="text">
         <string>About</string>
@@ -70,8 +70,8 @@
        <property name="styleSheet">
         <string notr="true">QPlainTextEdit {
 	background-color: transparent;
-	border: 1px solid @color-panel-background-border;
-	color: @color-text-on-background;
+	border: 1px solid @inset-color;
+	color: @default-text-color;
 	
 }
 
@@ -84,7 +84,7 @@ QScrollBar::vertical{
 }
 
 QScrollBar::handle:vertical {
-	background : @color-button-background;
+	background : @button-background-color;
 	border: none;
 	border-radius: 5px;
 }

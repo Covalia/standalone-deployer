@@ -26,11 +26,12 @@ class MainWindow : public QMainWindow
         void center();
 
     protected:
-        void mousePressEvent(QMouseEvent *);
-        void mouseMoveEvent(QMouseEvent *);
+        virtual void mousePressEvent(QMouseEvent *);
+        virtual void mouseMoveEvent(QMouseEvent *);
+        virtual void closeEvent(QCloseEvent *);
 
     private slots:
-        void buttonClicked();
+        void startUpdate();
         void updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateRemainingTimeMessage(const QString &_time);
@@ -51,8 +52,6 @@ class MainWindow : public QMainWindow
         bool m_alreadyClosedOnMacOs = false;
         AppUpdater * m_appUpdater;
 
-        void showEvent(QShowEvent * _event);
-        virtual void closeEvent(QCloseEvent *);
         void loadSlideShowImagesFromResources();
 };
 

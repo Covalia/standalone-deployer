@@ -56,7 +56,7 @@ DownloadManager::~DownloadManager()
     delete m_saveFile;
 }
 
-void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> > &_downloadsMap)
+void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloadsMap)
 {
     // la file doit être vide pour ne pas écraser d'autres downloads en cours !
     if (m_downloadQueue.isEmpty()) {
@@ -71,23 +71,19 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
         // réinitialisation de la file d'entêtes à récupérer
         m_headQueue.clear();
 
-        QMap<Application, QList<QUrl> >::const_iterator iterator = _downloadsMap.constBegin();
-        while (iterator != _downloadsMap.constEnd()) {
+        QMapIterator<Application, QUrl> iterator(_downloadsMap);
+        while (iterator.hasNext()) {
+            iterator.next();
+            const Application & application = iterator.key();
+            const QUrl url = iterator.value();
 
-            const Application application = iterator.key();
-            const QList<QUrl> downloads = iterator.value();
+            // concatenation base avec url
+            const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
 
-            foreach(QUrl url, downloads) {
-                // concatenation base avec url
-                const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
-                L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
-                QPair<Application, QUrl> pair(application, buildUrl);
-                m_headQueue.enqueue(pair);
-                m_downloadQueue.enqueue(pair);
-
-            }
-
-            ++iterator;
+            L_INFO(application.getName() + " - build URL: " + buildUrl.toString());
+            QPair<Application, QUrl> pair(application, buildUrl);
+            m_headQueue.enqueue(pair);
+            m_downloadQueue.enqueue(pair);
         }
 
         // lancement les requêtes head
@@ -95,23 +91,17 @@ void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QUrl> >
     }
 }
 
-void DownloadManager::setUrlListToDownload(const QMap<Application, QList<QString> > &_downloadsMap)
+void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString> &_downloadsMap)
 {
-    QMap<Application, QList<QUrl> > urlMap;
+    QMultiMap<Application, QUrl> urlMap;
 
-    QMap<Application, QList<QString> >::const_iterator iterator = _downloadsMap.constBegin();
-    while (iterator != _downloadsMap.constEnd()) {
+    QMapIterator<Application, QString> iterator(_downloadsMap);
+    while (iterator.hasNext()) {
+        iterator.next();
+        const Application & application = iterator.key();
+        const QString & url = iterator.value();
 
-        const Application application = iterator.key();
-        const QList<QString> downloads = iterator.value();
-
-        urlMap.insert(application, QList<QUrl>());
-
-        foreach(QString url, downloads) {
-            urlMap[application].append(QUrl(url));
-        }
-
-        ++iterator;
+        urlMap.insert(application, QUrl(url));
     }
 
     setUrlListToDownload(urlMap);
@@ -236,6 +226,7 @@ void DownloadManager::headMetaDataChanged()
 {
     QVariant statusVariant = m_currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     int status = statusVariant.toInt();
+
     QPair<Application, QUrl> currentUrlPair(m_currentApplication, m_currentReply->url());
 
     L_INFO("Status: " + QString::number(status) + " - " + currentUrlPair.second.toEncoded().constData());
@@ -493,11 +484,11 @@ bool DownloadManager::createDirIfNotExists(const QDir &_dir)
     if (_dir.exists()) {
         return true;
     } else {
-        bool created = QDir().mkpath(_dir.path());
+        bool created = QDir().mkpath(_dir.absolutePath());
         if (created) {
-            L_INFO("Success while creating parent directory: " + _dir.path());
+            L_INFO("Success while creating parent directory: " + _dir.absolutePath());
         } else {
-            L_INFO("Error while creating parent directory: " + _dir.path());
+            L_INFO("Error while creating parent directory: " + _dir.absolutePath());
         }
         return created;
     }

@@ -5,39 +5,39 @@
 #include <QSettings>
 #include <QMutex>
 
-static QString P_IP_SERVER = "ip_server";
-static QString P_APPLICATION_NAME = "application_name";
-static QString P_LANGUAGE = "language";
-
-static QString P_SHORTCUT_NAME = "shortcut_name";
-static QString P_SHORTCUT_NAME_OFFLINE = "shortcut_name_offline";
-static QString P_SHORTCUT_ONLINE = "shortcut_online";
-static QString P_SHORTCUT_OFFLINE = "shortcut_offline";
-static QString P_SHORTCUT_OFFLINE_ARGS = "shortcut_offline_args";
-
-static QString P_RUN_AT_START = "run_at_start";
-
-static QString P_DEFAULT_INSTALLATION_PATH = "default_installation_path";
-static QString P_DEFAULT_INSTALLATION_FOLDER_NAME = "default_installation_folder_name";
-
-static QString P_DEFAULT_DATA_PATH_SIMPLE_INSTALL = "default_data_path_simple_install";
-static QString P_DEFAULT_DATA_PATH_CUSTOM_INSTALL = "default_data_path_custom_install";
-static QString P_POSSIBLE_CHANGE_DATA_LOCATION = "possible_change_data_location";
-
-static QString P_ENCRYPTED_PASSWORD_KEY = "encrypted_password_key";
-
-static QString P_COLOR_PANEL_BACKGROUND_BORDER = "color_panel_background_border";
-static QString P_COLOR_PANEL_BACKGROUND = "color_panel_background";
-static QString P_COLOR_BUTTON_BACKGROUND_OVER = "color_button_background_over";
-static QString P_COLOR_BUTTON_BACKGROUND = "color_button_background";
-static QString P_COLOR_TEXT_ON_BACKGROUND = "color_text_on_background";
-static QString P_COLOR_TEXT_GRAY = "color_text_gray";
-static QString P_COLOR_DISABLED = "color_disabled";
-static QString P_BORDER_WINDOW = "border_window";
-
 class ResourcesSettings
 {
     public:
+
+        static const QString DeploymentUrl;
+        static const QString AppName;
+        static const QString Lang;
+
+        static const QString ShortcutName;
+        static const QString ShortcutOfflineName;
+        static const QString ShortcutOnline;
+        static const QString ShortcutOffline;
+        static const QString ShortcutOfflineArgs;
+
+        static const QString RunAtStart;
+
+        static const QString DefaultInstallationPath;
+
+        static const QString DefaultSimpleInstallDataPath;
+        static const QString DefaultCustomInstallDataPath;
+        static const QString ChangeDataLocationAllowed;
+
+        static const QString EncryptedPasswordKey;
+
+        static const QString InsetColor;
+        static const QString PanelBackgroundColor;
+        static const QString ButtonHoverBackgroundColor;
+        static const QString ButtonBackgroundColor;
+        static const QString DefaultTextColor;
+        static const QString GrayTextColor;
+        static const QString DisabledColor;
+        static const QString WindowBorderWidth;
+
         static ResourcesSettings * getInstance();
         static void kill();
 
@@ -47,76 +47,73 @@ class ResourcesSettings
 
         void sendToSettings();
 
-        QString getBorder_window() const;
-        void setBorder_window(const QString &border_window);
+        QString getWindowBorderWidth() const;
+        void setWindowBorderWidth(const QString &windowBorderWidth);
 
-        QString getColor_disabled() const;
-        void setColor_disabled(const QString &color_disabled);
+        QString getDisabledColor() const;
+        void setDisabledColor(const QString &disabledColor);
 
-        QString getColor_text_gray() const;
-        void setColor_text_gray(const QString &color_text_gray);
+        QString getGrayTextColor() const;
+        void setGrayTextColor(const QString &grayTextColor);
 
-        QString getColor_text_on_background() const;
-        void setColor_text_on_background(const QString &color_text_on_background);
+        QString getDefaultTextColor() const;
+        void setDefaultTextColor(const QString &defaultTextColor);
 
-        QString getColor_button_background() const;
-        void setColor_button_background(const QString &color_button_background);
+        QString getButtonBackgroundColor() const;
+        void setButtonBackgroundColor(const QString &buttonBackgroundColor);
 
-        QString getColor_button_background_over() const;
-        void setColor_button_background_over(const QString &color_button_background_over);
+        QString getButtonHoverBackgroundColor() const;
+        void setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor);
 
-        QString getColor_panel_background() const;
-        void setColor_panel_background(const QString &color_panel_background);
+        QString getPanelBackgroundColor() const;
+        void setPanelBackgroundColor(const QString &panelBackgroundColor);
 
-        QString getColor_panel_background_border() const;
-        void setColor_panel_background_border(const QString &color_panel_background_border);
+        QString getInsetColor() const;
+        void setInsetColor(const QString &insetColor);
 
-        bool isPossible_change_data_location() const;
-        void setPossible_change_data_location(bool possible_change_data_location);
+        bool isChangeDataLocationAllowed() const;
+        void setChangeDataLocationAllowed(bool changeDataLocationAllowed);
 
-        QString getDefault_installation_path() const;
-        void setDefault_installation_path(const QString &default_installation_path);
+        QString getDefaultInstallationPath() const;
+        void setDefaultInstallationPath(const QString &defaultInstallationPath);
 
-        bool isShortcut_offline() const;
-        void setShortcut_offline(bool shortcut_offline);
+        bool isShortcutOffline() const;
+        void setShortcutOffline(bool shortcutOffline);
 
-        bool isShortcut_online() const;
-        void setShortcut_online(bool shortcut_online);
+        bool isShortcutOnline() const;
+        void setShortcutOnline(bool shortcutOnline);
 
-        QString getShortcut_name_offline() const;
-        void setShortcut_name_offline(const QString &shortcut_name_offline);
+        QString getShortcutOfflineName() const;
+        void setShortcutOfflineName(const QString &shortcutOfflineName);
 
-        QString getShortcut_name() const;
-        void setShortcut_name(const QString &shortcut_name);
+        QString getShortcutName() const;
+        void setShortcutName(const QString &shortcutName);
 
-        QString getLanguage() const;
-        void setLanguage(const QString &language);
+        QString getLang() const;
+        void setLang(const QString &lang);
 
-        QString getApp_name() const;
-        void setApp_name(const QString &app_name);
+        QString getAppName() const;
+        void setAppName(const QString &appName);
 
-        QString getIp_server() const;
-        void setIp_server(const QString &ip_server);
+        QString getDeploymentUrl() const;
+        void setDeploymentUrl(const QString &deploymentUrl);
 
-        QString getDefault_data_path_simple_install() const;
-        void setDefault_data_path_simple_install(const QString &default_data_path_simple_install);
+        QString getDefaultSimpleInstallDataPath() const;
+        void setDefaultSimpleInstallDataPath(const QString &defaultSimpleInstallDataPath);
 
-        QString getDefault_data_path_custom_install() const;
-        void setDefault_data_path_custom_install(const QString &default_data_path_custom_install);
+        QString getDefaultCustomInstallDataPath() const;
+        void setDefaultCustomInstallDataPath(const QString &defaultCustomInstallDataPath);
 
-        QString getEncrypted_password_key() const;
-        void setEncrypted_password_key(const QString &encrypted_password_key);
+        QString getEncryptedPasswordKey() const;
+        void setEncryptedPasswordKey(const QString &encryptedPasswordKey);
 
-        QString getDefault_installation_folder_name() const;
-        void setDefault_installation_folder_name(const QString &default_installation_folder_name);
+        QString getShortcutOfflineArgs() const;
+        void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
 
-        QString getShortcut_offline_args() const;
-        void setShortcut_offline_args(const QString &shortcut_offline_args);
+        bool isRunAtStart() const;
+        void setRunAtStart(bool runAtStart);
 
-        bool isRun_at_start() const;
-        void setRun_at_start(bool run_at_start);
-
-private:
+    private:
         /**
          * @brief Use for singleton
          */
@@ -148,29 +145,32 @@ private:
          */
         QSettings * m_settings;
 
-        QString m_ip_server;
-        QString m_app_name;
-        QString m_language;
-        QString m_shortcut_name;
-        QString m_shortcut_name_offline;
-        bool m_shortcut_online;
-        bool m_shortcut_offline;
-        QString m_shortcut_offline_args;
-        bool m_run_at_start;
-        QString m_default_installation_path;
-        QString m_default_installation_folder_name;
-        QString m_default_data_path_simple_install;
-        QString m_default_data_path_custom_install;
-        bool m_possible_change_data_location;
-        QString m_encrypted_password_key;
-        QString m_color_panel_background_border;
-        QString m_color_panel_background;
-        QString m_color_button_background_over;
-        QString m_color_button_background;
-        QString m_color_text_on_background;
-        QString m_color_text_gray;
-        QString m_color_disabled;
-        QString m_border_window;
+        QString m_deploymentUrl;
+        QString m_appName;
+
+        QString m_lang;
+
+        bool m_shortcutOnline;
+        bool m_shortcutOffline;
+        QString m_shortcutName;
+        QString m_shortcutOfflineName;
+        QString m_shortcutOfflineArgs;
+        bool m_runAtStart;
+
+        QString m_insetColor;
+        QString m_panelBackgroundColor;
+        QString m_buttonHoverBackgroundColor;
+        QString m_buttonBackgroundColor;
+        QString m_defaultTextColor;
+        QString m_grayTextColor;
+        QString m_disabledColor;
+        QString m_windowBorderWidth;
+
+        QString m_defaultInstallationPath;
+        QString m_defaultSimpleInstallDataPath;
+        QString m_defaultCustomInstallDataPath;
+        bool m_changeDataLocationAllowed;
+        QString m_encryptedPasswordKey;
 };
 
 #endif // SETTINGS__RESOURCESSETTINGS_H

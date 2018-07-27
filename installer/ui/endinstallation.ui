@@ -67,7 +67,7 @@
           <item>
            <widget class="QLabel" name="labelIcon">
             <property name="styleSheet">
-             <string notr="true">color : @color-text-gray;</string>
+             <string notr="true">color : @gray-text-color;</string>
             </property>
             <property name="text">
              <string/>
@@ -91,7 +91,7 @@
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">color: @color-text-on-background ;</string>
+             <string notr="true">color: @default-text-color ;</string>
             </property>
             <property name="text">
              <string>The installation is now complete</string>
@@ -114,7 +114,7 @@
           <item alignment="Qt::AlignHCenter">
            <widget class="QLabel" name="labelError">
             <property name="styleSheet">
-             <string notr="true">color: @color-text-gray ;</string>
+             <string notr="true">color: @gray-text-color ;</string>
             </property>
             <property name="text">
              <string notr="true"/>

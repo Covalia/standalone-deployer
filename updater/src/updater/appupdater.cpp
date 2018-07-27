@@ -7,8 +7,11 @@
 #include "utils/hashmac/hashmac512.h"
 #include "io/fileutils.h"
 #include "settings/settings.h"
+#include "io/unzip/zipextractor.h"
+#include "settings/commandlinesingleton.h"
 
 #include <QDirIterator>
+#include <QCoreApplication>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
     m_updater(0),
@@ -16,7 +19,11 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject 
     m_remoteUpdaterVersion(""),
     m_localUpdaterVersion(""),
     m_remoteJavaVersion(""),
-    m_localJavaVersion("")
+    m_localJavaVersion(""),
+    m_encoding(""),
+    m_mainClass(""),
+    m_runnerClass(""),
+    m_memory("")
 {
     m_appUrl = _appUrl;
 
@@ -54,15 +61,12 @@ void AppUpdater::start()
 
     bool result = m_appPath.makeAppDirectories();
 
-    QList<QUrl> downloads;
     // TODO disable progress bar for cnlp files
-    downloads << QUrl(UpdaterConfig::AppCnlpRemoteFilename);
-    downloads << QUrl(UpdaterConfig::LoaderCnlpRemoteFilename);
-    downloads << QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename);
-    downloads << QUrl(UpdaterConfig::JavaCnlpRemoteFilename);
-
-    QMap<Application, QList<QUrl> > map;
-    map.insert(Application::getCnlpApplication(), downloads);
+    QMultiMap<Application, QUrl> map;
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::AppCnlpRemoteFilename + CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::LoaderCnlpRemoteFilename));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename));
+    map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::JavaCnlpRemoteFilename));
 
     connect(m_updater, SIGNAL(downloadsFinished()),
             SLOT(cnlpDownloadFinished()));
@@ -102,71 +106,101 @@ void AppUpdater::cnlpDownloadFinished()
     disconnect(m_updater, SIGNAL(downloadsFinished()),
                this, SLOT(cnlpDownloadFinished()));
 
-    const QString applicationCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::AppCnlpLocalFilename);
-    const QString updaterCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::UpdaterCnlpLocalFilename);
     const QString loaderCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::LoaderCnlpLocalFilename);
+    const QString updaterCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::UpdaterCnlpLocalFilename);
     const QString javaCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::JavaCnlpLocalFilename);
-    L_INFO("File to read: " + applicationCnlpPath);
-    L_INFO("File to read: " + updaterCnlpPath);
+    const QString applicationCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::AppCnlpLocalFilename);
     L_INFO("File to read: " + loaderCnlpPath);
+    L_INFO("File to read: " + updaterCnlpPath);
     L_INFO("File to read: " + javaCnlpPath);
+    L_INFO("File to read: " + applicationCnlpPath);
 
-    DeploymentXML applicationXml(applicationCnlpPath);
-    DeploymentXML updaterXml(updaterCnlpPath);
     DeploymentXML loaderXml(loaderCnlpPath);
+    DeploymentXML updaterXml(updaterCnlpPath);
     DeploymentXML javaXml(javaCnlpPath);
+    DeploymentXML applicationXml(applicationCnlpPath);
 
-    if (applicationXml.read() && updaterXml.read() && loaderXml.read() && javaXml.read()) {
+    if (loaderXml.read() && updaterXml.read() && javaXml.read() && applicationXml.read()) {
         // retrieving remote updater version.
         m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
+        L_INFO("Remote updater version: " + m_remoteUpdaterVersion);
+
+        // retrieving application encoding
+        m_encoding = applicationXml.getEncoding();
+        // retrieving application main class
+        m_mainClass = applicationXml.getMainClass();
+        // retrieving application runner class
+        m_runnerClass = applicationXml.getRunnerClass();
+
+        // retrieving cnlp arguments
+        m_arguments.clear();
+        m_arguments << applicationXml.getArguments();
+
+        // retrieving memory needed
+        m_memory = applicationXml.getMemory();
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
+        L_INFO("Local updater version: " + m_localUpdaterVersion);
         m_localJavaVersion = settings->getJavaVersion();
+        L_INFO("Local java version: " + m_localJavaVersion);
 
-        const Application appApplication = Application::getAppApplication();
-        const Application updaterApplication = Application::getUpdaterApplication();
         const Application loaderApplication = Application::getLoaderApplication();
+        const Application updaterApplication = Application::getUpdaterApplication();
         const Application javaApplication = Application::getJavaApplication();
+        const Application appApplication = Application::getAppApplication();
 
-        // TODO refactor into an helper class?
-        QString osValue;
-#ifdef Q_OS_MACOS
-            osValue = DeploymentXML::OsMacOsValue;
-#endif
-
-#ifdef Q_OS_WIN
-            osValue = DeploymentXML::OsWindowsValue;
-#endif
-        const QList<Download> appDownloads = applicationXml.getDownloads(osValue);
-        const QList<Download> updaterDownloads = updaterXml.getDownloads(osValue);
-        const QList<Download> loaderDownloads = loaderXml.getDownloads(osValue);
-        const QList<Download> javaDownloads = javaXml.getDownloads(osValue);
+        const QList<Download> loaderDownloads = loaderXml.getDownloads();
+        const QList<Download> updaterDownloads = updaterXml.getDownloads();
+        const QList<Download> javaDownloads = javaXml.getDownloads();
+        const QList<Download> appDownloads = applicationXml.getDownloads();
 
         // retrieving remote java version.
         m_remoteJavaVersion = "";
         for (int i = 0; i < javaDownloads.size(); ++i) {
             m_remoteJavaVersion = javaDownloads[i].getVersion();
             // only one java version for one operating system
+            L_INFO("Remote java version: " + m_remoteJavaVersion);
             break;
         }
 
         m_cnlpParsedFiles.clear();
-        m_cnlpParsedFiles.insert(appApplication, appDownloads);
-        m_cnlpParsedFiles.insert(updaterApplication, updaterDownloads);
-        m_cnlpParsedFiles.insert(loaderApplication, loaderDownloads);
-        m_cnlpParsedFiles.insert(javaApplication, javaDownloads);
+        {
+            QListIterator<Download> iterator(loaderDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(loaderApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(updaterDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(updaterApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(javaDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(javaApplication, iterator.next());
+            }
+        }
+        {
+            QListIterator<Download> iterator(appDownloads);
+            while (iterator.hasNext()) {
+                m_cnlpParsedFiles.insert(appApplication, iterator.next());
+            }
+        }
 
         processCnlpDownloadFileList();
 
         connect(m_updater, SIGNAL(downloadsFinished()),
                 SLOT(applicationDownloadFinished()));
-        m_updater->setUrlListToDownload(m_filesToDownload);
-    } else {
 
+        const QMultiMap<Application, QString> nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
+
+        m_updater->setUrlListToDownload(nonAlreadyDownloadedFiles);
+    } else {
         L_ERROR("Unable to read the application cnlp files");
         // TODO handle error
-
     }
 }
 
@@ -177,337 +211,142 @@ void AppUpdater::applicationDownloadFinished()
 
     L_INFO("Files successfully downloaded");
 
-    // reading hash key only once
-    const QString hash_key = HashKey::readHashKey();
-
-    bool downloadsOk = true;
-
-    // check downloaded hash mac
-    QMap<Application, QList<QString> >::const_iterator iterator = m_filesToDownload.constBegin();
-    while (iterator != m_filesToDownload.constEnd()) {
-        const Application application = iterator.key();
-        const QList<QString> downloadedFiles = iterator.value();
-
-        // foreach application, checking each file
-        foreach(QString downloadedFile, downloadedFiles) {
-            if (application == Application::getAppApplication()
-                || application == Application::getLoaderApplication()
-                || application == Application::getUpdaterApplication()
-                || application == Application::getJavaApplication()) {
-                QDir dir;
-
-                if (application == Application::getAppApplication()) {
-                    dir = QDir(m_appPath.getTempAppDir());
-                } else if (application == Application::getLoaderApplication()) {
-                    dir = QDir(m_appPath.getTempLoaderDir());
-                } else if (application == Application::getUpdaterApplication()) {
-                    dir = QDir(m_appPath.getTempUpdaterDir());
-                } else if (application == Application::getJavaApplication()) {
-                    dir = QDir(m_appPath.getTempJavaDir());
-                }
-
-                // temporary location of downloaded file
-                QString localFile = dir.absoluteFilePath(downloadedFile);
-
-                if (QFile::exists(localFile)) {
-                    // if this local temporary file exists
-                    // checking its hashmac
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-
-                    // we find the download corresponding to the downloadedFile to get its expected hashmac
-                    bool found = false;
-                    foreach(Download download, m_cnlpParsedFiles[application]) {
-                        if (download.getHref() == downloadedFile) {
-                            found = true;
-                            if (hashmac != download.getHashMac()) {
-                                L_WARN("Bad hashmac, expected: " + download.getHashMac() + ", found: " + hashmac + " for file: " + localFile);
-                                downloadsOk = false;
-                            }
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        // we print a warning if downloaded file was not found in the parsed downloads list
-                        // we just log it, in case this happens, but this mustn't
-                        L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
-                    }
-                } else {
-                    // if this file does not exist, we get an error
-                    L_ERROR("Downloaded file does not exist " + localFile);
-                    downloadsOk = false;
-                }
-            }
-        }
-
-        ++iterator;
-    }
-
-    if (downloadsOk) {
+    if (checkDownloadsAreOk()) {
         // all downloads are done
 
-        bool buildOk = true;
+        bool loaderInstalledOk = true;
+        bool updaterInstalledOk = true;
+        bool javaInstalledOk = true;
+        bool appInstalledOk = true;
 
         // we install only if the download list is not empty or if the remain list is not empty.
-        if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-            L_INFO("Need to rebuild and install " + Application::getAppApplication().getName());
-            buildOk &= buildApplicationInTempDirectory(Application::getAppApplication());
-            L_INFO(Application::getAppApplication().getName() + " build result: " + QString::number(buildOk));
-        }
         if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
             L_INFO("Need to rebuild and install " + Application::getLoaderApplication().getName());
-            buildOk &= buildApplicationInTempDirectory(Application::getLoaderApplication());
-            L_INFO(Application::getLoaderApplication().getName() + " build result: " + QString::number(buildOk));
-        }
-        if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
-            L_INFO("Need to rebuild and install " + Application::getUpdaterApplication().getName());
-            buildOk &= buildApplicationInTempDirectory(Application::getUpdaterApplication());
-            L_INFO(Application::getUpdaterApplication().getName() + " build result: " + QString::number(buildOk));
-        }
-        if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
-            L_INFO("Need to rebuild and install " + Application::getJavaApplication().getName());
-            buildOk &= buildApplicationInTempDirectory(Application::getJavaApplication());
-            L_INFO(Application::getJavaApplication().getName() + " build result: " + QString::number(buildOk));
-        }
-
-        if (buildOk) {
-            // build is ok
-
-            bool appInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                L_INFO("Installing " + Application::getAppApplication().getName());
-
-                const QString appInstallDir = m_appPath.getAppDir().absolutePath();
-                const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
-                const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
-
-                // remove an old app directory if it already exists
-                if (FileUtils::directoryExists(appOldDir)) {
-                    L_INFO("Existing old application directory needs to be removed: " + appOldDir);
-
-                    if (FileUtils::removeDirRecursively(appOldDir)) {
-                        L_INFO("Removed " + appOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-
-                if (appInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old app directory.
-                    if (QDir().rename(appInstallDir, appOldDir)) {
-                        L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
-                        if (QDir().rename(appBuildDir, appInstallDir)) {
-                            L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
-                            if (FileUtils::removeDirRecursively(appOldDir)) {
-                                L_INFO("Removed " + appOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + appOldDir);
-                                // not an error
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
-                            appInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
-                        appInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Application does not need to be updated.");
-            }
-
-            if (appInstalledOk) {
-                L_INFO("No error reported on application installation.");
-            } else {
-                L_ERROR("Errors have been reported on application installation.");
-            }
-
-            bool loaderInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getLoaderApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                L_INFO("Installing " + Application::getLoaderApplication().getName());
-
-                const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
-                const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
-                const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
-
-                // remove an old loader directory if it already exists
-                if (FileUtils::directoryExists(loaderOldDir)) {
-                    L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
-
-                    if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                        L_INFO("Removed " + loaderOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + loaderOldDir);
-                        loaderInstalledOk = false;
-                    }
-                }
-
-                if (loaderInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old app directory.
-                    if (QDir().rename(loaderInstallDir, loaderOldDir)) {
-                        L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
-                        if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
-                            L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
-                            if (FileUtils::removeDirRecursively(loaderOldDir)) {
-                                L_INFO("Removed " + loaderOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + loaderOldDir);
-                                // not an error
-                            }
-                        } else {
-                            L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
-                            loaderInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
-                        loaderInstalledOk = false;
-                    }
-                    // extract app from dmg (macos).
-                    if (m_appPath.prepareLoader()) {
-                        L_INFO("Loader prepared.");
-                    } else {
-                        L_ERROR("Unable to prepare Loader.");
-                        loaderInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Loader does not need to be updated.");
-            }
+            loaderInstalledOk &= buildApplicationInTempDirectory(Application::getLoaderApplication());
+            L_INFO(Application::getLoaderApplication().getName() + " build result: " + QString::number(loaderInstalledOk));
 
             if (loaderInstalledOk) {
-                L_INFO("No error reported on loader installation.");
-            } else {
-                L_ERROR("Errors have been reported on loader installation.");
-            }
+                loaderInstalledOk &= installLoader();
 
-            bool updaterInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
-                // if this app needed to be rebuild, we now install it.
+                if (loaderInstalledOk) {
+                    L_INFO("No error reported on loader installation.");
 
-                // we can not overwrite ourselves
-                if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
-                    L_INFO("Installing " + Application::getUpdaterApplication().getName());
-
-                    const QString updaterInstallDir = m_appPath.getUpdaterDir().absoluteFilePath(m_remoteUpdaterVersion);
-                    const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
-
-                    if (FileUtils::directoryExists(updaterInstallDir)) {
-                        // it should not exist with the previous condition, but in case it exists
-                        // (it is not used because local and remote versions differ), we need to remove it
-                        if (FileUtils::removeDirRecursively(updaterInstallDir)) {
-                            L_INFO("Removed " + updaterInstallDir);
-                        } else {
-                            L_ERROR("Unable to remove " + updaterInstallDir);
-                            updaterInstalledOk = false;
-                        }
-                    }
-
-                    if (updaterInstalledOk) {
-                        // we continue only if there is no error
-
-                        // local and remote versions differ
-                        if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
-                            L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
-                            // nothing to remove. deletion will be done at next launch.
-                            // extract app from dmg (macos).
-                            if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
-                                L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
-                                // write new updater version number
-                                Settings * settings = Settings::getInstance();
-                                settings->setUpdaterVersion(m_remoteUpdaterVersion);
-                                if (settings->writeSettings()) {
-                                    L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
-                                } else {
-                                    L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
-                                    updaterInstalledOk = false;
-                                }
+                    // install loader cnlp file
+                    if (installCnlpFile(UpdaterConfig::LoaderCnlpLocalFilename)) {
+                        L_INFO("Need a restart for Loader.");
+                        // restart process
+                        QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
+                        if (m_appPath.startLoader(args)) {
+                            if (CommandLineSingleton::getInstance()->isDebugMode()) {
+                                // debug mode, print args
+                                L_INFO("Restart loader with: " + args.join(" "));
                             } else {
-                                L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
-                                updaterInstalledOk = false;
+                                L_INFO("Restart loader...");
                             }
                         } else {
-                            L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
-                            updaterInstalledOk = false;
+                            L_ERROR("Loader restart failed.");
+                        }
+                    } else {
+                        L_ERROR("Error installing loader cnlp.");
+                    }
+
+                    QCoreApplication::quit();
+                    return;
+                } else {
+                    L_ERROR("Errors have been reported on loader installation.");
+                }
+            } else {
+                L_ERROR("Errors have been reported on loader build.");
+            }
+        }
+
+        if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
+            L_INFO("Need to rebuild and install " + Application::getUpdaterApplication().getName());
+            updaterInstalledOk &= buildApplicationInTempDirectory(Application::getUpdaterApplication());
+            L_INFO(Application::getUpdaterApplication().getName() + " build result: " + QString::number(updaterInstalledOk));
+
+            if (updaterInstalledOk) {
+                updaterInstalledOk &= installUpdater();
+
+                if (updaterInstalledOk) {
+                    L_INFO("No error reported on updater installation.");
+
+                    // install updater cnlp file
+                    if (installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename)) {
+                        L_INFO("Need a restart for Updater.");
+                        // restart process
+                        QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
+                        if (m_appPath.startLoader(args)) {
+                            if (CommandLineSingleton::getInstance()->isDebugMode()) {
+                                // debug mode, print args
+                                L_INFO("Restart loader with: " + args.join(" "));
+                            } else {
+                                L_INFO("Restart loader...");
+                            }
+                        } else {
+                            L_ERROR("Loader restart failed.");
+                        }
+                    } else {
+                        L_ERROR("Error installing updater cnlp.");
+                    }
+
+                    QCoreApplication::quit();
+                    return;
+                } else {
+                    L_ERROR("Errors have been reported on updater installation.");
+                }
+            } else {
+                L_ERROR("Errors have been reported on updater build.");
+            }
+        }
+
+        if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
+            L_INFO("Need to rebuild and install " + Application::getJavaApplication().getName());
+            javaInstalledOk &= buildApplicationInTempDirectory(Application::getJavaApplication());
+            L_INFO(Application::getJavaApplication().getName() + " build result: " + QString::number(javaInstalledOk));
+
+            if (javaInstalledOk) {
+                javaInstalledOk &= installJava();
+
+                if (javaInstalledOk) {
+                    L_INFO("No error reported on java installation.");
+
+                    // install java cnlp file
+                    if (!installCnlpFile(UpdaterConfig::JavaCnlpLocalFilename)) {
+                        L_ERROR("Error installing java cnlp.");
+                    }
+                } else {
+                    L_ERROR("Errors have been reported on java installation.");
+                }
+            } else {
+                L_ERROR("Errors have been reported on java build.");
+            }
+        } else {
+            L_INFO("Java does not need to be updated.");
+
+            if (javaInstalledOk) {
+                const QString javaRemoteVersionDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
+
+                if (!FileUtils::directoryExists(javaRemoteVersionDir)) {
+                    L_WARN("Remote version was not installed into: " + javaRemoteVersionDir + " maybe because version names differ but not hashes.");
+
+                    // remote version not installed because local version is the same file
+                    const QString javaLocalDistDir = m_appPath.getJavaDistDir(m_localJavaVersion).absolutePath();
+                    if (!FileUtils::directoryExists(javaLocalDistDir)) {
+                        L_INFO("Java local dist directory does not exist. " + javaLocalDistDir);
+                        if (m_appPath.prepareJava(m_localJavaVersion, false)) {
+                            L_INFO("Java local " + m_localJavaVersion + " soft prepared.");
+                        } else {
+                            L_INFO("Unable to soft prepare Java local " + m_localJavaVersion + ".");
+                            javaInstalledOk = false;
                         }
                     }
                 } else {
-                    L_WARN("Remote and local updaters differ but have same version number, no possible update.");
-                }
-            } else {
-                L_INFO("Updater does not need to be updated.");
-            }
+                    // remote version installed because local and remote version are differents
+                    const QString javaRemoteDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
 
-            if (updaterInstalledOk) {
-                L_INFO("No error reported on updater installation.");
-            } else {
-                L_ERROR("Errors have been reported on updater installation.");
-            }
-
-            bool javaInstalledOk = true;
-            if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
-                // if this app needed to be rebuild, we now install it.
-
-                // we can overwrite java because it must not be used by us.
-                L_INFO("Installing " + Application::getJavaApplication().getName());
-
-                const QString javaInstallDir = m_appPath.getJavaDir().absoluteFilePath(m_remoteJavaVersion);
-                const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
-
-                if (FileUtils::directoryExists(javaInstallDir)) {
-                    // remove existing java dir if it exists
-                    if (FileUtils::removeDirRecursively(javaInstallDir)) {
-                        L_INFO("Removed " + javaInstallDir);
-                    } else {
-                        L_ERROR("Unable to remove " + javaInstallDir);
-                        javaInstalledOk = false;
-                    }
-                }
-
-                if (javaInstalledOk) {
-                    // we continue only if there is no error
-
-                    // local and remote versions differ
-                    if (QDir().rename(javaBuildDir, javaInstallDir)) {
-                        L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
-                        // nothing to remove. deletion will be done at next launch.
-                        // extract zip.
-                        if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
-                            L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
-                            // write new java version number
-                            Settings * settings = Settings::getInstance();
-                            settings->setJavaVersion(m_remoteJavaVersion);
-                            if (settings->writeSettings()) {
-                                L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
-                            } else {
-                                L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
-                                javaInstalledOk = false;
-                            }
-                        } else {
-                            L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
-                            javaInstalledOk = false;
-                        }
-                    } else {
-                        L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
-                        javaInstalledOk = false;
-                    }
-                }
-            } else {
-                L_INFO("Java does not need to be updated.");
-
-                if (javaInstalledOk) {
-                    const QString javaDistDir = m_appPath.getJavaDir().absoluteFilePath(m_remoteJavaVersion + QDir::separator() + IOConfig::JavaSubDirName);
-
-                    if (!FileUtils::directoryExists(javaDistDir)) {
-                        L_INFO("Java dist directory does not exist. " + javaDistDir);
+                    if (!FileUtils::directoryExists(javaRemoteDistDir)) {
+                        L_INFO("Java dist directory does not exist. " + javaRemoteDistDir);
                         if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
                             L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
                         } else {
@@ -517,72 +356,127 @@ void AppUpdater::applicationDownloadFinished()
                     }
                 }
             }
+        }
 
-            if (javaInstalledOk) {
-                L_INFO("No error reported on java installation.");
+        if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
+            L_INFO("Need to rebuild and install " + Application::getAppApplication().getName());
+            appInstalledOk &= buildApplicationInTempDirectory(Application::getAppApplication());
+            L_INFO(Application::getAppApplication().getName() + " build result: " + QString::number(appInstalledOk));
+
+            if (appInstalledOk) {
+                appInstalledOk &= installApp();
+
+                if (appInstalledOk) {
+                    L_INFO("No error reported on application installation.");
+
+                    // install app cnlp file
+                    if (!installCnlpFile(UpdaterConfig::AppCnlpLocalFilename)) {
+                        L_ERROR("Error installing application cnlp.");
+                    }
+                } else {
+                    L_ERROR("Errors have been reported on application installation.");
+                }
             } else {
-                L_ERROR("Errors have been reported on java installation.");
+                L_ERROR("Errors have been reported on application build.");
+            }
+        }
+
+        if (loaderInstalledOk && updaterInstalledOk && javaInstalledOk && appInstalledOk) {
+            // application, loader and updater didn't throw error.
+
+            // rewrite cnlp files, in case they was removed manually
+            installCnlpFile(UpdaterConfig::LoaderCnlpLocalFilename);
+            installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename);
+            installCnlpFile(UpdaterConfig::JavaCnlpLocalFilename);
+            installCnlpFile(UpdaterConfig::AppCnlpLocalFilename);
+
+            bool native_extracted = true;
+
+            const QString extractDir = m_appPath.getAppNativesDir().absolutePath();
+
+            // optimisation: if extractDir already exists, no extraction is done
+            if (!FileUtils::directoryExists(extractDir)) {
+                L_INFO("Natives directory " + extractDir + " does not exist. Extracting...");
+
+                // find the native jar and extract it
+                QListIterator<Download> iterator(m_cnlpParsedFiles.values(Application::getAppApplication()));
+                while (iterator.hasNext()) {
+                    const Download & download = iterator.next();
+
+                    if (download.isNative()) {
+                        const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+
+                        // extract zip to dist
+                        ZipExtractor zip(fileToExtract, extractDir);
+
+                        // start extraction
+                        zip.extract();
+
+                        if (zip.isOk()) {
+                            L_INFO(fileToExtract + " extracted to " + extractDir);
+                        } else {
+                            L_ERROR(fileToExtract + " can not be extracted to " + extractDir);
+                            native_extracted = false;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                L_INFO("Natives directory " + extractDir + " already exists. No extraction done.");
             }
 
-            if (appInstalledOk && loaderInstalledOk && updaterInstalledOk && javaInstalledOk) {
-                // application, loader and updater didn't throw error, updating cnlp files.
+            if (native_extracted) {
+                const QString classpathSeparator = m_appPath.getClasspathSeparator();
 
-                L_INFO("Installing Cnlp files.");
+                QString classpath = "";
 
-                const QString cnlpInstallDir = m_appPath.getCnlpDir().absolutePath();
-                const QString cnlpOldDir = m_appPath.getCnlpOldDir().absolutePath();
-                const QString cnlpBuildDir = m_appPath.getTempCnlpDir().absolutePath();
+                // build the classpath string
+                const QDir installDir = m_appPath.getInstallationDir();
+                QListIterator<Download> iterator(m_cnlpParsedFiles.values(Application::getAppApplication()));
+                while (iterator.hasNext()) {
+                    const Download & download = iterator.next();
 
-                bool cnlpInstalledOk = true;
-
-                // remove an old cnlp directory if it already exists
-                if (FileUtils::directoryExists(cnlpOldDir)) {
-                    L_INFO("Existing old cnlp directory needs to be removed: " + cnlpOldDir);
-
-                    if (FileUtils::removeDirRecursively(cnlpOldDir)) {
-                        L_INFO("Removed " + cnlpOldDir);
-                    } else {
-                        L_ERROR("Unable to remove " + cnlpOldDir);
-                        cnlpInstalledOk = false;
-                    }
-                }
-
-                if (cnlpInstalledOk) {
-                    // we continue only if the old existing directory has been deleted
-
-                    // firstly, we rename the old cnlp directory.
-                    if (QDir().rename(cnlpInstallDir, cnlpOldDir)) {
-                        L_INFO("Renamed " + cnlpInstallDir + " to " + cnlpOldDir);
-                        if (QDir().rename(cnlpBuildDir, cnlpInstallDir)) {
-                            L_INFO("Renamed " + cnlpBuildDir + " to " + cnlpInstallDir);
-                            if (FileUtils::removeDirRecursively(cnlpOldDir)) {
-                                L_INFO("Removed " + cnlpOldDir);
-                            } else {
-                                L_WARN("Unable to remove " + cnlpOldDir);
-                                // not an error
-                            }
+                    if (download.isMain() || (!download.isNative() && download.getOs() == DeploymentXML::getCurrentOsValue())) {
+                        const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
+                        const QString relativeFile = installDir.relativeFilePath(fileToExtract);
+                        L_INFO("Add " + relativeFile + " to classpath.");
+                        if (classpath.isEmpty()) {
+                            classpath += relativeFile;
                         } else {
-                            L_ERROR("Unable to rename " + cnlpBuildDir + " to " + cnlpInstallDir);
-                            cnlpInstalledOk = false;
+                            classpath += classpathSeparator + relativeFile;
                         }
-                    } else {
-                        L_ERROR("Unable to rename " + cnlpInstallDir + " to " + cnlpOldDir);
-                        cnlpInstalledOk = false;
                     }
                 }
 
-                if (cnlpInstalledOk) {
-                    L_INFO("No error reported on cnlp installation.");
+                Settings * settings = Settings::getInstance();
 
-                    L_INFO("Starting application.");
-                    // TODO start app with args
+                if (m_appPath.startPostInstallTasks(settings->getJavaVersion(), m_memory, classpath,
+                                                    m_runnerClass, m_encoding, settings->getDataLocation())) {
+                    L_INFO("Post install tasks started and finished.");
 
+                    if (m_appPath.startApplication(settings->getJavaVersion(), m_memory, classpath, m_mainClass,
+                                                   m_encoding, settings->getDataLocation(), m_arguments)) {
+                        // clean temp directory
+                        if (FileUtils::removeDirRecursively(m_appPath.getTempDir().absolutePath())) {
+                            L_INFO("Cleaned " + m_appPath.getTempDir().absolutePath());
+                        } else {
+                            L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
+                        }
+
+                        // quit application
+                        L_INFO("Quit application.");
+                    } else {
+                        L_ERROR("Unable to start application. Exiting.");
+                    }
                 } else {
-                    L_ERROR("Errors have been reported on cnlp installation.");
+                    L_ERROR("Error while running post install tasks. Exiting.");
                 }
+
+                QCoreApplication::quit();
+                return;
             }
         } else {
-            L_ERROR("Unable to build applications. Aborting.");
+            L_ERROR("Unable to install applications. Aborting.");
             // TODO handle error
         }
     } else {
@@ -596,7 +490,7 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
     bool buildOk = true;
     QDir tempAppDir;
     QDir appDir;
-    QString appBuild;
+    QDir appBuildDir;
 
     if (_application == Application::getAppApplication() ||
         _application == Application::getLoaderApplication() ||
@@ -605,19 +499,19 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
         if (_application == Application::getAppApplication()) {
             tempAppDir = m_appPath.getTempAppDir();
             appDir = QDir(m_appPath.getAppDir());
-            appBuild = m_appPath.getTempAppBuildDir().absolutePath();
+            appBuildDir = m_appPath.getTempAppBuildDir();
         } else if (_application == Application::getLoaderApplication()) {
             tempAppDir = m_appPath.getTempLoaderDir();
             appDir = QDir(m_appPath.getLoaderDir());
-            appBuild = m_appPath.getTempLoaderBuildDir().absolutePath();
+            appBuildDir = m_appPath.getTempLoaderBuildDir();
         } else if (_application == Application::getUpdaterApplication()) {
             tempAppDir = m_appPath.getTempUpdaterDir();
-            appDir = QDir(m_appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion));
-            appBuild = m_appPath.getTempUpdaterBuildDir().absolutePath();
+            appDir = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            appBuildDir = m_appPath.getTempUpdaterBuildDir();
         } else if (_application == Application::getJavaApplication()) {
             tempAppDir = m_appPath.getTempJavaDir();
-            appDir = QDir(m_appPath.getJavaDir().absoluteFilePath(m_localJavaVersion));
-            appBuild = m_appPath.getTempJavaBuildDir().absolutePath();
+            appDir = m_appPath.getJavaVersionDir(m_localJavaVersion);
+            appBuildDir = m_appPath.getTempJavaBuildDir();
         }
     } else {
         // nothing to do, return true
@@ -625,17 +519,19 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
     }
 
     // remove temp/{application}-build directory
-    L_INFO("Removing previous build directory: " + appBuild);
-    FileUtils::removeDirRecursively(appBuild);
+    L_INFO("Removing previous build directory: " + appBuildDir.absolutePath());
+    FileUtils::removeDirRecursively(appBuildDir.absolutePath());
 
-    if (QDir().mkpath(appBuild)) {
-        L_INFO("Creating empty build directory: " + appBuild);
+    if (QDir().mkpath(appBuildDir.absolutePath())) {
+        L_INFO("Creating empty build directory: " + appBuildDir.absolutePath());
 
-        const QList<QString> downloadedFiles = m_filesToDownload[_application];
+        const QList<QString> downloadedFiles = m_filesToDownload.values(_application);
 
-        foreach(QString downloadedFile, downloadedFiles) {
-            QString localSourceFile = tempAppDir.absoluteFilePath(downloadedFile);
-            QString destinationFile = appBuild + QDir::separator() + downloadedFile;
+        QListIterator<QString> downloadedIterator(downloadedFiles);
+        while (downloadedIterator.hasNext()) {
+            const QString downloadedFile = downloadedIterator.next();
+            const QString localSourceFile = tempAppDir.absoluteFilePath(downloadedFile);
+            const QString destinationFile = appBuildDir.absoluteFilePath(downloadedFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("download source: " + localSourceFile);
@@ -654,11 +550,13 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
             }
         }
 
-        const QList<QString> keepFiles = m_filesToKeep[_application];
+        const QList<QString> keepFiles = m_filesToKeep.values(_application);
 
-        foreach(QString keepFile, keepFiles) {
-            QString localSourceFile = appDir.absoluteFilePath(keepFile);
-            QString destinationFile = appBuild + QDir::separator() + keepFile;
+        QListIterator<QString> keepIterator(keepFiles);
+        while (keepIterator.hasNext()) {
+            const QString keepFile = keepIterator.next();
+            const QString localSourceFile = appDir.absoluteFilePath(keepFile);
+            const QString destinationFile = appBuildDir.absoluteFilePath(keepFile);
 
             if (QFile::exists(localSourceFile)) {
                 L_INFO("keep source: " + localSourceFile);
@@ -701,9 +599,9 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
         } else if (_application == Application::getLoaderApplication()) {
             dir = QDir(appPath.getLoaderDir());
         } else if (_application == Application::getUpdaterApplication()) {
-            dir = QDir(appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion));
+            dir = appPath.getUpdaterVersionDir(m_localUpdaterVersion);
         } else if (_application == Application::getJavaApplication()) {
-            dir = QDir(appPath.getJavaDir().absoluteFilePath(m_localJavaVersion));
+            dir = appPath.getJavaVersionDir(m_localJavaVersion);
         }
 
         QDirIterator it(dir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
@@ -715,19 +613,19 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
                 // on macos, we ignore updater/<version>/updater.app/
                 if (_application == Application::getUpdaterApplication()
                     && filename.startsWith(IOConfig::UpdaterName + IOConfig::MacOsAppExtension + QDir::separator())) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in Updater: " + filename);
                     continue;
                 }
                 // and loader/loader.app/
                 if (_application == Application::getLoaderApplication()
                     && filename.startsWith(IOConfig::LoaderName + IOConfig::MacOsAppExtension + QDir::separator())) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in Loader: " + filename);
                     continue;
                 }
 
                 // and .DS_Store on macos
                 if (filename.toLower().endsWith(".ds_store")) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in " + _application.getName() + ": " + filename);
                     continue;
                 }
 #endif
@@ -735,15 +633,22 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
 #ifdef Q_OS_WIN
                 // and Thumbs.db on windows
                 if (filename.toLower().endsWith("thumbs.db")) {
-                    L_INFO("Ignoring file: " + filename);
+                    L_INFO("Ignoring file in " + _application.getName() + ": " + filename);
                     continue;
                 }
 #endif
 
             // and java/<java-version>/dist/
             if (_application == Application::getJavaApplication()
-                && filename.startsWith(IOConfig::JavaSubDirName + QDir::separator())) {
-                L_INFO("Ignoring file: " + filename);
+                && filename.startsWith(AppPathImpl::JavaSubDirName + QDir::separator())) {
+                L_INFO("Ignoring file in Java: " + filename);
+                continue;
+            }
+
+            // and application/natives/
+            if (_application == Application::getAppApplication()
+                && filename.startsWith(AppPathImpl::NativesDirName + QDir::separator())) {
+                L_INFO("Ignoring file in Application: " + filename);
                 continue;
             }
 
@@ -754,14 +659,38 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
     return fileList;
 }
 
-QMap<Application, QList<QString> > AppUpdater::getLocalFiles()
+QMultiMap<Application, QString> AppUpdater::getLocalFiles()
 {
-    QMap<Application, QList<QString> > fileList;
+    QMultiMap<Application, QString> fileList;
 
-    fileList.insert(Application::getLoaderApplication(), getLocalFiles(Application::getLoaderApplication()));
-    fileList.insert(Application::getUpdaterApplication(), getLocalFiles(Application::getUpdaterApplication()));
-    fileList.insert(Application::getAppApplication(), getLocalFiles(Application::getAppApplication()));
-    fileList.insert(Application::getJavaApplication(), getLocalFiles(Application::getJavaApplication()));
+    {
+        const Application loaderApplication = Application::getLoaderApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getLoaderApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(loaderApplication, iterator.next());
+        }
+    }
+    {
+        const Application updaterApplication = Application::getUpdaterApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getUpdaterApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(updaterApplication, iterator.next());
+        }
+    }
+    {
+        const Application javaApplication = Application::getJavaApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getJavaApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(javaApplication, iterator.next());
+        }
+    }
+    {
+        const Application appApplication = Application::getAppApplication();
+        QListIterator<QString> iterator(getLocalFiles(Application::getAppApplication()));
+        while (iterator.hasNext()) {
+            fileList.insert(appApplication, iterator.next());
+        }
+    }
 
     return fileList;
 }
@@ -777,27 +706,26 @@ void AppUpdater::processCnlpDownloadFileList()
     const QString hash_key = HashKey::readHashKey();
 
     // list of all local files (installed and in temporary directory)
-    const QMap<Application, QList<QString> > allLocalFiles = AppUpdater::getLocalFiles();
+    QMultiMap<Application, QString> allLocalFiles = AppUpdater::getLocalFiles();
 
     // iterate over files read from cnlp files
-    QMap<Application, QList<Download> >::const_iterator iterator = m_cnlpParsedFiles.constBegin();
-
-    while (iterator != m_cnlpParsedFiles.constEnd()) {
-        const Application application = iterator.key();
+    QSetIterator<Application> applicationIterator(QSet<Application>::fromList(m_cnlpParsedFiles.keys()));
+    while (applicationIterator.hasNext()) {
+        const Application & application = applicationIterator.next();
 
         L_INFO("Processing Application: " + application.getName());
 
-        // lists init
-        m_filesToDownload.insert(application, QList<QString>());
-        m_filesToKeep.insert(application, QList<QString>());
-
-        const QList<Download> parsedDownloads = iterator.value();
+        const QList<Download> & parsedDownloads = m_cnlpParsedFiles.values(application);
 
         // local files of the current application, installed only
-        QList<QString> localFilesOfCurrentApplication = allLocalFiles[application];
+        QList<QString> localFilesOfCurrentApplication = allLocalFiles.values(application);
 
-        foreach(Download parsedDownload, parsedDownloads) {
-            L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac());
+        // check files to keep or download
+        QListIterator<Download> parsedIterator(parsedDownloads);
+        while (parsedIterator.hasNext()) {
+            const Download & parsedDownload = parsedIterator.next();
+
+            L_INFO("Remote file: " + parsedDownload.getHref() + " has hash: " + parsedDownload.getHashMac().shortHashMac());
 
             if (localFilesOfCurrentApplication.contains(parsedDownload.getHref())) {
                 QString localFile = "";
@@ -806,58 +734,434 @@ void AppUpdater::processCnlpDownloadFileList()
                 } else if (application == Application::getLoaderApplication()) {
                     localFile = m_appPath.getLoaderDir().absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getUpdaterApplication()) {
-                    localFile = m_appPath.getUpdaterDir().absoluteFilePath(m_localUpdaterVersion + QDir::separator() + parsedDownload.getHref());
+                    localFile = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getJavaApplication()) {
-                    localFile = m_appPath.getJavaDir().absoluteFilePath(m_localJavaVersion + QDir::separator() + parsedDownload.getHref());
+                    localFile = m_appPath.getJavaVersionDir(m_localJavaVersion).absoluteFilePath(parsedDownload.getHref());
                 }
 
                 // must be true but we test anyway
                 if (QFile::exists(localFile)) {
-                    QString hashmac = HashMac512::hashFromFile(localFile, hash_key);
-                    L_INFO("Local file: " + localFile + " has hashmac: " + hashmac);
+                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                    L_INFO("Local file: " + localFile + " has hashmac: " + hashmac.shortHashMac());
 
                     if (hashmac == parsedDownload.getHashMac()) {
                         L_INFO("Local and remote files are identical. Add to keep list.");
                         // add file to download list because file is out of date
-                        m_filesToKeep[application].append(parsedDownload.getHref());
+                        m_filesToKeep.insert(application, parsedDownload.getHref());
                         // remove from the local list
                         localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                     } else {
                         L_INFO("Local and remote files differ. Add to download list.");
                         // add file to download list because file is out of date
-                        m_filesToDownload[application].append(parsedDownload.getHref());
+                        m_filesToDownload.insert(application, parsedDownload.getHref());
                         // remove from the local list
                         localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                     }
                 } else {
                     L_INFO("Local file does not exist. Add to download list.");
                     // add file to download list because it doesn't exist
-                    m_filesToDownload[application].append(parsedDownload.getHref());
+                    m_filesToDownload.insert(application, parsedDownload.getHref());
                     // remove from the local list
                     localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
                 }
             } else {
                 L_INFO("Local file does not exist. Add to download list.");
                 // add file to download list because it doesn't exist
-                m_filesToDownload[application].append(parsedDownload.getHref());
+                m_filesToDownload.insert(application, parsedDownload.getHref());
                 // remove from the local list
                 localFilesOfCurrentApplication.removeAll(parsedDownload.getHref());
             }
         }
 
         // remaining files, those who no longer need to be in the app
-        m_remainingFiles[application] = localFilesOfCurrentApplication;
-
-        ++iterator;
+        QListIterator<QString> iterator(localFilesOfCurrentApplication);
+        while (iterator.hasNext()) {
+            m_remainingFiles.insert(application, iterator.next());
+        }
     }
 }
 
 bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
 {
-    if (m_filesToDownload.contains(_application)) {
-        return !m_filesToDownload[_application].isEmpty()
-               || !m_remainingFiles[_application].isEmpty();
+    return !m_filesToDownload.values(_application).isEmpty()
+           || !m_remainingFiles.values(_application).isEmpty();
+}
+
+bool AppUpdater::checkDownloadsAreOk() const
+{
+    // reading hash key only once
+    const QString hash_key = HashKey::readHashKey();
+
+    bool downloadsOk = true;
+
+    // check downloaded hash mac
+    QMapIterator<Application, QString> iterator(m_filesToDownload);
+    while (iterator.hasNext()) {
+        iterator.next();
+        const Application & application = iterator.key();
+        const QString downloadedFile = iterator.value();
+
+        if (application == Application::getAppApplication()
+            || application == Application::getLoaderApplication()
+            || application == Application::getUpdaterApplication()
+            || application == Application::getJavaApplication()) {
+            QDir dir;
+
+            if (application == Application::getAppApplication()) {
+                dir = QDir(m_appPath.getTempAppDir());
+            } else if (application == Application::getLoaderApplication()) {
+                dir = QDir(m_appPath.getTempLoaderDir());
+            } else if (application == Application::getUpdaterApplication()) {
+                dir = QDir(m_appPath.getTempUpdaterDir());
+            } else if (application == Application::getJavaApplication()) {
+                dir = QDir(m_appPath.getTempJavaDir());
+            }
+
+            // temporary location of downloaded file
+            QString localFile = dir.absoluteFilePath(downloadedFile);
+
+            if (QFile::exists(localFile)) {
+                // if this local temporary file exists
+                // checking its hashmac
+                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+
+                // we find the download corresponding to the downloadedFile to get its expected hashmac
+                bool found = false;
+                QListIterator<Download> parsedIterator(m_cnlpParsedFiles.values(application));
+                while (parsedIterator.hasNext()) {
+                    const Download & download = parsedIterator.next();
+                    if (download.getHref() == downloadedFile) {
+                        found = true;
+                        if (hashmac != download.getHashMac()) {
+                            L_WARN("Bad hashmac, expected: " + download.getHashMac().shortHashMac() + ", found: " + hashmac.shortHashMac() + " for file: " + localFile);
+                            downloadsOk = false;
+                        }
+                        break;
+                    }
+                }
+                if (!found) {
+                    // we print a warning if downloaded file was not found in the parsed downloads list
+                    // we just log it, in case this happens, but this mustn't
+                    L_WARN("Downloaded file not found in the parsed downloads list: " + downloadedFile);
+                }
+            } else {
+                // if this file does not exist, we get an error
+                L_ERROR("Downloaded file does not exist " + localFile);
+                downloadsOk = false;
+            }
+        }
     }
 
-    return false;
+    return downloadsOk;
+}
+
+bool AppUpdater::installLoader()
+{
+    // called only if loader needs to be rebuild, so we now install it.
+    bool loaderInstalledOk = true;
+
+    L_INFO("Installing " + Application::getLoaderApplication().getName());
+
+    const QString loaderInstallDir = m_appPath.getLoaderDir().absolutePath();
+    const QString loaderOldDir = m_appPath.getLoaderOldDir().absolutePath();
+    const QString loaderBuildDir = m_appPath.getTempLoaderBuildDir().absolutePath();
+
+    // remove an old loader directory if it already exists
+    if (FileUtils::directoryExists(loaderOldDir)) {
+        L_INFO("Existing old loader directory needs to be removed: " + loaderOldDir);
+
+        if (FileUtils::removeDirRecursively(loaderOldDir)) {
+            L_INFO("Removed " + loaderOldDir);
+        } else {
+            L_ERROR("Unable to remove " + loaderOldDir);
+            loaderInstalledOk = false;
+        }
+    }
+
+    if (loaderInstalledOk) {
+        // we continue only if the old existing directory has been deleted
+
+        // firstly, we rename the old app directory.
+        if (QDir().rename(loaderInstallDir, loaderOldDir)) {
+            L_INFO("Renamed " + loaderInstallDir + " to " + loaderOldDir);
+            if (QDir().rename(loaderBuildDir, loaderInstallDir)) {
+                L_INFO("Renamed " + loaderBuildDir + " to " + loaderInstallDir);
+                if (FileUtils::removeDirRecursively(loaderOldDir)) {
+                    L_INFO("Removed " + loaderOldDir);
+                } else {
+                    L_WARN("Unable to remove " + loaderOldDir);
+                    // not an error
+                }
+            } else {
+                L_ERROR("Unable to rename " + loaderBuildDir + " to " + loaderInstallDir);
+                loaderInstalledOk = false;
+            }
+        } else {
+            L_ERROR("Unable to rename " + loaderInstallDir + " to " + loaderOldDir);
+            loaderInstalledOk = false;
+        }
+        // extract app from dmg (macos).
+        if (m_appPath.prepareLoader()) {
+            L_INFO("Loader prepared.");
+        } else {
+            L_ERROR("Unable to prepare Loader.");
+            loaderInstalledOk = false;
+        }
+    }
+
+    return loaderInstalledOk;
+}
+
+bool AppUpdater::installUpdater()
+{
+    // called only if updated needs to be rebuild, so we now install it.
+    bool updaterInstalledOk = true;
+
+    // we can not overwrite ourselves
+    if (m_localUpdaterVersion != m_remoteUpdaterVersion) {
+        L_INFO("Installing " + Application::getUpdaterApplication().getName());
+
+        const QString updaterInstallDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absolutePath();
+        const QString updaterBuildDir = m_appPath.getTempUpdaterBuildDir().absolutePath();
+
+        if (FileUtils::directoryExists(updaterInstallDir)) {
+            // it should not exist with the previous condition, but in case it exists
+            // (it is not used because local and remote versions differ), we need to remove it
+            if (FileUtils::removeDirRecursively(updaterInstallDir)) {
+                L_INFO("Removed " + updaterInstallDir);
+            } else {
+                L_ERROR("Unable to remove " + updaterInstallDir);
+                updaterInstalledOk = false;
+            }
+        }
+
+        if (updaterInstalledOk) {
+            // we continue only if there is no error
+
+            // local and remote versions differ
+            if (QDir().rename(updaterBuildDir, updaterInstallDir)) {
+                L_INFO("Renamed " + updaterBuildDir + " to " + updaterInstallDir);
+                // nothing to remove. deletion will be done at next launch.
+                // extract app from dmg (macos).
+                if (m_appPath.prepareUpdater(m_remoteUpdaterVersion)) {
+                    L_INFO("Updater " + m_remoteUpdaterVersion + " prepared.");
+                    // write new updater version number
+                    Settings * settings = Settings::getInstance();
+                    settings->setUpdaterVersion(m_remoteUpdaterVersion);
+                    if (settings->writeSettings()) {
+                        L_INFO("Written version " + m_remoteUpdaterVersion + " to settings.");
+                    } else {
+                        L_ERROR("Unable to write version " + m_remoteUpdaterVersion + " to settings.");
+                        updaterInstalledOk = false;
+                    }
+                } else {
+                    L_ERROR("Unable to prepare Updater " + m_remoteUpdaterVersion + ".");
+                    updaterInstalledOk = false;
+                }
+            } else {
+                L_ERROR("Unable to rename " + updaterBuildDir + " to " + updaterInstallDir);
+                updaterInstalledOk = false;
+            }
+        }
+    } else {
+        L_WARN("Remote and local updaters differ but have same version number, no possible update.");
+    }
+
+    return updaterInstalledOk;
+}
+
+bool AppUpdater::installJava()
+{
+    // called only if java needs to be rebuild, so we now install it.
+    bool javaInstalledOk = true;
+
+    // we can overwrite java because it must not be used by us.
+    L_INFO("Installing " + Application::getJavaApplication().getName());
+
+    const QString javaInstallDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
+    const QString javaBuildDir = m_appPath.getTempJavaBuildDir().absolutePath();
+
+    if (FileUtils::directoryExists(javaInstallDir)) {
+        // remove existing java dir if it exists
+        if (FileUtils::removeDirRecursively(javaInstallDir)) {
+            L_INFO("Removed " + javaInstallDir);
+        } else {
+            L_ERROR("Unable to remove " + javaInstallDir);
+            javaInstalledOk = false;
+        }
+    }
+
+    if (javaInstalledOk) {
+        // we continue only if there is no error
+
+        // local and remote versions differ
+        if (QDir().rename(javaBuildDir, javaInstallDir)) {
+            L_INFO("Renamed " + javaBuildDir + " to " + javaInstallDir);
+            // nothing to remove. deletion will be done at next launch.
+            // extract zip.
+            if (m_appPath.prepareJava(m_remoteJavaVersion, true)) {
+                L_INFO("Java " + m_remoteJavaVersion + " force prepared.");
+                // write new java version number
+                Settings * settings = Settings::getInstance();
+                settings->setJavaVersion(m_remoteJavaVersion);
+                if (settings->writeSettings()) {
+                    L_INFO("Written version " + m_remoteJavaVersion + " to settings.");
+                } else {
+                    L_ERROR("Unable to write version " + m_remoteJavaVersion + " to settings.");
+                    javaInstalledOk = false;
+                }
+            } else {
+                L_ERROR("Unable to force prepare Java " + m_remoteJavaVersion + ".");
+                javaInstalledOk = false;
+            }
+        } else {
+            L_ERROR("Unable to rename " + javaBuildDir + " to " + javaInstallDir);
+            javaInstalledOk = false;
+        }
+    }
+
+    return javaInstalledOk;
+}
+
+bool AppUpdater::installApp()
+{
+    // called only if app needs to be rebuild, so we now install it.
+    bool appInstalledOk = true;
+
+    L_INFO("Installing " + Application::getAppApplication().getName());
+
+    const QString appInstallDir = m_appPath.getAppDir().absolutePath();
+    const QString appOldDir = m_appPath.getAppOldDir().absolutePath();
+    const QString appBuildDir = m_appPath.getTempAppBuildDir().absolutePath();
+
+    // remove an old app directory if it already exists
+    if (FileUtils::directoryExists(appOldDir)) {
+        L_INFO("Existing old application directory needs to be removed: " + appOldDir);
+
+        if (FileUtils::removeDirRecursively(appOldDir)) {
+            L_INFO("Removed " + appOldDir);
+        } else {
+            L_ERROR("Unable to remove " + appOldDir);
+            appInstalledOk = false;
+        }
+    }
+
+    if (appInstalledOk) {
+        // we continue only if the old existing directory has been deleted
+
+        // firstly, we rename the old app directory.
+        if (QDir().rename(appInstallDir, appOldDir)) {
+            L_INFO("Renamed " + appInstallDir + " to " + appOldDir);
+            if (QDir().rename(appBuildDir, appInstallDir)) {
+                L_INFO("Renamed " + appBuildDir + " to " + appInstallDir);
+                if (FileUtils::removeDirRecursively(appOldDir)) {
+                    L_INFO("Removed " + appOldDir);
+                } else {
+                    L_WARN("Unable to remove " + appOldDir);
+                    // not an error
+                }
+            } else {
+                L_ERROR("Unable to rename " + appBuildDir + " to " + appInstallDir);
+                appInstalledOk = false;
+            }
+        } else {
+            L_ERROR("Unable to rename " + appInstallDir + " to " + appOldDir);
+            appInstalledOk = false;
+        }
+    }
+
+    return appInstalledOk;
+}
+
+bool AppUpdater::installCnlpFile(const QString &_file)
+{
+    const QString cnlpInstallFile = m_appPath.getCnlpDir().absoluteFilePath(_file);
+    const QString cnlpBuildFile = m_appPath.getTempCnlpDir().absoluteFilePath(_file);
+
+    bool cnlpInstalledOk = true;
+
+    if (QFile::exists(cnlpInstallFile)) {
+        L_INFO(cnlpInstallFile + " already exists. Removing.");
+        if (QFile::remove(cnlpInstallFile)) {
+            L_INFO(cnlpInstallFile + " removed.");
+        } else {
+            L_ERROR("Unable to remove " + cnlpInstallFile);
+            cnlpInstalledOk = false;
+        }
+    }
+
+    if (cnlpInstalledOk) {
+        if (QFile::copy(cnlpBuildFile, cnlpInstallFile)) {
+            L_INFO("Copy " + cnlpBuildFile + " to " + cnlpInstallFile);
+        } else {
+            L_ERROR("Unable to copy " + cnlpBuildFile + " to " + cnlpInstallFile);
+            cnlpInstalledOk = false;
+        }
+    }
+
+    return cnlpInstalledOk;
+}
+
+QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QMultiMap<Application, QString> _fullDownloadMap,
+                                                                        const QMultiMap<Application, Download> _cnlpParsedFiles)
+{
+    // copy list
+    QMultiMap<Application, QString> outMap = _fullDownloadMap;
+
+    // reading hash key only once
+    const QString hash_key = HashKey::readHashKey();
+
+    // check downloaded hash mac
+    QMutableMapIterator<Application, QString> iterator(outMap);
+    while (iterator.hasNext()) {
+        iterator.next();
+        const Application & application = iterator.key();
+        const QString downloadedFile = iterator.value();
+
+        if (application == Application::getAppApplication()
+            || application == Application::getLoaderApplication()
+            || application == Application::getUpdaterApplication()
+            || application == Application::getJavaApplication()) {
+            QDir dir;
+
+            const AppPath appPath = Utils::getAppPath();
+
+            if (application == Application::getAppApplication()) {
+                dir = QDir(appPath.getTempAppDir());
+            } else if (application == Application::getLoaderApplication()) {
+                dir = QDir(appPath.getTempLoaderDir());
+            } else if (application == Application::getUpdaterApplication()) {
+                dir = QDir(appPath.getTempUpdaterDir());
+            } else if (application == Application::getJavaApplication()) {
+                dir = QDir(appPath.getTempJavaDir());
+            }
+
+            // temporary location of downloaded file
+            const QString localFile = dir.absoluteFilePath(downloadedFile);
+
+            if (QFile::exists(localFile)) {
+                // if this local temporary file exists
+                // checking its hashmac
+                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+
+                // we find the download corresponding to the downloadedFile to get its expected hashmac
+                bool found = false;
+                QListIterator<Download> parsedIterator(_cnlpParsedFiles.values(application));
+                while (parsedIterator.hasNext()) {
+                    const Download & download = parsedIterator.next();
+                    if (download.getHref() == downloadedFile) {
+                        found = true;
+                        if (hashmac == download.getHashMac()) {
+                            L_INFO("File for application: " + application.getName() + " already downloaded: " + download.getHref());
+                            // remove this from temp list
+                            iterator.remove();
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return outMap;
 }

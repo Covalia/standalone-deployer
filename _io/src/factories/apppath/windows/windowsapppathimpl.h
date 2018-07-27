@@ -12,8 +12,13 @@ class WindowsAppPathImpl : public AppPathImpl {
         virtual QSharedPointer<QFile> getLoaderFile();
         virtual QSharedPointer<QFile> getUpdaterFile(QString _updaterVersion);
 
+        virtual bool startLoader(QStringList _args);
+        virtual bool startUpdater(QString _version, QStringList _args);
+
+        virtual QString getClasspathSeparator() const;
+
     protected:
-        virtual bool startApplication(QSharedPointer<QFile> _app, QStringList _args);
+        virtual QString getJavaExecutablePath(const QString &_javaVersion) const;
 };
 
 #endif

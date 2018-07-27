@@ -145,7 +145,7 @@ void WindowUI::comboBoxLanguageEvent(int _index)
 void WindowUI::updateUi(){
     m_ui->retranslateUi(this);
     ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getApp_name()));
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getAppName()));
 }
 
 void WindowUI::changeLanguage()

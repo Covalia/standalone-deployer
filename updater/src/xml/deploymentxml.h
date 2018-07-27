@@ -4,7 +4,6 @@
 #include <QString>
 #include <QXmlStreamReader>
 #include <QList>
-#include <QMap>
 #include <QFile>
 #include <QDebug>
 #include "xml/data/download.h"
@@ -41,8 +40,13 @@ class DeploymentXML : public QObject
         QString getVersion() const;
         QList<QString> getArguments() const;
         Application getApplication() const;
-        QList<Download> getDownloads(const QString &_os) const;
+        QList<Download> getDownloads() const;
         QString getMemory() const;
+        QString getEncoding() const;
+        QString getMainClass() const;
+        QString getRunnerClass() const;
+
+        static QString getCurrentOsValue();
 
         static const QString RDeploymentTag;
         static const QString DownloadsTag;
@@ -65,13 +69,14 @@ class DeploymentXML : public QObject
         static const QString VersionAttribute;
         static const QString NameAttribute;
 
-        static const QString UpdaterExtensionClasspathAttribute;
-
         static const QString ArgumentsTag;
         static const QString ArgumentTag;
 
         static const QString MemoryTag;
         static const QString VersionTag;
+        static const QString EncodingTag;
+        static const QString MainClassTag;
+        static const QString RunnerClassTag;
 
     private:
 
@@ -79,6 +84,9 @@ class DeploymentXML : public QObject
         QXmlStreamReader m_xmlReader;
         QString m_memory;
         QString m_version;
+        QString m_encoding;
+        QString m_mainClass;
+        QString m_runnerClass;
         QList<QString> m_arguments;
 
         Application m_application;
@@ -101,6 +109,24 @@ class DeploymentXML : public QObject
          * @return true if success analysis
          */
         bool processMemory();
+
+        /**
+         * @brief read encoding tag in xml
+         * @return true if success analysis
+         */
+        bool processEncoding();
+
+        /**
+         * @brief read mainClass tag in xml
+         * @return true if success analysis
+         */
+        bool processMainClass();
+
+        /**
+         * @brief read runnerClass tag in xml
+         * @return true if success analysis
+         */
+        bool processRunnerClass();
 
         /**
          * @brief read all arguments tags

@@ -16,29 +16,37 @@ bool FileUtils::copyDirRecursively(const QString &_fromDir, const QString &_toDi
         return false;
     }
 
-    foreach(QString copy_file, dir.entryList(QDir::Files | QDir::Hidden)) {
-        const QString from = _fromDir + QDir::separator() + copy_file;
-        const QString to = _toDir + QDir::separator() + copy_file;
+    {
+        QStringListIterator iterator(dir.entryList(QDir::Files | QDir::Hidden));
+        while(iterator.hasNext()) {
+            const QString copy_file = iterator.next();
+            const QString from = _fromDir + QDir::separator() + copy_file;
+            const QString to = _toDir + QDir::separator() + copy_file;
 
-        if (QFile::exists(to)) {
-            L_INFO("remove file: " + to);
-            if (!QFile::remove(to)) {
+            if (QFile::exists(to)) {
+                L_INFO("remove file: " + to);
+                if (!QFile::remove(to)) {
+                    return false;
+                }
+            }
+
+            L_INFO("copy file: " + from + " to: " + to);
+            if (!QFile::copy(from, to)) {
                 return false;
             }
         }
-
-        L_INFO("copy file: " + from + " to: " + to);
-        if (!QFile::copy(from, to)) {
-            return false;
-        }
     }
 
-    foreach(QString copy_dir, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden)) {
-        const QString from = _fromDir + QDir::separator() + copy_dir;
-        const QString to = _toDir + QDir::separator() + copy_dir;
+    {
+        QStringListIterator iterator(dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden));
+        while (iterator.hasNext()) {
+            const QString copy_dir = iterator.next();
+            const QString from = _fromDir + QDir::separator() + copy_dir;
+            const QString to = _toDir + QDir::separator() + copy_dir;
 
-        if (!copyDirRecursively(from, to)) {
-            return false;
+            if (!copyDirRecursively(from, to)) {
+                return false;
+            }
         }
     }
 

@@ -6,13 +6,79 @@
 #include <QMutexLocker>
 #include <QSettings>
 
+const QString Settings::GroupInfo("INFO");
+const QString Settings::GroupProxy("PROXY");
+const QString Settings::GroupLang("LANG");
+const QString Settings::GroupShortcut("SHORTCUT");
+const QString Settings::GroupData("DATA");
+const QString Settings::GroupServer("SERVER");
+const QString Settings::GroupStart("START");
+const QString Settings::GroupTheme("THEME");
+
+const QString Settings::AppName("app_name");
+const QString Settings::UpdaterVersion("updater_version");
+const QString Settings::JavaVersion("java_version");
+
+const QString Settings::ProxyUse("proxy_use");
+const QString Settings::ProxyAuto("proxy_auto");
+const QString Settings::ProxyManual("proxy_manual");
+const QString Settings::ProxyHostname("proxy_hostname");
+const QString Settings::ProxyPort("proxy_port");
+const QString Settings::ProxyAuthentication("proxy_authentication");
+const QString Settings::ProxyLogin("proxy_login");
+const QString Settings::ProxyPassword("proxy_password");
+
+const QString Settings::Lang("lang");
+
+const QString Settings::ShortcutOnline("shortcut_online");
+const QString Settings::ShortcutOffline("shortcut_offline");
+const QString Settings::ShortcutName("shortcut_name");
+const QString Settings::ShortcutOfflineName("shortcut_offline_name");
+const QString Settings::ShortcutOfflineArgs("shortcut_offline_args");
+const QString Settings::ShortcutForAllUsers("shortcut_for_all_users");
+
+const QString Settings::InstallLocation("install_location");
+const QString Settings::DataLocation("data_location");
+
+const QString Settings::DeploymentUrl("deployment_url");
+
+const QString Settings::RunAtStart("run_at_start");
+
+const QString Settings::InsetColor("inset_color");
+const QString Settings::PanelBackgroundColor("panel_background_color");
+const QString Settings::ButtonHoverBackgroundColor("button_hover_background_color");
+const QString Settings::ButtonBackgroundColor("button_background_color");
+const QString Settings::ColorTextOnBackground("default_text_color");
+const QString Settings::GrayTextColor("gray_text_color");
+const QString Settings::DisabledColor("disabled_color");
+const QString Settings::WindowBorderWidth("window_border_width");
+
 Settings * Settings::sm_instance = 0;
 QMutex Settings::sm_instanceMutex;
 QMutex Settings::sm_settingsMutex;
 
 Settings::Settings() :
     m_settings(0),
-    m_applicationName("Application"),
+    m_deploymentUrl(""),
+    m_appName("Application"),
+    m_lang(LanguageManager::getLocaleFromLanguage(Language::English)),
+    m_shortcutOnline(false),
+    m_shortcutOffline(false),
+    m_shortcutName("Application"),
+    m_shortcutOfflineName("Application offline"),
+    m_shortcutOfflineArgs("--offline=true"),
+    m_runAtStart(false),
+    m_insetColor("#364058"),
+    m_panelBackgroundColor("#2d364c"),
+    m_buttonHoverBackgroundColor("#2a7d7d"),
+    m_buttonBackgroundColor("#339999"),
+    m_defaultTextColor("#eff0f2"),
+    m_grayTextColor("#9ea0a5"),
+    m_disabledColor("#656976"),
+    m_windowBorderWidth("0"),
+    m_shortcutForAllUsers(false),
+    m_dataLocation(""),
+    m_installLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
     m_proxyUse(false),
@@ -22,27 +88,7 @@ Settings::Settings() :
     m_proxyPort(-1),
     m_proxyAuthentification(false),
     m_proxyLogin(""),
-    m_proxyPassword(""),
-    m_language(Language::English),
-    m_shortcutOnline(false),
-    m_shortcutOffline(false),
-    m_shortcutName("Application"),
-    m_shortcutOfflineName("Application offline"),
-    m_shortcutOfflineArgs("--offline=true"),
-    m_shortcutAllUser(false),
-    m_classpathExtension(""),
-    m_dataLocation(""),
-    m_installLocation(""),
-    m_serverURL(""),
-    m_runAtStart(false),
-    m_colorPanelBackgroundBorder("#364058"),
-    m_colorPanelBackground("#2d364c"),
-    m_colorButtonBackgroundOver("#2a7d7d"),
-    m_colorButtonBackground("#339999"),
-    m_colorTextOnBackground("#eff0f2"),
-    m_colorTextGray("#9ea0a5"),
-    m_colorDisabled("#656976"),
-    m_borderWindow("0")
+    m_proxyPassword("")
 
 {
     L_INFO("Initialise Setting singleton instance");
@@ -115,62 +161,58 @@ bool Settings::writeSettings()
     L_INFO("Starting to write all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GROUP_INFO);
-    putSetting(S_APPLICATION_NAME, m_applicationName);
-    putSetting(S_UPDATER_VERSION, m_updaterVersion);
-    putSetting(S_JAVA_VERSION, m_javaVersion);
+    m_settings->beginGroup(GroupInfo);
+    putSetting(AppName, m_appName);
+    putSetting(UpdaterVersion, m_updaterVersion);
+    putSetting(JavaVersion, m_javaVersion);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_PROXY);
-    putSetting(S_PROXY_USE, m_proxyUse);
-    putSetting(S_PROXY_AUTO, m_proxyAuto);
-    putSetting(S_PROXY_MANUAL, m_proxyManual);
-    putSetting(S_PROXY_HOSTNAME, m_proxyHostname);
-    putSetting(S_PROXY_PORT, m_proxyPort);
-    putSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification);
-    putSetting(S_PROXY_LOGIN, m_proxyLogin);
-    putSetting(S_PROXY_PASSWORD, m_proxyPassword);
+    m_settings->beginGroup(GroupProxy);
+    putSetting(ProxyUse, m_proxyUse);
+    putSetting(ProxyAuto, m_proxyAuto);
+    putSetting(ProxyManual, m_proxyManual);
+    putSetting(ProxyHostname, m_proxyHostname);
+    putSetting(ProxyPort, m_proxyPort);
+    putSetting(ProxyAuthentication, m_proxyAuthentification);
+    putSetting(ProxyLogin, m_proxyLogin);
+    putSetting(ProxyPassword, m_proxyPassword);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_LANGUAGE);
-    putSetting(S_LANGUAGE_LANGUAGE, m_language);
+    m_settings->beginGroup(GroupLang);
+    putSetting(Lang, m_lang);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_SHORTCUT);
-    putSetting(S_SHORTCUT_OFFLINE, m_shortcutOffline);
-    putSetting(S_SHORTCUT_ONLINE, m_shortcutOnline);
-    putSetting(S_SHORTCUT_NAME, m_shortcutName);
-    putSetting(S_SHORTCUT_OFFLINE_NAME, m_shortcutOfflineName);
-    putSetting(S_SHORTCUT_OFFLINE_ARGS, m_shortcutOfflineArgs);
-    putSetting(S_SHORTCUT_ALL_USER, m_shortcutAllUser);
+    m_settings->beginGroup(GroupShortcut);
+    putSetting(ShortcutOffline, m_shortcutOffline);
+    putSetting(ShortcutOnline, m_shortcutOnline);
+    putSetting(ShortcutName, m_shortcutName);
+    putSetting(ShortcutOfflineName, m_shortcutOfflineName);
+    putSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs);
+    putSetting(ShortcutForAllUsers, m_shortcutForAllUsers);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_CLASSPATH);
-    putSetting(S_CLASSPATH_EXTENSION, m_classpathExtension);
+    m_settings->beginGroup(GroupData);
+    putSetting(DataLocation, m_dataLocation);
+    putSetting(InstallLocation, m_installLocation);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_DATA);
-    putSetting(S_DATA_LOCATION, m_dataLocation);
-    putSetting(S_INSTALL_LOCATION, m_installLocation);
+    m_settings->beginGroup(GroupServer);
+    putSetting(DeploymentUrl, m_deploymentUrl);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_SERVER);
-    putSetting(S_SERVER_URL, m_serverURL);
+    m_settings->beginGroup(GroupStart);
+    putSetting(RunAtStart, m_runAtStart);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_START);
-    putSetting(S_RUN_AT_START, m_runAtStart);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GROUP_THEME);
-    putSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_colorPanelBackgroundBorder);
-    putSetting(S_COLOR_PANEL_BACKGROUND, m_colorPanelBackground);
-    putSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_colorButtonBackgroundOver);
-    putSetting(S_COLOR_BUTTON_BACKGROUND, m_colorButtonBackground);
-    putSetting(S_COLOR_TEXT_ON_BACKGROUND, m_colorTextOnBackground);
-    putSetting(S_COLOR_TEXT_GRAY, m_colorTextGray);
-    putSetting(S_COLOR_DISABLED, m_colorDisabled);
-    putSetting(S_BORDER_WINDOW, m_borderWindow);
+    m_settings->beginGroup(GroupTheme);
+    putSetting(InsetColor, m_insetColor);
+    putSetting(PanelBackgroundColor, m_panelBackgroundColor);
+    putSetting(ButtonHoverBackgroundColor, m_buttonHoverBackgroundColor);
+    putSetting(ButtonBackgroundColor, m_buttonBackgroundColor);
+    putSetting(ColorTextOnBackground, m_defaultTextColor);
+    putSetting(GrayTextColor, m_grayTextColor);
+    putSetting(DisabledColor, m_disabledColor);
+    putSetting(WindowBorderWidth, m_windowBorderWidth);
     m_settings->endGroup();
 
     L_INFO("End to write all settings");
@@ -185,64 +227,59 @@ void Settings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GROUP_INFO);
-    m_applicationName = getSetting(S_APPLICATION_NAME, m_applicationName).toString();
-    m_updaterVersion = getSetting(S_UPDATER_VERSION, m_updaterVersion).toString();
-    m_javaVersion = getSetting(S_JAVA_VERSION, m_javaVersion).toString();
+    m_settings->beginGroup(GroupInfo);
+    m_appName = getSetting(AppName, m_appName).toString();
+    m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
+    m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_PROXY);
-    m_proxyUse = getSetting(S_PROXY_USE, m_proxyUse).toBool();
-    m_proxyAuto = getSetting(S_PROXY_AUTO, m_proxyAuto).toBool();
-    m_proxyManual = getSetting(S_PROXY_MANUAL, m_proxyManual).toBool();
-    m_proxyHostname = getSetting(S_PROXY_HOSTNAME, "").toString();
-    m_proxyPort = getSetting(S_PROXY_PORT, 0).toInt();
-    m_proxyAuthentification = getSetting(S_PROXY_AUTHENTICATION, m_proxyAuthentification).toBool();
-    m_proxyLogin = getSetting(S_PROXY_LOGIN, "").toString();
-    m_proxyPassword = getSetting(S_PROXY_PASSWORD, "").toString();
+    m_settings->beginGroup(GroupProxy);
+    m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
+    m_proxyAuto = getSetting(ProxyAuto, m_proxyAuto).toBool();
+    m_proxyManual = getSetting(ProxyManual, m_proxyManual).toBool();
+    m_proxyHostname = getSetting(ProxyHostname, "").toString();
+    m_proxyPort = getSetting(ProxyPort, 0).toInt();
+    m_proxyAuthentification = getSetting(ProxyAuthentication, m_proxyAuthentification).toBool();
+    m_proxyLogin = getSetting(ProxyLogin, "").toString();
+    m_proxyPassword = getSetting(ProxyPassword, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_LANGUAGE);
-    m_language = Language(getSetting(S_LANGUAGE_LANGUAGE, 0).toInt());
+    m_settings->beginGroup(GroupLang);
+    m_lang = getSetting(Lang, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_SHORTCUT);
-    m_shortcutOffline = getSetting(S_SHORTCUT_OFFLINE, m_shortcutOffline).toBool();
-    m_shortcutOnline = getSetting(S_SHORTCUT_ONLINE, m_shortcutOnline).toBool();
-    m_shortcutName = getSetting(S_SHORTCUT_NAME, m_shortcutName).toString();
-    m_shortcutOfflineName = getSetting(S_SHORTCUT_OFFLINE_NAME, m_shortcutOfflineName).toString();
-    m_shortcutOfflineArgs = getSetting(S_SHORTCUT_OFFLINE_ARGS, m_shortcutOfflineArgs).toString();
-    m_shortcutAllUser = getSetting(S_SHORTCUT_ALL_USER, m_shortcutAllUser).toBool();
+    m_settings->beginGroup(GroupShortcut);
+    m_shortcutOffline = getSetting(ShortcutOffline, m_shortcutOffline).toBool();
+    m_shortcutOnline = getSetting(ShortcutOnline, m_shortcutOnline).toBool();
+    m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
+    m_shortcutOfflineName = getSetting(ShortcutOfflineName, m_shortcutOfflineName).toString();
+    m_shortcutOfflineArgs = getSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
+    m_shortcutForAllUsers = getSetting(ShortcutForAllUsers, m_shortcutForAllUsers).toBool();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_CLASSPATH);
-    m_classpathExtension = getSetting(S_CLASSPATH_EXTENSION, "").toString();
+    m_settings->beginGroup(GroupData);
+    m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
+    m_installLocation = getSetting(InstallLocation, m_installLocation).toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_DATA);
-    m_dataLocation = getSetting(S_DATA_LOCATION, m_dataLocation).toString();
-    m_installLocation = getSetting(S_INSTALL_LOCATION, m_installLocation).toString();
+    m_settings->beginGroup(GroupServer);
+    m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_SERVER);
-    m_serverURL = getSetting(S_SERVER_URL, "").toString();
+    m_settings->beginGroup(GroupStart);
+    m_runAtStart = getSetting(RunAtStart, m_runAtStart).toBool();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GROUP_START);
-    m_runAtStart = getSetting(S_RUN_AT_START, m_runAtStart).toBool();
+    m_settings->beginGroup(GroupTheme);
+    m_insetColor = getSetting(InsetColor, m_dataLocation).toString();
+    m_panelBackgroundColor = getSetting(PanelBackgroundColor, m_dataLocation).toString();
+    m_buttonHoverBackgroundColor = getSetting(ButtonHoverBackgroundColor, m_dataLocation).toString();
+    m_buttonBackgroundColor = getSetting(ButtonBackgroundColor, m_dataLocation).toString();
+    m_defaultTextColor = getSetting(ColorTextOnBackground, m_dataLocation).toString();
+    m_grayTextColor = getSetting(GrayTextColor, m_dataLocation).toString();
+    m_disabledColor = getSetting(DisabledColor, m_dataLocation).toString();
+    m_windowBorderWidth = getSetting(WindowBorderWidth, m_dataLocation).toString();
     m_settings->endGroup();
-
-    m_settings->beginGroup(GROUP_THEME);
-    m_colorPanelBackgroundBorder= getSetting(S_COLOR_PANEL_BACKGROUND_BORDER, m_dataLocation).toString();
-    m_colorPanelBackground= getSetting(S_COLOR_PANEL_BACKGROUND, m_dataLocation).toString();
-    m_colorButtonBackgroundOver= getSetting(S_COLOR_BUTTON_BACKGROUND_OVER, m_dataLocation).toString();
-    m_colorButtonBackground= getSetting(S_COLOR_BUTTON_BACKGROUND, m_dataLocation).toString();
-    m_colorTextOnBackground= getSetting(S_COLOR_TEXT_ON_BACKGROUND, m_dataLocation).toString();
-    m_colorTextGray= getSetting(S_COLOR_TEXT_GRAY, m_dataLocation).toString();
-    m_colorDisabled= getSetting(S_COLOR_DISABLED, m_dataLocation).toString();
-    m_borderWindow= getSetting(S_BORDER_WINDOW, m_dataLocation).toString();
-    m_settings->endGroup();
-
 
     L_INFO("End to read all settings");
 }
@@ -251,111 +288,110 @@ QString Settings::paramListString()
 {
     QString s;
 
-    s = s + "applicationName = " + m_applicationName + "\n";
-    s = s + "updaterVersion = " + m_updaterVersion + "\n";
-    s = s + "javaVersion = " + m_javaVersion + "\n";
-    s = s + "proxyUse = " + QString::number(m_proxyUse) + "\n";
-    s = s + "proxyAuto = " + QString::number(m_proxyAuto) + "\n";
-    s = s + "proxyManual = " + QString::number(m_proxyManual)  + "\n";
-    s = s + "proxyHostname = " + m_proxyHostname + "\n";
-    s = s + "proxyPort = " + QString::number(m_proxyPort) + "\n";
-    s = s + "proxyAuthentification = " + QString::number(m_proxyAuthentification) + "\n";
-    s = s + "proxyLogin = " + m_proxyLogin + "\n";
-    s = s + "proxyPassword(encrypt) = " + m_proxyPassword + "\n";
-    s = s + "language = " + LanguageManager::getStringLanguageFromEnum(m_language) + "\n";
-    s = s + "shortcutOffline = " + QString::number(m_shortcutOffline) + "\n";
-    s = s + "shortcutOnline = " + QString::number(m_shortcutOnline) + "\n";
-    s = s + "shortcutName = " + m_shortcutName + "\n";
-    s = s + "shortcutOffineName = " + m_shortcutOfflineName + "\n";
-    s = s + "shortcutOfflineArgs = " + m_shortcutOfflineArgs + "\n";
-    s = s + "shortcutAllUser = " + QString::number(m_shortcutAllUser) + "\n";
-    s = s + "classpathExtension = " + m_classpathExtension + "\n";
-    s = s + "dataLocation = " + m_dataLocation + "\n";
-    s = s + "installLocation = " + m_installLocation + "\n";
-    s = s + "serverURL = " + m_serverURL + "\n";
-    s = s + "runAtStart = " + QString::number(m_runAtStart) + "\n";
+    s = s + "app_name = " + m_appName + "\n";
+    s = s + "updater_version = " + m_updaterVersion + "\n";
+    s = s + "java_version = " + m_javaVersion + "\n";
+    s = s + "proxy_use = " + QString::number(m_proxyUse) + "\n";
+    s = s + "proxy_auto = " + QString::number(m_proxyAuto) + "\n";
+    s = s + "proxy_manual = " + QString::number(m_proxyManual)  + "\n";
+    s = s + "proxy_hostname = " + m_proxyHostname + "\n";
+    s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
+    s = s + "proxy_authentification = " + QString::number(m_proxyAuthentification) + "\n";
+    s = s + "proxy_login = " + m_proxyLogin + "\n";
+    s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
+    s = s + "lang = " + m_lang + "\n";
+    s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
+    s = s + "shortcut_online = " + QString::number(m_shortcutOnline) + "\n";
+    s = s + "shortcut_name = " + m_shortcutName + "\n";
+    s = s + "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
+    s = s + "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
+    s = s + "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
+    s = s + "data_location = " + m_dataLocation + "\n";
+    s = s + "install_location = " + m_installLocation + "\n";
+    s = s + "deployment_url = " + m_deploymentUrl + "\n";
+    s = s + "run_at_start = " + QString::number(m_runAtStart) + "\n";
 
     return s;
 }
 
-QString Settings::getBorderWindow() const
+QString Settings::getWindowBorderWidth() const
 {
-    return m_borderWindow;
+    return m_windowBorderWidth;
 }
 
-void Settings::setBorderWindow(const QString &borderWindow)
+void Settings::setWindowBorderWidth(const QString &windowBorderWidth)
 {
-    m_borderWindow = borderWindow;
+    m_windowBorderWidth = windowBorderWidth;
 }
 
-QString Settings::getColorDisabled() const
+QString Settings::getDisabledColor() const
 {
-    return m_colorDisabled;
+    return m_disabledColor;
 }
 
-void Settings::setColorDisabled(const QString &colorDisabled)
+void Settings::setDisabledColor(const QString &disabledColor)
 {
-    m_colorDisabled = colorDisabled;
+    m_disabledColor = disabledColor;
 }
 
-QString Settings::getColorTextGray() const
+QString Settings::getGrayTextColor() const
 {
-    return m_colorTextGray;
+    return m_grayTextColor;
 }
 
-void Settings::setColorTextGray(const QString &colorTextGray)
+void Settings::setGrayTextColor(const QString &grayTextColor)
 {
-    m_colorTextGray = colorTextGray;
+    m_grayTextColor = grayTextColor;
 }
 
-QString Settings::getColorTextOnBackground() const
+QString Settings::getDefaultTextColor() const
 {
-    return m_colorTextOnBackground;
+    return m_defaultTextColor;
 }
 
-void Settings::setColorTextOnBackground(const QString &colorTextOnBackground)
+void Settings::setDefaultTextColor(const QString &defaultTextColor)
 {
-    m_colorTextOnBackground = colorTextOnBackground;
+    m_defaultTextColor = defaultTextColor;
 }
 
-QString Settings::getColorButtonBackground() const
+QString Settings::getButtonBackgroundColor() const
 {
-    return m_colorButtonBackground;
+    return m_buttonBackgroundColor;
 }
 
-void Settings::setColorButtonBackground(const QString &colorButtonBackground)
+void Settings::setButtonBackgroundColor(const QString &buttonBackgroundColor)
 {
-    m_colorButtonBackground = colorButtonBackground;
+    m_buttonBackgroundColor = buttonBackgroundColor;
 }
 
-QString Settings::getColorButtonBackgroundOver() const
+QString Settings::getButtonHoverBackgroundColor() const
 {
-    return m_colorButtonBackgroundOver;
+    return m_buttonHoverBackgroundColor;
 }
 
-void Settings::setColorButtonBackgroundOver(const QString &colorButtonBackgroundOver)
+void Settings::setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor)
 {
-    m_colorButtonBackgroundOver = colorButtonBackgroundOver;
+    m_buttonHoverBackgroundColor = buttonHoverBackgroundColor;
 }
 
-QString Settings::getColorPanelBackground() const
+QString Settings::getPanelBackgroundColor() const
 {
-    return m_colorPanelBackground;
+    return m_panelBackgroundColor;
 }
 
-void Settings::setColorPanelBackground(const QString &colorPanelBackground)
+void Settings::setPanelBackgroundColor(const QString &panelBackgroundColor)
 {
-    m_colorPanelBackground = colorPanelBackground;
+    m_panelBackgroundColor = panelBackgroundColor;
 }
 
-QString Settings::getColorPanelBackgroundBorder() const
+QString Settings::getInsetColor() const
 {
-    return m_colorPanelBackgroundBorder;
+    return m_insetColor;
 }
 
-void Settings::setColorPanelBackgroundBorder(const QString &colorPanelBackgroundBorder)
+void Settings::setInsetColor(const QString &insetColor)
 {
-    m_colorPanelBackgroundBorder = colorPanelBackgroundBorder;
+    m_insetColor = insetColor;
 }
 
 QString Settings::getShortcutOfflineArgs() const
@@ -388,7 +424,8 @@ void Settings::setUpdaterVersion(const QString &updaterVersion)
     m_updaterVersion = updaterVersion;
 }
 
-QString Settings::getJavaVersion() const {
+QString Settings::getJavaVersion() const
+{
     return m_javaVersion;
 }
 
@@ -397,14 +434,14 @@ void Settings::setJavaVersion(const QString &_javaVersion)
     m_javaVersion = _javaVersion;
 }
 
-QString Settings::getApplicationName() const
+QString Settings::getAppName() const
 {
-    return m_applicationName;
+    return m_appName;
 }
 
-void Settings::setApplicationName(const QString &applicationName)
+void Settings::setAppName(const QString &appName)
 {
-    m_applicationName = applicationName;
+    m_appName = appName;
 }
 
 bool Settings::isRunAtStart() const
@@ -417,14 +454,14 @@ void Settings::setRunAtStart(const bool &runAtStart)
     m_runAtStart = runAtStart;
 }
 
-QString Settings::getServerURL() const
+QString Settings::getDeploymentUrl() const
 {
-    return m_serverURL;
+    return m_deploymentUrl;
 }
 
-void Settings::setServerURL(const QString &serverURL)
+void Settings::setDeploymentUrl(const QString &deploymentUrl)
 {
-    m_serverURL = serverURL;
+    m_deploymentUrl = deploymentUrl;
 }
 
 QString Settings::getDataLocation() const
@@ -447,24 +484,14 @@ void Settings::setDataLocation(const QString &dataLocation)
     m_dataLocation = dataLocation;
 }
 
-QString Settings::getClasspathExtension() const
+bool Settings::isShortcutForAllUsers() const
 {
-    return m_classpathExtension;
+    return m_shortcutForAllUsers;
 }
 
-void Settings::setClasspathExtension(const QString &classpathExtension)
+void Settings::setShortcutForAllUsers(bool shortcutForAllUsers)
 {
-    m_classpathExtension = classpathExtension;
-}
-
-bool Settings::isShortcutAllUser() const
-{
-    return m_shortcutAllUser;
-}
-
-void Settings::setShortcutAllUser(bool shortcutAllUser)
-{
-    m_shortcutAllUser = shortcutAllUser;
+    m_shortcutForAllUsers = shortcutForAllUsers;
 }
 
 bool Settings::isShortcutOnline() const
@@ -497,14 +524,14 @@ void Settings::setShortcutName(const QString &shortcutName)
     m_shortcutName = shortcutName;
 }
 
-Language Settings::getLanguage() const
+Language Settings::getLang() const
 {
-    return m_language;
+    return LanguageManager::getLanguageFromLocale(m_lang);
 }
 
-void Settings::setLanguage(const Language &language)
+void Settings::setLang(const Language &lang)
 {
-    m_language = language;
+    m_lang = LanguageManager::getLocaleFromLanguage(lang);
 }
 
 QString Settings::getProxyPassword() const

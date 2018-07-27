@@ -25,13 +25,14 @@ const QString DeploymentXML::FileTag("file");
 const QString DeploymentXML::VersionAttribute("version");
 const QString DeploymentXML::NameAttribute("name");
 
-const QString DeploymentXML::UpdaterExtensionClasspathAttribute("updaterExtensionClasspath");
-
 const QString DeploymentXML::ArgumentsTag("arguments");
 const QString DeploymentXML::ArgumentTag("argument");
 
 const QString DeploymentXML::MemoryTag("memory");
 const QString DeploymentXML::VersionTag("version");
+const QString DeploymentXML::EncodingTag("encoding");
+const QString DeploymentXML::MainClassTag("mainclass");
+const QString DeploymentXML::RunnerClassTag("runnerclass");
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
@@ -40,6 +41,9 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
 {
     m_memory = "512";
     m_version = "";
+    m_encoding = "";
+    m_mainClass = "";
+    m_runnerClass = "";
     m_downloads = QList<Download>();
     m_arguments = QList<QString>();
 }
@@ -78,12 +82,23 @@ Application DeploymentXML::getApplication() const
     return m_application;
 }
 
-QList<Download> DeploymentXML::getDownloads(const QString &_os) const
+QList<Download> DeploymentXML::getDownloads() const
 {
     QList<Download> downloads;
 
-    foreach(Download download, m_downloads) {
-        if (download.getOs() == _os || download.getOs() == OsAnyValue) {
+    QString osValue;
+#ifdef Q_OS_MACOS
+        osValue = OsMacOsValue;
+#endif
+
+#ifdef Q_OS_WIN
+        osValue = OsWindowsValue;
+#endif
+
+    QListIterator<Download> iterator(m_downloads);
+    while(iterator.hasNext()) {
+        const Download & download = iterator.next();
+        if (download.getOs() == osValue || download.getOs() == OsAnyValue) {
             downloads.append(download);
         }
     }
@@ -94,6 +109,32 @@ QList<Download> DeploymentXML::getDownloads(const QString &_os) const
 QString DeploymentXML::getMemory() const
 {
     return m_memory;
+}
+
+QString DeploymentXML::getEncoding() const
+{
+    return m_encoding;
+}
+
+QString DeploymentXML::getMainClass() const
+{
+    return m_mainClass;
+}
+
+QString DeploymentXML::getRunnerClass() const
+{
+    return m_runnerClass;
+}
+
+QString DeploymentXML::getCurrentOsValue()
+{
+#ifdef Q_OS_MACOS
+        return OsMacOsValue;
+#endif
+
+#ifdef Q_OS_WIN
+        return OsWindowsValue;
+#endif
 }
 
 QList<QString> DeploymentXML::getArguments() const
@@ -125,6 +166,15 @@ bool DeploymentXML::processDeployment()
         } else if (m_xmlReader.name() == MemoryTag) {
             result &= processMemory();
             m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == EncodingTag) {
+            result &= processEncoding();
+            m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == MainClassTag) {
+            result &= processMainClass();
+            m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == RunnerClassTag) {
+            result &= processRunnerClass();
+            m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == ArgumentsTag) {
             result &= processArguments();
         } else if (m_xmlReader.name() == DownloadsTag) {
@@ -152,6 +202,33 @@ bool DeploymentXML::processMemory()
         return false;
     }
     m_memory = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processEncoding()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != EncodingTag) {
+        return false;
+    }
+    m_encoding = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processMainClass()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != MainClassTag) {
+        return false;
+    }
+    m_mainClass = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processRunnerClass()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != RunnerClassTag) {
+        return false;
+    }
+    m_runnerClass = readNextText();
     return true;
 }
 
@@ -210,7 +287,6 @@ bool DeploymentXML::processApplication()
 
     QString name = "";
     QString version = "";
-    QString updaterExtensionClasspath = "";
 
     // TODO check attributes et return false
     if (m_xmlReader.attributes().hasAttribute(NameAttribute)) {
@@ -218,9 +294,6 @@ bool DeploymentXML::processApplication()
     }
     if (m_xmlReader.attributes().hasAttribute(VersionAttribute)) {
         version = m_xmlReader.attributes().value(VersionAttribute).toString();
-    }
-    if (m_xmlReader.attributes().hasAttribute(UpdaterExtensionClasspathAttribute)) {
-        updaterExtensionClasspath = m_xmlReader.attributes().value(UpdaterExtensionClasspathAttribute).toString();
     }
 
     if (name == IOConfig::AppName) {
@@ -237,7 +310,6 @@ bool DeploymentXML::processApplication()
 
     if (name == IOConfig::AppName || name == IOConfig::LoaderName || name == IOConfig::UpdaterName || name == IOConfig::JavaName) {
         application.setVersion(version);
-        application.setUpdaterExtensionClasspath(updaterExtensionClasspath);
 
         m_downloads.clear();
         m_application = application;
