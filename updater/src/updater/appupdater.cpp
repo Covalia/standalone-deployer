@@ -463,6 +463,22 @@ void AppUpdater::applicationDownloadFinished()
                             L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
                         }
 
+                        // clean old updater versions
+                        L_INFO("Clean old updater versions");
+                        if (m_appPath.cleanUpdaterDirExceptVersion(m_remoteUpdaterVersion)) {
+                            L_INFO("Old updater versions cleaned");
+                        } else {
+                            L_WARN("Unable to clean old updater versions");
+                        }
+
+                        // clean old java versions
+                        L_INFO("Clean old java versions");
+                        if (m_appPath.cleanJavaDirExceptVersion(m_remoteJavaVersion)) {
+                            L_INFO("Old java versions cleaned");
+                        } else {
+                            L_WARN("Unable to clean old java versions");
+                        }
+
                         // quit application
                         L_INFO("Quit application.");
                     } else {

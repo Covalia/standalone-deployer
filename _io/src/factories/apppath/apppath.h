@@ -67,6 +67,9 @@ class AppPath {
         bool cleanTempDir();
         bool cleanUpdaterDir();
 
+        bool cleanUpdaterDirExceptVersion(const QString &_version);
+        bool cleanJavaDirExceptVersion(const QString &_version);
+
         // will extract app from dmg on macos, nothing on windows
         bool prepareLoader();
         bool prepareUpdater(QString _version);

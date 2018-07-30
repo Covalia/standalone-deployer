@@ -389,6 +389,21 @@ bool AppPath::cleanUpdaterDir()
     return false;
 }
 
+bool AppPath::cleanUpdaterDirExceptVersion(const QString &_version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanUpdaterDirExceptVersion(_version);
+    }
+    return false;
+}
+bool AppPath::cleanJavaDirExceptVersion(const QString &_version)
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanJavaDirExceptVersion(_version);
+    }
+    return false;
+}
+
 bool AppPath::prepareLoader()
 {
     if (m_appPathImpl) {

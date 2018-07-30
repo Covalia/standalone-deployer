@@ -80,6 +80,9 @@ class AppPathImpl {
         bool cleanTempDir();
         bool cleanUpdaterDir();
 
+        bool cleanUpdaterDirExceptVersion(const QString &_version);
+        bool cleanJavaDirExceptVersion(const QString &_version);
+
         virtual bool prepareLoader();
         virtual bool prepareUpdater(QString _version);
         virtual bool prepareJava(const QString &_version, bool _forceOverwrite);
@@ -114,6 +117,7 @@ class AppPathImpl {
         virtual QString getJavaExecutablePath(const QString &_javaVersion) const = 0;
 
         bool cleanDir(const QString &_folder);
+        bool cleanExceptVersion(const QDir &_dir, const QString &_version);
 
 };
 
