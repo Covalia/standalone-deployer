@@ -29,6 +29,7 @@ class InstallManager: public QThread
 
         bool runAppAfter;
 
+        bool cleanInstallationFolders();
         bool createInstallationFolders();
         void moveLogIntoInstallFolder();
         bool createIniConfigurationFile();

@@ -58,6 +58,7 @@ class AppPathImpl {
         virtual QDir getCnlpDir() const;
         virtual QDir getCnlpOldDir() const;
         virtual QDir getDataDir() const;
+
         virtual QDir getUpdaterDir() const;
         virtual QDir getUpdaterVersionDir(const QString &_version) const;
         virtual QDir getLoaderDir() const;
@@ -70,6 +71,14 @@ class AppPathImpl {
         virtual QSharedPointer<QFile> getUpdaterFile(QString updaterVersion) = 0;
 
         virtual QSharedPointer<QFile> getConfigurationFile();
+
+        bool cleanAppDir();
+        bool cleanCnlpDir();
+        bool cleanImagesDir();
+        bool cleanJavaDir();
+        bool cleanLoaderDir();
+        bool cleanTempDir();
+        bool cleanUpdaterDir();
 
         virtual bool prepareLoader();
         virtual bool prepareUpdater(QString _version);
@@ -103,6 +112,9 @@ class AppPathImpl {
         bool cdUp(QDir &_dir, int _numUp);
 
         virtual QString getJavaExecutablePath(const QString &_javaVersion) const = 0;
+
+        bool cleanDir(const QString &_folder);
+
 };
 
 #endif

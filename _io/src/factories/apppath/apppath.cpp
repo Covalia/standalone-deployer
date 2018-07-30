@@ -93,7 +93,6 @@ QDir AppPath::getAppNativesDir() const
     return QDir();
 }
 
-
 QDir AppPath::getConfigurationDir() const
 {
     if (m_appPathImpl) {
@@ -334,6 +333,62 @@ QSharedPointer<QFile> AppPath::getConfigurationFile()
     return QSharedPointer<QFile>(new QFile());
 }
 
+bool AppPath::cleanAppDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanAppDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanCnlpDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanCnlpDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanImagesDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanImagesDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanJavaDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanJavaDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanLoaderDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanLoaderDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanTempDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanTempDir();
+    }
+    return false;
+}
+
+bool AppPath::cleanUpdaterDir()
+{
+    if (m_appPathImpl) {
+        return m_appPathImpl->cleanUpdaterDir();
+    }
+    return false;
+}
+
 bool AppPath::prepareLoader()
 {
     if (m_appPathImpl) {
@@ -402,7 +457,7 @@ bool AppPath::startApplication(const QString &_javaVersion, const QString &_xmxM
 }
 
 bool AppPath::startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
-                                   const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation)
+                                    const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation)
 {
     if (m_appPathImpl) {
         return m_appPathImpl->startPostInstallTasks(_javaVersion, _xmxMemory, _classPath,

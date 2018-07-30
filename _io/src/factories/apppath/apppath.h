@@ -47,7 +47,6 @@ class AppPath {
         QDir getCnlpDir() const;
         QDir getCnlpOldDir() const;
         QDir getDataDir() const;
-
         QDir getUpdaterDir() const;
         QDir getUpdaterVersionDir(const QString &_version) const;
         QDir getLoaderDir() const;
@@ -59,6 +58,14 @@ class AppPath {
         QSharedPointer<QFile> getLoaderFile();
         QSharedPointer<QFile> getUpdaterFile(QString updaterVersion);
         QSharedPointer<QFile> getConfigurationFile();
+
+        bool cleanAppDir();
+        bool cleanCnlpDir();
+        bool cleanImagesDir();
+        bool cleanJavaDir();
+        bool cleanLoaderDir();
+        bool cleanTempDir();
+        bool cleanUpdaterDir();
 
         // will extract app from dmg on macos, nothing on windows
         bool prepareLoader();

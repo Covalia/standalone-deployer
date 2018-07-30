@@ -239,6 +239,60 @@ bool AppPathImpl::makeDirectoryIfNotExisting(const QDir &_directory)
     }
 }
 
+bool AppPathImpl::cleanDir(const QString &_folder)
+{
+    if (FileUtils::directoryExists(_folder)) {
+        L_INFO("Directory to clean: " + _folder);
+
+        if (FileUtils::removeDirRecursively(_folder)) {
+            L_INFO("Removed");
+
+            return true;
+        } else {
+            L_WARN("Not removed!");
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool AppPathImpl::cleanAppDir()
+{
+    return cleanDir(getAppDir().absolutePath());
+}
+
+bool AppPathImpl::cleanCnlpDir()
+{
+    return cleanDir(getCnlpDir().absolutePath());
+}
+
+bool AppPathImpl::cleanImagesDir()
+{
+    return cleanDir(getImagesDir().absolutePath());
+}
+
+bool AppPathImpl::cleanJavaDir()
+{
+    return cleanDir(getJavaDir().absolutePath());
+}
+
+bool AppPathImpl::cleanLoaderDir()
+{
+    return cleanDir(getLoaderDir().absolutePath());
+}
+
+bool AppPathImpl::cleanTempDir()
+{
+    return cleanDir(getTempDir().absolutePath());
+}
+
+bool AppPathImpl::cleanUpdaterDir()
+{
+    return cleanDir(getUpdaterDir().absolutePath());
+}
+
 bool AppPathImpl::prepareLoader()
 {
     return true;
@@ -377,7 +431,8 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
 }
 
 bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
-                                        const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation){
+                                        const QString &_runnerClass, const QString &_encoding, const QString &_dataLocation)
+{
     QStringList arguments;
     const QDir installDir = getInstallationDir();
 
@@ -409,8 +464,8 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
     bool result = process.waitForFinished();
 
     while (process.canReadLine()) {
-       QString line = QString::fromLocal8Bit(process.readLine());
-       L_INFO(line);
+        QString line = QString::fromLocal8Bit(process.readLine());
+        L_INFO(line);
     }
 
     if (result) {
