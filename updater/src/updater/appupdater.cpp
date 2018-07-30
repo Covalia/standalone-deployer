@@ -522,11 +522,11 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
             appBuildDir = m_appPath.getTempLoaderBuildDir();
         } else if (_application == Application::getUpdaterApplication()) {
             tempAppDir = m_appPath.getTempUpdaterDir();
-            appDir = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            appDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion);
             appBuildDir = m_appPath.getTempUpdaterBuildDir();
         } else if (_application == Application::getJavaApplication()) {
             tempAppDir = m_appPath.getTempJavaDir();
-            appDir = m_appPath.getJavaVersionDir(m_localJavaVersion);
+            appDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion);
             appBuildDir = m_appPath.getTempJavaBuildDir();
         }
     } else {
@@ -615,9 +615,9 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
         } else if (_application == Application::getLoaderApplication()) {
             dir = QDir(appPath.getLoaderDir());
         } else if (_application == Application::getUpdaterApplication()) {
-            dir = appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            dir = appPath.getUpdaterVersionDir(m_remoteUpdaterVersion);
         } else if (_application == Application::getJavaApplication()) {
-            dir = appPath.getJavaVersionDir(m_localJavaVersion);
+            dir = appPath.getJavaVersionDir(m_remoteJavaVersion);
         }
 
         QDirIterator it(dir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
@@ -750,9 +750,9 @@ void AppUpdater::processCnlpDownloadFileList()
                 } else if (application == Application::getLoaderApplication()) {
                     localFile = m_appPath.getLoaderDir().absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getUpdaterApplication()) {
-                    localFile = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
+                    localFile = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getJavaApplication()) {
-                    localFile = m_appPath.getJavaVersionDir(m_localJavaVersion).absoluteFilePath(parsedDownload.getHref());
+                    localFile = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absoluteFilePath(parsedDownload.getHref());
                 }
 
                 // must be true but we test anyway
