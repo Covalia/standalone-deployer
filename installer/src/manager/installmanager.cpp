@@ -18,6 +18,7 @@
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
 #include "io/config.h"
+#include "io/fileutils.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(0),
@@ -61,8 +62,8 @@ void InstallManager::initInstallation()
 
         QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
                          this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-        QObject::connect(this, SIGNAL(endInstallation(bool, QStringList)),
-                         m_uiManager, SLOT(eventEndInstallation(bool, QStringList)));
+        QObject::connect(this, SIGNAL(endInstallation(bool,QStringList)),
+                         m_uiManager, SLOT(eventEndInstallation(bool,QStringList)));
     } else {
         start();
     }
@@ -96,19 +97,19 @@ void InstallManager::startInstallation()
     }
 
     // create updater version folder
-    bool successCreatingUpdaterVersion =  createUpdaterFolderVersion();
+    bool successCreatingUpdaterVersion = createUpdaterFolderVersion();
     if (!successCreatingUpdaterVersion) {
         errorMessages << tr("Unable to create updater version folder");
     }
 
     // settings writing
-    bool successWritingSettings =  createIniConfigurationFile();
+    bool successWritingSettings = createIniConfigurationFile();
     if (!successWritingSettings) {
         errorMessages << tr("Unable to write settings file");
     }
 
     // extract resources
-    bool successExtractingResources =  extractResources();
+    bool successExtractingResources = extractResources();
     if (!successExtractingResources) {
         errorMessages << tr("Unable to extract resources");
     }
@@ -126,8 +127,8 @@ void InstallManager::startInstallation()
     }
 
     bool success = successCreatingFolders && successWritingSettings
-            && successCreatingUpdaterVersion && successExtractingResources
-            && successCreatingShortcut && successPreparingApp;
+        && successCreatingUpdaterVersion && successExtractingResources
+        && successCreatingShortcut && successPreparingApp;
 
     if (m_uiManager) {
         if (success) {
@@ -144,6 +145,23 @@ void InstallManager::startInstallation()
     }
 }
 
+bool InstallManager::cleanInstallationFolders()
+{
+    L_INFO("Cleaning sub installation folders.");
+
+    bool result = true;
+
+    result &= m_appPath.cleanAppDir();
+    result &= m_appPath.cleanCnlpDir();
+    result &= m_appPath.cleanImagesDir();
+    result &= m_appPath.cleanJavaDir();
+    result &= m_appPath.cleanLoaderDir();
+    result &= m_appPath.cleanTempDir();
+    result &= m_appPath.cleanUpdaterDir();
+
+    return result;
+}
+
 bool InstallManager::createInstallationFolders()
 {
     L_INFO("Start the installation in directory : " + m_settings->getDataLocation());
@@ -154,12 +172,19 @@ bool InstallManager::createInstallationFolders()
     } else {
         L_INFO("Succes of installation folder verification ");
 
+        // trying to clean old directories.
+        if (!cleanInstallationFolders()) {
+            // nothing to do
+            L_WARN("Error while cleaning some directories. Continue.");
+        }
+
         if (!m_appPath.makeAppDirectories()) {
             L_ERROR("Error when create sub-installation folder (application tree) ");
             return false;
         }
 
         L_INFO("Succes of sub-installation folder creation ");
+
         return true;
     }
 }
@@ -169,6 +194,7 @@ void InstallManager::moveLogIntoInstallFolder()
     QFile currentLogFile(Utils::getInstallerlLogPath());
     QFileInfo logFileInfo(currentLogFile);
     QFile destLogFile(m_appPath.getLogsDir().absoluteFilePath(logFileInfo.fileName()));
+
     m_appPath.extractResource(currentLogFile, destLogFile);
     currentLogFile.remove();
 }
@@ -311,23 +337,24 @@ bool InstallManager::extractResources()
 
 bool InstallManager::createShortcut()
 {
-        Shortcut shortcut;
-        bool success = true;
-        // online shortcut
-        if (m_settings->isShortcutOnline()) {
-            success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
-        }
-        // offline shortcut
-        if (m_settings->isShortcutOffline()) {
-            success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getAppName());
-        }
-        // startup shortcut
-        if (m_settings->isRunAtStart()) {
-            success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
-        }
-        // StartMenu folder and shortcut
-        success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
-        return success;
+    Shortcut shortcut;
+    bool success = true;
+
+    // online shortcut
+    if (m_settings->isShortcutOnline()) {
+        success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
+    }
+    // offline shortcut
+    if (m_settings->isShortcutOffline()) {
+        success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getAppName());
+    }
+    // startup shortcut
+    if (m_settings->isRunAtStart()) {
+        success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
+    }
+    // StartMenu folder and shortcut
+    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
+    return success;
 }
 
 bool InstallManager::launchLoader()
@@ -335,6 +362,7 @@ bool InstallManager::launchLoader()
     QStringList args;
 
     bool success = m_appPath.startLoader(args);
+
     if (!success) {
         L_ERROR("Error when launching loader");
     } else {
