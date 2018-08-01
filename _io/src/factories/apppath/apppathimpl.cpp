@@ -293,6 +293,48 @@ bool AppPathImpl::cleanUpdaterDir()
     return cleanDir(getUpdaterDir().absolutePath());
 }
 
+bool AppPathImpl::cleanExceptVersion(const QDir &_dir, const QString &_version)
+{
+    L_INFO("Cleaning: " + _dir.absolutePath() + " except: " + _version);
+    const QFileInfoList fileInfoList = _dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+    bool success = true;
+    for (int i = 0; i < fileInfoList.size(); i++) {
+        const QFileInfo fileInfo = fileInfoList[i];
+        if (fileInfo.fileName() != _version) {
+            const QString filePath = _dir.absoluteFilePath(fileInfo.fileName());
+            L_INFO("Cleaning: " + filePath);
+
+            if (fileInfo.isDir()) {
+                if (FileUtils::removeDirRecursively(filePath)) {
+                    L_INFO("Removed");
+                } else {
+                    L_ERROR("Not removed.");
+                    success = false;
+                }
+            } else if (fileInfo.isFile()) {
+                QFile f(filePath);
+                if (f.remove()) {
+                    L_INFO("Removed");
+                } else {
+                    L_ERROR("Not removed.");
+                    success = false;
+                }
+            }
+        }
+    }
+    return success;
+}
+
+bool AppPathImpl::cleanUpdaterDirExceptVersion(const QString &_version)
+{
+    return cleanExceptVersion(getUpdaterDir(), _version);
+}
+
+bool AppPathImpl::cleanJavaDirExceptVersion(const QString &_version)
+{
+    return cleanExceptVersion(getJavaDir(), _version);
+}
+
 bool AppPathImpl::prepareLoader()
 {
     return true;

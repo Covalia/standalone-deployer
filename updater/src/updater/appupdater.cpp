@@ -325,34 +325,16 @@ void AppUpdater::applicationDownloadFinished()
             L_INFO("Java does not need to be updated.");
 
             if (javaInstalledOk) {
-                const QString javaRemoteVersionDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absolutePath();
+                // dist directory was manually removed...
+                const QString javaRemoteDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
 
-                if (!FileUtils::directoryExists(javaRemoteVersionDir)) {
-                    L_WARN("Remote version was not installed into: " + javaRemoteVersionDir + " maybe because version names differ but not hashes.");
-
-                    // remote version not installed because local version is the same file
-                    const QString javaLocalDistDir = m_appPath.getJavaDistDir(m_localJavaVersion).absolutePath();
-                    if (!FileUtils::directoryExists(javaLocalDistDir)) {
-                        L_INFO("Java local dist directory does not exist. " + javaLocalDistDir);
-                        if (m_appPath.prepareJava(m_localJavaVersion, false)) {
-                            L_INFO("Java local " + m_localJavaVersion + " soft prepared.");
-                        } else {
-                            L_INFO("Unable to soft prepare Java local " + m_localJavaVersion + ".");
-                            javaInstalledOk = false;
-                        }
-                    }
-                } else {
-                    // remote version installed because local and remote version are differents
-                    const QString javaRemoteDistDir = m_appPath.getJavaDistDir(m_remoteJavaVersion).absolutePath();
-
-                    if (!FileUtils::directoryExists(javaRemoteDistDir)) {
-                        L_INFO("Java dist directory does not exist. " + javaRemoteDistDir);
-                        if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
-                            L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
-                        } else {
-                            L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
-                            javaInstalledOk = false;
-                        }
+                if (!FileUtils::directoryExists(javaRemoteDistDir)) {
+                    L_INFO("Java dist directory does not exist. " + javaRemoteDistDir);
+                    if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
+                        L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
+                    } else {
+                        L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
+                        javaInstalledOk = false;
                     }
                 }
             }
@@ -463,6 +445,22 @@ void AppUpdater::applicationDownloadFinished()
                             L_WARN("Can not clean " + m_appPath.getTempDir().absolutePath());
                         }
 
+                        // clean old updater versions
+                        L_INFO("Clean old updater versions");
+                        if (m_appPath.cleanUpdaterDirExceptVersion(m_remoteUpdaterVersion)) {
+                            L_INFO("Old updater versions cleaned");
+                        } else {
+                            L_WARN("Unable to clean old updater versions");
+                        }
+
+                        // clean old java versions
+                        L_INFO("Clean old java versions");
+                        if (m_appPath.cleanJavaDirExceptVersion(m_remoteJavaVersion)) {
+                            L_INFO("Old java versions cleaned");
+                        } else {
+                            L_WARN("Unable to clean old java versions");
+                        }
+
                         // quit application
                         L_INFO("Quit application.");
                     } else {
@@ -506,11 +504,11 @@ bool AppUpdater::buildApplicationInTempDirectory(const Application &_application
             appBuildDir = m_appPath.getTempLoaderBuildDir();
         } else if (_application == Application::getUpdaterApplication()) {
             tempAppDir = m_appPath.getTempUpdaterDir();
-            appDir = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            appDir = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion);
             appBuildDir = m_appPath.getTempUpdaterBuildDir();
         } else if (_application == Application::getJavaApplication()) {
             tempAppDir = m_appPath.getTempJavaDir();
-            appDir = m_appPath.getJavaVersionDir(m_localJavaVersion);
+            appDir = m_appPath.getJavaVersionDir(m_remoteJavaVersion);
             appBuildDir = m_appPath.getTempJavaBuildDir();
         }
     } else {
@@ -599,9 +597,9 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
         } else if (_application == Application::getLoaderApplication()) {
             dir = QDir(appPath.getLoaderDir());
         } else if (_application == Application::getUpdaterApplication()) {
-            dir = appPath.getUpdaterVersionDir(m_localUpdaterVersion);
+            dir = appPath.getUpdaterVersionDir(m_remoteUpdaterVersion);
         } else if (_application == Application::getJavaApplication()) {
-            dir = appPath.getJavaVersionDir(m_localJavaVersion);
+            dir = appPath.getJavaVersionDir(m_remoteJavaVersion);
         }
 
         QDirIterator it(dir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
@@ -734,9 +732,16 @@ void AppUpdater::processCnlpDownloadFileList()
                 } else if (application == Application::getLoaderApplication()) {
                     localFile = m_appPath.getLoaderDir().absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getUpdaterApplication()) {
-                    localFile = m_appPath.getUpdaterVersionDir(m_localUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
+                    localFile = m_appPath.getUpdaterVersionDir(m_remoteUpdaterVersion).absoluteFilePath(parsedDownload.getHref());
                 } else if (application == Application::getJavaApplication()) {
-                    localFile = m_appPath.getJavaVersionDir(m_localJavaVersion).absoluteFilePath(parsedDownload.getHref());
+                    if (m_localJavaVersion.isEmpty()) {
+                        // special case: if local version is empty, on fresh install, we search for a fake file.
+                        // this prevents errors if remote version already exists locally.
+                        // this should never happen unless someone manually touch config file.
+                        localFile = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absoluteFilePath(parsedDownload.getHref() + "-fake");
+                    } else {
+                        localFile = m_appPath.getJavaVersionDir(m_remoteJavaVersion).absoluteFilePath(parsedDownload.getHref());
+                    }
                 }
 
                 // must be true but we test anyway
