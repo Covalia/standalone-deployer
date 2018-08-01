@@ -59,7 +59,7 @@ void AppUpdater::start()
     L_INFO("Updater started");
     emit serverUrlMessage(m_appUrl);
 
-    bool result = m_appPath.makeAppDirectories();
+    m_appPath.makeAppDirectories();
 
     // TODO disable progress bar for cnlp files
     QMultiMap<Application, QUrl> map;
@@ -1150,12 +1150,10 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
                 HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
                 // we find the download corresponding to the downloadedFile to get its expected hashmac
-                bool found = false;
                 QListIterator<Download> parsedIterator(_cnlpParsedFiles.values(application));
                 while (parsedIterator.hasNext()) {
                     const Download & download = parsedIterator.next();
                     if (download.getHref() == downloadedFile) {
-                        found = true;
                         if (hashmac == download.getHashMac()) {
                             L_INFO("File for application: " + application.getName() + " already downloaded: " + download.getHref());
                             // remove this from temp list
