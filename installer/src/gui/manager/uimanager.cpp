@@ -151,7 +151,7 @@ void UIManager::changeInstallation()
     m_window->changeContentWidget(m_installation);
     m_window->setVisibleButton(false, false);
     m_window->update();
-    changeInstallationSignal();
+    emit changeInstallationSignal();
 }
 
 void UIManager::changeEndInstallation()
@@ -209,5 +209,6 @@ void UIManager::eventEndInstallation(bool _success, QStringList _errors)
 
 void UIManager::eventCloseInstallation(bool _launchApplication)
 {
-    closeInstallationSignal(_launchApplication);
+    emit closeInstallationSignal(_launchApplication);
 }
+

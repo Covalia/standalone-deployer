@@ -10,7 +10,7 @@
 #include "settings/settings.h"
 #include "utils.h"
 
-class InstallManager: public QThread
+class InstallManager : public QThread
 {
     Q_OBJECT
 
@@ -27,7 +27,7 @@ class InstallManager: public QThread
         ResourcesSettings * m_projectSettings;
         Settings * m_settings;
 
-        bool runAppAfter;
+        bool m_runAppAfter;
 
         bool cleanInstallationFolders();
         bool createInstallationFolders();
@@ -41,7 +41,7 @@ class InstallManager: public QThread
         bool launchLoader();
 
     protected:
-         void run();
+        virtual void run();
 
     private slots:
         void eventStartInstallation();

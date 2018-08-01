@@ -14,8 +14,9 @@ int main(int argc, char * argv[])
     L_INFO("Installer started " + Utils::getAppPath().getInstallerVersion());
 
     L_INFO("Exe path " + QDir("./").absolutePath());
-    InstallManager * installManager = new InstallManager();
-    installManager->initInstallation();
+
+    InstallManager installManager;
+    installManager.initInstallation();
 
     int ret = app.exec();
 

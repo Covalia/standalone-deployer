@@ -14,7 +14,7 @@ class InstallationUI : public QWidget
 
     public:
         explicit InstallationUI(QWidget * parent = 0);
-        ~InstallationUI();
+        virtual ~InstallationUI();
 
     private:
         Ui::InstallationUI * m_ui;

@@ -45,7 +45,7 @@ class ResourcesSettings
 
         void readSettings();
 
-        void sendToSettings();
+        void writeAppSettings();
 
         QString getWindowBorderWidth() const;
         void setWindowBorderWidth(const QString &windowBorderWidth);

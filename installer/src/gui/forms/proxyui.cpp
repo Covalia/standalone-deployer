@@ -89,5 +89,5 @@ void ProxyUI::validateSettings()
     settings->setProxyLogin(m_ui->lineEditLogin->text());
     settings->setProxyPassword(m_ui->lineEditPassword->text());
 
-    validateSettingsSignal();
+    emit validateSettingsSignal();
 }

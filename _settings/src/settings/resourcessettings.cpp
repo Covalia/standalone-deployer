@@ -12,7 +12,7 @@ const QString ResourcesSettings::AppName("app_name");
 const QString ResourcesSettings::Lang("lang");
 
 const QString ResourcesSettings::ShortcutName("shortcut_name");
-const QString ResourcesSettings::ShortcutOfflineName("shortcut_name_offline");
+const QString ResourcesSettings::ShortcutOfflineName("shortcut_offline_name");
 const QString ResourcesSettings::ShortcutOnline("shortcut_online");
 const QString ResourcesSettings::ShortcutOffline("shortcut_offline");
 const QString ResourcesSettings::ShortcutOfflineArgs("shortcut_offline_args");
@@ -21,9 +21,9 @@ const QString ResourcesSettings::RunAtStart("run_at_start");
 
 const QString ResourcesSettings::DefaultInstallationPath("default_installation_path");
 
-const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_data_path_simple_install");
-const QString ResourcesSettings::DefaultCustomInstallDataPath("default_data_path_custom_install");
-const QString ResourcesSettings::ChangeDataLocationAllowed("possible_change_data_location");
+const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_simple_install_data_path");
+const QString ResourcesSettings::DefaultCustomInstallDataPath("default_custom_install_path");
+const QString ResourcesSettings::ChangeDataLocationAllowed("change_data_location_allowed");
 
 const QString ResourcesSettings::EncryptedPasswordKey("encrypted_password_key");
 
@@ -140,7 +140,7 @@ void ResourcesSettings::readSettings()
     m_windowBorderWidth = m_settings->value(WindowBorderWidth, m_windowBorderWidth).toString();
 }
 
-void ResourcesSettings::sendToSettings()
+void ResourcesSettings::writeAppSettings()
 {
     Settings * settings = Settings::getInstance();
 

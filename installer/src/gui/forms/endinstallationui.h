@@ -13,7 +13,7 @@ class EndInstallationUI : public QWidget
 
     public:
         explicit EndInstallationUI(QWidget * parent = 0);
-        ~EndInstallationUI();
+        virtual ~EndInstallationUI();
 
         void showErrors(QStringList _errors);
 

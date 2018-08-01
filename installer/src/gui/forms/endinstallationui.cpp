@@ -38,5 +38,5 @@ void EndInstallationUI::showErrors(QStringList _errors)
 
 void EndInstallationUI::closeInstallationEvent()
 {
-    closeInstallationSignal(m_ui->checkBoxLaunchAfterClose->isChecked());
+    emit closeInstallationSignal(m_ui->checkBoxLaunchAfterClose->isChecked());
 }

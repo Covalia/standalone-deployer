@@ -33,16 +33,16 @@ void WelcomeUI::changeLanguage()
 
 void WelcomeUI::customInstallationEvent()
 {
-    customInstallationSignal();
+    emit customInstallationSignal();
 }
 
 void WelcomeUI::simpleInstallationEvent()
 {
-    simpleInstallationSignal();
+    emit simpleInstallationSignal();
 }
 
 void WelcomeUI::customContractEvent()
 {
-    contractSignal();
+    emit contractSignal();
 }
 

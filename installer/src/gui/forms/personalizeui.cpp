@@ -55,7 +55,7 @@ void PersonalizeUI::changeLanguage()
 void PersonalizeUI::proxySettingEvent()
 {
     saveElementsInSetting();
-    proxySettingSignal();
+    emit proxySettingSignal();
 }
 
 void PersonalizeUI::fileChooserInstallEvent()
@@ -120,5 +120,5 @@ void PersonalizeUI::customInstallationEvent()
 {
     saveElementsInSetting();
 
-    customInstallationSignal();
+    emit customInstallationSignal();
 }

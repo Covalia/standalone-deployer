@@ -37,14 +37,14 @@ void InstallManager::initInstallation()
     m_projectSettings = ResourcesSettings::getInstance();
     m_projectSettings->initSettings(":/project.ini");
     m_projectSettings->readSettings();
-    m_projectSettings->sendToSettings();
+    m_projectSettings->writeAppSettings();
     L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
 
     L_INFO("Parsing command line");
-    CommandLineParser * lineParser = new CommandLineParser();
-    runAppAfter = lineParser->isRunApp();
-    L_INFO("Run after = " + QString::number(runAppAfter));
-    lineParser->sendToSettings();
+    CommandLineParser lineParser;
+    m_runAppAfter = lineParser.isRunApp();
+    L_INFO("Run after = " + QString::number(m_runAppAfter));
+    lineParser.sendToSettings();
 
     m_settings = Settings::getInstance();
 
@@ -53,11 +53,13 @@ void InstallManager::initInstallation()
 
     LanguageManager::initLanguage();
 
-    if (!lineParser->isSilent()) {
+    if (!lineParser.isSilent()) {
         qApp->setWindowIcon(QIcon(":/images/icon.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
-        m_uiManager = new UIManager();
+        if (!m_uiManager) {
+            m_uiManager = new UIManager();
+        }
         m_uiManager->init();
 
         QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
@@ -67,8 +69,6 @@ void InstallManager::initInstallation()
     } else {
         start();
     }
-
-    delete lineParser;
 }
 
 void InstallManager::eventStartInstallation()
@@ -141,7 +141,7 @@ void InstallManager::startInstallation()
         QObject::connect(m_uiManager, SIGNAL(closeInstallationSignal(bool)),
                          this, SLOT(eventCloseInstallation(bool)));
     } else {
-        closeInstallation(runAppAfter);
+        closeInstallation(m_runAppAfter);
     }
 }
 
