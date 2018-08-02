@@ -23,9 +23,6 @@ class CommandLineParser
         QString getSilent() const;
         void setSilent(const QString &silent);
 
-        QString getIntallLocation() const;
-        void setIntallLocation(const QString &intallLocation);
-
         QString getDataLocation() const;
         void setDataLocation(const QString &dataLocation);
 
@@ -102,7 +99,7 @@ class CommandLineParser
         bool parseBoolWithDefaultValue(QString value, bool defaultValue);
 
         QString m_silent;
-        QString m_intallLocation;
+        QString m_installLocation;
         QString m_dataLocation;
         QString m_proxyAuto;
         QString m_proxyHostname;
@@ -112,7 +109,7 @@ class CommandLineParser
         QString m_language;
         QString m_runApp;
         QString m_runAtStart;
-        QString m_offshort;
+        QString m_offlineShortcut;
         QString m_shortcut;
         QString m_allUserShortcut;
 };

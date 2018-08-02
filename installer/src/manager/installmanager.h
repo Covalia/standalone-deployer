@@ -20,6 +20,9 @@ class InstallManager : public QThread
 
         void initInstallation();
 
+    public slots:
+        void setInstallationDir(const QString &_directory);
+
     private:
 
         UIManager * m_uiManager;

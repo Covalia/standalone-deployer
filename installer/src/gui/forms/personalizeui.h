@@ -28,6 +28,7 @@ class PersonalizeUI : public QWidget
     signals:
         void proxySettingSignal();
         void customInstallationSignal();
+        void installationFolderChanged(QString folder);
 
     public slots:
         void changeLanguage();

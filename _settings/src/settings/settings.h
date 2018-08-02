@@ -50,7 +50,6 @@ class Settings
         static const QString ShortcutOfflineArgs;
         static const QString ShortcutForAllUsers;
 
-        static const QString InstallLocation;
         static const QString DataLocation;
 
         static const QString DeploymentUrl;
@@ -120,9 +119,6 @@ class Settings
 
         bool isRunAtStart() const;
         void setRunAtStart(const bool &runAtStart);
-
-        QString getInstallLocation() const;
-        void setInstallLocation(const QString &installLocation);
 
         bool isShortcutOffline() const;
         void setShortcutOffline(bool shortcutOffline);
@@ -252,7 +248,6 @@ class Settings
         bool m_shortcutForAllUsers;
 
         QString m_dataLocation;
-        QString m_installLocation;
 
         QString m_updaterVersion;
         QString m_javaVersion;

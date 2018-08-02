@@ -155,9 +155,6 @@ void ResourcesSettings::writeAppSettings()
 
     settings->setRunAtStart(m_runAtStart);
 
-    // install path
-    settings->setInstallLocation(m_defaultInstallationPath);
-
     // data path
     // use simple by default
     settings->setDataLocation(m_defaultSimpleInstallDataPath);

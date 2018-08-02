@@ -31,7 +31,7 @@ PersonalizeUI::PersonalizeUI(QWidget * _parent) :
         settings->setDataLocation(resource->getDefaultCustomInstallDataPath());
     }
 
-    m_ui->editLineFolderInstallation->setText(settings->getInstallLocation());
+    m_ui->editLineFolderInstallation->setText(resource->getDefaultInstallationPath());
     m_ui->editLineDataInstallation->setText(settings->getDataLocation());
     m_ui->checkBoxOfflineShortcut->setChecked(settings->isShortcutOffline());
     m_ui->checkBoxRunAtStart->setChecked(settings->isRunAtStart());
@@ -99,7 +99,8 @@ void PersonalizeUI::saveElementsInSetting()
     Settings * settings = Settings::getInstance();
 
     // install folder
-    settings->setInstallLocation(m_ui->editLineFolderInstallation->text());
+    emit installationFolderChanged(m_ui->editLineFolderInstallation->text());
+
     // data folder
     if (m_ui->checkBoxDataInstallation->isVisible() && m_ui->checkBoxDataInstallation->isChecked()) {
         settings->setDataLocation(m_ui->editLineDataInstallation->text());

@@ -38,6 +38,8 @@ void InstallManager::initInstallation()
     m_projectSettings->initSettings(":/project.ini");
     m_projectSettings->readSettings();
     m_projectSettings->writeAppSettings();
+    setInstallationDir(m_projectSettings->getDefaultInstallationPath());
+
     L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
 
     L_INFO("Parsing command line");
@@ -62,10 +64,12 @@ void InstallManager::initInstallation()
         }
         m_uiManager->init();
 
-        QObject::connect(m_uiManager, SIGNAL(changeInstallationSignal()),
-                         this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-        QObject::connect(this, SIGNAL(endInstallation(bool,QStringList)),
-                         m_uiManager, SLOT(eventEndInstallation(bool,QStringList)));
+        connect(m_uiManager, SIGNAL(changeInstallationSignal()),
+                this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
+        connect(this, SIGNAL(endInstallation(bool,QStringList)),
+                m_uiManager, SLOT(eventEndInstallation(bool,QStringList)));
+        connect(m_uiManager, SIGNAL(installationFolderChanged(QString)),
+                this, SLOT(setInstallationDir(const QString&)));
     } else {
         start();
     }
@@ -88,7 +92,6 @@ void InstallManager::startInstallation()
     L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
 
     QStringList errorMessages;
-    m_appPath.setInstallationDir(QDir(m_settings->getInstallLocation()));
 
     // tree creation
     bool successCreatingFolders = createInstallationFolders();
@@ -353,7 +356,7 @@ bool InstallManager::createShortcut()
         success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
     }
     // StartMenu folder and shortcut
-    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_settings->getInstallLocation()).dirName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
+    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_projectSettings->getDefaultInstallationPath()).dirName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
     return success;
 }
 
@@ -385,4 +388,9 @@ void InstallManager::closeInstallation(bool _launchApplication)
 void InstallManager::eventCloseInstallation(bool _launchApplication)
 {
     closeInstallation(_launchApplication);
+}
+
+void InstallManager::setInstallationDir(const QString &_directory)
+{
+    m_appPath.setInstallationDir(QDir(_directory));
 }

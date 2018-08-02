@@ -37,7 +37,6 @@ const QString Settings::ShortcutOfflineName("shortcut_offline_name");
 const QString Settings::ShortcutOfflineArgs("shortcut_offline_args");
 const QString Settings::ShortcutForAllUsers("shortcut_for_all_users");
 
-const QString Settings::InstallLocation("install_location");
 const QString Settings::DataLocation("data_location");
 
 const QString Settings::DeploymentUrl("deployment_url");
@@ -78,7 +77,6 @@ Settings::Settings() :
     m_windowBorderWidth("0"),
     m_shortcutForAllUsers(false),
     m_dataLocation(""),
-    m_installLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
     m_proxyUse(false),
@@ -193,7 +191,6 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupData);
     putSetting(DataLocation, m_dataLocation);
-    putSetting(InstallLocation, m_installLocation);
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupServer);
@@ -259,7 +256,6 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupData);
     m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
-    m_installLocation = getSetting(InstallLocation, m_installLocation).toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupServer);
@@ -307,7 +303,6 @@ QString Settings::paramListString()
     s = s + "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
     s = s + "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
     s = s + "data_location = " + m_dataLocation + "\n";
-    s = s + "install_location = " + m_installLocation + "\n";
     s = s + "deployment_url = " + m_deploymentUrl + "\n";
     s = s + "run_at_start = " + QString::number(m_runAtStart) + "\n";
 
@@ -467,16 +462,6 @@ void Settings::setDeploymentUrl(const QString &deploymentUrl)
 QString Settings::getDataLocation() const
 {
     return m_dataLocation;
-}
-
-QString Settings::getInstallLocation() const
-{
-    return m_installLocation;
-}
-
-void Settings::setInstallLocation(const QString &installLocation)
-{
-    m_installLocation = installLocation;
 }
 
 void Settings::setDataLocation(const QString &dataLocation)

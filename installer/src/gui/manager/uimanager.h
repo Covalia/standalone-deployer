@@ -50,6 +50,7 @@ class UIManager : public QObject
         void switchProxyToPersonalize();
         void switchAboutTo();
         void eventCloseInstallation(bool _launchApplication);
+        void installationFolderChangedEvent(QString _folder);
 
     public slots:
         void eventEndInstallation(bool _success, QStringList _errors);
@@ -57,6 +58,7 @@ class UIManager : public QObject
     signals:
         void changeInstallationSignal();
         void closeInstallationSignal(bool _launchApplication);
+        void installationFolderChanged(QString _folder);
 };
 
 #endif // INSTALLER__UIMANAGER_H

@@ -117,6 +117,8 @@ void UIManager::changePersonalize()
             this, SLOT(switchPersonalizeToProxy()));
     connect(m_personalize, SIGNAL(customInstallationSignal()),
             this, SLOT(switchWelcomeToInstallation()));
+    connect(m_personalize, SIGNAL(installationFolderChanged(QString)),
+            this, SLOT(installationFolderChangedEvent(QString)));
 }
 
 void UIManager::changeProxy()
@@ -212,3 +214,7 @@ void UIManager::eventCloseInstallation(bool _launchApplication)
     emit closeInstallationSignal(_launchApplication);
 }
 
+void UIManager::installationFolderChangedEvent(QString _folder)
+{
+    emit installationFolderChanged(_folder);
+}

@@ -14,7 +14,7 @@ CommandLineParser::CommandLineParser()
     QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "silent", EMPTY);
 
     // data location
-    QCommandLineOption intallLocation_opt("installLocation", "Application installation path [--intallLocation=\"XXX\"].", "installLocation", EMPTY);
+    QCommandLineOption installLocation_opt("installLocation", "Application installation path [--installLocation=\"XXX\"].", "installLocation", EMPTY);
     QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", EMPTY);
 
     // proxy configuration
@@ -41,7 +41,7 @@ CommandLineParser::CommandLineParser()
     parser.addVersionOption();
 
     parser.addOption(silent_opt);
-    parser.addOption(intallLocation_opt);
+    parser.addOption(installLocation_opt);
     parser.addOption(dataLocation_opt);
     parser.addOption(proxyAuto_opt);
     parser.addOption(proxyHostname_opt);
@@ -63,7 +63,7 @@ CommandLineParser::CommandLineParser()
     L_INFO("Start to read command line arguments with parse data");
 
     m_silent = getValueBool(parser, silent_opt);
-    m_intallLocation = getValueString(parser, intallLocation_opt);
+    m_installLocation = getValueString(parser, installLocation_opt);
     m_dataLocation = getValueString(parser, dataLocation_opt);
     m_proxyAuto = getValueBool(parser, proxyAuto_opt);
     m_proxyHostname = getValueString(parser, proxyHostname_opt);
@@ -73,7 +73,7 @@ CommandLineParser::CommandLineParser()
     m_language = getValueString(parser, language_opt);
     m_runApp = getValueBool(parser, runApp_opt);
     m_runAtStart = getValueBool(parser, runAtStart_opt);
-    m_offshort = getValueBool(parser, createOfflineShortcut_opt);
+    m_offlineShortcut = getValueBool(parser, createOfflineShortcut_opt);
     m_shortcut = getValueBool(parser, createShortcut_opt);
     m_allUserShortcut = getValueBool(parser, createAllUserShortcut_opt);
 
@@ -84,9 +84,8 @@ void CommandLineParser::sendToSettings()
 {
     Settings * settings = Settings::getInstance();
 
-    if (!isEmptyValue(m_intallLocation)) {
-        settings->setInstallLocation(m_intallLocation);
-        settings->setDataLocation(m_intallLocation + QDir::separator() + IOConfig::DataDir);
+    if (!isEmptyValue(m_installLocation)) {
+        settings->setDataLocation(m_installLocation + QDir::separator() + IOConfig::DataDir);
     }
     if (!isEmptyValue(m_dataLocation)) {
         settings->setDataLocation(m_dataLocation);
@@ -123,8 +122,8 @@ void CommandLineParser::sendToSettings()
         settings->setProxyPassword(m_proxyPassword);
     }
 
-    if (!isEmptyValue(m_offshort)) {
-        settings->setShortcutOffline(parseBool(m_offshort));
+    if (!isEmptyValue(m_offlineShortcut)) {
+        settings->setShortcutOffline(parseBool(m_offlineShortcut));
     }
     if (!isEmptyValue(m_shortcut)) {
         settings->setShortcutOnline(parseBool(m_shortcut));
@@ -217,12 +216,12 @@ void CommandLineParser::setShortcut(const QString &shortcut)
 
 QString CommandLineParser::getOffshort() const
 {
-    return m_offshort;
+    return m_offlineShortcut;
 }
 
 void CommandLineParser::setOffshort(const QString &offshort)
 {
-    m_offshort = offshort;
+    m_offlineShortcut = offshort;
 }
 
 QString CommandLineParser::getRunAtStart() const
@@ -303,16 +302,6 @@ QString CommandLineParser::getDataLocation() const
 void CommandLineParser::setDataLocation(const QString &dataLocation)
 {
     m_dataLocation = dataLocation;
-}
-
-QString CommandLineParser::getIntallLocation() const
-{
-    return m_intallLocation;
-}
-
-void CommandLineParser::setIntallLocation(const QString &intallLocation)
-{
-    m_intallLocation = intallLocation;
 }
 
 QString CommandLineParser::getSilent() const
