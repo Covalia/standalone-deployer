@@ -8,31 +8,33 @@
 
 #include <QDir>
 
+const QString CommandLineParser::Empty("EMPTY");
+
 CommandLineParser::CommandLineParser()
 {
     // silence mode
-    QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "silent", EMPTY);
+    QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "silent", Empty);
 
     // data location
-    QCommandLineOption installLocation_opt("installLocation", "Application installation path [--installLocation=\"XXX\"].", "installLocation", EMPTY);
-    QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", EMPTY);
+    QCommandLineOption installLocation_opt("installLocation", "Application installation path [--installLocation=\"XXX\"].", "installLocation", Empty);
+    QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", Empty);
 
     // proxy configuration
-    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse=true --proxyAuto=true]", "proxyAuto", EMPTY);
-    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "proxyHostname", EMPTY);
-    QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "proxyPort", EMPTY);
-    QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "proxyLogin", EMPTY);
-    QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "proxyPassword", EMPTY);
+    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse=true --proxyAuto=true]", "proxyAuto", Empty);
+    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "proxyHostname", Empty);
+    QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "proxyPort", Empty);
+    QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "proxyLogin", Empty);
+    QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "proxyPassword", Empty);
 
     // language
-    QCommandLineOption language_opt("language", "Language. EN=English, FR=French; [--language=FR]", "language", EMPTY);
+    QCommandLineOption language_opt("language", "Language. EN=English, FR=French; [--language=FR]", "language", Empty);
 
     // start and shortcut
-    QCommandLineOption runApp_opt("runApp", "Launch application after installation. [--runApp=true]", "runApp", EMPTY);
-    QCommandLineOption runAtStart_opt("runAtStart", "Launch application when computer starts. [--runAtStart=true]", "runAtStart", EMPTY);
-    QCommandLineOption createOfflineShortcut_opt("createOfflineShortcut", "Create offline shortcut. [--createOfflineShortcut=true]", "createOfflineShortcut", EMPTY);
-    QCommandLineOption createShortcut_opt("createShortcut", "Create application shortcut. [--shortcurt=false]", "createShortcut", EMPTY);
-    QCommandLineOption createAllUserShortcut_opt("createAllUserShortcut", "Create application shortcuts for all users. Option reserved when installation and data location are not in user folder [--createAllUserShortcut=false]", "createAllUserShortcut", EMPTY);
+    QCommandLineOption runApp_opt("runApp", "Launch application after installation. [--runApp=true]", "runApp", Empty);
+    QCommandLineOption runAtStart_opt("runAtStart", "Launch application when computer starts. [--runAtStart=true]", "runAtStart", Empty);
+    QCommandLineOption createOfflineShortcut_opt("createOfflineShortcut", "Create offline shortcut. [--createOfflineShortcut=true]", "createOfflineShortcut", Empty);
+    QCommandLineOption createShortcut_opt("createShortcut", "Create application shortcut. [--shortcurt=false]", "createShortcut", Empty);
+    QCommandLineOption createAllUserShortcut_opt("createAllUserShortcut", "Create application shortcuts for all users. Option reserved when installation and data location are not in user folder [--createAllUserShortcut=false]", "createAllUserShortcut", Empty);
 
     QCommandLineParser parser;
 
@@ -146,7 +148,7 @@ QString CommandLineParser::getValueBool(QCommandLineParser & parser, QCommandLin
             return "true";
         }
     } else {
-        return EMPTY;
+        return Empty;
     }
 }
 
@@ -157,7 +159,7 @@ QString CommandLineParser::getValueString(QCommandLineParser & parser, QCommandL
 
 bool CommandLineParser::isEmptyValue(QString value)
 {
-    return value == EMPTY;
+    return value == Empty;
 }
 
 bool CommandLineParser::parseBool(QString value)
@@ -167,12 +169,11 @@ bool CommandLineParser::parseBool(QString value)
 
 bool CommandLineParser::parseBoolWithDefaultValue(QString value, bool defaultValue)
 {
-    if(value == EMPTY){
+    if (isEmptyValue(value)) {
         return defaultValue;
     }
     return parseBool(value);
 }
-
 
 bool CommandLineParser::isSilent()
 {

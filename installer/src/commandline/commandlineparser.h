@@ -3,7 +3,6 @@
 
 #include <QCommandLineParser>
 
-const QString EMPTY = "EMPTY";
 
 /**
  * @class QCommandLineParser
@@ -13,6 +12,9 @@ const QString EMPTY = "EMPTY";
 class CommandLineParser
 {
     public:
+
+        static const QString Empty;
+
         CommandLineParser();
 
         void sendToSettings();
@@ -92,7 +94,7 @@ class CommandLineParser
         bool parseBool(QString value);
 
         /**
-         * @brief Parse bool value with default value when value is EMPTY (no set in command)
+         * @brief Parse bool value with default value when value is EMPTY (not set in command)
          * @param value
          * @return
          */
