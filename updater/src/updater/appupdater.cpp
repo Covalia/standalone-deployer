@@ -606,17 +606,21 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
         while (it.hasNext()) {
             QString filename = dir.relativeFilePath(it.next());
 
+            // startWith tests use hardcoded "/" instead of QDir::separator() because
+            // on windows, filename variable still contains "/", so tests will fail
+            // if using QDir::separator()...
+
 #ifdef Q_OS_MACOS
                 // to disable false application rebuilding,
                 // on macos, we ignore updater/<version>/updater.app/
                 if (_application == Application::getUpdaterApplication()
-                    && filename.startsWith(IOConfig::UpdaterName + IOConfig::MacOsAppExtension + QDir::separator())) {
+                    && filename.startsWith(IOConfig::UpdaterName + IOConfig::MacOsAppExtension + "/")) {
                     L_INFO("Ignoring file in Updater: " + filename);
                     continue;
                 }
                 // and loader/loader.app/
                 if (_application == Application::getLoaderApplication()
-                    && filename.startsWith(IOConfig::LoaderName + IOConfig::MacOsAppExtension + QDir::separator())) {
+                    && filename.startsWith(IOConfig::LoaderName + IOConfig::MacOsAppExtension + "/")) {
                     L_INFO("Ignoring file in Loader: " + filename);
                     continue;
                 }
@@ -638,14 +642,15 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
 
             // and java/<java-version>/dist/
             if (_application == Application::getJavaApplication()
-                && filename.startsWith(AppPathImpl::JavaSubDirName + QDir::separator())) {
+                && filename.startsWith(AppPathImpl::JavaSubDirName + "/")) {
                 L_INFO("Ignoring file in Java: " + filename);
                 continue;
             }
 
+            // TODO check la valeur de filename
             // and application/natives/
             if (_application == Application::getAppApplication()
-                && filename.startsWith(AppPathImpl::NativesDirName + QDir::separator())) {
+                && filename.startsWith(AppPathImpl::NativesDirName + "/")) {
                 L_INFO("Ignoring file in Application: " + filename);
                 continue;
             }
