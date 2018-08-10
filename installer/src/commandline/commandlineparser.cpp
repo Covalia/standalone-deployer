@@ -104,7 +104,6 @@ void CommandLineParser::sendToSettings()
     if (!isEmptyValue(m_proxyHostname)) {
         settings->setProxyUse(true);
         settings->setProxyHostname(m_proxyHostname);
-        settings->setProxyAuto(false);
         settings->setProxyManual(true);
     }
 

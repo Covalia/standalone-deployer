@@ -18,15 +18,12 @@ ProxyUI::ProxyUI(QWidget * _parent) :
     QButtonGroup * group = new QButtonGroup(this);
     group->setExclusive(true);
     group->addButton(m_ui->checkBoxProxy);
-    group->addButton(m_ui->checkBoxProxyAuto);
     group->addButton(m_ui->checkBoxProxyManual);
 
     // init with actual settings
     Settings * settings = Settings::getInstance();
     if (!settings->isProxyUse()) {
         m_ui->checkBoxProxy->setChecked(true);
-    } else if (settings->isProxyAuto()) {
-        m_ui->checkBoxProxyAuto->setChecked(true);
     } else if (settings->isProxyManual()) {
         m_ui->checkBoxProxyManual->setChecked(true);
     }
@@ -41,7 +38,6 @@ ProxyUI::ProxyUI(QWidget * _parent) :
 
     connect(m_ui->buttonValidateProxy, SIGNAL(clicked()), this, SLOT(validateSettings()));
     connect(m_ui->checkBoxProxy, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
-    connect(m_ui->checkBoxProxyAuto, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
     connect(m_ui->checkBoxProxyManual, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
 }
 
@@ -73,7 +69,6 @@ void ProxyUI::validateSettings()
     Settings * settings = Settings::getInstance();
 
     settings->setProxyUse(!m_ui->checkBoxProxy->isChecked());
-    settings->setProxyAuto(m_ui->checkBoxProxyAuto->isChecked());
     settings->setProxyManual(m_ui->checkBoxProxyManual->isChecked());
 
     settings->setProxyHostname(m_ui->lineEditHostname->text());

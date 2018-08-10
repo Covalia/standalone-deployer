@@ -33,7 +33,6 @@ class Settings
         static const QString JavaVersion;
 
         static const QString ProxyUse;
-        static const QString ProxyAuto;
         static const QString ProxyManual;
         static const QString ProxyHostname;
         static const QString ProxyPort;
@@ -80,9 +79,6 @@ class Settings
 
         bool isProxyUse() const;
         void setProxyUse(bool proxyUse);
-
-        bool isProxyAuto() const;
-        void setProxyAuto(bool proxyAuto);
 
         bool isProxyManual() const;
         void setProxyManual(bool proxyManual);
@@ -253,7 +249,6 @@ class Settings
         QString m_javaVersion;
 
         bool m_proxyUse;
-        bool m_proxyAuto;
         bool m_proxyManual;
         QString m_proxyHostname;
         int m_proxyPort;

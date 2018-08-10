@@ -70,24 +70,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="checkBoxProxyAuto">
-       <property name="font">
-        <font>
-         <family>Segoe UI</family>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>Automatic proxy configuration</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QCheckBox" name="checkBoxProxyManual">
        <property name="styleSheet">
         <string notr="true"/>

@@ -20,7 +20,6 @@ const QString Settings::UpdaterVersion("updater_version");
 const QString Settings::JavaVersion("java_version");
 
 const QString Settings::ProxyUse("proxy_use");
-const QString Settings::ProxyAuto("proxy_auto");
 const QString Settings::ProxyManual("proxy_manual");
 const QString Settings::ProxyHostname("proxy_hostname");
 const QString Settings::ProxyPort("proxy_port");
@@ -80,7 +79,6 @@ Settings::Settings() :
     m_updaterVersion(""),
     m_javaVersion(""),
     m_proxyUse(false),
-    m_proxyAuto(false),
     m_proxyManual(false),
     m_proxyHostname(""),
     m_proxyPort(-1),
@@ -167,7 +165,6 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupProxy);
     putSetting(ProxyUse, m_proxyUse);
-    putSetting(ProxyAuto, m_proxyAuto);
     putSetting(ProxyManual, m_proxyManual);
     putSetting(ProxyHostname, m_proxyHostname);
     putSetting(ProxyPort, m_proxyPort);
@@ -232,7 +229,6 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupProxy);
     m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
-    m_proxyAuto = getSetting(ProxyAuto, m_proxyAuto).toBool();
     m_proxyManual = getSetting(ProxyManual, m_proxyManual).toBool();
     m_proxyHostname = getSetting(ProxyHostname, "").toString();
     m_proxyPort = getSetting(ProxyPort, 0).toInt();
@@ -288,7 +284,6 @@ QString Settings::paramListString()
     s = s + "updater_version = " + m_updaterVersion + "\n";
     s = s + "java_version = " + m_javaVersion + "\n";
     s = s + "proxy_use = " + QString::number(m_proxyUse) + "\n";
-    s = s + "proxy_auto = " + QString::number(m_proxyAuto) + "\n";
     s = s + "proxy_manual = " + QString::number(m_proxyManual)  + "\n";
     s = s + "proxy_hostname = " + m_proxyHostname + "\n";
     s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
@@ -581,16 +576,6 @@ bool Settings::isProxyManual() const
 void Settings::setProxyManual(bool proxyManual)
 {
     m_proxyManual = proxyManual;
-}
-
-bool Settings::isProxyAuto() const
-{
-    return m_proxyAuto;
-}
-
-void Settings::setProxyAuto(bool proxyAuto)
-{
-    m_proxyAuto = proxyAuto;
 }
 
 bool Settings::isProxyUse() const
