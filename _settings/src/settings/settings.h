@@ -33,10 +33,8 @@ class Settings
         static const QString JavaVersion;
 
         static const QString ProxyUse;
-        static const QString ProxyManual;
         static const QString ProxyHostname;
         static const QString ProxyPort;
-        static const QString ProxyAuthentication;
         static const QString ProxyLogin;
         static const QString ProxyPassword;
 
@@ -80,17 +78,11 @@ class Settings
         bool isProxyUse() const;
         void setProxyUse(bool proxyUse);
 
-        bool isProxyManual() const;
-        void setProxyManual(bool proxyManual);
-
         QString getProxyHostname() const;
         void setProxyHostname(const QString &proxyHostname);
 
         int getProxyPort() const;
         void setProxyPort(int proxyPort);
-
-        bool isProxyAuthentification() const;
-        void setProxyAuthentification(bool proxyAuthentification);
 
         QString getProxyLogin() const;
         void setProxyLogin(const QString &proxyLogin);
@@ -249,10 +241,8 @@ class Settings
         QString m_javaVersion;
 
         bool m_proxyUse;
-        bool m_proxyManual;
         QString m_proxyHostname;
         int m_proxyPort;
-        bool m_proxyAuthentification;
         QString m_proxyLogin;
         QString m_proxyPassword;
 };

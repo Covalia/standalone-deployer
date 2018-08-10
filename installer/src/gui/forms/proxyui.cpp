@@ -15,21 +15,14 @@ ProxyUI::ProxyUI(QWidget * _parent) :
 
     StyleManager::transformStyle(this);
 
-    QButtonGroup * group = new QButtonGroup(this);
-    group->setExclusive(true);
-    group->addButton(m_ui->checkBoxProxy);
-    group->addButton(m_ui->checkBoxProxyManual);
-
     // init with actual settings
     Settings * settings = Settings::getInstance();
-    if (!settings->isProxyUse()) {
-        m_ui->checkBoxProxy->setChecked(true);
-    } else if (settings->isProxyManual()) {
-        m_ui->checkBoxProxyManual->setChecked(true);
-    }
+
+    m_ui->checkBoxUseProxy->setChecked(settings->isProxyUse());
+
     m_ui->lineEditHostname->setText(settings->getProxyHostname());
-    if (settings->getProxyPort() > 0) {
-        m_ui->lineEditPort->setText(QString::number(settings->getProxyPort()));
+    if (settings->getProxyPort() >= 0 && settings->getProxyPort() <= 65535) {
+        m_ui->spinBoxPort->setValue(settings->getProxyPort());
     }
     m_ui->lineEditLogin->setText(settings->getProxyLogin());
     m_ui->lineEditPassword->setText(settings->getProxyPassword());
@@ -37,8 +30,7 @@ ProxyUI::ProxyUI(QWidget * _parent) :
     updateVisibleField();
 
     connect(m_ui->buttonValidateProxy, SIGNAL(clicked()), this, SLOT(validateSettings()));
-    connect(m_ui->checkBoxProxy, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
-    connect(m_ui->checkBoxProxyManual, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
+    connect(m_ui->checkBoxUseProxy, SIGNAL(stateChanged(int)), this, SLOT(updateVisibleField()));
 }
 
 ProxyUI::~ProxyUI()
@@ -48,15 +40,17 @@ ProxyUI::~ProxyUI()
 
 void ProxyUI::updateVisibleField()
 {
-    m_ui->labelHostname->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->labelPort->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->labelLogin->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->labelPassword->setEnabled(m_ui->checkBoxProxyManual->isChecked());
+    const bool enabled = m_ui->checkBoxUseProxy->isChecked();
 
-    m_ui->lineEditHostname->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->lineEditPort->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->lineEditLogin->setEnabled(m_ui->checkBoxProxyManual->isChecked());
-    m_ui->lineEditPassword->setEnabled(m_ui->checkBoxProxyManual->isChecked());
+    m_ui->labelHostname->setEnabled(enabled);
+    m_ui->labelPort->setEnabled(enabled);
+    m_ui->labelLogin->setEnabled(enabled);
+    m_ui->labelPassword->setEnabled(enabled);
+
+    m_ui->lineEditHostname->setEnabled(enabled);
+    m_ui->spinBoxPort->setEnabled(enabled);
+    m_ui->lineEditLogin->setEnabled(enabled);
+    m_ui->lineEditPassword->setEnabled(enabled);
 }
 
 void ProxyUI::changeLanguage()
@@ -68,19 +62,11 @@ void ProxyUI::validateSettings()
 {
     Settings * settings = Settings::getInstance();
 
-    settings->setProxyUse(!m_ui->checkBoxProxy->isChecked());
-    settings->setProxyManual(m_ui->checkBoxProxyManual->isChecked());
+    settings->setProxyUse(m_ui->checkBoxUseProxy->isChecked());
 
     settings->setProxyHostname(m_ui->lineEditHostname->text());
 
-    // port parsing to int
-    if (!m_ui->lineEditPort->text().isEmpty()) {
-        bool okParsePort = false;
-        int port = m_ui->lineEditPort->text().toInt(&okParsePort, 10);
-        if (okParsePort) {
-            settings->setProxyPort(port);
-        }
-    }
+    settings->setProxyPort(m_ui->spinBoxPort->value());
     settings->setProxyLogin(m_ui->lineEditLogin->text());
     settings->setProxyPassword(m_ui->lineEditPassword->text());
 

@@ -20,10 +20,8 @@ const QString Settings::UpdaterVersion("updater_version");
 const QString Settings::JavaVersion("java_version");
 
 const QString Settings::ProxyUse("proxy_use");
-const QString Settings::ProxyManual("proxy_manual");
 const QString Settings::ProxyHostname("proxy_hostname");
 const QString Settings::ProxyPort("proxy_port");
-const QString Settings::ProxyAuthentication("proxy_authentication");
 const QString Settings::ProxyLogin("proxy_login");
 const QString Settings::ProxyPassword("proxy_password");
 
@@ -79,10 +77,8 @@ Settings::Settings() :
     m_updaterVersion(""),
     m_javaVersion(""),
     m_proxyUse(false),
-    m_proxyManual(false),
     m_proxyHostname(""),
     m_proxyPort(-1),
-    m_proxyAuthentification(false),
     m_proxyLogin(""),
     m_proxyPassword("")
 
@@ -165,10 +161,8 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupProxy);
     putSetting(ProxyUse, m_proxyUse);
-    putSetting(ProxyManual, m_proxyManual);
     putSetting(ProxyHostname, m_proxyHostname);
     putSetting(ProxyPort, m_proxyPort);
-    putSetting(ProxyAuthentication, m_proxyAuthentification);
     putSetting(ProxyLogin, m_proxyLogin);
     putSetting(ProxyPassword, m_proxyPassword);
     m_settings->endGroup();
@@ -229,10 +223,8 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupProxy);
     m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
-    m_proxyManual = getSetting(ProxyManual, m_proxyManual).toBool();
     m_proxyHostname = getSetting(ProxyHostname, "").toString();
     m_proxyPort = getSetting(ProxyPort, 0).toInt();
-    m_proxyAuthentification = getSetting(ProxyAuthentication, m_proxyAuthentification).toBool();
     m_proxyLogin = getSetting(ProxyLogin, "").toString();
     m_proxyPassword = getSetting(ProxyPassword, "").toString();
     m_settings->endGroup();
@@ -284,10 +276,8 @@ QString Settings::paramListString()
     s = s + "updater_version = " + m_updaterVersion + "\n";
     s = s + "java_version = " + m_javaVersion + "\n";
     s = s + "proxy_use = " + QString::number(m_proxyUse) + "\n";
-    s = s + "proxy_manual = " + QString::number(m_proxyManual)  + "\n";
     s = s + "proxy_hostname = " + m_proxyHostname + "\n";
     s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
-    s = s + "proxy_authentification = " + QString::number(m_proxyAuthentification) + "\n";
     s = s + "proxy_login = " + m_proxyLogin + "\n";
     s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
     s = s + "lang = " + m_lang + "\n";
@@ -538,16 +528,6 @@ void Settings::setProxyLogin(const QString &proxyLogin)
     m_proxyLogin = proxyLogin;
 }
 
-bool Settings::isProxyAuthentification() const
-{
-    return m_proxyAuthentification;
-}
-
-void Settings::setProxyAuthentification(bool proxyAuthentification)
-{
-    m_proxyAuthentification = proxyAuthentification;
-}
-
 int Settings::getProxyPort() const
 {
     return m_proxyPort;
@@ -566,16 +546,6 @@ QString Settings::getProxyHostname() const
 void Settings::setProxyHostname(const QString &proxyHostname)
 {
     m_proxyHostname = proxyHostname;
-}
-
-bool Settings::isProxyManual() const
-{
-    return m_proxyManual;
-}
-
-void Settings::setProxyManual(bool proxyManual)
-{
-    m_proxyManual = proxyManual;
 }
 
 bool Settings::isProxyUse() const

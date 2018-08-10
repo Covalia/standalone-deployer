@@ -101,10 +101,12 @@ void CommandLineParser::sendToSettings()
         settings->setDataLocation(m_dataLocation);
     }
 
-    if (!isEmptyValue(m_proxyHostname)) {
+    if (!isEmptyValue(m_proxyHostname) && !isEmptyValue(m_proxyPort)) {
         settings->setProxyUse(true);
+    }
+
+    if (!isEmptyValue(m_proxyHostname)) {
         settings->setProxyHostname(m_proxyHostname);
-        settings->setProxyManual(true);
     }
 
     // port to int
@@ -112,13 +114,14 @@ void CommandLineParser::sendToSettings()
         bool okParsePort = false;
         int port = m_proxyPort.toInt(&okParsePort, 10);
         if (okParsePort) {
-            settings->setProxyPort(port);
+            if (port >= 0 && port <= 65535) {
+                settings->setProxyPort(port);
+            }
         }
     }
 
     if (!isEmptyValue(m_proxyLogin)) {
         settings->setProxyLogin(m_proxyLogin);
-        settings->setProxyAuthentification(true);
     }
     if (!isEmptyValue(m_proxyPassword)) {
         settings->setProxyPassword(m_proxyPassword);
