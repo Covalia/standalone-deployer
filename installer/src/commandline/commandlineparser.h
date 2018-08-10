@@ -19,17 +19,11 @@ class CommandLineParser
 
         void sendToSettings();
 
-        bool isSilent();
-        bool isRunApp();
-
-        QString getSilent() const;
-        void setSilent(const QString &silent);
+        bool isSilent() const;
+        void setSilent(bool _silent);
 
         QString getDataLocation() const;
         void setDataLocation(const QString &dataLocation);
-
-        QString getProxyAuto() const;
-        void setProxyAuto(const QString &proxyAuto);
 
         QString getProxyHostname() const;
         void setProxyHostname(const QString &proxyHostname);
@@ -46,30 +40,22 @@ class CommandLineParser
         QString getLanguage() const;
         void setLanguage(const QString &language);
 
-        QString getRunApp() const;
-        void setRunApp(const QString &runApp);
+        bool isRunApp() const;
+        void setRunApp(bool _runApp);
 
-        QString getRunAtStart() const;
-        void setRunAtStart(const QString &runAtStart);
+        bool isRunAtStart() const;
+        void setRunAtStart(bool _runAtStart);
 
-        QString getOffshort() const;
-        void setOffshort(const QString &offshort);
+        bool isCreateOfflineShortcut() const;
+        void setOfflineShortcut(bool _createOfflineShortcut);
 
-        QString getShortcut() const;
-        void setShortcut(const QString &shortcut);
+        bool isCreateShortcut() const;
+        void setCreateShortcut(bool _createShortcut);
 
-        QString getAllUserShortcut() const;
-        void setAllUserShortcut(const QString &allUserShortcut);
+        bool isCreateAllUserShortcut() const;
+        void setCreateAllUserShortcut(bool _createAllUserShortcut);
 
     private:
-
-        /**
-         * @brief Method used to read boolean arguments
-         * @param parser
-         * @param commandOption
-         * @return true if argument exist and have no value or true value. Example : --arg OR--arg=true
-         */
-        QString getValueBool(QCommandLineParser & parser, QCommandLineOption & commandOption);
 
         /**
          * @brief Method used to read string arguments
@@ -86,34 +72,19 @@ class CommandLineParser
          */
         bool isEmptyValue(QString value);
 
-        /**
-         * @brief Parse bool value
-         * @param value
-         * @return
-         */
-        bool parseBool(QString value);
-
-        /**
-         * @brief Parse bool value with default value when value is EMPTY (not set in command)
-         * @param value
-         * @return
-         */
-        bool parseBoolWithDefaultValue(QString value, bool defaultValue);
-
-        QString m_silent;
+        bool m_silent;
         QString m_installLocation;
         QString m_dataLocation;
-        QString m_proxyAuto;
         QString m_proxyHostname;
         QString m_proxyPort;
         QString m_proxyLogin;
         QString m_proxyPassword;
         QString m_language;
-        QString m_runApp;
-        QString m_runAtStart;
-        QString m_offlineShortcut;
-        QString m_shortcut;
-        QString m_allUserShortcut;
+        bool m_runApp;
+        bool m_runAtStart;
+        bool m_createOfflineShortcut;
+        bool m_createShortcut;
+        bool m_createAllUserShortcut;
 };
 
 #endif // INSTALLER__COMMANDLINEPARSER_H

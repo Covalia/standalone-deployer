@@ -78,8 +78,6 @@ private:
     Application m_currentApplication;
     QNetworkReply * m_currentReply;
 
-    QString m_appName;
-
     QQueue<QPair<Application, QUrl> > m_headQueue;
     QQueue<QPair<Application, QUrl> > m_downloadQueue;
 
