@@ -3,7 +3,6 @@
 
 #include <QCommandLineParser>
 
-
 /**
  * @class QCommandLineParser
  *
@@ -13,8 +12,6 @@ class CommandLineParser
 {
     public:
 
-        static const QString Empty;
-
         CommandLineParser();
 
         void sendToSettings();
@@ -23,22 +20,22 @@ class CommandLineParser
         void setSilent(bool _silent);
 
         QString getDataLocation() const;
-        void setDataLocation(const QString &dataLocation);
+        void setDataLocation(const QString &_dataLocation);
 
         QString getProxyHostname() const;
-        void setProxyHostname(const QString &proxyHostname);
+        void setProxyHostname(const QString &_proxyHostname);
 
         QString getProxyPort() const;
-        void setProxyPort(const QString &proxyPort);
+        void setProxyPort(const QString &_proxyPort);
 
         QString getProxyLogin() const;
-        void setProxyLogin(const QString &proxyLogin);
+        void setProxyLogin(const QString &_proxyLogin);
 
         QString getProxyPassword() const;
-        void setProxyPassword(const QString &proxyPassword);
+        void setProxyPassword(const QString &_proxyPassword);
 
         QString getLanguage() const;
-        void setLanguage(const QString &language);
+        void setLanguage(const QString &_language);
 
         bool isRunApp() const;
         void setRunApp(bool _runApp);
@@ -57,21 +54,6 @@ class CommandLineParser
 
     private:
 
-        /**
-         * @brief Method used to read string arguments
-         * @param parser
-         * @param commandOption
-         * @return value unless the value is "EMPTY" (defaut arg value) return empty value ("").
-         */
-        QString getValueString(QCommandLineParser & parser, QCommandLineOption & commandOption);
-
-        /**
-         * @brief Return true is value is empty : not definid in arg of parser line
-         * @param value
-         * @return
-         */
-        bool isEmptyValue(QString value);
-
         bool m_silent;
         QString m_installLocation;
         QString m_dataLocation;
@@ -87,4 +69,4 @@ class CommandLineParser
         bool m_createAllUserShortcut;
 };
 
-#endif // INSTALLER__COMMANDLINEPARSER_H
+#endif

@@ -8,25 +8,23 @@
 
 #include <QDir>
 
-const QString CommandLineParser::Empty("EMPTY");
-
 CommandLineParser::CommandLineParser()
 {
     // silent mode
     QCommandLineOption silentOption("silent", "Enable silent mode. Install application without graphical interface.");
 
     // data location
-    QCommandLineOption installLocationOption("installLocation", "Set the application installation path.", "installLocation", Empty);
-    QCommandLineOption dataLocationOption("dataLocation", "Set the application data path.", "dataLocation", Empty);
+    QCommandLineOption installLocationOption("installLocation", "Set the application installation path.", "installLocation");
+    QCommandLineOption dataLocationOption("dataLocation", "Set the application data path.", "dataLocation");
 
     // proxy configuration
-    QCommandLineOption proxyHostnameOption("proxyHostname", "Set the proxy hostname.", "proxyHostname", Empty);
-    QCommandLineOption proxyPortOption("proxyPort", "Set the proxy port.", "proxyPort", Empty);
-    QCommandLineOption proxyLoginOption("proxyLogin", "Set the proxy authentication login.", "proxyLogin", Empty);
-    QCommandLineOption proxyPasswordOption("proxyPassword", "Set the proxy authentication password.", "proxyPassword", Empty);
+    QCommandLineOption proxyHostnameOption("proxyHostname", "Set the proxy hostname.", "proxyHostname");
+    QCommandLineOption proxyPortOption("proxyPort", "Set the proxy port.", "proxyPort");
+    QCommandLineOption proxyLoginOption("proxyLogin", "Set the proxy authentication login.", "proxyLogin");
+    QCommandLineOption proxyPasswordOption("proxyPassword", "Set the proxy authentication password.", "proxyPassword");
 
     // language
-    QCommandLineOption languageOption("language", "Set the application language. EN for English, FR for French.", "language", Empty);
+    QCommandLineOption languageOption("language", "Set the application language. EN for English, FR for French.", "language");
 
     // start and shortcut
     QCommandLineOption runAppOption("runApp", "Enable the application launch after installation.");
@@ -62,13 +60,13 @@ CommandLineParser::CommandLineParser()
     parser.process(QCoreApplication::arguments());
 
     m_silent = parser.isSet(silentOption);
-    m_installLocation = getValueString(parser, installLocationOption);
-    m_dataLocation = getValueString(parser, dataLocationOption);
-    m_proxyHostname = getValueString(parser, proxyHostnameOption);
-    m_proxyPort = getValueString(parser, proxyPortOption);
-    m_proxyLogin = getValueString(parser, proxyLoginOption);
-    m_proxyPassword = getValueString(parser, proxyPasswordOption);
-    m_language = getValueString(parser, languageOption);
+    m_installLocation = parser.value(installLocationOption);
+    m_dataLocation = parser.value(dataLocationOption);
+    m_proxyHostname = parser.value(proxyHostnameOption);
+    m_proxyPort = parser.value(proxyPortOption);
+    m_proxyLogin = parser.value(proxyLoginOption);
+    m_proxyPassword = parser.value(proxyPasswordOption);
+    m_language = parser.value(languageOption);
     m_runApp = parser.isSet(runAppOption);
     m_runAtStart = parser.isSet(runAtStartOption);
     m_createOfflineShortcut = parser.isSet(createOfflineShortcutOption);
@@ -94,23 +92,23 @@ void CommandLineParser::sendToSettings()
 {
     Settings * settings = Settings::getInstance();
 
-    if (!isEmptyValue(m_installLocation)) {
+    if (!m_installLocation.isEmpty()) {
         settings->setDataLocation(m_installLocation + QDir::separator() + IOConfig::DataDir);
     }
-    if (!isEmptyValue(m_dataLocation)) {
+    if (!m_dataLocation.isEmpty()) {
         settings->setDataLocation(m_dataLocation);
     }
 
-    if (!isEmptyValue(m_proxyHostname) && !isEmptyValue(m_proxyPort)) {
+    if (!m_proxyHostname.isEmpty() && !m_proxyPort.isEmpty()) {
         settings->setProxyUse(true);
     }
 
-    if (!isEmptyValue(m_proxyHostname)) {
+    if (!m_proxyHostname.isEmpty()) {
         settings->setProxyHostname(m_proxyHostname);
     }
 
     // port to int
-    if (!isEmptyValue(m_proxyPort)) {
+    if (!m_proxyPort.isEmpty()) {
         bool okParsePort = false;
         int port = m_proxyPort.toInt(&okParsePort, 10);
         if (okParsePort) {
@@ -120,10 +118,10 @@ void CommandLineParser::sendToSettings()
         }
     }
 
-    if (!isEmptyValue(m_proxyLogin)) {
+    if (!m_proxyLogin.isEmpty()) {
         settings->setProxyLogin(m_proxyLogin);
     }
-    if (!isEmptyValue(m_proxyPassword)) {
+    if (!m_proxyPassword.isEmpty()) {
         settings->setProxyPassword(m_proxyPassword);
     }
 
@@ -131,16 +129,6 @@ void CommandLineParser::sendToSettings()
     settings->setShortcutOnline(m_createShortcut);
     settings->setShortcutForAllUsers(m_createAllUserShortcut);
     settings->setRunAtStart(m_runAtStart);
-}
-
-QString CommandLineParser::getValueString(QCommandLineParser & parser, QCommandLineOption & commandOption)
-{
-    return parser.value(commandOption);
-}
-
-bool CommandLineParser::isEmptyValue(QString value)
-{
-    return value == Empty;
 }
 
 bool CommandLineParser::isRunApp() const
@@ -198,9 +186,9 @@ QString CommandLineParser::getLanguage() const
     return m_language;
 }
 
-void CommandLineParser::setLanguage(const QString &language)
+void CommandLineParser::setLanguage(const QString &_language)
 {
-    m_language = language;
+    m_language = _language;
 }
 
 QString CommandLineParser::getProxyPassword() const
@@ -208,9 +196,9 @@ QString CommandLineParser::getProxyPassword() const
     return m_proxyPassword;
 }
 
-void CommandLineParser::setProxyPassword(const QString &proxyPassword)
+void CommandLineParser::setProxyPassword(const QString &_proxyPassword)
 {
-    m_proxyPassword = proxyPassword;
+    m_proxyPassword = _proxyPassword;
 }
 
 QString CommandLineParser::getProxyLogin() const
@@ -218,9 +206,9 @@ QString CommandLineParser::getProxyLogin() const
     return m_proxyLogin;
 }
 
-void CommandLineParser::setProxyLogin(const QString &proxyLogin)
+void CommandLineParser::setProxyLogin(const QString &_proxyLogin)
 {
-    m_proxyLogin = proxyLogin;
+    m_proxyLogin = _proxyLogin;
 }
 
 QString CommandLineParser::getProxyPort() const
@@ -228,9 +216,9 @@ QString CommandLineParser::getProxyPort() const
     return m_proxyPort;
 }
 
-void CommandLineParser::setProxyPort(const QString &proxyPort)
+void CommandLineParser::setProxyPort(const QString &_proxyPort)
 {
-    m_proxyPort = proxyPort;
+    m_proxyPort = _proxyPort;
 }
 
 QString CommandLineParser::getProxyHostname() const
@@ -238,9 +226,9 @@ QString CommandLineParser::getProxyHostname() const
     return m_proxyHostname;
 }
 
-void CommandLineParser::setProxyHostname(const QString &proxyHostname)
+void CommandLineParser::setProxyHostname(const QString &_proxyHostname)
 {
-    m_proxyHostname = proxyHostname;
+    m_proxyHostname = _proxyHostname;
 }
 
 QString CommandLineParser::getDataLocation() const
@@ -248,9 +236,9 @@ QString CommandLineParser::getDataLocation() const
     return m_dataLocation;
 }
 
-void CommandLineParser::setDataLocation(const QString &dataLocation)
+void CommandLineParser::setDataLocation(const QString &_dataLocation)
 {
-    m_dataLocation = dataLocation;
+    m_dataLocation = _dataLocation;
 }
 
 bool CommandLineParser::isSilent() const
