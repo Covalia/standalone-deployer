@@ -19,13 +19,9 @@ class Settings
 {
     public:
 
-        static const QString GroupInfo;
         static const QString GroupProxy;
-        static const QString GroupLang;
-        static const QString GroupShortcut;
-        static const QString GroupData;
-        static const QString GroupServer;
-        static const QString GroupStart;
+        static const QString GroupUninst;
+        static const QString GroupConfig;
         static const QString GroupTheme;
 
         static const QString AppName;

@@ -6,14 +6,10 @@
 #include <QMutexLocker>
 #include <QSettings>
 
-const QString Settings::GroupInfo("INFO");
-const QString Settings::GroupProxy("PROXY");
-const QString Settings::GroupLang("LANG");
-const QString Settings::GroupShortcut("SHORTCUT");
-const QString Settings::GroupData("DATA");
-const QString Settings::GroupServer("SERVER");
-const QString Settings::GroupStart("START");
-const QString Settings::GroupTheme("THEME");
+const QString Settings::GroupProxy("proxy");
+const QString Settings::GroupUninst("uninst");
+const QString Settings::GroupConfig("config");
+const QString Settings::GroupTheme("theme");
 
 const QString Settings::AppName("app_name");
 const QString Settings::UpdaterVersion("updater_version");
@@ -78,7 +74,7 @@ Settings::Settings() :
     m_javaVersion(""),
     m_proxyUse(false),
     m_proxyHostname(""),
-    m_proxyPort(-1),
+    m_proxyPort(0),
     m_proxyLogin(""),
     m_proxyPassword("")
 
@@ -153,12 +149,6 @@ bool Settings::writeSettings()
     L_INFO("Starting to write all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GroupInfo);
-    putSetting(AppName, m_appName);
-    putSetting(UpdaterVersion, m_updaterVersion);
-    putSetting(JavaVersion, m_javaVersion);
-    m_settings->endGroup();
-
     m_settings->beginGroup(GroupProxy);
     putSetting(ProxyUse, m_proxyUse);
     putSetting(ProxyHostname, m_proxyHostname);
@@ -167,29 +157,23 @@ bool Settings::writeSettings()
     putSetting(ProxyPassword, m_proxyPassword);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupLang);
-    putSetting(Lang, m_lang);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupShortcut);
+    m_settings->beginGroup(GroupUninst);
     putSetting(ShortcutOffline, m_shortcutOffline);
     putSetting(ShortcutOnline, m_shortcutOnline);
     putSetting(ShortcutName, m_shortcutName);
     putSetting(ShortcutOfflineName, m_shortcutOfflineName);
     putSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs);
     putSetting(ShortcutForAllUsers, m_shortcutForAllUsers);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupData);
-    putSetting(DataLocation, m_dataLocation);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupServer);
-    putSetting(DeploymentUrl, m_deploymentUrl);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupStart);
     putSetting(RunAtStart, m_runAtStart);
+    m_settings->endGroup();
+
+    m_settings->beginGroup(GroupConfig);
+    putSetting(AppName, m_appName);
+    putSetting(Lang, m_lang);
+    putSetting(UpdaterVersion, m_updaterVersion);
+    putSetting(JavaVersion, m_javaVersion);
+    putSetting(DataLocation, m_dataLocation);
+    putSetting(DeploymentUrl, m_deploymentUrl);
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupTheme);
@@ -215,12 +199,6 @@ void Settings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GroupInfo);
-    m_appName = getSetting(AppName, m_appName).toString();
-    m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
-    m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
-    m_settings->endGroup();
-
     m_settings->beginGroup(GroupProxy);
     m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
     m_proxyHostname = getSetting(ProxyHostname, "").toString();
@@ -229,29 +207,23 @@ void Settings::readSettings()
     m_proxyPassword = getSetting(ProxyPassword, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupLang);
-    m_lang = getSetting(Lang, "").toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupShortcut);
+    m_settings->beginGroup(GroupUninst);
     m_shortcutOffline = getSetting(ShortcutOffline, m_shortcutOffline).toBool();
     m_shortcutOnline = getSetting(ShortcutOnline, m_shortcutOnline).toBool();
     m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
     m_shortcutOfflineName = getSetting(ShortcutOfflineName, m_shortcutOfflineName).toString();
     m_shortcutOfflineArgs = getSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
     m_shortcutForAllUsers = getSetting(ShortcutForAllUsers, m_shortcutForAllUsers).toBool();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupData);
-    m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupServer);
-    m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupStart);
     m_runAtStart = getSetting(RunAtStart, m_runAtStart).toBool();
+    m_settings->endGroup();
+
+    m_settings->beginGroup(GroupConfig);
+    m_appName = getSetting(AppName, m_appName).toString();
+    m_lang = getSetting(Lang, "").toString();
+    m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
+    m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
+    m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
+    m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupTheme);
