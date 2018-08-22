@@ -25,8 +25,6 @@ const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_simple_in
 const QString ResourcesSettings::DefaultCustomInstallDataPath("default_custom_install_path");
 const QString ResourcesSettings::ChangeDataLocationAllowed("change_data_location_allowed");
 
-const QString ResourcesSettings::EncryptedPasswordKey("encrypted_password_key");
-
 const QString ResourcesSettings::InsetColor("inset_color");
 const QString ResourcesSettings::PanelBackgroundColor("panel_background_color");
 const QString ResourcesSettings::ButtonHoverBackgroundColor("button_hover_background_color");
@@ -62,8 +60,7 @@ ResourcesSettings::ResourcesSettings() :
     m_defaultInstallationPath("$HOME"),
     m_defaultSimpleInstallDataPath("$INSTALL_PATH/data"),
     m_defaultCustomInstallDataPath("$INSTALL_PATH/data"),
-    m_changeDataLocationAllowed(false),
-    m_encryptedPasswordKey("0x0c2cd4a4bcb9f023")
+    m_changeDataLocationAllowed(false)
 {
     L_INFO("Initialise ResourcesSettings singleton instance");
 }
@@ -127,8 +124,6 @@ void ResourcesSettings::readSettings()
     m_defaultSimpleInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultSimpleInstallDataPath, m_defaultSimpleInstallDataPath).toString());
     m_defaultCustomInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultCustomInstallDataPath, m_defaultCustomInstallDataPath).toString());
     m_changeDataLocationAllowed = m_settings->value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
-
-    m_encryptedPasswordKey = m_settings->value(EncryptedPasswordKey, m_encryptedPasswordKey).toString();
 
     m_insetColor = m_settings->value(InsetColor, m_insetColor).toString();
     m_panelBackgroundColor = m_settings->value(PanelBackgroundColor, m_panelBackgroundColor).toString();
@@ -196,16 +191,6 @@ QString ResourcesSettings::getShortcutOfflineArgs() const
 void ResourcesSettings::setShortcutOfflineArgs(const QString &shortcutOfflineArgs)
 {
     m_shortcutOfflineArgs = shortcutOfflineArgs;
-}
-
-QString ResourcesSettings::getEncryptedPasswordKey() const
-{
-    return m_encryptedPasswordKey;
-}
-
-void ResourcesSettings::setEncryptedPasswordKey(const QString &encryptedPasswordKey)
-{
-    m_encryptedPasswordKey = encryptedPasswordKey;
 }
 
 QString ResourcesSettings::getDeploymentUrl() const

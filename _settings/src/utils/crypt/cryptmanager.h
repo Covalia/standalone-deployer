@@ -2,16 +2,17 @@
 #define SETTINGS__CRYPTMANAGER_H
 
 #include <QString>
+#include <QByteArray>
 
 class CryptManager
 {
     public:
+        static QString encrypt(const QString _hexKey, const QString _plaintextMessage);
+        static QString decrypt(const QString _hexKey, const QString _encryptedHexMessage);
+
+    private:
         CryptManager();
-
-        QString encryptToString(const QString &text);
-        QString decryptToString(const QString &text);
-
-        quint64 getKey();
+        virtual ~CryptManager();
 };
 
-#endif // SETTINGS__CRYPTMANAGER_H
+#endif

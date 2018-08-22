@@ -10,6 +10,9 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
+    // load settings resource static file. must be called keymanager_resources
+    Q_INIT_RESOURCE(keymanager_resources);
+
     new Logger(Utils::getInstallerlLogPath());
     L_INFO("Installer started " + Utils::getAppPath().getInstallerVersion());
 

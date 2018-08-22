@@ -1,36 +1,34 @@
 #include "utils/crypt/cryptmanager.h"
 
-#include "utils/crypt/simplecrypt.h"
-#include "settings/resourcessettings.h"
-#include "log/logger.h"
+#include "utils/crypt/qblowfish/qblowfish.h"
 
-CryptManager::CryptManager()
+QString CryptManager::encrypt(const QString _hexKey, const QString _plaintextMessage)
 {
+    QBlowfish bf(QByteArray::fromHex(_hexKey.toUtf8()));
+
+    // Enable padding to be able to encrypt an arbitrary length of bytes
+    bf.setPaddingEnabled(true);
+
+    // encrypt the message
+    const QByteArray cipheredMessageBa = bf.encrypted(_plaintextMessage.toUtf8());
+
+    // return a hex encoded of the ciphered message
+    return cipheredMessageBa.toHex();
 }
 
-QString CryptManager::encryptToString(const QString& text)
+QString CryptManager::decrypt(const QString _hexKey, const QString _encryptedHexMessage)
 {
-    SimpleCrypt crypto(getKey());
-    return crypto.encryptToString(text);
-}
+    QBlowfish bf(QByteArray::fromHex(_hexKey.toUtf8()));
 
-QString CryptManager::decryptToString(const QString& text)
-{
-    SimpleCrypt crypto(getKey());
-    return crypto.decryptToString(text);
-}
+    // Enable padding to be able to encrypt an arbitrary length of bytes
+    bf.setPaddingEnabled(true);
 
-quint64 CryptManager::getKey()
-{
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    QString key = resource->getEncryptedPasswordKey();
-    bool ok;
-    quint64 quintKey = key.toLongLong(&ok, 16);
+    // encrypted message must be hex encoded. decoding from hex.
+    const QByteArray encryptedMessageBa = QByteArray::fromHex(_encryptedHexMessage.toUtf8());
 
-    if (ok) {
-        return quintKey;
-    } else {
-        L_ERROR("Error in converting encrypted key to quint64, please change key in resources project");
-        return Q_UINT64_C(0x0c2cd4a4bcb9f023);
-    }
+    // decrypt message
+    const QByteArray decryptedMessageBa = bf.decrypted(encryptedMessageBa);
+
+    // convert it to string
+    return QString::fromUtf8(decryptedMessageBa.constData(), decryptedMessageBa.size());
 }

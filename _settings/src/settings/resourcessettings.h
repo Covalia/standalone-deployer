@@ -27,8 +27,6 @@ class ResourcesSettings
         static const QString DefaultCustomInstallDataPath;
         static const QString ChangeDataLocationAllowed;
 
-        static const QString EncryptedPasswordKey;
-
         static const QString InsetColor;
         static const QString PanelBackgroundColor;
         static const QString ButtonHoverBackgroundColor;
@@ -104,9 +102,6 @@ class ResourcesSettings
         QString getDefaultCustomInstallDataPath() const;
         void setDefaultCustomInstallDataPath(const QString &defaultCustomInstallDataPath);
 
-        QString getEncryptedPasswordKey() const;
-        void setEncryptedPasswordKey(const QString &encryptedPasswordKey);
-
         QString getShortcutOfflineArgs() const;
         void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
 
@@ -170,7 +165,6 @@ class ResourcesSettings
         QString m_defaultSimpleInstallDataPath;
         QString m_defaultCustomInstallDataPath;
         bool m_changeDataLocationAllowed;
-        QString m_encryptedPasswordKey;
 };
 
 #endif // SETTINGS__RESOURCESSETTINGS_H

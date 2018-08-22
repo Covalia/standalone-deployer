@@ -2,6 +2,7 @@
 #include "log/logger.h"
 #include "utils/crypt/cryptmanager.h"
 #include "lang/languagemanager.h"
+#include "secret/keymanager.h"
 
 #include <QMutexLocker>
 #include <QSettings>
@@ -478,16 +479,14 @@ void Settings::setLang(const Language &lang)
 
 QString Settings::getProxyPassword() const
 {
-    CryptManager * crypt = new CryptManager();
-
-    return crypt->decryptToString(m_proxyPassword);
+    const QString key = KeyManager::readPasswordEncryptionKey();
+    return CryptManager::decrypt(key, m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
-    CryptManager * crypt = new CryptManager();
-
-    m_proxyPassword = crypt->encryptToString(proxyPassword);
+    const QString key = KeyManager::readPasswordEncryptionKey();
+    m_proxyPassword = CryptManager::encrypt(key, proxyPassword);
 }
 
 QString Settings::getProxyLogin() const
