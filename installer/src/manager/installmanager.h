@@ -20,9 +20,6 @@ class InstallManager : public QThread
 
         void initInstallation();
 
-    public slots:
-        void setInstallationDir(const QString &_directory);
-
     private:
 
         UIManager * m_uiManager;
@@ -47,6 +44,7 @@ class InstallManager : public QThread
         virtual void run();
 
     private slots:
+        void setInstallationDir(const QString &_directory);
         void eventStartInstallation();
         void eventCloseInstallation(bool _launchApplication);
 
@@ -54,4 +52,4 @@ class InstallManager : public QThread
         void endInstallation(bool _success, QStringList _errors);
 };
 
-#endif // INSTALLMANAGER_H
+#endif

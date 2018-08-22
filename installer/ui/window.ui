@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../overridable_resources.qrc">
-    <normaloff>:/images/icon.png</normaloff>:/images/icon.png</iconset>
+    <normaloff>:/images/installer.png</normaloff>:/images/installer.png</iconset>
   </property>
   <property name="statusTip">
    <string notr="true"/>

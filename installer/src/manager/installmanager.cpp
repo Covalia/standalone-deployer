@@ -22,8 +22,21 @@
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(0),
-    m_appPath(Utils::getAppPath())
+    m_appPath(Utils::getAppPath()),
+    m_projectSettings(0),
+    m_settings(0)
 {
+    // init project resources
+    m_projectSettings = ResourcesSettings::getInstance();
+
+    m_projectSettings->initSettings(":/project.ini");
+    m_projectSettings->readSettings();
+    m_projectSettings->writeAppSettings();
+
+    setInstallationDir(m_projectSettings->getDefaultInstallationPath());
+    L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
+
+    m_settings = Settings::getInstance();
 }
 
 InstallManager::~InstallManager()
@@ -33,22 +46,11 @@ InstallManager::~InstallManager()
 
 void InstallManager::initInstallation()
 {
-    // init project resources
-    m_projectSettings = ResourcesSettings::getInstance();
-    m_projectSettings->initSettings(":/project.ini");
-    m_projectSettings->readSettings();
-    m_projectSettings->writeAppSettings();
-    setInstallationDir(m_projectSettings->getDefaultInstallationPath());
-
-    L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
-
     L_INFO("Parsing command line");
     CommandLineParser lineParser;
     m_runAppAfter = lineParser.isRunApp();
-    L_INFO("Run after = " + QString::number(m_runAppAfter));
-    lineParser.sendToSettings();
 
-    m_settings = Settings::getInstance();
+    lineParser.sendToSettings();
 
     // init style
     StyleManager::setGeneralStyle();
@@ -56,7 +58,7 @@ void InstallManager::initInstallation()
     LanguageManager::initLanguage();
 
     if (!lineParser.isSilent()) {
-        qApp->setWindowIcon(QIcon(":/images/icon.png"));
+        qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
         if (!m_uiManager) {
