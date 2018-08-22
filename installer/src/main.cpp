@@ -3,8 +3,8 @@
 
 #include "log/logger.h"
 #include "manager/installmanager.h"
-#include "settings/settings.h"
-#include "gui/forms/windowui.h"
+// #include "settings/settings.h"
+// #include "gui/forms/windowui.h"
 
 int main(int argc, char * argv[])
 {
@@ -21,7 +21,5 @@ int main(int argc, char * argv[])
     InstallManager installManager;
     installManager.initInstallation();
 
-    int ret = app.exec();
-
-    return ret;
+    return app.exec();
 }
