@@ -8,7 +8,6 @@
 #include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
-#include "settings/resourcessettings.h"
 #include "settings/settings.h"
 #include "settings/commandlinesingleton.h"
 #include "utils.h"
