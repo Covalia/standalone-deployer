@@ -46,67 +46,27 @@ class ResourcesSettings
         void writeAppSettings();
 
         QString getWindowBorderWidth() const;
-        void setWindowBorderWidth(const QString &windowBorderWidth);
-
         QString getDisabledColor() const;
-        void setDisabledColor(const QString &disabledColor);
-
         QString getGrayTextColor() const;
-        void setGrayTextColor(const QString &grayTextColor);
-
         QString getDefaultTextColor() const;
-        void setDefaultTextColor(const QString &defaultTextColor);
-
         QString getButtonBackgroundColor() const;
-        void setButtonBackgroundColor(const QString &buttonBackgroundColor);
-
         QString getButtonHoverBackgroundColor() const;
-        void setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor);
-
         QString getPanelBackgroundColor() const;
-        void setPanelBackgroundColor(const QString &panelBackgroundColor);
-
         QString getInsetColor() const;
-        void setInsetColor(const QString &insetColor);
-
         bool isChangeDataLocationAllowed() const;
-        void setChangeDataLocationAllowed(bool changeDataLocationAllowed);
-
         QString getDefaultInstallationPath() const;
-        void setDefaultInstallationPath(const QString &defaultInstallationPath);
-
         bool isShortcutOffline() const;
-        void setShortcutOffline(bool shortcutOffline);
-
         bool isShortcutOnline() const;
-        void setShortcutOnline(bool shortcutOnline);
-
         QString getShortcutOfflineName() const;
-        void setShortcutOfflineName(const QString &shortcutOfflineName);
-
         QString getShortcutName() const;
-        void setShortcutName(const QString &shortcutName);
-
         QString getLang() const;
-        void setLang(const QString &lang);
-
         QString getAppName() const;
-        void setAppName(const QString &appName);
-
         QString getDeploymentUrl() const;
-        void setDeploymentUrl(const QString &deploymentUrl);
-
         QString getDefaultSimpleInstallDataPath() const;
-        void setDefaultSimpleInstallDataPath(const QString &defaultSimpleInstallDataPath);
-
         QString getDefaultCustomInstallDataPath() const;
-        void setDefaultCustomInstallDataPath(const QString &defaultCustomInstallDataPath);
-
         QString getShortcutOfflineArgs() const;
-        void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
 
         bool isRunAtStart() const;
-        void setRunAtStart(bool runAtStart);
 
     private:
         /**
@@ -167,4 +127,4 @@ class ResourcesSettings
         bool m_changeDataLocationAllowed;
 };
 
-#endif // SETTINGS__RESOURCESSETTINGS_H
+#endif

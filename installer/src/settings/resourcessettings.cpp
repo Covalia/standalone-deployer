@@ -178,19 +178,9 @@ bool ResourcesSettings::isRunAtStart() const
     return m_runAtStart;
 }
 
-void ResourcesSettings::setRunAtStart(bool runAtStart)
-{
-    m_runAtStart = runAtStart;
-}
-
 QString ResourcesSettings::getShortcutOfflineArgs() const
 {
     return m_shortcutOfflineArgs;
-}
-
-void ResourcesSettings::setShortcutOfflineArgs(const QString &shortcutOfflineArgs)
-{
-    m_shortcutOfflineArgs = shortcutOfflineArgs;
 }
 
 QString ResourcesSettings::getDeploymentUrl() const
@@ -198,19 +188,9 @@ QString ResourcesSettings::getDeploymentUrl() const
     return m_deploymentUrl;
 }
 
-void ResourcesSettings::setDeploymentUrl(const QString &deploymentUrl)
-{
-    m_deploymentUrl = deploymentUrl;
-}
-
 QString ResourcesSettings::getAppName() const
 {
     return m_appName;
-}
-
-void ResourcesSettings::setAppName(const QString &appName)
-{
-    m_appName = appName;
 }
 
 QString ResourcesSettings::getLang() const
@@ -218,19 +198,9 @@ QString ResourcesSettings::getLang() const
     return m_lang;
 }
 
-void ResourcesSettings::setLang(const QString &lang)
-{
-    m_lang = lang;
-}
-
 QString ResourcesSettings::getShortcutName() const
 {
     return m_shortcutName;
-}
-
-void ResourcesSettings::setShortcutName(const QString &shortcutName)
-{
-    m_shortcutName = shortcutName;
 }
 
 QString ResourcesSettings::getShortcutOfflineName() const
@@ -238,19 +208,9 @@ QString ResourcesSettings::getShortcutOfflineName() const
     return m_shortcutOfflineName;
 }
 
-void ResourcesSettings::setShortcutOfflineName(const QString &shortcutOfflineName)
-{
-    m_shortcutOfflineName = shortcutOfflineName;
-}
-
 bool ResourcesSettings::isShortcutOnline() const
 {
     return m_shortcutOnline;
-}
-
-void ResourcesSettings::setShortcutOnline(bool shortcutOnline)
-{
-    m_shortcutOnline = shortcutOnline;
 }
 
 bool ResourcesSettings::isShortcutOffline() const
@@ -258,19 +218,9 @@ bool ResourcesSettings::isShortcutOffline() const
     return m_shortcutOffline;
 }
 
-void ResourcesSettings::setShortcutOffline(bool shortcutOffline)
-{
-    m_shortcutOffline = shortcutOffline;
-}
-
 QString ResourcesSettings::getDefaultInstallationPath() const
 {
     return m_defaultInstallationPath;
-}
-
-void ResourcesSettings::setDefaultInstallationPath(const QString &defaultInstallationPath)
-{
-    m_defaultInstallationPath = defaultInstallationPath;
 }
 
 bool ResourcesSettings::isChangeDataLocationAllowed() const
@@ -278,19 +228,9 @@ bool ResourcesSettings::isChangeDataLocationAllowed() const
     return m_changeDataLocationAllowed;
 }
 
-void ResourcesSettings::setChangeDataLocationAllowed(bool changeDataLocationAllowed)
-{
-    m_changeDataLocationAllowed = changeDataLocationAllowed;
-}
-
 QString ResourcesSettings::getDefaultCustomInstallDataPath() const
 {
     return m_defaultCustomInstallDataPath;
-}
-
-void ResourcesSettings::setDefaultCustomInstallDataPath(const QString &defaultCustomInstallDataPath)
-{
-    m_defaultCustomInstallDataPath = defaultCustomInstallDataPath;
 }
 
 QString ResourcesSettings::getDefaultSimpleInstallDataPath() const
@@ -298,19 +238,9 @@ QString ResourcesSettings::getDefaultSimpleInstallDataPath() const
     return m_defaultSimpleInstallDataPath;
 }
 
-void ResourcesSettings::setDefaultSimpleInstallDataPath(const QString &defaultSimpleInstallDataPath)
-{
-    m_defaultSimpleInstallDataPath = defaultSimpleInstallDataPath;
-}
-
 QString ResourcesSettings::getInsetColor() const
 {
     return m_insetColor;
-}
-
-void ResourcesSettings::setInsetColor(const QString &insetColor)
-{
-    m_insetColor = insetColor;
 }
 
 QString ResourcesSettings::getPanelBackgroundColor() const
@@ -318,19 +248,9 @@ QString ResourcesSettings::getPanelBackgroundColor() const
     return m_panelBackgroundColor;
 }
 
-void ResourcesSettings::setPanelBackgroundColor(const QString &panelBackgroundColor)
-{
-    m_panelBackgroundColor = panelBackgroundColor;
-}
-
 QString ResourcesSettings::getButtonHoverBackgroundColor() const
 {
     return m_buttonHoverBackgroundColor;
-}
-
-void ResourcesSettings::setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor)
-{
-    m_buttonHoverBackgroundColor = buttonHoverBackgroundColor;
 }
 
 QString ResourcesSettings::getButtonBackgroundColor() const
@@ -338,19 +258,9 @@ QString ResourcesSettings::getButtonBackgroundColor() const
     return m_buttonBackgroundColor;
 }
 
-void ResourcesSettings::setButtonBackgroundColor(const QString &buttonBackgroundColor)
-{
-    m_buttonBackgroundColor = buttonBackgroundColor;
-}
-
 QString ResourcesSettings::getDefaultTextColor() const
 {
     return m_defaultTextColor;
-}
-
-void ResourcesSettings::setDefaultTextColor(const QString &defaultTextColor)
-{
-    m_defaultTextColor = defaultTextColor;
 }
 
 QString ResourcesSettings::getGrayTextColor() const
@@ -358,27 +268,12 @@ QString ResourcesSettings::getGrayTextColor() const
     return m_grayTextColor;
 }
 
-void ResourcesSettings::setGrayTextColor(const QString &grayTextColor)
-{
-    m_grayTextColor = grayTextColor;
-}
-
 QString ResourcesSettings::getDisabledColor() const
 {
     return m_disabledColor;
 }
 
-void ResourcesSettings::setDisabledColor(const QString &disabledColor)
-{
-    m_disabledColor = disabledColor;
-}
-
 QString ResourcesSettings::getWindowBorderWidth() const
 {
     return m_windowBorderWidth;
-}
-
-void ResourcesSettings::setWindowBorderWidth(const QString &windowBorderWidth)
-{
-    m_windowBorderWidth = windowBorderWidth;
 }
