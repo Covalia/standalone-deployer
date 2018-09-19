@@ -3,45 +3,39 @@
 
 #include <QApplication>
 #include <QTextStream>
-#include <QTextCursor>
 #include <QFile>
+#include <QWidget>
 
-StyleManager::StyleManager()
+QString StyleManager::transformStyle(QSharedPointer<ResourcesSettings> _resourcesSettings, QString _styleSheet)
 {
+    _styleSheet.replace("@inset-color", _resourcesSettings->getInsetColor());
+    _styleSheet.replace("@panel-background-color", _resourcesSettings->getPanelBackgroundColor());
+    _styleSheet.replace("@button-hover-background-color", _resourcesSettings->getButtonHoverBackgroundColor());
+    _styleSheet.replace("@button-background-color", _resourcesSettings->getButtonBackgroundColor());
+    _styleSheet.replace("@default-text-color", _resourcesSettings->getDefaultTextColor());
+    _styleSheet.replace("@gray-text-color", _resourcesSettings->getGrayTextColor());
+    _styleSheet.replace("@disabled-color", _resourcesSettings->getDisabledColor());
+    _styleSheet.replace("@window-border-width", _resourcesSettings->getWindowBorderWidth());
+
+    return _styleSheet;
 }
 
-QString StyleManager::transformStyle(QString styleSheet)
-{
-    ResourcesSettings * projectSetting = ResourcesSettings::getInstance();
-
-    styleSheet.replace("@inset-color", projectSetting->getInsetColor());
-    styleSheet.replace("@panel-background-color", projectSetting->getPanelBackgroundColor());
-    styleSheet.replace("@button-hover-background-color", projectSetting->getButtonHoverBackgroundColor());
-    styleSheet.replace("@button-background-color", projectSetting->getButtonBackgroundColor());
-    styleSheet.replace("@default-text-color", projectSetting->getDefaultTextColor());
-    styleSheet.replace("@gray-text-color", projectSetting->getGrayTextColor());
-    styleSheet.replace("@disabled-color", projectSetting->getDisabledColor());
-    styleSheet.replace("@window-border-width", projectSetting->getWindowBorderWidth());
-
-    return styleSheet;
-}
-
-void StyleManager::transformStyle(QWidget * parentWidget)
+void StyleManager::transformStyle(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * parentWidget)
 {
     for (auto * widget : parentWidget->findChildren<QWidget *>()) {
-        widget->setStyleSheet(StyleManager::transformStyle(widget->styleSheet()));
+        widget->setStyleSheet(StyleManager::transformStyle(_resourcesSettings, widget->styleSheet()));
     }
 }
 
-void StyleManager::setGeneralStyle()
+void StyleManager::setGeneralStyle(QSharedPointer<ResourcesSettings> _resourcesSettings)
 {
     QFile f(":/style.css");
 
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
-        QString sytle = in.readAll();
-        if (!sytle.isNull() && !sytle.isEmpty()) {
-            QString transformeSytle = transformStyle(sytle);
+        const QString style = in.readAll();
+        if (!style.isNull() && !style.isEmpty()) {
+            const QString transformeSytle = transformStyle(_resourcesSettings, style);
             qApp->setStyleSheet(transformeSytle);
         }
     }

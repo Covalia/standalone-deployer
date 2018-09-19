@@ -2,6 +2,9 @@
 #define INSTALLER__ABOUT_H
 
 #include <QWidget>
+#include <QSharedDataPointer>
+
+#include "settings/resourcessettings.h"
 
 namespace Ui {
 class AboutUI;
@@ -16,7 +19,7 @@ class AboutUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit AboutUI(QWidget * _parent = 0);
+        explicit AboutUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
         virtual ~AboutUI();
 
     private:

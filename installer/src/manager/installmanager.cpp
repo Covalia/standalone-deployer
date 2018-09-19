@@ -27,9 +27,7 @@ InstallManager::InstallManager() : QThread(),
     m_settings(0)
 {
     // init project resources
-    m_projectSettings = ResourcesSettings::getInstance();
-
-    m_projectSettings->initSettings(":/project.ini");
+    m_projectSettings = QSharedPointer<ResourcesSettings>(new ResourcesSettings(":/project.ini"));
     m_projectSettings->readSettings();
     m_projectSettings->writeAppSettings();
 
@@ -52,17 +50,17 @@ void InstallManager::initInstallation()
 
     lineParser.sendToSettings();
 
-    // init style
-    StyleManager::setGeneralStyle();
-
     LanguageManager::initLanguage();
 
     if (!lineParser.isSilent()) {
         qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
+        // init style
+        StyleManager::setGeneralStyle(m_projectSettings);
+
         if (!m_uiManager) {
-            m_uiManager = new UIManager();
+            m_uiManager = new UIManager(m_projectSettings);
         }
         m_uiManager->init();
 

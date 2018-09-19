@@ -4,6 +4,7 @@
 #include <QString>
 #include <QObject>
 #include <QThread>
+#include <QSharedPointer>
 
 #include "gui/manager/uimanager.h"
 #include "settings/resourcessettings.h"
@@ -24,8 +25,9 @@ class InstallManager : public QThread
 
         UIManager * m_uiManager;
         AppPath m_appPath;
-        ResourcesSettings * m_projectSettings;
+        QSharedPointer<ResourcesSettings> m_projectSettings;
         Settings * m_settings;
+
 
         bool m_runAppAfter;
 

@@ -11,8 +11,9 @@
 #include <QFileDialog>
 #include <QStringList>
 
-PersonalizeUI::PersonalizeUI(QWidget * _parent) :
+PersonalizeUI::PersonalizeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
     QWidget(_parent),
+    m_resourcesSettings(_resourcesSettings),
     m_ui(new Ui::PersonalizeUI)
 {
     m_ui->setupUi(this);
@@ -20,18 +21,17 @@ PersonalizeUI::PersonalizeUI(QWidget * _parent) :
     // link style
     m_ui->buttonStartInstallation->setAccessibleName("pageButton");
 
-    StyleManager::transformStyle(this);
+    StyleManager::transformStyle(_resourcesSettings, this);
 
     Settings * settings = Settings::getInstance();
 
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->widgetDataInstallation->setVisible(resource->isChangeDataLocationAllowed());
+    m_ui->widgetDataInstallation->setVisible(m_resourcesSettings->isChangeDataLocationAllowed());
     // apply custom data path to setting
-    if (resource->isChangeDataLocationAllowed()) {
-        settings->setDataLocation(resource->getDefaultCustomInstallDataPath());
+    if (m_resourcesSettings->isChangeDataLocationAllowed()) {
+        settings->setDataLocation(m_resourcesSettings->getDefaultCustomInstallDataPath());
     }
 
-    m_ui->editLineFolderInstallation->setText(resource->getDefaultInstallationPath());
+    m_ui->editLineFolderInstallation->setText(m_resourcesSettings->getDefaultInstallationPath());
     m_ui->editLineDataInstallation->setText(settings->getDataLocation());
     m_ui->checkBoxOfflineShortcut->setChecked(settings->isShortcutOffline());
     m_ui->checkBoxRunAtStart->setChecked(settings->isRunAtStart());

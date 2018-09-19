@@ -2,6 +2,9 @@
 #define INSTALLER__PROXY_H
 
 #include <QWidget>
+#include <QSharedDataPointer>
+
+#include "settings/resourcessettings.h"
 
 namespace Ui {
 class ProxyUI;
@@ -16,7 +19,7 @@ class ProxyUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit ProxyUI(QWidget * _parent = 0);
+        explicit ProxyUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
         virtual ~ProxyUI();
 
     private:

@@ -11,7 +11,8 @@
 #include "gui/forms/installationui.h"
 #include "gui/forms/endinstallationui.h"
 
-UIManager::UIManager() : QObject(),
+UIManager::UIManager(QSharedPointer<ResourcesSettings> _resourcesSettings) : QObject(),
+    m_resourcesSettings(_resourcesSettings),
     m_window(0),
     m_welcome(0),
     m_personalize(0),
@@ -20,13 +21,13 @@ UIManager::UIManager() : QObject(),
     m_installation(0),
     m_endInstallation(0)
 {
-    m_window = new WindowUI();
-    m_welcome = new WelcomeUI();
-    m_personalize = new PersonalizeUI();
-    m_proxy = new ProxyUI();
-    m_about = new AboutUI();
-    m_installation = new InstallationUI();
-    m_endInstallation = new EndInstallationUI();
+    m_window = new WindowUI(m_resourcesSettings);
+    m_welcome = new WelcomeUI(m_resourcesSettings);
+    m_personalize = new PersonalizeUI(m_resourcesSettings);
+    m_proxy = new ProxyUI(m_resourcesSettings);
+    m_about = new AboutUI(m_resourcesSettings);
+    m_installation = new InstallationUI(m_resourcesSettings);
+    m_endInstallation = new EndInstallationUI(m_resourcesSettings);
 
     connect(m_window, SIGNAL(changeLanguageSignal()),
             m_window, SLOT(changeLanguage()));

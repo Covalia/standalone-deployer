@@ -14,8 +14,9 @@
 #include <QMessageBox>
 #include <QStyledItemDelegate>
 
-WindowUI::WindowUI(QWidget * _parent) :
+WindowUI::WindowUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
     QMainWindow(_parent),
+    m_resourcesSettings(_resourcesSettings),
     m_ui(new Ui::WindowUI),
     m_itemDelegate(0)
 {
@@ -26,7 +27,7 @@ WindowUI::WindowUI(QWidget * _parent) :
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    StyleManager::transformStyle(this);
+    StyleManager::transformStyle(_resourcesSettings, this);
 
     connect(m_ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
     connect(m_ui->buttonAbout, SIGNAL(clicked()), this, SLOT(aboutEvent()));
@@ -42,7 +43,7 @@ WindowUI::WindowUI(QWidget * _parent) :
     updateUi();
 
     // bug combobox style
-    StyleManager::transformStyle(this);
+    StyleManager::transformStyle(_resourcesSettings, this);
 }
 
 WindowUI::~WindowUI()
@@ -116,7 +117,7 @@ void WindowUI::closeEvent(QCloseEvent * _event)
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        AskPopupUI * popupClose = new AskPopupUI(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        AskPopupUI * popupClose = new AskPopupUI(m_resourcesSettings, this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
         popupClose->show();
         if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();
@@ -144,8 +145,7 @@ void WindowUI::comboBoxLanguageEvent(int _index)
 
 void WindowUI::updateUi(){
     m_ui->retranslateUi(this);
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getAppName()));
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(m_resourcesSettings->getAppName()));
 }
 
 void WindowUI::changeLanguage()

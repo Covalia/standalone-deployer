@@ -2,6 +2,9 @@
 #define INSTALLER__WELCOME_H
 
 #include <QWidget>
+#include <QSharedDataPointer>
+
+#include "settings/resourcessettings.h"
 
 namespace Ui {
 class WelcomeUI;
@@ -16,7 +19,7 @@ class WelcomeUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit WelcomeUI(QWidget * _parent = 0);
+        explicit WelcomeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
         virtual ~WelcomeUI();
 
     signals:

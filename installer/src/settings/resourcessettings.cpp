@@ -34,12 +34,9 @@ const QString ResourcesSettings::GrayTextColor("gray_text_color");
 const QString ResourcesSettings::DisabledColor("disabled_color");
 const QString ResourcesSettings::WindowBorderWidth("window_border_width");
 
-ResourcesSettings * ResourcesSettings::sm_instance = 0;
-QMutex ResourcesSettings::sm_instanceMutex;
-QMutex ResourcesSettings::sm_settingsMutex;
 
-ResourcesSettings::ResourcesSettings() :
-    m_settings(0),
+ResourcesSettings::ResourcesSettings(const QString &_appPath) :
+    m_settings(_appPath, QSettings::IniFormat),
     m_deploymentUrl(""),
     m_appName("Application"),
     m_lang("en_US"),
@@ -63,76 +60,44 @@ ResourcesSettings::ResourcesSettings() :
     m_changeDataLocationAllowed(false)
 {
     L_INFO("Initialise ResourcesSettings singleton instance");
+
+    m_settings.setFallbacksEnabled(false);
 }
 
 ResourcesSettings::~ResourcesSettings()
 {
-    delete m_settings;
-}
-
-ResourcesSettings * ResourcesSettings::getInstance()
-{
-    if (ResourcesSettings::sm_instance == 0) {
-        ResourcesSettings::sm_instanceMutex.lock();
-        if (ResourcesSettings::sm_instance == 0) {
-            ResourcesSettings::sm_instance = new ResourcesSettings();
-        }
-        ResourcesSettings::sm_instanceMutex.unlock();
-    }
-    return ResourcesSettings::sm_instance;
-}
-
-void ResourcesSettings::kill()
-{
-    if (ResourcesSettings::sm_instance) {
-        ResourcesSettings::sm_instanceMutex.lock();
-        if (ResourcesSettings::sm_instance) {
-            delete ResourcesSettings::sm_instance;
-            ResourcesSettings::sm_instance = 0;
-        }
-        ResourcesSettings::sm_instanceMutex.unlock();
-    }
-}
-
-void ResourcesSettings::initSettings(QString _appPath)
-{
-    if (m_settings == 0) {
-        m_settings = new QSettings(_appPath, QSettings::IniFormat);
-        m_settings->setFallbacksEnabled(false);
-    }
 }
 
 void ResourcesSettings::readSettings()
 {
     L_INFO("Starting to read all settings");
-    QMutexLocker locker(&sm_settingsMutex);
 
-    m_deploymentUrl = m_settings->value(DeploymentUrl, m_deploymentUrl).toString();
-    m_appName = m_settings->value(AppName, m_appName).toString();
-    m_lang = m_settings->value(Lang, m_lang).toString();
+    m_deploymentUrl = m_settings.value(DeploymentUrl, m_deploymentUrl).toString();
+    m_appName = m_settings.value(AppName, m_appName).toString();
+    m_lang = m_settings.value(Lang, m_lang).toString();
 
-    m_shortcutName = m_settings->value(ShortcutName, m_shortcutName).toString();
-    m_shortcutOfflineName = m_settings->value(ShortcutOfflineName, m_shortcutOfflineName).toString();
-    m_shortcutOnline = m_settings->value(ShortcutOnline, m_shortcutOnline).toBool();
-    m_shortcutOffline = m_settings->value(ShortcutOffline, m_shortcutOffline).toBool();
-    m_shortcutOfflineArgs = m_settings->value(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
+    m_shortcutName = m_settings.value(ShortcutName, m_shortcutName).toString();
+    m_shortcutOfflineName = m_settings.value(ShortcutOfflineName, m_shortcutOfflineName).toString();
+    m_shortcutOnline = m_settings.value(ShortcutOnline, m_shortcutOnline).toBool();
+    m_shortcutOffline = m_settings.value(ShortcutOffline, m_shortcutOffline).toBool();
+    m_shortcutOfflineArgs = m_settings.value(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
 
-    m_runAtStart = m_settings->value(RunAtStart, m_runAtStart).toBool();
+    m_runAtStart = m_settings.value(RunAtStart, m_runAtStart).toBool();
 
-    m_defaultInstallationPath = getTransformedVariablePath(m_settings->value(DefaultInstallationPath, m_defaultInstallationPath).toString());
+    m_defaultInstallationPath = getTransformedVariablePath(m_settings.value(DefaultInstallationPath, m_defaultInstallationPath).toString());
 
-    m_defaultSimpleInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultSimpleInstallDataPath, m_defaultSimpleInstallDataPath).toString());
-    m_defaultCustomInstallDataPath = getTransformedVariablePath(m_settings->value(DefaultCustomInstallDataPath, m_defaultCustomInstallDataPath).toString());
-    m_changeDataLocationAllowed = m_settings->value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
+    m_defaultSimpleInstallDataPath = getTransformedVariablePath(m_settings.value(DefaultSimpleInstallDataPath, m_defaultSimpleInstallDataPath).toString());
+    m_defaultCustomInstallDataPath = getTransformedVariablePath(m_settings.value(DefaultCustomInstallDataPath, m_defaultCustomInstallDataPath).toString());
+    m_changeDataLocationAllowed = m_settings.value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
 
-    m_insetColor = m_settings->value(InsetColor, m_insetColor).toString();
-    m_panelBackgroundColor = m_settings->value(PanelBackgroundColor, m_panelBackgroundColor).toString();
-    m_buttonHoverBackgroundColor = m_settings->value(ButtonHoverBackgroundColor, m_buttonHoverBackgroundColor).toString();
-    m_buttonBackgroundColor = m_settings->value(ButtonBackgroundColor, m_buttonBackgroundColor).toString();
-    m_defaultTextColor = m_settings->value(DefaultTextColor, m_defaultTextColor).toString();
-    m_grayTextColor = m_settings->value(GrayTextColor, m_grayTextColor).toString();
-    m_disabledColor = m_settings->value(DisabledColor, m_disabledColor).toString();
-    m_windowBorderWidth = m_settings->value(WindowBorderWidth, m_windowBorderWidth).toString();
+    m_insetColor = m_settings.value(InsetColor, m_insetColor).toString();
+    m_panelBackgroundColor = m_settings.value(PanelBackgroundColor, m_panelBackgroundColor).toString();
+    m_buttonHoverBackgroundColor = m_settings.value(ButtonHoverBackgroundColor, m_buttonHoverBackgroundColor).toString();
+    m_buttonBackgroundColor = m_settings.value(ButtonBackgroundColor, m_buttonBackgroundColor).toString();
+    m_defaultTextColor = m_settings.value(DefaultTextColor, m_defaultTextColor).toString();
+    m_grayTextColor = m_settings.value(GrayTextColor, m_grayTextColor).toString();
+    m_disabledColor = m_settings.value(DisabledColor, m_disabledColor).toString();
+    m_windowBorderWidth = m_settings.value(WindowBorderWidth, m_windowBorderWidth).toString();
 }
 
 void ResourcesSettings::writeAppSettings()

@@ -2,6 +2,9 @@
 #define ENDINSTALLATIONUI_H
 
 #include <QWidget>
+#include <QSharedPointer>
+
+#include "settings/resourcessettings.h"
 
 namespace Ui {
 class EndInstallationUI;
@@ -12,7 +15,7 @@ class EndInstallationUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit EndInstallationUI(QWidget * parent = 0);
+        explicit EndInstallationUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
         virtual ~EndInstallationUI();
 
         void showErrors(QStringList _errors);

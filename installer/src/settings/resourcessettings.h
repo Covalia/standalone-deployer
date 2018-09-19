@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QSettings>
-#include <QMutex>
 
 class ResourcesSettings
 {
@@ -36,13 +35,10 @@ class ResourcesSettings
         static const QString DisabledColor;
         static const QString WindowBorderWidth;
 
-        static ResourcesSettings * getInstance();
-        static void kill();
-
-        void initSettings(QString _appPath);
+        ResourcesSettings(const QString &_appPath);
+        virtual ~ResourcesSettings();
 
         void readSettings();
-
         void writeAppSettings();
 
         QString getWindowBorderWidth() const;
@@ -65,40 +61,17 @@ class ResourcesSettings
         QString getDefaultSimpleInstallDataPath() const;
         QString getDefaultCustomInstallDataPath() const;
         QString getShortcutOfflineArgs() const;
-
         bool isRunAtStart() const;
 
     private:
-        /**
-         * @brief Use for singleton
-         */
-        void operator=(const ResourcesSettings&)
-        {
-        }
-        ResourcesSettings (const ResourcesSettings&)
-        {
-        }
 
-        static ResourcesSettings * sm_instance;
-        static QMutex sm_instanceMutex;
-        static QMutex sm_settingsMutex;
-
-        /**
-         * @brief Constructor in singleton
-         */
-        ResourcesSettings();
-
-        /**
-         * @brief Destructor in singleton
-         */
-        virtual ~ResourcesSettings();
+        void operator=(const ResourcesSettings&);
+        ResourcesSettings (const ResourcesSettings&);
 
         QString getTransformedVariablePath(QString _path);
 
-        /**
-         * @brief QSetting instance for find and add setting
-         */
-        QSettings * m_settings;
+        // QSetting instance to find and add setting
+        QSettings m_settings;
 
         QString m_deploymentUrl;
         QString m_appName;

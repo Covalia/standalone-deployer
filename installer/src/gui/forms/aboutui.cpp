@@ -7,7 +7,7 @@
 #include <QTextCursor>
 #include <QTextStream>
 
-AboutUI::AboutUI(QWidget * _parent) :
+AboutUI::AboutUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
     QWidget(_parent),
     m_ui(new Ui::AboutUI)
 {
@@ -16,7 +16,7 @@ AboutUI::AboutUI(QWidget * _parent) :
     // link style
     m_ui->buttonValidateAbout->setAccessibleName("pageButton");
 
-    StyleManager::transformStyle(this);
+    StyleManager::transformStyle(_resourcesSettings, this);
 
     connect(m_ui->buttonValidateAbout, SIGNAL(clicked()), this, SLOT(validateAbout()));
 
