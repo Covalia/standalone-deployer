@@ -14,7 +14,7 @@
 #include "factories/shortcut/shortcut.h"
 #include "commandline/commandlineparser.h"
 #include "settings/settings.h"
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
 #include "gui/style/stylemanager.h"
 #include "io/config.h"
@@ -27,7 +27,7 @@ InstallManager::InstallManager() : QThread(),
     m_settings(0)
 {
     // init project resources
-    m_projectSettings = QSharedPointer<ResourcesSettings>(new ResourcesSettings(":/project.ini"));
+    m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
     m_projectSettings->readSettings();
     m_projectSettings->writeAppSettings();
 

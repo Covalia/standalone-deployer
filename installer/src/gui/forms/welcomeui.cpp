@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-WelcomeUI::WelcomeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+WelcomeUI::WelcomeUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QWidget(_parent),
     m_ui(new Ui::WelcomeUI)
 {
@@ -14,7 +14,7 @@ WelcomeUI::WelcomeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidg
     // link style
     m_ui->buttonSimpleInstallation->setAccessibleName("pageButton");
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     connect(m_ui->buttonSimpleInstallation, SIGNAL(clicked()), this, SLOT(simpleInstallationEvent()));
     connect(m_ui->buttonCustomInstall, SIGNAL(clicked()), this, SLOT(customInstallationEvent()));

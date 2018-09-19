@@ -4,7 +4,7 @@
 #include "gui/style/stylemanager.h"
 #include "settings/settings.h"
 
-ProxyUI::ProxyUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+ProxyUI::ProxyUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QWidget(_parent),
     m_ui(new Ui::ProxyUI)
 {
@@ -13,7 +13,7 @@ ProxyUI::ProxyUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget *
     // link style
     m_ui->buttonValidateProxy->setAccessibleName("pageButton");
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     // init with actual settings
     Settings * settings = Settings::getInstance();

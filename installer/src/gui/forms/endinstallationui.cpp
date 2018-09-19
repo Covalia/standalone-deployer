@@ -3,13 +3,13 @@
 
 #include "gui/style/stylemanager.h"
 
-EndInstallationUI::EndInstallationUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+EndInstallationUI::EndInstallationUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QWidget(_parent),
     m_ui(new Ui::EndInstallationUI)
 {
     m_ui->setupUi(this);
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
     m_ui->buttonFinish->setAccessibleName("pageButton");
     m_ui->labelError->setVisible(false);
 

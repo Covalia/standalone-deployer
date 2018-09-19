@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QSharedDataPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 namespace Ui {
 class WindowUI;
@@ -25,7 +25,7 @@ class WindowUI : public QMainWindow
     Q_OBJECT
 
     public:
-        explicit WindowUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
+        explicit WindowUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
         virtual ~WindowUI();
         void center();
         void changeContentWidget(QWidget * _widget);
@@ -33,7 +33,7 @@ class WindowUI : public QMainWindow
         QWidget * currentWidgetCentral() const;
 
     private:
-        QSharedPointer<ResourcesSettings> m_resourcesSettings;
+        QSharedPointer<ResourceSettings> m_resourceSettings;
 
         Ui::WindowUI * m_ui;
         QStyledItemDelegate * m_itemDelegate;

@@ -4,7 +4,7 @@
 #include "gui/style/stylemanager.h"
 #include "log/logger.h"
 
-InstallationUI::InstallationUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+InstallationUI::InstallationUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QWidget(_parent),
     m_ui(new Ui::InstallationUI)
 {
@@ -12,7 +12,7 @@ InstallationUI::InstallationUI(QSharedPointer<ResourcesSettings> _resourcesSetti
 
     m_ui->setupUi(this);
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     movie = new QMovie();
     movie->setFileName(":/images/loading.gif");

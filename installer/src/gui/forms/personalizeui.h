@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QSharedDataPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 namespace Ui {
 class PersonalizeUI;
@@ -20,11 +20,11 @@ class PersonalizeUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit PersonalizeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
+        explicit PersonalizeUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
         virtual ~PersonalizeUI();
 
     private:
-        QSharedPointer<ResourcesSettings> m_resourcesSettings;
+        QSharedPointer<ResourceSettings> m_resourceSettings;
 
         Ui::PersonalizeUI * m_ui;
         QString fileChooserDialog(QString directory);

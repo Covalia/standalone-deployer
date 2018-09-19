@@ -6,7 +6,7 @@
 #include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 #include <QCloseEvent>
 #include <QDesktopWidget>
@@ -14,9 +14,9 @@
 #include <QMessageBox>
 #include <QStyledItemDelegate>
 
-WindowUI::WindowUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+WindowUI::WindowUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QMainWindow(_parent),
-    m_resourcesSettings(_resourcesSettings),
+    m_resourceSettings(_resourceSettings),
     m_ui(new Ui::WindowUI),
     m_itemDelegate(0)
 {
@@ -27,7 +27,7 @@ WindowUI::WindowUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     connect(m_ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
     connect(m_ui->buttonAbout, SIGNAL(clicked()), this, SLOT(aboutEvent()));
@@ -43,7 +43,7 @@ WindowUI::WindowUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget
     updateUi();
 
     // bug combobox style
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 }
 
 WindowUI::~WindowUI()
@@ -117,7 +117,7 @@ void WindowUI::closeEvent(QCloseEvent * _event)
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        AskPopupUI * popupClose = new AskPopupUI(m_resourcesSettings, this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        AskPopupUI * popupClose = new AskPopupUI(m_resourceSettings, this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
         popupClose->show();
         if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();
@@ -145,7 +145,7 @@ void WindowUI::comboBoxLanguageEvent(int _index)
 
 void WindowUI::updateUi(){
     m_ui->retranslateUi(this);
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(m_resourcesSettings->getAppName()));
+    m_ui->labelTitle->setText(tr("Installation of %1").arg(m_resourceSettings->getAppName()));
 }
 
 void WindowUI::changeLanguage()

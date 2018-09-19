@@ -10,7 +10,7 @@
 #include <QPropertyAnimation>
 #endif
 
-AskPopupUI::AskPopupUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent, QString _title, QString _description) :
+AskPopupUI::AskPopupUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent, QString _title, QString _description) :
     QDialog(_parent),
     m_ui(new Ui::AskPopupUI),
     m_parent(0)
@@ -21,7 +21,7 @@ AskPopupUI::AskPopupUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWi
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     m_ui->labelTitle->setText(_title);
     m_ui->labelDescription->setText(_description);

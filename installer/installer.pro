@@ -78,7 +78,7 @@ SOURCES += src/gui/forms/windowui.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/manager/installmanager.cpp
-SOURCES += src/settings/resourcessettings.cpp
+SOURCES += src/settings/resourcesettings.cpp
 SOURCES += src/utils.cpp
 
 HEADERS += src/commandline/commandlineparser.h
@@ -93,7 +93,7 @@ HEADERS += src/gui/forms/windowui.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/manager/installmanager.h
-HEADERS += src/settings/resourcessettings.h
+HEADERS += src/settings/resourcesettings.h
 HEADERS += src/utils.h
 
 RESOURCES += fixed_resources.qrc

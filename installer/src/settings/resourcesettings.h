@@ -1,10 +1,10 @@
-#ifndef SETTINGS__RESOURCESSETTINGS_H
-#define SETTINGS__RESOURCESSETTINGS_H
+#ifndef SETTINGS__RESOURCESETTINGS_H
+#define SETTINGS__RESOURCESETTINGS_H
 
 #include <QString>
 #include <QSettings>
 
-class ResourcesSettings
+class ResourceSettings
 {
     public:
 
@@ -35,8 +35,8 @@ class ResourcesSettings
         static const QString DisabledColor;
         static const QString WindowBorderWidth;
 
-        ResourcesSettings(const QString &_appPath);
-        virtual ~ResourcesSettings();
+        ResourceSettings(const QString &_appPath);
+        virtual ~ResourceSettings();
 
         void readSettings();
         void writeAppSettings();
@@ -65,8 +65,8 @@ class ResourcesSettings
 
     private:
 
-        void operator=(const ResourcesSettings&);
-        ResourcesSettings (const ResourcesSettings&);
+        void operator=(const ResourceSettings&);
+        ResourceSettings (const ResourceSettings&);
 
         QString getTransformedVariablePath(QString _path);
 

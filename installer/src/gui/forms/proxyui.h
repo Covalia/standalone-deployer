@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QSharedDataPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 namespace Ui {
 class ProxyUI;
@@ -19,7 +19,7 @@ class ProxyUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit ProxyUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
+        explicit ProxyUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
         virtual ~ProxyUI();
 
     private:

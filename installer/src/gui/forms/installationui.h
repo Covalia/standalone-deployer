@@ -5,7 +5,7 @@
 #include <QMovie>
 #include <QSharedPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 namespace Ui {
 class InstallationUI;
@@ -16,7 +16,7 @@ class InstallationUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit InstallationUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
+        explicit InstallationUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
         virtual ~InstallationUI();
 
     private:

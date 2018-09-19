@@ -1,4 +1,4 @@
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 #include "log/logger.h"
 #include "settings/settings.h"
 #include "lang/languagemanager.h"
@@ -7,35 +7,35 @@
 #include <QStandardPaths>
 #include <QDir>
 
-const QString ResourcesSettings::DeploymentUrl("deployment_url");
-const QString ResourcesSettings::AppName("app_name");
-const QString ResourcesSettings::Lang("lang");
+const QString ResourceSettings::DeploymentUrl("deployment_url");
+const QString ResourceSettings::AppName("app_name");
+const QString ResourceSettings::Lang("lang");
 
-const QString ResourcesSettings::ShortcutName("shortcut_name");
-const QString ResourcesSettings::ShortcutOfflineName("shortcut_offline_name");
-const QString ResourcesSettings::ShortcutOnline("shortcut_online");
-const QString ResourcesSettings::ShortcutOffline("shortcut_offline");
-const QString ResourcesSettings::ShortcutOfflineArgs("shortcut_offline_args");
+const QString ResourceSettings::ShortcutName("shortcut_name");
+const QString ResourceSettings::ShortcutOfflineName("shortcut_offline_name");
+const QString ResourceSettings::ShortcutOnline("shortcut_online");
+const QString ResourceSettings::ShortcutOffline("shortcut_offline");
+const QString ResourceSettings::ShortcutOfflineArgs("shortcut_offline_args");
 
-const QString ResourcesSettings::RunAtStart("run_at_start");
+const QString ResourceSettings::RunAtStart("run_at_start");
 
-const QString ResourcesSettings::DefaultInstallationPath("default_installation_path");
+const QString ResourceSettings::DefaultInstallationPath("default_installation_path");
 
-const QString ResourcesSettings::DefaultSimpleInstallDataPath("default_simple_install_data_path");
-const QString ResourcesSettings::DefaultCustomInstallDataPath("default_custom_install_path");
-const QString ResourcesSettings::ChangeDataLocationAllowed("change_data_location_allowed");
+const QString ResourceSettings::DefaultSimpleInstallDataPath("default_simple_install_data_path");
+const QString ResourceSettings::DefaultCustomInstallDataPath("default_custom_install_path");
+const QString ResourceSettings::ChangeDataLocationAllowed("change_data_location_allowed");
 
-const QString ResourcesSettings::InsetColor("inset_color");
-const QString ResourcesSettings::PanelBackgroundColor("panel_background_color");
-const QString ResourcesSettings::ButtonHoverBackgroundColor("button_hover_background_color");
-const QString ResourcesSettings::ButtonBackgroundColor("button_background_color");
-const QString ResourcesSettings::DefaultTextColor("default_text_color");
-const QString ResourcesSettings::GrayTextColor("gray_text_color");
-const QString ResourcesSettings::DisabledColor("disabled_color");
-const QString ResourcesSettings::WindowBorderWidth("window_border_width");
+const QString ResourceSettings::InsetColor("inset_color");
+const QString ResourceSettings::PanelBackgroundColor("panel_background_color");
+const QString ResourceSettings::ButtonHoverBackgroundColor("button_hover_background_color");
+const QString ResourceSettings::ButtonBackgroundColor("button_background_color");
+const QString ResourceSettings::DefaultTextColor("default_text_color");
+const QString ResourceSettings::GrayTextColor("gray_text_color");
+const QString ResourceSettings::DisabledColor("disabled_color");
+const QString ResourceSettings::WindowBorderWidth("window_border_width");
 
 
-ResourcesSettings::ResourcesSettings(const QString &_appPath) :
+ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_settings(_appPath, QSettings::IniFormat),
     m_deploymentUrl(""),
     m_appName("Application"),
@@ -59,16 +59,16 @@ ResourcesSettings::ResourcesSettings(const QString &_appPath) :
     m_defaultCustomInstallDataPath("$INSTALL_PATH/data"),
     m_changeDataLocationAllowed(false)
 {
-    L_INFO("Initialise ResourcesSettings singleton instance");
+    L_INFO("Initialise ResourceSettings singleton instance");
 
     m_settings.setFallbacksEnabled(false);
 }
 
-ResourcesSettings::~ResourcesSettings()
+ResourceSettings::~ResourceSettings()
 {
 }
 
-void ResourcesSettings::readSettings()
+void ResourceSettings::readSettings()
 {
     L_INFO("Starting to read all settings");
 
@@ -100,7 +100,7 @@ void ResourcesSettings::readSettings()
     m_windowBorderWidth = m_settings.value(WindowBorderWidth, m_windowBorderWidth).toString();
 }
 
-void ResourcesSettings::writeAppSettings()
+void ResourceSettings::writeAppSettings()
 {
     Settings * settings = Settings::getInstance();
 
@@ -129,7 +129,7 @@ void ResourcesSettings::writeAppSettings()
     settings->setWindowBorderWidth(m_windowBorderWidth);
 }
 
-QString ResourcesSettings::getTransformedVariablePath(QString _path)
+QString ResourceSettings::getTransformedVariablePath(QString _path)
 {
     _path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     _path.replace(QString("$INSTALL_PATH"), m_defaultInstallationPath);
@@ -138,107 +138,107 @@ QString ResourcesSettings::getTransformedVariablePath(QString _path)
     return _path;
 }
 
-bool ResourcesSettings::isRunAtStart() const
+bool ResourceSettings::isRunAtStart() const
 {
     return m_runAtStart;
 }
 
-QString ResourcesSettings::getShortcutOfflineArgs() const
+QString ResourceSettings::getShortcutOfflineArgs() const
 {
     return m_shortcutOfflineArgs;
 }
 
-QString ResourcesSettings::getDeploymentUrl() const
+QString ResourceSettings::getDeploymentUrl() const
 {
     return m_deploymentUrl;
 }
 
-QString ResourcesSettings::getAppName() const
+QString ResourceSettings::getAppName() const
 {
     return m_appName;
 }
 
-QString ResourcesSettings::getLang() const
+QString ResourceSettings::getLang() const
 {
     return m_lang;
 }
 
-QString ResourcesSettings::getShortcutName() const
+QString ResourceSettings::getShortcutName() const
 {
     return m_shortcutName;
 }
 
-QString ResourcesSettings::getShortcutOfflineName() const
+QString ResourceSettings::getShortcutOfflineName() const
 {
     return m_shortcutOfflineName;
 }
 
-bool ResourcesSettings::isShortcutOnline() const
+bool ResourceSettings::isShortcutOnline() const
 {
     return m_shortcutOnline;
 }
 
-bool ResourcesSettings::isShortcutOffline() const
+bool ResourceSettings::isShortcutOffline() const
 {
     return m_shortcutOffline;
 }
 
-QString ResourcesSettings::getDefaultInstallationPath() const
+QString ResourceSettings::getDefaultInstallationPath() const
 {
     return m_defaultInstallationPath;
 }
 
-bool ResourcesSettings::isChangeDataLocationAllowed() const
+bool ResourceSettings::isChangeDataLocationAllowed() const
 {
     return m_changeDataLocationAllowed;
 }
 
-QString ResourcesSettings::getDefaultCustomInstallDataPath() const
+QString ResourceSettings::getDefaultCustomInstallDataPath() const
 {
     return m_defaultCustomInstallDataPath;
 }
 
-QString ResourcesSettings::getDefaultSimpleInstallDataPath() const
+QString ResourceSettings::getDefaultSimpleInstallDataPath() const
 {
     return m_defaultSimpleInstallDataPath;
 }
 
-QString ResourcesSettings::getInsetColor() const
+QString ResourceSettings::getInsetColor() const
 {
     return m_insetColor;
 }
 
-QString ResourcesSettings::getPanelBackgroundColor() const
+QString ResourceSettings::getPanelBackgroundColor() const
 {
     return m_panelBackgroundColor;
 }
 
-QString ResourcesSettings::getButtonHoverBackgroundColor() const
+QString ResourceSettings::getButtonHoverBackgroundColor() const
 {
     return m_buttonHoverBackgroundColor;
 }
 
-QString ResourcesSettings::getButtonBackgroundColor() const
+QString ResourceSettings::getButtonBackgroundColor() const
 {
     return m_buttonBackgroundColor;
 }
 
-QString ResourcesSettings::getDefaultTextColor() const
+QString ResourceSettings::getDefaultTextColor() const
 {
     return m_defaultTextColor;
 }
 
-QString ResourcesSettings::getGrayTextColor() const
+QString ResourceSettings::getGrayTextColor() const
 {
     return m_grayTextColor;
 }
 
-QString ResourcesSettings::getDisabledColor() const
+QString ResourceSettings::getDisabledColor() const
 {
     return m_disabledColor;
 }
 
-QString ResourcesSettings::getWindowBorderWidth() const
+QString ResourceSettings::getWindowBorderWidth() const
 {
     return m_windowBorderWidth;
 }

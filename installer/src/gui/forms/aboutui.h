@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QSharedDataPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 namespace Ui {
 class AboutUI;
@@ -19,7 +19,7 @@ class AboutUI : public QWidget
     Q_OBJECT
 
     public:
-        explicit AboutUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent = 0);
+        explicit AboutUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
         virtual ~AboutUI();
 
     private:

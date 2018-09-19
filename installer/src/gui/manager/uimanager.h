@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QSharedDataPointer>
 
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 
 class WindowUI;
 class WelcomeUI;
@@ -20,12 +20,12 @@ class UIManager : public QObject
     Q_OBJECT
 
     public:
-        UIManager(QSharedPointer<ResourcesSettings> _resourcesSettings);
+        UIManager(QSharedPointer<ResourceSettings> _resourceSettings);
         virtual ~UIManager();
         void init();
 
     private:
-        QSharedPointer<ResourcesSettings> m_resourcesSettings;
+        QSharedPointer<ResourceSettings> m_resourceSettings;
         WindowUI * m_window;
         WelcomeUI * m_welcome;
         PersonalizeUI * m_personalize;

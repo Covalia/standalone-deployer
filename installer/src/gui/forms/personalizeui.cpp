@@ -3,7 +3,7 @@
 
 #include "gui/style/stylemanager.h"
 #include "log/logger.h"
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
 #include "settings/settings.h"
 #include "io/config.h"
 
@@ -11,9 +11,9 @@
 #include <QFileDialog>
 #include <QStringList>
 
-PersonalizeUI::PersonalizeUI(QSharedPointer<ResourcesSettings> _resourcesSettings, QWidget * _parent) :
+PersonalizeUI::PersonalizeUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent) :
     QWidget(_parent),
-    m_resourcesSettings(_resourcesSettings),
+    m_resourceSettings(_resourceSettings),
     m_ui(new Ui::PersonalizeUI)
 {
     m_ui->setupUi(this);
@@ -21,17 +21,17 @@ PersonalizeUI::PersonalizeUI(QSharedPointer<ResourcesSettings> _resourcesSetting
     // link style
     m_ui->buttonStartInstallation->setAccessibleName("pageButton");
 
-    StyleManager::transformStyle(_resourcesSettings, this);
+    StyleManager::transformStyle(_resourceSettings, this);
 
     Settings * settings = Settings::getInstance();
 
-    m_ui->widgetDataInstallation->setVisible(m_resourcesSettings->isChangeDataLocationAllowed());
+    m_ui->widgetDataInstallation->setVisible(m_resourceSettings->isChangeDataLocationAllowed());
     // apply custom data path to setting
-    if (m_resourcesSettings->isChangeDataLocationAllowed()) {
-        settings->setDataLocation(m_resourcesSettings->getDefaultCustomInstallDataPath());
+    if (m_resourceSettings->isChangeDataLocationAllowed()) {
+        settings->setDataLocation(m_resourceSettings->getDefaultCustomInstallDataPath());
     }
 
-    m_ui->editLineFolderInstallation->setText(m_resourcesSettings->getDefaultInstallationPath());
+    m_ui->editLineFolderInstallation->setText(m_resourceSettings->getDefaultInstallationPath());
     m_ui->editLineDataInstallation->setText(settings->getDataLocation());
     m_ui->checkBoxOfflineShortcut->setChecked(settings->isShortcutOffline());
     m_ui->checkBoxRunAtStart->setChecked(settings->isRunAtStart());
