@@ -1,23 +1,24 @@
 #ifndef INSTALLATIONUI_H
 #define INSTALLATIONUI_H
 
+#include "gui/abstract_translated_ui.h"
+
 #include <QWidget>
 #include <QMovie>
-#include <QSharedPointer>
-
-#include "settings/resourcesettings.h"
 
 namespace Ui {
 class InstallationUI;
 }
 
-class InstallationUI : public QWidget
+class InstallationUI : public QWidget, public AbstractTranslatedUi
 {
     Q_OBJECT
 
     public:
-        explicit InstallationUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
+        explicit InstallationUI(QWidget * _parent = 0);
         virtual ~InstallationUI();
+
+        virtual void retranslateUi();
 
     private:
         Ui::InstallationUI * m_ui;

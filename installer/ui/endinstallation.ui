@@ -66,9 +66,6 @@
           </property>
           <item>
            <widget class="QLabel" name="labelIcon">
-            <property name="styleSheet">
-             <string notr="true">color : @gray-text-color;</string>
-            </property>
             <property name="text">
              <string/>
             </property>
@@ -81,7 +78,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="labelTitre">
+           <widget class="QLabel" name="labelTitle">
             <property name="font">
              <font>
               <family>Segoe UI Semibold</family>
@@ -89,9 +86,6 @@
               <weight>50</weight>
               <bold>false</bold>
              </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: @default-text-color ;</string>
             </property>
             <property name="text">
              <string>The installation is now complete</string>
@@ -102,20 +96,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QCheckBox" name="checkBoxLaunchAfterClose">
-            <property name="text">
-             <string>Launch the application at closing</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignHCenter">
            <widget class="QLabel" name="labelError">
-            <property name="styleSheet">
-             <string notr="true">color: @gray-text-color ;</string>
-            </property>
             <property name="text">
              <string notr="true"/>
             </property>
@@ -159,9 +140,6 @@
        </property>
        <property name="autoFillBackground">
         <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
        </property>
        <property name="text">
         <string>Finish</string>

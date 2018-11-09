@@ -2,58 +2,58 @@
 #define INSTALLER__WINDOW_H
 
 #include <QMainWindow>
-#include <QWidget>
-#include <QSharedDataPointer>
 
-#include "settings/resourcesettings.h"
+class QWidget;
+class QLabel;
+class QComboBox;
 
-namespace Ui {
-class WindowUI;
-}
+#include "gui/abstract_translated_ui.h"
 
 class QStyledItemDelegate;
 
 /**
  * @class WindowUI
  * @brief Window frame.
- * This window is the enveloppe of application. It contain, close button, change language button, about button.
+ * This window is the enveloppe of application. It contain, close button, change language button.
  * This window is movable.
  * It's possible to add widget in content of this window.
  */
-class WindowUI : public QMainWindow
+class WindowUI : public QMainWindow, public AbstractTranslatedUi
 {
     Q_OBJECT
 
     public:
-        explicit WindowUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
+        explicit WindowUI(QWidget * _centralWidget, const QString &_appName, QWidget * _parent = 0);
         virtual ~WindowUI();
         void center();
-        void changeContentWidget(QWidget * _widget);
-        void setVisibleButton(bool _about, bool _changeLanguage);
-        QWidget * currentWidgetCentral() const;
+        virtual void retranslateUi();
+
+        // UI strings
+        const QString m_closeActionText;
+        const QString m_titleLabelText;
 
     private:
-        QSharedPointer<ResourceSettings> m_resourceSettings;
+        const QString m_appName;
 
-        Ui::WindowUI * m_ui;
-        QStyledItemDelegate * m_itemDelegate;
+        QAction * m_closeAction;
+
+        QToolBar * m_toolbar;
+        QLabel * m_iconLabel;
+        QLabel * m_titleLabel;
+        QComboBox * m_comboBoxLanguage;
+
         bool m_alreadyClosedOnMacOs = false;
         QPoint m_position;
         void mousePressEvent(QMouseEvent * _e);
         void mouseReleaseEvent(QMouseEvent * _e);
         void mouseMoveEvent(QMouseEvent *);
-        void hideLayoutContent(QLayout * _layout);
         virtual void closeEvent(QCloseEvent *);
-        void updateUi();
 
     signals:
-        void changeLanguageSignal();
-        void aboutSignal();
+        void changeLanguageSignal(const QString &_language);
 
     private slots:
         void comboBoxLanguageEvent(int _index);
-        void changeLanguage();
-        void aboutEvent();
 };
 
 #endif // INSTALLER__WINDOW_H

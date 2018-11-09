@@ -16,7 +16,6 @@
 #include "settings/settings.h"
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
-#include "gui/style/stylemanager.h"
 #include "io/config.h"
 #include "io/fileutils.h"
 
@@ -52,32 +51,42 @@ void InstallManager::initInstallation()
 
     LanguageManager::initLanguage();
 
+    // init values from project.ini and command line args.
+    if (!lineParser.getInstallLocation().isEmpty()) {
+        m_installationPath = lineParser.getInstallLocation();
+    } else {
+        m_installationPath = m_projectSettings->getDefaultInstallationPath();
+    }
+
+    if (!lineParser.getDataLocation().isEmpty()) {
+        m_dataPath = lineParser.getDataLocation();
+    } else {
+        m_dataPath = m_projectSettings->getDefaultCustomInstallDataPath();
+    }
+
     if (!lineParser.isSilent()) {
         qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
-        // init style
-        StyleManager::setGeneralStyle(m_projectSettings);
-
         if (!m_uiManager) {
-            m_uiManager = new UIManager(m_projectSettings);
+            m_uiManager = new UIManager(m_projectSettings->getAppName());
         }
         m_uiManager->init();
 
-        connect(m_uiManager, SIGNAL(changeInstallationSignal()),
-                this, SLOT(eventStartInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
+        m_uiManager->setInstallationFolder(m_installationPath);
+        m_uiManager->setDataFolder(m_dataPath);
+
+        m_uiManager->setCreatedOfflineShortcut(false);
+        m_uiManager->setLaunchedAppAtStartUp(false);
+        m_uiManager->setStartedAppWhenInstalled(true);
+
+        connect(m_uiManager, SIGNAL(wizardFinishedSignal()),
+                this, SLOT(start()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
         connect(this, SIGNAL(endInstallation(bool,QStringList)),
                 m_uiManager, SLOT(eventEndInstallation(bool,QStringList)));
-        connect(m_uiManager, SIGNAL(installationFolderChanged(QString)),
-                this, SLOT(setInstallationDir(const QString&)));
     } else {
         start();
     }
-}
-
-void InstallManager::eventStartInstallation()
-{
-    start();
 }
 
 void InstallManager::run()
@@ -96,37 +105,37 @@ void InstallManager::startInstallation()
     // tree creation
     bool successCreatingFolders = createInstallationFolders();
     if (!successCreatingFolders) {
-        errorMessages << tr("Unable to create directory tree");
+        errorMessages << QT_TR_NOOP("Unable to create directory tree");
     }
 
     // create updater version folder
     bool successCreatingUpdaterVersion = createUpdaterFolderVersion();
     if (!successCreatingUpdaterVersion) {
-        errorMessages << tr("Unable to create updater version folder");
+        errorMessages << QT_TR_NOOP("Unable to create updater version folder");
     }
 
     // settings writing
     bool successWritingSettings = createIniConfigurationFile();
     if (!successWritingSettings) {
-        errorMessages << tr("Unable to write settings file");
+        errorMessages << QT_TR_NOOP("Unable to write settings file");
     }
 
     // extract resources
     bool successExtractingResources = extractResources();
     if (!successExtractingResources) {
-        errorMessages << tr("Unable to extract resources");
+        errorMessages << QT_TR_NOOP("Unable to extract resources");
     }
 
     // create shorcut
     bool successCreatingShortcut = createShortcut();
     if (!successCreatingShortcut) {
-        errorMessages << tr("Unable to create shortcuts");
+        errorMessages << QT_TR_NOOP("Unable to create shortcuts");
     }
 
     // preparing app
     bool successPreparingApp = m_appPath.prepareLoader() && m_appPath.prepareUpdater(m_appPath.getUpdaterVersion());
     if (!successPreparingApp) {
-        errorMessages << tr("Unable to prepare applications");
+        errorMessages << QT_TR_NOOP("Unable to prepare applications");
     }
 
     bool success = successCreatingFolders && successWritingSettings
@@ -134,15 +143,14 @@ void InstallManager::startInstallation()
         && successCreatingShortcut && successPreparingApp;
 
     if (m_uiManager) {
+        connect(m_uiManager, SIGNAL(quitInstaller(bool)), this, SLOT(closeInstallation(bool)));
+
         if (success) {
             L_INFO("Success Installation");
             emit endInstallation(success, errorMessages);
         } else {
             emit endInstallation(success, errorMessages);
         }
-
-        QObject::connect(m_uiManager, SIGNAL(closeInstallationSignal(bool)),
-                         this, SLOT(eventCloseInstallation(bool)));
     } else {
         closeInstallation(m_runAppAfter);
     }
@@ -383,11 +391,6 @@ void InstallManager::closeInstallation(bool _launchApplication)
     L_INFO("End treatment, close application");
     moveLogIntoInstallFolder();
     qApp->exit();
-}
-
-void InstallManager::eventCloseInstallation(bool _launchApplication)
-{
-    closeInstallation(_launchApplication);
 }
 
 void InstallManager::setInstallationDir(const QString &_directory)

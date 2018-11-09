@@ -1,33 +1,37 @@
 #ifndef ENDINSTALLATIONUI_H
 #define ENDINSTALLATIONUI_H
 
-#include <QWidget>
-#include <QSharedPointer>
+#include "gui/abstract_translated_ui.h"
 
-#include "settings/resourcesettings.h"
+#include <QWidget>
 
 namespace Ui {
 class EndInstallationUI;
 }
 
-class EndInstallationUI : public QWidget
+class EndInstallationUI : public QWidget, public AbstractTranslatedUi
 {
     Q_OBJECT
 
     public:
-        explicit EndInstallationUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0);
+        explicit EndInstallationUI(QWidget * _parent = 0);
         virtual ~EndInstallationUI();
 
         void showErrors(QStringList _errors);
+        void setStartedAppWhenInstalled(bool _start);
+
+        virtual void retranslateUi();
 
     private:
         Ui::EndInstallationUI * m_ui;
+        bool m_start;
+        QStringList m_errors;
 
     private slots:
         void closeInstallationEvent();
 
     signals:
-        void closeInstallationSignal(bool _launchApplication);
+        void quitInstaller(bool _startApp);
 };
 
 #endif // ENDINSTALLATIONUI_H

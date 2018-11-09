@@ -3,9 +3,6 @@
 
 #include <QDialog>
 #include <QString>
-#include <QSharedPointer>
-
-#include "settings/resourcesettings.h"
 
 namespace Ui {
 class AskPopupUI;
@@ -20,7 +17,7 @@ class AskPopupUI : public QDialog
     Q_OBJECT
 
     public:
-        explicit AskPopupUI(QSharedPointer<ResourceSettings> _resourceSettings, QWidget * _parent = 0, QString _title = "", QString _description = "");
+        explicit AskPopupUI(QWidget * _parent = 0, QString _title = "", QString _description = "");
         virtual ~AskPopupUI();
         int exec();
 

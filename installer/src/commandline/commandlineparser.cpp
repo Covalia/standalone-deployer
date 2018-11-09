@@ -231,6 +231,16 @@ void CommandLineParser::setProxyHostname(const QString &_proxyHostname)
     m_proxyHostname = _proxyHostname;
 }
 
+QString CommandLineParser::getInstallLocation() const
+{
+    return m_installLocation;
+}
+
+void CommandLineParser::setInstallLocation(const QString &_installLocation)
+{
+    m_installLocation = _installLocation;
+}
+
 QString CommandLineParser::getDataLocation() const
 {
     return m_dataLocation;

@@ -19,6 +19,9 @@ class CommandLineParser
         bool isSilent() const;
         void setSilent(bool _silent);
 
+        QString getInstallLocation() const;
+        void setInstallLocation(const QString &_installLocation);
+
         QString getDataLocation() const;
         void setDataLocation(const QString &_dataLocation);
 

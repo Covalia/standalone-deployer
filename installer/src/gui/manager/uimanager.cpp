@@ -4,218 +4,167 @@
 
 #include "log/logger.h"
 #include "gui/forms/windowui.h"
-#include "gui/forms/welcomeui.h"
-#include "gui/forms/personalizeui.h"
-#include "gui/forms/proxyui.h"
-#include "gui/forms/aboutui.h"
 #include "gui/forms/installationui.h"
 #include "gui/forms/endinstallationui.h"
+#include "gui/wizard/installwizard.h"
 
-UIManager::UIManager(QSharedPointer<ResourceSettings> _resourceSettings) : QObject(),
-    m_resourceSettings(_resourceSettings),
+UIManager::UIManager(const QString &_appName) : QObject(),
     m_window(0),
-    m_welcome(0),
-    m_personalize(0),
-    m_proxy(0),
-    m_about(0),
     m_installation(0),
-    m_endInstallation(0)
+    m_endInstallation(0),
+    m_wizard(0),
+    m_currentWidget(0)
 {
-    m_window = new WindowUI(m_resourceSettings);
-    m_welcome = new WelcomeUI(m_resourceSettings);
-    m_personalize = new PersonalizeUI(m_resourceSettings);
-    m_proxy = new ProxyUI(m_resourceSettings);
-    m_about = new AboutUI(m_resourceSettings);
-    m_installation = new InstallationUI(m_resourceSettings);
-    m_endInstallation = new EndInstallationUI(m_resourceSettings);
+    m_installation = new InstallationUI;
+    m_endInstallation = new EndInstallationUI;
 
-    connect(m_window, SIGNAL(changeLanguageSignal()),
-            m_window, SLOT(changeLanguage()));
-    connect(m_window, SIGNAL(aboutSignal()),
-            this, SLOT(aboutEvent()));
+    m_wizard = new InstallWizard(_appName);
+    m_wizard->retranslateUi();
+
+    m_window = new WindowUI(m_wizard, _appName);
+    m_currentWidget = m_wizard;
+
+    connect(m_wizard, SIGNAL(finished(int)), this, SLOT(wizardFinished(int)));
+    connect(m_window, SIGNAL(changeLanguageSignal(const QString&)),
+            this, SLOT(languageChanged(const QString&)));
+    connect(m_endInstallation, SIGNAL(quitInstaller(bool)), this, SIGNAL(quitInstaller(bool)));
 
     m_window->show();
     m_window->center();
 }
 
-void UIManager::init()
-{
-    changeWelcome();
-}
-
 UIManager::~UIManager()
 {
+    // remove m_window ownership in case wizard is currently running.
+    m_wizard->setParent(0);
+
     delete m_window;
-    delete m_welcome;
-    delete m_personalize;
-    delete m_proxy;
-    delete m_about;
-    delete m_installation;
-    delete m_endInstallation;
+    delete m_wizard;
+    // m_installation, m_endInstallation are children of m_window, deleted by m_window.
 }
 
-void UIManager::aboutEvent()
+void UIManager::init()
 {
-    changeAbout();
+    m_wizard->show();
 }
 
-void UIManager::returnToLastPage()
+bool UIManager::isCustomInstallation() const
 {
-    QWidget * widget = 0;
-
-    switch (m_returnPage) {
-        case WelcomePage:
-            widget = m_welcome;
-            break;
-        case PersonalizePage:
-            widget = m_personalize;
-            break;
-        case ProxyPage:
-            widget = m_proxy;
-            break;
-        case AboutPage:
-            widget = m_about;
-            break;
-        case InstallationPage:
-            widget = m_installation;
-            break;
-        case EndInstallationPage:
-            widget = m_endInstallation;
-            break;
-    } // switch
-
-    m_window->changeContentWidget(widget);
-    m_window->setVisibleButton(true, true);
+    return m_wizard->isCustomInstallation();
 }
 
-void UIManager::changeWelcome()
+QString UIManager::getInstallationFolder() const
 {
-    if (m_welcome) {
-        m_window->changeContentWidget(m_welcome);
-        m_returnPage = WelcomePage;
-        m_window->setVisibleButton(true, true);
-
-        connect(m_window, SIGNAL(changeLanguageSignal()),
-                m_welcome, SLOT(changeLanguage()));
-        connect(m_welcome, SIGNAL(customInstallationSignal()),
-                this, SLOT(switchWelcomeToPersonalize()));
-        connect(m_welcome, SIGNAL(contractSignal()),
-                this, SLOT(aboutEvent()));
-        connect(m_welcome, SIGNAL(simpleInstallationSignal()),
-                this, SLOT(switchWelcomeToInstallation()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
-    }
+    return m_wizard->getInstallationFolder();
 }
 
-void UIManager::changePersonalize()
+bool UIManager::isChosenDataFolder() const
 {
-    m_window->changeContentWidget(m_personalize);
-    m_returnPage = PersonalizePage;
-    m_window->setVisibleButton(true, true);
-
-    connect(m_window, SIGNAL(changeLanguageSignal()),
-            m_personalize, SLOT(changeLanguage()));
-    connect(m_personalize, SIGNAL(proxySettingSignal()),
-            this, SLOT(switchPersonalizeToProxy()));
-    connect(m_personalize, SIGNAL(customInstallationSignal()),
-            this, SLOT(switchWelcomeToInstallation()));
-    connect(m_personalize, SIGNAL(installationFolderChanged(QString)),
-            this, SLOT(installationFolderChangedEvent(QString)));
+    return m_wizard->isChosenDataFolder();
 }
 
-void UIManager::changeProxy()
+QString UIManager::getDataFolder() const
 {
-    if (m_proxy) {
-        m_window->changeContentWidget(m_proxy);
-        m_returnPage = ProxyPage;
-        m_window->setVisibleButton(true, true);
-
-        connect(m_window, SIGNAL(changeLanguageSignal()),
-                m_proxy, SLOT(changeLanguage()));
-        connect(m_proxy, SIGNAL(validateSettingsSignal()),
-                this, SLOT(switchProxyToPersonalize()));
-    }
+    return m_wizard->getDataFolder();
 }
 
-void UIManager::changeAbout()
+bool UIManager::isCreatedOfflineShortcut() const
 {
-    if (m_about) {
-        m_window->changeContentWidget(m_about);
-        m_window->setVisibleButton(false, true);
-
-        connect(m_window, SIGNAL(changeLanguageSignal()),
-                m_about, SLOT(changeLanguage()));
-        connect(m_about, SIGNAL(validateAboutSignal()),
-                this, SLOT(switchAboutTo()));
-    }
+    return m_wizard->isCreatedOfflineShortcut();
 }
 
-void UIManager::changeInstallation()
+bool UIManager::isLaunchedAppAtStartUp() const
 {
-    m_window->changeContentWidget(m_installation);
-    m_window->setVisibleButton(false, false);
-    m_window->update();
-    emit changeInstallationSignal();
+    return m_wizard->isLaunchedAppAtStartUp();
 }
 
-void UIManager::changeEndInstallation()
+bool UIManager::isUsedProxy() const
 {
-    m_window->changeContentWidget(m_endInstallation);
-    m_window->setVisibleButton(false, false);
-    connect(m_endInstallation, SIGNAL(closeInstallationSignal(bool)),
-            this, SLOT(eventCloseInstallation(bool)));
+    return m_wizard->isUsedProxy();
 }
 
-void UIManager::switchWelcomeToPersonalize()
+QString UIManager::getProxyHostname() const
 {
-    m_welcome->disconnect();
-    changePersonalize();
+    return m_wizard->getProxyHostname();
 }
 
-void UIManager::switchWelcomeToInstallation()
+quint16 UIManager::getProxyPort() const
 {
-    m_welcome->disconnect();
-    changeInstallation();
+    return m_wizard->getProxyPort();
 }
 
-void UIManager::switchPersonalizeToProxy()
+QString UIManager::getProxyLogin() const
 {
-    m_personalize->disconnect();
-    changeProxy();
+    return m_wizard->getProxyLogin();
 }
 
-void UIManager::switchPersonalizeToInstallation()
+QString UIManager::getProxyPassword() const
 {
-    m_personalize->disconnect();
-    changeInstallation();
+    return m_wizard->getProxyPassword();
 }
 
-void UIManager::switchProxyToPersonalize()
+bool UIManager::isStartedAppWhenInstalled() const
 {
-    m_proxy->disconnect();
-    changePersonalize();
+    return m_wizard->isStartedAppWhenInstalled();
 }
 
-void UIManager::switchAboutTo()
+void UIManager::setInstallationFolder(const QString _installationFolder)
 {
-    m_about->disconnect();
-    returnToLastPage();
+    m_wizard->setInstallationFolder(_installationFolder);
+}
+
+void UIManager::setDataFolder(const QString _dataFolder)
+{
+    m_wizard->setDataFolder(_dataFolder);
+}
+
+void UIManager::setCreatedOfflineShortcut(const bool _createdOfflineShortcut)
+{
+    m_wizard->setCreatedOfflineShortcut(_createdOfflineShortcut);
+}
+
+void UIManager::setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp)
+{
+    m_wizard->setLaunchedAppAtStartUp(_launchedAppAtStartUp);
+}
+
+void UIManager::setStartedAppWhenInstalled(const bool _startedAppWhenInstalled)
+{
+    m_wizard->setStartedAppWhenInstalled(_startedAppWhenInstalled);
+}
+
+void UIManager::wizardFinished(int _result)
+{
+    Q_UNUSED(_result)
+
+    // remove m_window ownership to be able to later access wizard properties.
+    m_wizard->setParent(0);
+
+    m_installation->retranslateUi();
+    m_window->setCentralWidget(m_installation);
+    m_currentWidget = m_installation;
+    emit wizardFinishedSignal();
+}
+
+void UIManager::languageChanged(const QString &_language)
+{
+    Q_UNUSED(_language)
+
+    m_currentWidget->retranslateUi();
+    m_window->retranslateUi();
 }
 
 void UIManager::eventEndInstallation(bool _success, QStringList _errors)
 {
     m_installation->disconnect();
-    changeEndInstallation();
-    if (!_success && m_endInstallation) {
+    if (!_success) {
         m_endInstallation->showErrors(_errors);
+    } else {
+        // indicate if application must start when installer will be closed
+        m_endInstallation->setStartedAppWhenInstalled(m_wizard->isStartedAppWhenInstalled());
     }
-}
+    m_endInstallation->retranslateUi();
 
-void UIManager::eventCloseInstallation(bool _launchApplication)
-{
-    emit closeInstallationSignal(_launchApplication);
-}
-
-void UIManager::installationFolderChangedEvent(QString _folder)
-{
-    emit installationFolderChanged(_folder);
+    m_window->setCentralWidget(m_endInstallation);
+    m_currentWidget = m_endInstallation;
 }

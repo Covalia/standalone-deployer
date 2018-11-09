@@ -28,8 +28,10 @@ class InstallManager : public QThread
         QSharedPointer<ResourceSettings> m_projectSettings;
         Settings * m_settings;
 
-
         bool m_runAppAfter;
+
+        QString m_installationPath;
+        QString m_dataPath;
 
         bool cleanInstallationFolders();
         bool createInstallationFolders();
@@ -39,16 +41,15 @@ class InstallManager : public QThread
         bool extractResources();
         bool createShortcut();
         void startInstallation();
-        void closeInstallation(bool _launchApplication);
         bool launchLoader();
+
+        void setInstallationDir(const QString &_directory);
 
     protected:
         virtual void run();
 
     private slots:
-        void setInstallationDir(const QString &_directory);
-        void eventStartInstallation();
-        void eventCloseInstallation(bool _launchApplication);
+        void closeInstallation(bool _launchApplication);
 
     signals:
         void endInstallation(bool _success, QStringList _errors);
