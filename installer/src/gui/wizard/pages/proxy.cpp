@@ -35,6 +35,7 @@ ProxyPage::ProxyPage(QWidget * parent) : QWizardPage(parent),
     m_portLineEdit->setText("3128");
     m_loginLineEdit = new QLineEdit(this);
     m_passwordLineEdit = new QLineEdit(this);
+    m_passwordLineEdit->setEchoMode(QLineEdit::Password);
 
     m_hostnameLabel->setBuddy(m_hostnameLineEdit);
     m_portLabel->setBuddy(m_portLineEdit);
