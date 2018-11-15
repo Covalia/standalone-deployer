@@ -30,7 +30,7 @@ class InstallWizard : public QWizard, public AbstractTranslatedUi
             Page_Launch
         };
 
-        InstallWizard(const QString &_appName, QWidget * parent = 0);
+        InstallWizard(const QString &_appName, bool _changeDataLocationAllowed, QWidget * parent = 0);
 
         bool isCustomInstallation() const;
         void setCustomInstallation(bool _customInstallation);

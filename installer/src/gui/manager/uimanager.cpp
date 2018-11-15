@@ -8,7 +8,7 @@
 #include "gui/forms/endinstallationui.h"
 #include "gui/wizard/installwizard.h"
 
-UIManager::UIManager(const QString &_appName) : QObject(),
+UIManager::UIManager(const QString &_appName, bool _changeDataLocationAllowed) : QObject(),
     m_window(0),
     m_installation(0),
     m_endInstallation(0),
@@ -18,7 +18,7 @@ UIManager::UIManager(const QString &_appName) : QObject(),
     m_installation = new InstallationUI;
     m_endInstallation = new EndInstallationUI;
 
-    m_wizard = new InstallWizard(_appName);
+    m_wizard = new InstallWizard(_appName, _changeDataLocationAllowed);
     m_wizard->retranslateUi();
 
     m_window = new WindowUI(m_wizard, _appName);

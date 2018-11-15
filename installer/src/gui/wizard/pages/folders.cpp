@@ -3,7 +3,7 @@
 
 #include <QtWidgets>
 
-FoldersPage::FoldersPage(QWidget * parent) : QWizardPage(parent),
+FoldersPage::FoldersPage(bool _changeDataLocationAllowed, QWidget * parent) : QWizardPage(parent),
     m_titleText(QT_TR_NOOP("Customize installation folders")),
     m_installationFolderLabelText(QT_TR_NOOP("&Application installation directory")),
     m_changeInstallationFolderPushButtonText(QT_TR_NOOP("Change")),
@@ -14,7 +14,8 @@ FoldersPage::FoldersPage(QWidget * parent) : QWizardPage(parent),
     m_changeInstallationFolderPushButton(0),
     m_chooseDataFolderCheckBox(0),
     m_dataFolderLineEdit(0),
-    m_changeDataFolderPushButton(0)
+    m_changeDataFolderPushButton(0),
+    m_changeDataLocationAllowed(_changeDataLocationAllowed)
 {
     setTitle(tr_helper(m_titleText));
 
@@ -27,6 +28,10 @@ FoldersPage::FoldersPage(QWidget * parent) : QWizardPage(parent),
     m_chooseDataFolderCheckBox = new QCheckBox(tr_helper(m_chooseDataFolderCheckBoxText), this);
     m_dataFolderLineEdit = new QLineEdit(this);
     m_changeDataFolderPushButton = new QPushButton(tr_helper(m_changeDataFolderPushButtonText), this);
+
+    m_chooseDataFolderCheckBox->setVisible(m_changeDataLocationAllowed);
+    m_dataFolderLineEdit->setVisible(m_changeDataLocationAllowed);
+    m_changeDataFolderPushButton->setVisible(m_changeDataLocationAllowed);
 
     m_changeInstallationFolderPushButton->setObjectName("changeInstallationFolderPushButton");
     m_changeDataFolderPushButton->setObjectName("changeDataFolderPushButton");

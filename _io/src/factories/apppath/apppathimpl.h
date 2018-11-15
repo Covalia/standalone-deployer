@@ -103,6 +103,8 @@ class AppPathImpl {
 
         virtual QString getClasspathSeparator() const = 0;
 
+        static QString getDataPathFromInstallPath(const QString &_installPath);
+
     protected:
 
         /// Build directory suffix.
@@ -118,7 +120,6 @@ class AppPathImpl {
 
         bool cleanDir(const QString &_folder);
         bool cleanExceptVersion(const QDir &_dir, const QString &_version);
-
 };
 
 #endif

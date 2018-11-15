@@ -518,3 +518,10 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
 
     return result;
 }
+
+QString AppPathImpl::getDataPathFromInstallPath(const QString &_installPath)
+{
+    QDir installDir(_installPath);
+
+    return installDir.absoluteFilePath(IOConfig::DataDir);
+}

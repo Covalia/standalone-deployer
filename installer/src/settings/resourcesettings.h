@@ -21,7 +21,6 @@ class ResourceSettings
 
         static const QString DefaultInstallationPath;
 
-        static const QString DefaultDataPath;
         static const QString ChangeDataLocationAllowed;
 
         static const QString InsetColor;
@@ -54,7 +53,6 @@ class ResourceSettings
         QString getLang() const;
         QString getAppName() const;
         QString getDeploymentUrl() const;
-        QString getDefaultDataPath() const;
         QString getShortcutOfflineArgs() const;
         bool isRunAtStart() const;
 
@@ -88,7 +86,6 @@ class ResourceSettings
         QString m_windowBorderWidth;
 
         QString m_defaultInstallationPath;
-        QString m_defaultDataPath;
         bool m_changeDataLocationAllowed;
 };
 

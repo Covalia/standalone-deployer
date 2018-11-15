@@ -10,7 +10,7 @@
 #include "gui/wizard/pages/proxy.h"
 #include "gui/wizard/pages/launch.h"
 
-InstallWizard::InstallWizard(const QString &_appName, QWidget * parent) : QWizard(parent),
+InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAllowed, QWidget * parent) : QWizard(parent),
     m_nextButtonText(QT_TR_NOOP("Next >")),
     m_backButtonText(QT_TR_NOOP("< Back")),
     m_finishButtonText(QT_TR_NOOP("Install"))
@@ -18,7 +18,7 @@ InstallWizard::InstallWizard(const QString &_appName, QWidget * parent) : QWizar
     setPage(Page_Welcome, new WelcomePage(_appName));
     setPage(Page_License, new LicensePage);
     setPage(Page_Type, new TypePage);
-    setPage(Page_Folders, new FoldersPage);
+    setPage(Page_Folders, new FoldersPage(_changeDataLocationAllowed));
     setPage(Page_Shortcuts, new ShortcutsPage);
     setPage(Page_Proxy, new ProxyPage);
     setPage(Page_Launch, new LaunchPage);

@@ -17,7 +17,6 @@ const QString ResourceSettings::RunAtStart("run_at_start");
 
 const QString ResourceSettings::DefaultInstallationPath("default_installation_path");
 
-const QString ResourceSettings::DefaultDataPath("default_data_path");
 const QString ResourceSettings::ChangeDataLocationAllowed("change_data_location_allowed");
 
 const QString ResourceSettings::InsetColor("inset_color");
@@ -49,7 +48,6 @@ ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_disabledColor("#656976"),
     m_windowBorderWidth("0"),
     m_defaultInstallationPath("$HOME"),
-    m_defaultDataPath("$INSTALL_PATH/data"),
     m_changeDataLocationAllowed(false)
 {
     L_INFO("Initialise ResourceSettings singleton instance");
@@ -78,7 +76,6 @@ void ResourceSettings::readSettings()
 
     m_defaultInstallationPath = getTransformedVariablePath(m_settings.value(DefaultInstallationPath, m_defaultInstallationPath).toString());
 
-    m_defaultDataPath = getTransformedVariablePath(m_settings.value(DefaultDataPath, m_defaultDataPath).toString());
     m_changeDataLocationAllowed = m_settings.value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
 
     m_insetColor = m_settings.value(InsetColor, m_insetColor).toString();
@@ -95,8 +92,6 @@ QString ResourceSettings::getTransformedVariablePath(QString _path)
 {
     _path.replace(QString("$HOME"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     _path.replace(QString("$INSTALL_PATH"), m_defaultInstallationPath);
-    // TODO attention sous macos !
-    _path.replace(QString("$APPDATA_JAVA_TMP"), QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/AppData/LocalLow/Sun/Java/Deployment/tmp");
     return _path;
 }
 
@@ -148,11 +143,6 @@ QString ResourceSettings::getDefaultInstallationPath() const
 bool ResourceSettings::isChangeDataLocationAllowed() const
 {
     return m_changeDataLocationAllowed;
-}
-
-QString ResourceSettings::getDefaultDataPath() const
-{
-    return m_defaultDataPath;
 }
 
 QString ResourceSettings::getInsetColor() const

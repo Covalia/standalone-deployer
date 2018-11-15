@@ -15,7 +15,7 @@ class UIManager : public QObject
     Q_OBJECT
 
     public:
-        UIManager(const QString &_appName);
+        UIManager(const QString &_appName, bool _changeDataLocationAllowed);
         virtual ~UIManager();
         void init();
 

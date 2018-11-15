@@ -17,7 +17,7 @@ class FoldersPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        FoldersPage(QWidget * parent = 0);
+        FoldersPage(bool _changeDataLocationAllowed, QWidget * parent = 0);
         int nextId() const override;
         bool isComplete() const override;
         void retranslateUi() override;
@@ -37,6 +37,8 @@ class FoldersPage : public QWizardPage, public AbstractTranslatedUi
         QCheckBox * m_chooseDataFolderCheckBox;
         QLineEdit * m_dataFolderLineEdit;
         QPushButton * m_changeDataFolderPushButton;
+
+        bool m_changeDataLocationAllowed;
 
         QString fileChooserDialog(QString directory);
 

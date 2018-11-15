@@ -66,6 +66,8 @@ InstallManager::~InstallManager()
 
 void InstallManager::initInstallation()
 {
+    const bool changeDataAllowed = m_projectSettings->isChangeDataLocationAllowed();
+
     if (m_lineParser.isSilent()) {
         if (!m_lineParser.getInstallLocation().isEmpty()) {
             m_installLocation = m_lineParser.getInstallLocation();
@@ -73,10 +75,14 @@ void InstallManager::initInstallation()
             m_installLocation = m_projectSettings->getDefaultInstallationPath();
         }
 
-        if (!m_lineParser.getDataLocation().isEmpty()) {
-            m_dataLocation = m_lineParser.getDataLocation();
+        if (changeDataAllowed) {
+            if (!m_lineParser.getDataLocation().isEmpty()) {
+                m_dataLocation = m_lineParser.getDataLocation();
+            } else {
+                m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
+            }
         } else {
-            m_dataLocation = m_projectSettings->getDefaultDataPath();
+            m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
         }
 
         m_proxyUsed = m_lineParser.isProxyUsed();
@@ -99,17 +105,20 @@ void InstallManager::initInstallation()
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
         if (!m_uiManager) {
-            m_uiManager = new UIManager(m_projectSettings->getAppName());
+            m_uiManager = new UIManager(m_projectSettings->getAppName(), m_projectSettings->isChangeDataLocationAllowed());
         }
 
         m_uiManager->init();
 
         // changing any setting via command line triggers a custom installation
 
+        QString currentInstallPath;
         if (!m_lineParser.getInstallLocation().isEmpty()) {
+            currentInstallPath = m_lineParser.getInstallLocation();
             m_uiManager->setInstallationFolder(m_lineParser.getInstallLocation());
             m_uiManager->setCustomInstallation(true);
         } else {
+            currentInstallPath = m_projectSettings->getDefaultInstallationPath();
             m_uiManager->setInstallationFolder(m_projectSettings->getDefaultInstallationPath());
         }
 
@@ -117,7 +126,7 @@ void InstallManager::initInstallation()
             m_uiManager->setDataFolder(m_lineParser.getDataLocation());
             m_uiManager->setCustomInstallation(true);
         } else {
-            m_uiManager->setDataFolder(m_projectSettings->getDefaultDataPath());
+            m_uiManager->setDataFolder(AppPath::getDataPathFromInstallPath(currentInstallPath));
         }
 
         if (m_lineParser.isProxyUsed()) {
@@ -170,6 +179,8 @@ void InstallManager::run()
         m_uiManager->printWizard();
     }
 
+    const bool changeDataAllowed = m_projectSettings->isChangeDataLocationAllowed();
+
     if (!m_lineParser.isSilent()) {
         // update user choices
 
@@ -178,12 +189,16 @@ void InstallManager::run()
 
             m_installLocation = m_uiManager->getInstallationFolder();
 
-            if (m_uiManager->isDataFolderChosen()) {
-                m_dataLocation = m_uiManager->getDataFolder();
-            } else if (m_lineParser.getDataLocation().isEmpty()) {
-                m_dataLocation = m_projectSettings->getDefaultDataPath();
+            if (changeDataAllowed) {
+                if (m_uiManager->isDataFolderChosen()) {
+                    m_dataLocation = m_uiManager->getDataFolder();
+                } else if (m_lineParser.getDataLocation().isEmpty()) {
+                    m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
+                } else {
+                    m_dataLocation = m_lineParser.getDataLocation();
+                }
             } else {
-                m_dataLocation = m_lineParser.getDataLocation();
+                m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
             }
 
             m_proxyUsed = m_uiManager->isProxyUsed();
@@ -203,10 +218,14 @@ void InstallManager::run()
                 m_installLocation = m_lineParser.getInstallLocation();
             }
 
-            if (m_lineParser.getDataLocation().isEmpty()) {
-                m_dataLocation = m_projectSettings->getDefaultDataPath();
+            if (changeDataAllowed) {
+                if (m_lineParser.getDataLocation().isEmpty()) {
+                    m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
+                } else {
+                    m_dataLocation = m_lineParser.getDataLocation();
+                }
             } else {
-                m_dataLocation = m_lineParser.getDataLocation();
+                m_dataLocation = AppPath::getDataPathFromInstallPath(m_installLocation);
             }
 
             m_proxyUsed = false;
