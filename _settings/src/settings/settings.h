@@ -28,7 +28,7 @@ class Settings
         static const QString UpdaterVersion;
         static const QString JavaVersion;
 
-        static const QString ProxyUse;
+        static const QString ProxyUsed;
         static const QString ProxyHostname;
         static const QString ProxyPort;
         static const QString ProxyLogin;
@@ -36,7 +36,6 @@ class Settings
 
         static const QString Lang;
 
-        static const QString ShortcutOnline;
         static const QString ShortcutOffline;
         static const QString ShortcutName;
         static const QString ShortcutOfflineName;
@@ -71,8 +70,8 @@ class Settings
 
         QString paramListString();
 
-        bool isProxyUse() const;
-        void setProxyUse(bool proxyUse);
+        bool isProxyUsed() const;
+        void setProxyUsed(bool _proxyUsed);
 
         QString getProxyHostname() const;
         void setProxyHostname(const QString &proxyHostname);
@@ -106,9 +105,6 @@ class Settings
 
         bool isShortcutOffline() const;
         void setShortcutOffline(bool shortcutOffline);
-
-        bool isShortcutOnline() const;
-        void setShortcutOnline(bool shortcutOnline);
 
         QString getAppName() const;
         void setAppName(const QString &appName);
@@ -213,7 +209,6 @@ class Settings
 
         QString m_lang;
 
-        bool m_shortcutOnline;
         bool m_shortcutOffline;
         QString m_shortcutName;
         QString m_shortcutOfflineName;
@@ -236,7 +231,7 @@ class Settings
         QString m_updaterVersion;
         QString m_javaVersion;
 
-        bool m_proxyUse;
+        bool m_proxyUsed;
         QString m_proxyHostname;
         int m_proxyPort;
         QString m_proxyLogin;

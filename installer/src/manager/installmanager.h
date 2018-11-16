@@ -8,6 +8,7 @@
 
 #include "gui/manager/uimanager.h"
 #include "settings/resourcesettings.h"
+#include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "utils.h"
 
@@ -28,10 +29,19 @@ class InstallManager : public QThread
         QSharedPointer<ResourceSettings> m_projectSettings;
         Settings * m_settings;
 
-        bool m_runAppAfter;
+        CommandLineParser m_lineParser;
 
-        QString m_installationPath;
-        QString m_dataPath;
+        // temporary values
+        QString m_installLocation;
+        QString m_dataLocation;
+        bool m_proxyUsed;
+        QString m_proxyHostname;
+        QString m_proxyPort;
+        QString m_proxyLogin;
+        QString m_proxyPassword;
+        bool m_runApp;
+        bool m_runAtStart;
+        bool m_createOfflineShortcut;
 
         bool cleanInstallationFolders();
         bool createInstallationFolders();
@@ -42,8 +52,6 @@ class InstallManager : public QThread
         bool createShortcut();
         void startInstallation();
         bool launchLoader();
-
-        void setInstallationDir(const QString &_directory);
 
     protected:
         virtual void run();

@@ -58,9 +58,14 @@ QString UIManager::getInstallationFolder() const
     return m_wizard->getInstallationFolder();
 }
 
-bool UIManager::isChosenDataFolder() const
+bool UIManager::isDataFolderChosen() const
 {
-    return m_wizard->isChosenDataFolder();
+    return m_wizard->isDataFolderChosen();
+}
+
+void UIManager::setDataFolderChosen(bool _folderChosen)
+{
+    m_wizard->setDataFolderChosen(_folderChosen);
 }
 
 QString UIManager::getDataFolder() const
@@ -78,9 +83,9 @@ bool UIManager::isLaunchedAppAtStartUp() const
     return m_wizard->isLaunchedAppAtStartUp();
 }
 
-bool UIManager::isUsedProxy() const
+bool UIManager::isProxyUsed() const
 {
-    return m_wizard->isUsedProxy();
+    return m_wizard->isProxyUsed();
 }
 
 QString UIManager::getProxyHostname() const
@@ -108,12 +113,12 @@ bool UIManager::isStartedAppWhenInstalled() const
     return m_wizard->isStartedAppWhenInstalled();
 }
 
-void UIManager::setInstallationFolder(const QString _installationFolder)
+void UIManager::setInstallationFolder(const QString &_installationFolder)
 {
     m_wizard->setInstallationFolder(_installationFolder);
 }
 
-void UIManager::setDataFolder(const QString _dataFolder)
+void UIManager::setDataFolder(const QString &_dataFolder)
 {
     m_wizard->setDataFolder(_dataFolder);
 }
@@ -167,4 +172,39 @@ void UIManager::eventEndInstallation(bool _success, QStringList _errors)
 
     m_window->setCentralWidget(m_endInstallation);
     m_currentWidget = m_endInstallation;
+}
+
+void UIManager::setProxyUsed(bool _proxyUsed)
+{
+    m_wizard->setProxyUsed(_proxyUsed);
+}
+
+void UIManager::setProxyHostname(const QString &_hostname)
+{
+    m_wizard->setProxyHostname(_hostname);
+}
+
+void UIManager::setProxyPort(quint16 _port)
+{
+    m_wizard->setProxyPort(_port);
+}
+
+void UIManager::setProxyLogin(const QString &_login)
+{
+    m_wizard->setProxyLogin(_login);
+}
+
+void UIManager::setProxyPassword(const QString _password)
+{
+    m_wizard->setProxyPassword(_password);
+}
+
+void UIManager::setCustomInstallation(bool _customInstallation)
+{
+    m_wizard->setCustomInstallation(_customInstallation);
+}
+
+void UIManager::printWizard() const
+{
+    m_wizard->print();
 }

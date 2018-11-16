@@ -21,6 +21,7 @@ TypePage::TypePage(QWidget * parent) : QWizardPage(parent),
     m_customInstallationRadioButton = new QRadioButton(tr_helper(m_customInstallationRadioButtonText), this);
     m_simpleInstallationRadioButton->setChecked(true);
 
+    registerField("type.simple", m_simpleInstallationRadioButton);
     registerField("type.custom", m_customInstallationRadioButton);
 
     QVBoxLayout * layout = new QVBoxLayout(this);

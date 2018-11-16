@@ -33,25 +33,34 @@ class InstallWizard : public QWizard, public AbstractTranslatedUi
         InstallWizard(const QString &_appName, QWidget * parent = 0);
 
         bool isCustomInstallation() const;
+        void setCustomInstallation(bool _customInstallation);
         QString getInstallationFolder() const;
-        bool isChosenDataFolder() const;
+        bool isDataFolderChosen() const;
+        void setDataFolderChosen(bool _folderChosen);
         QString getDataFolder() const;
         bool isCreatedOfflineShortcut() const;
         bool isLaunchedAppAtStartUp() const;
-        bool isUsedProxy() const;
+        bool isProxyUsed() const;
         QString getProxyHostname() const;
         quint16 getProxyPort() const;
         QString getProxyLogin() const;
         QString getProxyPassword() const;
         bool isStartedAppWhenInstalled() const;
 
-        void setInstallationFolder(const QString _installationFolder);
-        void setDataFolder(const QString _dataFolder);
+        void setInstallationFolder(const QString &_installationFolder);
+        void setDataFolder(const QString &_dataFolder);
         void setCreatedOfflineShortcut(const bool _createdOfflineShortcut);
         void setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp);
         void setStartedAppWhenInstalled(const bool _startedAppWhenInstalled);
 
+        void setProxyUsed(bool _proxyUsed);
+        void setProxyHostname(const QString &_hostname);
+        void setProxyPort(quint16 _port);
+        void setProxyLogin(const QString &_login);
+        void setProxyPassword(const QString _password);
+
         virtual void retranslateUi();
+        void print() const;
 
         // UI strings
         const QString m_nextButtonText;

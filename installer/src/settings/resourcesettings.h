@@ -14,7 +14,6 @@ class ResourceSettings
 
         static const QString ShortcutName;
         static const QString ShortcutOfflineName;
-        static const QString ShortcutOnline;
         static const QString ShortcutOffline;
         static const QString ShortcutOfflineArgs;
 
@@ -22,8 +21,7 @@ class ResourceSettings
 
         static const QString DefaultInstallationPath;
 
-        static const QString DefaultSimpleInstallDataPath;
-        static const QString DefaultCustomInstallDataPath;
+        static const QString DefaultDataPath;
         static const QString ChangeDataLocationAllowed;
 
         static const QString InsetColor;
@@ -39,7 +37,6 @@ class ResourceSettings
         virtual ~ResourceSettings();
 
         void readSettings();
-        void writeAppSettings();
 
         QString getWindowBorderWidth() const;
         QString getDisabledColor() const;
@@ -52,14 +49,12 @@ class ResourceSettings
         bool isChangeDataLocationAllowed() const;
         QString getDefaultInstallationPath() const;
         bool isShortcutOffline() const;
-        bool isShortcutOnline() const;
         QString getShortcutOfflineName() const;
         QString getShortcutName() const;
         QString getLang() const;
         QString getAppName() const;
         QString getDeploymentUrl() const;
-        QString getDefaultSimpleInstallDataPath() const;
-        QString getDefaultCustomInstallDataPath() const;
+        QString getDefaultDataPath() const;
         QString getShortcutOfflineArgs() const;
         bool isRunAtStart() const;
 
@@ -77,8 +72,6 @@ class ResourceSettings
         QString m_appName;
 
         QString m_lang;
-
-        bool m_shortcutOnline;
         bool m_shortcutOffline;
         QString m_shortcutName;
         QString m_shortcutOfflineName;
@@ -95,8 +88,7 @@ class ResourceSettings
         QString m_windowBorderWidth;
 
         QString m_defaultInstallationPath;
-        QString m_defaultSimpleInstallDataPath;
-        QString m_defaultCustomInstallDataPath;
+        QString m_defaultDataPath;
         bool m_changeDataLocationAllowed;
 };
 

@@ -9,10 +9,10 @@
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
+#include <QtDebug>
 
 #include "log/logger.h"
 #include "factories/shortcut/shortcut.h"
-#include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
@@ -23,17 +23,40 @@ InstallManager::InstallManager() : QThread(),
     m_uiManager(0),
     m_appPath(Utils::getAppPath()),
     m_projectSettings(0),
-    m_settings(0)
+    m_settings(0),
+    m_lineParser(),
+    m_installLocation(""),
+    m_dataLocation(""),
+    m_proxyUsed(false),
+    m_proxyHostname(""),
+    m_proxyPort(""),
+    m_proxyLogin(""),
+    m_proxyPassword(""),
+    m_runApp(false),
+    m_runAtStart(false),
+    m_createOfflineShortcut(false)
 {
     // init project resources
     m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
     m_projectSettings->readSettings();
-    m_projectSettings->writeAppSettings();
 
-    setInstallationDir(m_projectSettings->getDefaultInstallationPath());
     L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
 
     m_settings = Settings::getInstance();
+    m_settings->setAppName(m_projectSettings->getAppName());
+    m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
+    m_settings->setShortcutName(m_projectSettings->getShortcutName());
+    m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
+    m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
+
+    m_settings->setInsetColor(m_projectSettings->getInsetColor());
+    m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
+    m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
+    m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
+    m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
+    m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
+    m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
+    m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
 }
 
 InstallManager::~InstallManager()
@@ -43,54 +66,186 @@ InstallManager::~InstallManager()
 
 void InstallManager::initInstallation()
 {
-    L_INFO("Parsing command line");
-    CommandLineParser lineParser;
-    m_runAppAfter = lineParser.isRunApp();
+    if (m_lineParser.isSilent()) {
+        if (!m_lineParser.getInstallLocation().isEmpty()) {
+            m_installLocation = m_lineParser.getInstallLocation();
+        } else {
+            m_installLocation = m_projectSettings->getDefaultInstallationPath();
+        }
 
-    lineParser.sendToSettings();
+        if (!m_lineParser.getDataLocation().isEmpty()) {
+            m_dataLocation = m_lineParser.getDataLocation();
+        } else {
+            m_dataLocation = m_projectSettings->getDefaultDataPath();
+        }
 
-    LanguageManager::initLanguage();
+        m_proxyUsed = m_lineParser.isProxyUsed();
+        m_proxyHostname = m_lineParser.getProxyHostname();
+        m_proxyPort = m_lineParser.getProxyPort();
+        m_proxyLogin = m_lineParser.getProxyLogin();
+        m_proxyPassword = m_lineParser.getProxyPassword();
 
-    // init values from project.ini and command line args.
-    if (!lineParser.getInstallLocation().isEmpty()) {
-        m_installationPath = lineParser.getInstallLocation();
+        m_runApp = m_lineParser.isRunApp();
+
+        m_runAtStart = m_lineParser.isRunAtStart();
+
+        m_createOfflineShortcut = m_lineParser.isCreateOfflineShortcut();
+
+        start();
     } else {
-        m_installationPath = m_projectSettings->getDefaultInstallationPath();
-    }
+        LanguageManager::initLanguage();
 
-    if (!lineParser.getDataLocation().isEmpty()) {
-        m_dataPath = lineParser.getDataLocation();
-    } else {
-        m_dataPath = m_projectSettings->getDefaultCustomInstallDataPath();
-    }
-
-    if (!lineParser.isSilent()) {
         qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
         if (!m_uiManager) {
             m_uiManager = new UIManager(m_projectSettings->getAppName());
         }
+
         m_uiManager->init();
 
-        m_uiManager->setInstallationFolder(m_installationPath);
-        m_uiManager->setDataFolder(m_dataPath);
+        // changing any setting via command line triggers a custom installation
 
-        m_uiManager->setCreatedOfflineShortcut(false);
-        m_uiManager->setLaunchedAppAtStartUp(false);
-        m_uiManager->setStartedAppWhenInstalled(true);
+        if (!m_lineParser.getInstallLocation().isEmpty()) {
+            m_uiManager->setInstallationFolder(m_lineParser.getInstallLocation());
+            m_uiManager->setCustomInstallation(true);
+        } else {
+            m_uiManager->setInstallationFolder(m_projectSettings->getDefaultInstallationPath());
+        }
+
+        if (!m_lineParser.getDataLocation().isEmpty()) {
+            m_uiManager->setDataFolder(m_lineParser.getDataLocation());
+            m_uiManager->setCustomInstallation(true);
+        } else {
+            m_uiManager->setDataFolder(m_projectSettings->getDefaultDataPath());
+        }
+
+        if (m_lineParser.isProxyUsed()) {
+            m_uiManager->setCustomInstallation(true);
+        }
+        m_uiManager->setProxyUsed(m_lineParser.isProxyUsed());
+
+        if (m_lineParser.isProxyHostnameSet()) {
+            m_uiManager->setProxyHostname(m_lineParser.getProxyHostname());
+            m_uiManager->setCustomInstallation(true);
+        }
+
+        if (m_lineParser.isProxyPortSet()) {
+            m_uiManager->setProxyPort(m_lineParser.getProxyPort().toUInt());
+            m_uiManager->setCustomInstallation(true);
+        }
+
+        if (m_lineParser.isProxyLoginSet()) {
+            m_uiManager->setProxyLogin(m_lineParser.getProxyLogin());
+            m_uiManager->setCustomInstallation(true);
+        }
+
+        if (m_lineParser.isProxyPasswordSet()) {
+            m_uiManager->setProxyPassword(m_lineParser.getProxyPassword());
+            m_uiManager->setCustomInstallation(true);
+        }
+
+        m_uiManager->setStartedAppWhenInstalled(m_lineParser.isRunApp());
+
+        if (m_lineParser.isRunAtStart()) {
+            m_uiManager->setCustomInstallation(true);
+        }
+        m_uiManager->setLaunchedAppAtStartUp(m_lineParser.isRunAtStart());
+
+        if (m_lineParser.isCreateAllUserShortcut()) {
+            m_uiManager->setCustomInstallation(true);
+        }
+        m_uiManager->setCreatedOfflineShortcut(m_lineParser.isCreateAllUserShortcut());
 
         connect(m_uiManager, SIGNAL(wizardFinishedSignal()),
                 this, SLOT(start()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
         connect(this, SIGNAL(endInstallation(bool,QStringList)),
                 m_uiManager, SLOT(eventEndInstallation(bool,QStringList)));
-    } else {
-        start();
     }
 }
 
 void InstallManager::run()
 {
+    if (m_uiManager) {
+        m_uiManager->printWizard();
+    }
+
+    if (!m_lineParser.isSilent()) {
+        // update user choices
+
+        if (m_uiManager->isCustomInstallation()) {
+            // user has chosen custom installation
+
+            m_installLocation = m_uiManager->getInstallationFolder();
+
+            if (m_uiManager->isDataFolderChosen()) {
+                m_dataLocation = m_uiManager->getDataFolder();
+            } else if (m_lineParser.getDataLocation().isEmpty()) {
+                m_dataLocation = m_projectSettings->getDefaultDataPath();
+            } else {
+                m_dataLocation = m_lineParser.getDataLocation();
+            }
+
+            m_proxyUsed = m_uiManager->isProxyUsed();
+            m_proxyHostname = m_uiManager->getProxyHostname();
+            m_proxyPort = QString::number(m_uiManager->getProxyPort());
+            m_proxyLogin = m_uiManager->getProxyLogin();
+            m_proxyPassword = m_uiManager->getProxyPassword();
+
+            m_runAtStart = m_uiManager->isLaunchedAppAtStartUp();
+            m_createOfflineShortcut = m_uiManager->isCreatedOfflineShortcut();
+        } else {
+            // user has chosen simple installation
+
+            if (m_lineParser.getInstallLocation().isEmpty()) {
+                m_installLocation = m_projectSettings->getDefaultInstallationPath();
+            } else {
+                m_installLocation = m_lineParser.getInstallLocation();
+            }
+
+            if (m_lineParser.getDataLocation().isEmpty()) {
+                m_dataLocation = m_projectSettings->getDefaultDataPath();
+            } else {
+                m_dataLocation = m_lineParser.getDataLocation();
+            }
+
+            m_proxyUsed = false;
+            m_proxyHostname = "";
+            m_proxyPort = "1";
+            m_proxyLogin = "";
+            m_proxyPassword = "";
+
+            m_runAtStart = false;
+            m_createOfflineShortcut = false;
+        }
+
+        m_runApp = m_uiManager->isStartedAppWhenInstalled();
+    }
+
+    qDebug() << ">>>>> m_installLocation: " << m_installLocation;
+    qDebug() << ">>>>> m_dataLocation: " << m_dataLocation;
+    qDebug() << ">>>>> m_proxyUsed: " << QString(m_proxyUsed ? "yes" : "no");
+    qDebug() << ">>>>> m_proxyHostname:" << m_proxyHostname;
+    qDebug() << ">>>>> m_proxyPort:" << m_proxyPort;
+    qDebug() << ">>>>> m_proxyLogin:" << m_proxyLogin;
+    qDebug() << ">>>>> m_proxyPassword:" << m_proxyPassword;
+    qDebug() << ">>>>> m_runApp: " << QString(m_runApp ? "yes" : "no");
+    qDebug() << ">>>>> m_runAtStart: " << QString(m_runAtStart ? "yes" : "no");
+    qDebug() << ">>>>> m_createOfflineShortcut: " << QString(m_createOfflineShortcut ? "yes" : "no");
+
+    m_appPath.setInstallationDir(QDir(m_installLocation));
+
+    m_settings->setDataLocation(m_dataLocation);
+
+    m_settings->setProxyUsed(m_proxyUsed);
+    m_settings->setProxyHostname(m_proxyHostname);
+    m_settings->setProxyPort(m_proxyPort.toUInt());
+    m_settings->setProxyLogin(m_proxyLogin);
+    m_settings->setProxyPassword(m_proxyPassword);
+
+    m_settings->setRunAtStart(m_runAtStart);
+    m_settings->setShortcutOffline(m_createOfflineShortcut);
+
     startInstallation();
 }
 
@@ -152,7 +307,7 @@ void InstallManager::startInstallation()
             emit endInstallation(success, errorMessages);
         }
     } else {
-        closeInstallation(m_runAppAfter);
+        closeInstallation(m_runApp);
     }
 }
 
@@ -352,9 +507,7 @@ bool InstallManager::createShortcut()
     bool success = true;
 
     // online shortcut
-    if (m_settings->isShortcutOnline()) {
-        success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
-    }
+    success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
     // offline shortcut
     if (m_settings->isShortcutOffline()) {
         success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getAppName());
@@ -391,9 +544,4 @@ void InstallManager::closeInstallation(bool _launchApplication)
     L_INFO("End treatment, close application");
     moveLogIntoInstallFolder();
     qApp->exit();
-}
-
-void InstallManager::setInstallationDir(const QString &_directory)
-{
-    m_appPath.setInstallationDir(QDir(_directory));
 }

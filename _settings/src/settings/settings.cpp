@@ -16,7 +16,7 @@ const QString Settings::AppName("app_name");
 const QString Settings::UpdaterVersion("updater_version");
 const QString Settings::JavaVersion("java_version");
 
-const QString Settings::ProxyUse("proxy_use");
+const QString Settings::ProxyUsed("proxy_use");
 const QString Settings::ProxyHostname("proxy_hostname");
 const QString Settings::ProxyPort("proxy_port");
 const QString Settings::ProxyLogin("proxy_login");
@@ -24,7 +24,6 @@ const QString Settings::ProxyPassword("proxy_password");
 
 const QString Settings::Lang("lang");
 
-const QString Settings::ShortcutOnline("shortcut_online");
 const QString Settings::ShortcutOffline("shortcut_offline");
 const QString Settings::ShortcutName("shortcut_name");
 const QString Settings::ShortcutOfflineName("shortcut_offline_name");
@@ -55,7 +54,6 @@ Settings::Settings() :
     m_deploymentUrl(""),
     m_appName("Application"),
     m_lang(LanguageManager::getLocaleFromLanguage(Language::English)),
-    m_shortcutOnline(false),
     m_shortcutOffline(false),
     m_shortcutName("Application"),
     m_shortcutOfflineName("Application offline"),
@@ -73,7 +71,7 @@ Settings::Settings() :
     m_dataLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
-    m_proxyUse(false),
+    m_proxyUsed(false),
     m_proxyHostname(""),
     m_proxyPort(0),
     m_proxyLogin(""),
@@ -151,7 +149,7 @@ bool Settings::writeSettings()
     QMutexLocker locker(&sm_settingsMutex);
 
     m_settings->beginGroup(GroupProxy);
-    putSetting(ProxyUse, m_proxyUse);
+    putSetting(ProxyUsed, m_proxyUsed);
     putSetting(ProxyHostname, m_proxyHostname);
     putSetting(ProxyPort, m_proxyPort);
     putSetting(ProxyLogin, m_proxyLogin);
@@ -160,7 +158,6 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupUninst);
     putSetting(ShortcutOffline, m_shortcutOffline);
-    putSetting(ShortcutOnline, m_shortcutOnline);
     putSetting(ShortcutName, m_shortcutName);
     putSetting(ShortcutOfflineName, m_shortcutOfflineName);
     putSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs);
@@ -201,7 +198,7 @@ void Settings::readSettings()
     QMutexLocker locker(&sm_settingsMutex);
 
     m_settings->beginGroup(GroupProxy);
-    m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
+    m_proxyUsed = getSetting(ProxyUsed, m_proxyUsed).toBool();
     m_proxyHostname = getSetting(ProxyHostname, "").toString();
     m_proxyPort = getSetting(ProxyPort, 0).toInt();
     m_proxyLogin = getSetting(ProxyLogin, "").toString();
@@ -210,7 +207,6 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupUninst);
     m_shortcutOffline = getSetting(ShortcutOffline, m_shortcutOffline).toBool();
-    m_shortcutOnline = getSetting(ShortcutOnline, m_shortcutOnline).toBool();
     m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
     m_shortcutOfflineName = getSetting(ShortcutOfflineName, m_shortcutOfflineName).toString();
     m_shortcutOfflineArgs = getSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
@@ -248,14 +244,13 @@ QString Settings::paramListString()
     s = s + "app_name = " + m_appName + "\n";
     s = s + "updater_version = " + m_updaterVersion + "\n";
     s = s + "java_version = " + m_javaVersion + "\n";
-    s = s + "proxy_use = " + QString::number(m_proxyUse) + "\n";
+    s = s + "proxy_use = " + QString::number(m_proxyUsed) + "\n";
     s = s + "proxy_hostname = " + m_proxyHostname + "\n";
     s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
     s = s + "proxy_login = " + m_proxyLogin + "\n";
     s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
     s = s + "lang = " + m_lang + "\n";
     s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
-    s = s + "shortcut_online = " + QString::number(m_shortcutOnline) + "\n";
     s = s + "shortcut_name = " + m_shortcutName + "\n";
     s = s + "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
     s = s + "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
@@ -437,16 +432,6 @@ void Settings::setShortcutForAllUsers(bool shortcutForAllUsers)
     m_shortcutForAllUsers = shortcutForAllUsers;
 }
 
-bool Settings::isShortcutOnline() const
-{
-    return m_shortcutOnline;
-}
-
-void Settings::setShortcutOnline(bool shortcutOnline)
-{
-    m_shortcutOnline = shortcutOnline;
-}
-
 bool Settings::isShortcutOffline() const
 {
     return m_shortcutOffline;
@@ -480,12 +465,14 @@ void Settings::setLang(const Language &lang)
 QString Settings::getProxyPassword() const
 {
     const QString key = KeyManager::readPasswordEncryptionKey();
+
     return CryptManager::decrypt(key, m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
     const QString key = KeyManager::readPasswordEncryptionKey();
+
     m_proxyPassword = CryptManager::encrypt(key, proxyPassword);
 }
 
@@ -519,12 +506,12 @@ void Settings::setProxyHostname(const QString &proxyHostname)
     m_proxyHostname = proxyHostname;
 }
 
-bool Settings::isProxyUse() const
+bool Settings::isProxyUsed() const
 {
-    return m_proxyUse;
+    return m_proxyUsed;
 }
 
-void Settings::setProxyUse(bool proxyUse)
+void Settings::setProxyUsed(bool proxyUsed)
 {
-    m_proxyUse = proxyUse;
+    m_proxyUsed = proxyUsed;
 }

@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include <QtDebug>
 #include "gui/wizard/installwizard.h"
 
 #include "gui/wizard/pages/welcome.h"
@@ -38,6 +39,17 @@ bool InstallWizard::isCustomInstallation() const
     return field("type.custom").toBool();
 }
 
+void InstallWizard::setCustomInstallation(bool _customInstallation)
+{
+    if (_customInstallation) {
+        setField("type.custom", true);
+        setField("type.simple", false);
+    } else {
+        setField("type.simple", true);
+        setField("type.custom", false);
+    }
+}
+
 QString InstallWizard::getInstallationFolder() const
 {
     if (isCustomInstallation()) {
@@ -47,13 +59,18 @@ QString InstallWizard::getInstallationFolder() const
     }
 }
 
-bool InstallWizard::isChosenDataFolder() const
+bool InstallWizard::isDataFolderChosen() const
 {
     if (isCustomInstallation()) {
         return field("folders.chooseDataFolder").toBool();
     } else {
         return false;
     }
+}
+
+void InstallWizard::setDataFolderChosen(bool _folderChosen)
+{
+    setField("folders.chooseDataFolder", _folderChosen);
 }
 
 QString InstallWizard::getDataFolder() const
@@ -83,7 +100,7 @@ bool InstallWizard::isLaunchedAppAtStartUp() const
     }
 }
 
-bool InstallWizard::isUsedProxy() const
+bool InstallWizard::isProxyUsed() const
 {
     if (isCustomInstallation()) {
         return field("proxy.use").toBool();
@@ -133,12 +150,12 @@ bool InstallWizard::isStartedAppWhenInstalled() const
     return field("launch.startAppWhenInstalled").toBool();
 }
 
-void InstallWizard::setInstallationFolder(const QString _installationFolder)
+void InstallWizard::setInstallationFolder(const QString &_installationFolder)
 {
     setField("folders.installationFolder", _installationFolder);
 }
 
-void InstallWizard::setDataFolder(const QString _dataFolder)
+void InstallWizard::setDataFolder(const QString &_dataFolder)
 {
     setField("folders.dataFolder", _dataFolder);
 }
@@ -181,4 +198,47 @@ void InstallWizard::retranslateUi()
     static_cast<ShortcutsPage *>(page(Page_Shortcuts))->retranslateUi();
     static_cast<ProxyPage *>(page(Page_Proxy))->retranslateUi();
     static_cast<LaunchPage *>(page(Page_Launch))->retranslateUi();
+}
+
+void InstallWizard::setProxyUsed(bool _proxyUsed)
+{
+    setField("proxy.use", _proxyUsed);
+}
+
+void InstallWizard::setProxyHostname(const QString &_hostname)
+{
+    setField("proxy.hostname", _hostname);
+}
+
+void InstallWizard::setProxyPort(quint16 _port)
+{
+    setField("proxy.port", _port);
+}
+
+void InstallWizard::setProxyLogin(const QString &_login)
+{
+    setField("proxy.login", _login);
+}
+
+void InstallWizard::setProxyPassword(const QString _password)
+{
+    setField("proxy.password", _password);
+}
+
+void InstallWizard::print() const
+{
+    qDebug() << "----------------------------------------";
+    qDebug() << "isCustomInstallation(): " << QString(isCustomInstallation() ? "yes" : "no");
+    qDebug() << "getInstallationFolder(): " << getInstallationFolder();
+    qDebug() << "isDataFolderChosen(): " << QString(isDataFolderChosen() ? "yes" : "no");
+    qDebug() << "getDataFolder(): " << getDataFolder();
+    qDebug() << "isStartedAppWhenInstalled(): " << QString(isStartedAppWhenInstalled() ? "yes" : "no");
+    qDebug() << "isProxyUsed(): " << QString(isProxyUsed() ? "yes" : "no");
+    qDebug() << "getProxyHostname(): " << getProxyHostname();
+    qDebug() << "getProxyPort(): " << QString::number(getProxyPort());
+    qDebug() << "getProxyLogin(): " << getProxyLogin();
+    qDebug() << "getProxyPassword(): " << getProxyPassword();
+    qDebug() << "isLaunchedAppAtStartUp(): " << QString(isLaunchedAppAtStartUp() ? "yes" : "no");
+    qDebug() << "isCreatedOfflineShortcut(): " << QString(isCreatedOfflineShortcut() ? "yes" : "no");
+    qDebug() << "----------------------------------------";
 }
