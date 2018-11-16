@@ -39,6 +39,7 @@ class InstallManager : public QThread
         QString m_proxyPort;
         QString m_proxyLogin;
         QString m_proxyPassword;
+        QString m_locale;
         bool m_runApp;
         bool m_runAtStart;
         bool m_createOfflineShortcut;

@@ -27,6 +27,8 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
         virtual ~WindowUI();
         void center();
         virtual void retranslateUi();
+        void setLocale(const QString &_locale);
+        QString getLocale() const;
 
         // UI strings
         const QString m_closeActionText;

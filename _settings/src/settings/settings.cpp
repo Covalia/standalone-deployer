@@ -22,7 +22,7 @@ const QString Settings::ProxyPort("proxy_port");
 const QString Settings::ProxyLogin("proxy_login");
 const QString Settings::ProxyPassword("proxy_password");
 
-const QString Settings::Lang("lang");
+const QString Settings::Locale("locale");
 
 const QString Settings::ShortcutOffline("shortcut_offline");
 const QString Settings::ShortcutName("shortcut_name");
@@ -53,7 +53,7 @@ Settings::Settings() :
     m_settings(0),
     m_deploymentUrl(""),
     m_appName("Application"),
-    m_lang(LanguageManager::getLocaleFromLanguage(Language::English)),
+    m_locale(""),
     m_shortcutOffline(false),
     m_shortcutName("Application"),
     m_shortcutOfflineName("Application offline"),
@@ -167,7 +167,7 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupConfig);
     putSetting(AppName, m_appName);
-    putSetting(Lang, m_lang);
+    putSetting(Locale, m_locale);
     putSetting(UpdaterVersion, m_updaterVersion);
     putSetting(JavaVersion, m_javaVersion);
     putSetting(DataLocation, m_dataLocation);
@@ -216,7 +216,7 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupConfig);
     m_appName = getSetting(AppName, m_appName).toString();
-    m_lang = getSetting(Lang, "").toString();
+    m_locale = getSetting(Locale, "").toString();
     m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
     m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
     m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
@@ -249,7 +249,7 @@ QString Settings::paramListString()
     s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
     s = s + "proxy_login = " + m_proxyLogin + "\n";
     s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
-    s = s + "lang = " + m_lang + "\n";
+    s = s + "locale = " + m_locale + "\n";
     s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
     s = s + "shortcut_name = " + m_shortcutName + "\n";
     s = s + "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
@@ -452,14 +452,14 @@ void Settings::setShortcutName(const QString &shortcutName)
     m_shortcutName = shortcutName;
 }
 
-Language Settings::getLang() const
+QString Settings::getLocale() const
 {
-    return LanguageManager::getLanguageFromLocale(m_lang);
+    return m_locale;
 }
 
-void Settings::setLang(const Language &lang)
+void Settings::setLocale(const QString &_locale)
 {
-    m_lang = LanguageManager::getLocaleFromLanguage(lang);
+    m_locale = _locale;
 }
 
 QString Settings::getProxyPassword() const

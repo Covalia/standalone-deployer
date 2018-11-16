@@ -72,7 +72,7 @@ int main(int argc, char * argv[])
     StyleManager::setGeneralStyle();
 
     // init language with locale in settings
-    LanguageManager::updateLanguage(LanguageManager::getLocaleFromLanguage(settings->getLang()));
+    LanguageManager::updateLocale(settings->getLocale());
 
     QStringList arguments = qApp->arguments();
     arguments.removeFirst();

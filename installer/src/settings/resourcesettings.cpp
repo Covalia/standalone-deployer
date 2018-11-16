@@ -1,12 +1,13 @@
 #include "settings/resourcesettings.h"
 #include "log/logger.h"
+#include "io/config.h"
 
 #include <QSettings>
 #include <QStandardPaths>
 
 const QString ResourceSettings::DeploymentUrl("deployment_url");
 const QString ResourceSettings::AppName("app_name");
-const QString ResourceSettings::Lang("lang");
+const QString ResourceSettings::DefaultLocale("default_locale");
 
 const QString ResourceSettings::ShortcutName("shortcut_name");
 const QString ResourceSettings::ShortcutOfflineName("shortcut_offline_name");
@@ -28,12 +29,11 @@ const QString ResourceSettings::GrayTextColor("gray_text_color");
 const QString ResourceSettings::DisabledColor("disabled_color");
 const QString ResourceSettings::WindowBorderWidth("window_border_width");
 
-
 ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_settings(_appPath, QSettings::IniFormat),
     m_deploymentUrl(""),
     m_appName("Application"),
-    m_lang("en_US"),
+    m_defaultLocale(IOConfig::LocaleEnUs),
     m_shortcutOffline(false),
     m_shortcutName("Application"),
     m_shortcutOfflineName("Application Offline"),
@@ -65,7 +65,7 @@ void ResourceSettings::readSettings()
 
     m_deploymentUrl = m_settings.value(DeploymentUrl, m_deploymentUrl).toString();
     m_appName = m_settings.value(AppName, m_appName).toString();
-    m_lang = m_settings.value(Lang, m_lang).toString();
+    m_defaultLocale = m_settings.value(DefaultLocale, m_defaultLocale).toString();
 
     m_shortcutName = m_settings.value(ShortcutName, m_shortcutName).toString();
     m_shortcutOfflineName = m_settings.value(ShortcutOfflineName, m_shortcutOfflineName).toString();
@@ -115,9 +115,9 @@ QString ResourceSettings::getAppName() const
     return m_appName;
 }
 
-QString ResourceSettings::getLang() const
+QString ResourceSettings::getDefaultLocale() const
 {
-    return m_lang;
+    return m_defaultLocale;
 }
 
 QString ResourceSettings::getShortcutName() const

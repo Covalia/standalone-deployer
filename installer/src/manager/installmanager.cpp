@@ -32,6 +32,7 @@ InstallManager::InstallManager() : QThread(),
     m_proxyPort(""),
     m_proxyLogin(""),
     m_proxyPassword(""),
+    m_locale(IOConfig::LocaleEnUs),
     m_runApp(false),
     m_runAtStart(false),
     m_createOfflineShortcut(false)
@@ -68,6 +69,12 @@ void InstallManager::initInstallation()
 {
     const bool changeDataAllowed = m_projectSettings->isChangeDataLocationAllowed();
 
+    if (m_lineParser.isLocaleSet()) {
+        m_locale = m_lineParser.getLocale();
+    } else {
+        m_locale = LanguageManager::getSystemLocale();
+    }
+
     if (m_lineParser.isSilent()) {
         if (!m_lineParser.getInstallLocation().isEmpty()) {
             m_installLocation = m_lineParser.getInstallLocation();
@@ -99,8 +106,6 @@ void InstallManager::initInstallation()
 
         start();
     } else {
-        LanguageManager::initLanguage();
-
         qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
@@ -108,7 +113,7 @@ void InstallManager::initInstallation()
             m_uiManager = new UIManager(m_projectSettings->getAppName(), m_projectSettings->isChangeDataLocationAllowed());
         }
 
-        m_uiManager->init();
+        m_uiManager->init(m_locale);
 
         // changing any setting via command line triggers a custom installation
 
@@ -239,6 +244,7 @@ void InstallManager::run()
         }
 
         m_runApp = m_uiManager->isStartedAppWhenInstalled();
+        m_locale = m_uiManager->getLocale();
     }
 
     qDebug() << ">>>>> m_installLocation: " << m_installLocation;
@@ -248,6 +254,7 @@ void InstallManager::run()
     qDebug() << ">>>>> m_proxyPort:" << m_proxyPort;
     qDebug() << ">>>>> m_proxyLogin:" << m_proxyLogin;
     qDebug() << ">>>>> m_proxyPassword:" << m_proxyPassword;
+    qDebug() << ">>>>> m_locale: " << m_locale;
     qDebug() << ">>>>> m_runApp: " << QString(m_runApp ? "yes" : "no");
     qDebug() << ">>>>> m_runAtStart: " << QString(m_runAtStart ? "yes" : "no");
     qDebug() << ">>>>> m_createOfflineShortcut: " << QString(m_createOfflineShortcut ? "yes" : "no");
@@ -261,6 +268,8 @@ void InstallManager::run()
     m_settings->setProxyPort(m_proxyPort.toUInt());
     m_settings->setProxyLogin(m_proxyLogin);
     m_settings->setProxyPassword(m_proxyPassword);
+
+    m_settings->setLocale(m_locale);
 
     m_settings->setRunAtStart(m_runAtStart);
     m_settings->setShortcutOffline(m_createOfflineShortcut);

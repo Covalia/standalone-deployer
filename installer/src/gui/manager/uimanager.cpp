@@ -43,8 +43,9 @@ UIManager::~UIManager()
     // m_installation, m_endInstallation are children of m_window, deleted by m_window.
 }
 
-void UIManager::init()
+void UIManager::init(const QString &_locale)
 {
+    m_window->setLocale(_locale);
     m_wizard->show();
 }
 
@@ -207,4 +208,9 @@ void UIManager::setCustomInstallation(bool _customInstallation)
 void UIManager::printWizard() const
 {
     m_wizard->print();
+}
+
+QString UIManager::getLocale() const
+{
+    return m_window->getLocale();
 }

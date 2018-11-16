@@ -30,3 +30,6 @@ const QString IOConfig::MacOsAppExtension(".app");
 const QString IOConfig::MacOsDmgExtension(".dmg");
 
 const QString IOConfig::ConfigurationFile("standalone-deployer.ini");
+
+const QString IOConfig::LocaleFrFr("fr_FR");
+const QString IOConfig::LocaleEnUs("en_US");

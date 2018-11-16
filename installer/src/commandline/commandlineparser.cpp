@@ -1,6 +1,7 @@
 #include "commandline/commandlineparser.h"
 
 #include "log/logger.h"
+#include "io/config.h"
 
 CommandLineParser::CommandLineParser() :
     parser(),
@@ -12,7 +13,7 @@ CommandLineParser::CommandLineParser() :
     proxyPortOption("proxyPort", "Set the proxy port.", "proxyPort"),
     proxyLoginOption("proxyLogin", "Set the proxy authentication login.", "proxyLogin"),
     proxyPasswordOption("proxyPassword", "Set the proxy authentication password.", "proxyPassword"),
-    languageOption("language", "Set the application language. EN for English, FR for French.", "language"),
+    localeOption("locale", QString("Set the application locale. %1 for English, %2 for French.").arg(IOConfig::LocaleEnUs).arg(IOConfig::LocaleFrFr), "locale"),
     noRunAppOption("noRunApp", "Does not start the application after installation."),
     runAtStartOption("runAtStart", "Enable application launch when computer starts."),
     createOfflineShortcutOption("createOfflineShortcut", "Create offline shortcut."),
@@ -30,7 +31,7 @@ CommandLineParser::CommandLineParser() :
     parser.addOption(proxyPortOption);
     parser.addOption(proxyLoginOption);
     parser.addOption(proxyPasswordOption);
-    parser.addOption(languageOption);
+    parser.addOption(localeOption);
     parser.addOption(noRunAppOption);
     parser.addOption(runAtStartOption);
     parser.addOption(createOfflineShortcutOption);
@@ -49,7 +50,7 @@ CommandLineParser::CommandLineParser() :
     L_INFO("proxyHostname: " + parser.value(proxyHostnameOption));
     L_INFO("proxyPort: " + parser.value(proxyPortOption));
     L_INFO("proxyLogin: " + parser.value(proxyLoginOption));
-    L_INFO("language: " + parser.value(languageOption));
+    L_INFO("locale: " + parser.value(localeOption));
     L_INFO("noRunApp: " + QString(parser.isSet(noRunAppOption) ? "yes" : "no"));
     L_INFO("runAtStart: " + QString(parser.isSet(runAtStartOption) ? "yes" : "no"));
     L_INFO("createOfflineShortcut: " + QString(parser.isSet(createOfflineShortcutOption) ? "yes" : "no"));
@@ -81,9 +82,14 @@ bool CommandLineParser::isProxyPasswordSet() const
     return parser.isSet(proxyPasswordOption);
 }
 
-QString CommandLineParser::getLanguage() const
+bool CommandLineParser::isLocaleSet() const
 {
-    return parser.value(languageOption);
+    return parser.isSet(localeOption);
+}
+
+QString CommandLineParser::getLocale() const
+{
+    return parser.value(localeOption);
 }
 
 QString CommandLineParser::getProxyPassword() const

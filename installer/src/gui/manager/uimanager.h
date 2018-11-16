@@ -17,7 +17,7 @@ class UIManager : public QObject
     public:
         UIManager(const QString &_appName, bool _changeDataLocationAllowed);
         virtual ~UIManager();
-        void init();
+        void init(const QString &_locale);
 
         bool isCustomInstallation() const;
         QString getInstallationFolder() const;
@@ -48,6 +48,8 @@ class UIManager : public QObject
         void setCustomInstallation(bool _customInstallation);
 
         void printWizard() const;
+
+        QString getLocale() const;
 
     private slots:
         void wizardFinished(int _result);

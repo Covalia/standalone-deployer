@@ -30,8 +30,9 @@ class CommandLineParser
         bool isProxyPasswordSet() const;
         QString getProxyPassword() const;
 
-        QString getLanguage() const;
-        void setLanguage(const QString &_language);
+        bool isLocaleSet() const;
+        QString getLocale() const;
+        void setLocale(const QString &_locale);
 
         bool isRunApp() const;
         bool isRunAtStart() const;
@@ -56,8 +57,8 @@ class CommandLineParser
         QCommandLineOption proxyLoginOption;
         QCommandLineOption proxyPasswordOption;
 
-        // language
-        QCommandLineOption languageOption;
+        // locale
+        QCommandLineOption localeOption;
 
         // start and shortcut
         QCommandLineOption noRunAppOption;

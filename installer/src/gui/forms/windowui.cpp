@@ -3,6 +3,7 @@
 #include "gui/forms/askpopupui.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
+#include "io/config.h"
 
 #include <QtWidgets>
 
@@ -54,8 +55,8 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     sizePolicy.setHeightForWidth(m_comboBoxLanguage->sizePolicy().hasHeightForWidth());
     m_comboBoxLanguage->setSizePolicy(sizePolicy);
 
-    m_comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
-    m_comboBoxLanguage->addItem("English", QVariant("en_US"));
+    m_comboBoxLanguage->addItem("Francais", QVariant(IOConfig::LocaleFrFr));
+    m_comboBoxLanguage->addItem("English", QVariant(IOConfig::LocaleEnUs));
     m_comboBoxLanguage->setFocusPolicy(Qt::NoFocus);
     m_closeAction = new QAction(QIcon(":/images/close.png"), tr_helper(m_closeActionText), this);
 
@@ -132,7 +133,7 @@ void WindowUI::comboBoxLanguageEvent(int _index)
     L_INFO("Detect language change in language combobox");
     const QString language = m_comboBoxLanguage->itemData(_index).toString();
     if (!language.isNull() && !language.isEmpty()) {
-        LanguageManager::updateLanguage(language);
+        LanguageManager::updateLocale(language);
         emit changeLanguageSignal(language);
     }
 }
@@ -143,4 +144,19 @@ void WindowUI::retranslateUi()
 
     m_titleLabel->setText(translate_helper(className, m_titleLabelText).arg(m_appName));
     m_closeAction->setText(translate_helper(className, m_closeActionText));
+}
+
+void WindowUI::setLocale(const QString &_locale)
+{
+    const int index = m_comboBoxLanguage->findData(_locale);
+
+    if (index != -1) {
+        m_comboBoxLanguage->setCurrentIndex(index);
+        comboBoxLanguageEvent(index);
+    }
+}
+
+QString WindowUI::getLocale() const
+{
+    return m_comboBoxLanguage->currentData().toString();
 }

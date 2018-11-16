@@ -34,7 +34,7 @@ class Settings
         static const QString ProxyLogin;
         static const QString ProxyPassword;
 
-        static const QString Lang;
+        static const QString Locale;
 
         static const QString ShortcutOffline;
         static const QString ShortcutName;
@@ -85,8 +85,8 @@ class Settings
         QString getProxyPassword() const;
         void setProxyPassword(const QString &proxyPassword);
 
-        Language getLang() const;
-        void setLang(const Language &lang);
+        QString getLocale() const;
+        void setLocale(const QString &_locale);
 
         QString getShortcutName() const;
         void setShortcutName(const QString &shortcutName);
@@ -207,7 +207,7 @@ class Settings
         QString m_deploymentUrl;
         QString m_appName;
 
-        QString m_lang;
+        QString m_locale;
 
         bool m_shortcutOffline;
         QString m_shortcutName;

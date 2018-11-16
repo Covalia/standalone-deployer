@@ -10,7 +10,7 @@ class ResourceSettings
 
         static const QString DeploymentUrl;
         static const QString AppName;
-        static const QString Lang;
+        static const QString DefaultLocale;
 
         static const QString ShortcutName;
         static const QString ShortcutOfflineName;
@@ -50,7 +50,7 @@ class ResourceSettings
         bool isShortcutOffline() const;
         QString getShortcutOfflineName() const;
         QString getShortcutName() const;
-        QString getLang() const;
+        QString getDefaultLocale() const;
         QString getAppName() const;
         QString getDeploymentUrl() const;
         QString getShortcutOfflineArgs() const;
@@ -69,7 +69,7 @@ class ResourceSettings
         QString m_deploymentUrl;
         QString m_appName;
 
-        QString m_lang;
+        QString m_defaultLocale;
         bool m_shortcutOffline;
         QString m_shortcutName;
         QString m_shortcutOfflineName;
