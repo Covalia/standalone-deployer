@@ -11,6 +11,9 @@ int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
+    // load settings resource static file. must be called keymanager_resources
+    Q_INIT_RESOURCE(keymanager_resources);
+
     AppPath appPath = Utils::getAppPath();
     qDebug() << "-- Installation root: " << appPath.getInstallationDir();
 

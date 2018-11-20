@@ -4,20 +4,17 @@
 #include <QTranslator>
 #include <QString>
 
-enum Language { English, French };
-
 class LanguageManager
 {
     public:
-        LanguageManager();
 
-        static void initLanguage();
-        static void updateLanguage(QString locale);
-
-        static Language getLanguageFromLocale(QString locale);
-        static QString getLocaleFromLanguage(Language language);
+        static QString getSystemLocale();
+        static void updateLocale(const QString &_locale);
 
     private:
+        LanguageManager();
+        ~LanguageManager();
+
         static QTranslator translator;
 };
 

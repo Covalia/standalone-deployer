@@ -6,10 +6,7 @@
 #include <QTextStream>
 #include <QTextCursor>
 #include <QFile>
-
-StyleManager::StyleManager()
-{
-}
+#include <QWidget>
 
 QString StyleManager::transformStyle(QString styleSheet)
 {

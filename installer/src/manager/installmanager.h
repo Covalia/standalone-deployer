@@ -4,9 +4,11 @@
 #include <QString>
 #include <QObject>
 #include <QThread>
+#include <QSharedPointer>
 
 #include "gui/manager/uimanager.h"
-#include "settings/resourcessettings.h"
+#include "settings/resourcesettings.h"
+#include "commandline/commandlineparser.h"
 #include "settings/settings.h"
 #include "utils.h"
 
@@ -20,17 +22,27 @@ class InstallManager : public QThread
 
         void initInstallation();
 
-    public slots:
-        void setInstallationDir(const QString &_directory);
-
     private:
 
         UIManager * m_uiManager;
         AppPath m_appPath;
-        ResourcesSettings * m_projectSettings;
+        QSharedPointer<ResourceSettings> m_projectSettings;
         Settings * m_settings;
 
-        bool m_runAppAfter;
+        CommandLineParser m_lineParser;
+
+        // temporary values
+        QString m_installLocation;
+        QString m_dataLocation;
+        bool m_proxyUsed;
+        QString m_proxyHostname;
+        QString m_proxyPort;
+        QString m_proxyLogin;
+        QString m_proxyPassword;
+        QString m_locale;
+        bool m_runApp;
+        bool m_runAtStart;
+        bool m_createOfflineShortcut;
 
         bool cleanInstallationFolders();
         bool createInstallationFolders();
@@ -40,18 +52,16 @@ class InstallManager : public QThread
         bool extractResources();
         bool createShortcut();
         void startInstallation();
-        void closeInstallation(bool _launchApplication);
         bool launchLoader();
 
     protected:
         virtual void run();
 
     private slots:
-        void eventStartInstallation();
-        void eventCloseInstallation(bool _launchApplication);
+        void closeInstallation(bool _launchApplication);
 
     signals:
         void endInstallation(bool _success, QStringList _errors);
 };
 
-#endif // INSTALLMANAGER_H
+#endif

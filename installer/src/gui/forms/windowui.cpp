@@ -1,56 +1,84 @@
 #include "gui/forms/windowui.h"
-#include "ui_window.h"
 
 #include "gui/forms/askpopupui.h"
-#include "gui/forms/personalizeui.h"
-#include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
-#include "settings/resourcessettings.h"
+#include "io/config.h"
 
-#include <QCloseEvent>
-#include <QDesktopWidget>
-#include <QLayoutItem>
-#include <QMessageBox>
-#include <QStyledItemDelegate>
+#include <QtWidgets>
 
-WindowUI::WindowUI(QWidget * _parent) :
+WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget * _parent) :
     QMainWindow(_parent),
-    m_ui(new Ui::WindowUI),
-    m_itemDelegate(0)
+    m_closeActionText(QT_TR_NOOP("Close")),
+    m_titleLabelText(QT_TR_NOOP("Installation of %1")),
+    m_appName(_appName),
+    m_closeAction(0),
+    m_toolbar(0),
+    m_iconLabel(0),
+    m_titleLabel(0),
+    m_comboBoxLanguage(0)
 {
-    m_ui->setupUi(this);
+    setMinimumWidth(700);
+    setMinimumHeight(450);
+    setMaximumWidth(700);
+    setMaximumHeight(450);
 
     setWindowTitle(tr("Standalone deployment"));
 
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    StyleManager::transformStyle(this);
+    if (_centralWidget) {
+        _centralWidget->setVisible(true);
+        setCentralWidget(_centralWidget);
+    }
 
-    connect(m_ui->buttonClose, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
-    connect(m_ui->buttonAbout, SIGNAL(clicked()), this, SLOT(aboutEvent()));
+    m_toolbar = new QToolBar(this);
+    m_toolbar->layout()->setContentsMargins(0, 0, 0, 0);
+    m_toolbar->layout()->setSpacing(0);
 
-    // combobox init
-    m_itemDelegate = new QStyledItemDelegate();
-    m_ui->comboBoxLanguage->setItemDelegate(m_itemDelegate);
-    m_ui->comboBoxLanguage->addItem("Francais", QVariant("fr_FR"));
-    m_ui->comboBoxLanguage->addItem("English", QVariant("en_US"));
-    connect(m_ui->comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
+    m_toolbar->setIconSize(QSize(45, 45));
+    m_toolbar->setMovable(false);
+    addToolBar(Qt::TopToolBarArea, m_toolbar);
 
-    //windows title
-    updateUi();
+    m_iconLabel = new QLabel(this);
+    m_iconLabel->setObjectName("iconLabel");
+    m_iconLabel->setPixmap(QPixmap(":/images/logo_title.png"));
+    m_titleLabel = new QLabel(tr_helper(m_titleLabelText).arg(m_appName), this);
+    m_titleLabel->setObjectName("titleLabel");
+    m_comboBoxLanguage = new QComboBox(this);
+    connect(m_comboBoxLanguage, SIGNAL(activated(int)), this, SLOT(comboBoxLanguageEvent(int)));
 
-    // bug combobox style
-    StyleManager::transformStyle(this);
+    QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(m_comboBoxLanguage->sizePolicy().hasHeightForWidth());
+    m_comboBoxLanguage->setSizePolicy(sizePolicy);
+
+    m_comboBoxLanguage->addItem("Francais", QVariant(IOConfig::LocaleFrFr));
+    m_comboBoxLanguage->addItem("English", QVariant(IOConfig::LocaleEnUs));
+    m_comboBoxLanguage->setFocusPolicy(Qt::NoFocus);
+    m_closeAction = new QAction(QIcon(":/images/close.png"), tr_helper(m_closeActionText), this);
+
+    connect(m_closeAction, SIGNAL(triggered(bool)), qApp, SLOT(closeAllWindows()));
+
+    QWidget * spacer = new QWidget(this);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    m_toolbar->addWidget(m_iconLabel);
+    m_toolbar->addWidget(m_titleLabel);
+    m_toolbar->addWidget(spacer);
+    m_toolbar->addWidget(m_comboBoxLanguage);
+    m_toolbar->addAction(m_closeAction);
+
+    // windows title and icon
+    retranslateUi();
 }
 
 WindowUI::~WindowUI()
 {
-    delete m_ui;
-    delete m_itemDelegate;
+    delete m_closeAction;
 }
-
 
 void WindowUI::center()
 {
@@ -61,7 +89,6 @@ void WindowUI::center()
     m_position = center;
     move(geometry.topLeft());
 }
-
 
 void WindowUI::mousePressEvent(QMouseEvent * _e)
 {
@@ -84,32 +111,6 @@ void WindowUI::mouseMoveEvent(QMouseEvent * _e)
     }
 }
 
-void WindowUI::changeContentWidget(QWidget * _widget)
-{
-    // hide all old widgets
-    hideLayoutContent(m_ui->contentLayout);
-    m_ui->contentLayout->addWidget(_widget);
-    _widget->setVisible(true);
-}
-
-void WindowUI::setVisibleButton(bool _about, bool _changeLanguage)
-{
-    m_ui->buttonAbout->setVisible(_about);
-    m_ui->comboBoxLanguage->setVisible(_changeLanguage);
-}
-
-void WindowUI::hideLayoutContent(QLayout * _layout)
-{
-    QLayoutItem * i = _layout->takeAt(0);
-
-    if (i) {
-        QWidget * w = i->widget();
-        if (w) {
-            w->setVisible(false);
-        }
-    }
-}
-
 void WindowUI::closeEvent(QCloseEvent * _event)
 {
     // sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.
@@ -127,28 +128,35 @@ void WindowUI::closeEvent(QCloseEvent * _event)
     }
 }
 
-void WindowUI::aboutEvent()
-{
-    emit aboutSignal();
-}
-
 void WindowUI::comboBoxLanguageEvent(int _index)
 {
     L_INFO("Detect language change in language combobox");
-    QString dateValue = m_ui->comboBoxLanguage->itemData(_index).toString();
-    if (!dateValue.isNull() && !dateValue.isEmpty()) {
-        LanguageManager::updateLanguage(dateValue);
-        emit changeLanguageSignal();
+    const QString language = m_comboBoxLanguage->itemData(_index).toString();
+    if (!language.isNull() && !language.isEmpty()) {
+        LanguageManager::updateLocale(language);
+        emit changeLanguageSignal(language);
     }
 }
 
-void WindowUI::updateUi(){
-    m_ui->retranslateUi(this);
-    ResourcesSettings * resource = ResourcesSettings::getInstance();
-    m_ui->labelTitle->setText(tr("Installation of %1").arg(resource->getAppName()));
+void WindowUI::retranslateUi()
+{
+    const QString className = metaObject()->className();
+
+    m_titleLabel->setText(translate_helper(className, m_titleLabelText).arg(m_appName));
+    m_closeAction->setText(translate_helper(className, m_closeActionText));
 }
 
-void WindowUI::changeLanguage()
+void WindowUI::setLocale(const QString &_locale)
 {
-    updateUi();
+    const int index = m_comboBoxLanguage->findData(_locale);
+
+    if (index != -1) {
+        m_comboBoxLanguage->setCurrentIndex(index);
+        comboBoxLanguageEvent(index);
+    }
+}
+
+QString WindowUI::getLocale() const
+{
+    return m_comboBoxLanguage->currentData().toString();
 }

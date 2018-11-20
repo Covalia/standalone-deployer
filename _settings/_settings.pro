@@ -32,14 +32,23 @@ DEPENDPATH += src
 INCLUDEPATH += ../_logger/src
 
 SOURCES += src/lang/languagemanager.cpp
-SOURCES += src/settings/resourcessettings.cpp
+SOURCES += src/secret/keymanager.cpp
 SOURCES += src/settings/settings.cpp
 SOURCES += src/utils/crypt/cryptmanager.cpp
-SOURCES += src/utils/crypt/simplecrypt.cpp
+SOURCES += src/utils/crypt/qblowfish/qblowfish.cpp
 
 HEADERS += src/lang/languagemanager.h
-HEADERS += src/settings/resourcessettings.h
+HEADERS += src/secret/keymanager.h
 HEADERS += src/settings/settings.h
 HEADERS += src/utils/crypt/cryptmanager.h
-HEADERS += src/utils/crypt/simplecrypt.h
+HEADERS += src/utils/crypt/qblowfish/qblowfish.h
+HEADERS += src/utils/crypt/qblowfish/qblowfish_p.h
+
+defined(KEYMANAGER_RESOURCES, var) {
+    RESOURCES += $$KEYMANAGER_RESOURCES
+    message("Using key manager resources from file: $$KEYMANAGER_RESOURCES")
+}
+else {
+    RESOURCES += keymanager_resources.qrc
+}
 

@@ -3,7 +3,7 @@
 #include "updater/config.h"
 #include "io/config.h"
 #include "xml/deploymentxml.h"
-#include "updater/hash_key.h"
+#include "secret/keymanager.h"
 #include "utils/hashmac/hashmac512.h"
 #include "io/fileutils.h"
 #include "settings/settings.h"
@@ -706,7 +706,7 @@ void AppUpdater::processCnlpDownloadFileList()
     m_remainingFiles.clear();
 
     // reading hash key only once
-    const QString hash_key = HashKey::readHashKey();
+    const QString hash_key = KeyManager::readHashKey();
 
     // list of all local files (installed and in temporary directory)
     QMultiMap<Application, QString> allLocalFiles = AppUpdater::getLocalFiles();
@@ -800,7 +800,7 @@ bool AppUpdater::doesAppNeedToBeRebuild(const Application &_application)
 bool AppUpdater::checkDownloadsAreOk() const
 {
     // reading hash key only once
-    const QString hash_key = HashKey::readHashKey();
+    const QString hash_key = KeyManager::readHashKey();
 
     bool downloadsOk = true;
 
@@ -1119,7 +1119,7 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
     QMultiMap<Application, QString> outMap = _fullDownloadMap;
 
     // reading hash key only once
-    const QString hash_key = HashKey::readHashKey();
+    const QString hash_key = KeyManager::readHashKey();
 
     // check downloaded hash mac
     QMutableMapIterator<Application, QString> iterator(outMap);

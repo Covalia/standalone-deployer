@@ -19,31 +19,23 @@ class Settings
 {
     public:
 
-        static const QString GroupInfo;
         static const QString GroupProxy;
-        static const QString GroupLang;
-        static const QString GroupShortcut;
-        static const QString GroupData;
-        static const QString GroupServer;
-        static const QString GroupStart;
+        static const QString GroupUninst;
+        static const QString GroupConfig;
         static const QString GroupTheme;
 
         static const QString AppName;
         static const QString UpdaterVersion;
         static const QString JavaVersion;
 
-        static const QString ProxyUse;
-        static const QString ProxyAuto;
-        static const QString ProxyManual;
+        static const QString ProxyUsed;
         static const QString ProxyHostname;
         static const QString ProxyPort;
-        static const QString ProxyAuthentication;
         static const QString ProxyLogin;
         static const QString ProxyPassword;
 
-        static const QString Lang;
+        static const QString Locale;
 
-        static const QString ShortcutOnline;
         static const QString ShortcutOffline;
         static const QString ShortcutName;
         static const QString ShortcutOfflineName;
@@ -78,14 +70,8 @@ class Settings
 
         QString paramListString();
 
-        bool isProxyUse() const;
-        void setProxyUse(bool proxyUse);
-
-        bool isProxyAuto() const;
-        void setProxyAuto(bool proxyAuto);
-
-        bool isProxyManual() const;
-        void setProxyManual(bool proxyManual);
+        bool isProxyUsed() const;
+        void setProxyUsed(bool _proxyUsed);
 
         QString getProxyHostname() const;
         void setProxyHostname(const QString &proxyHostname);
@@ -93,17 +79,14 @@ class Settings
         int getProxyPort() const;
         void setProxyPort(int proxyPort);
 
-        bool isProxyAuthentification() const;
-        void setProxyAuthentification(bool proxyAuthentification);
-
         QString getProxyLogin() const;
         void setProxyLogin(const QString &proxyLogin);
 
         QString getProxyPassword() const;
         void setProxyPassword(const QString &proxyPassword);
 
-        Language getLang() const;
-        void setLang(const Language &lang);
+        QString getLocale() const;
+        void setLocale(const QString &_locale);
 
         QString getShortcutName() const;
         void setShortcutName(const QString &shortcutName);
@@ -122,9 +105,6 @@ class Settings
 
         bool isShortcutOffline() const;
         void setShortcutOffline(bool shortcutOffline);
-
-        bool isShortcutOnline() const;
-        void setShortcutOnline(bool shortcutOnline);
 
         QString getAppName() const;
         void setAppName(const QString &appName);
@@ -227,9 +207,8 @@ class Settings
         QString m_deploymentUrl;
         QString m_appName;
 
-        QString m_lang;
+        QString m_locale;
 
-        bool m_shortcutOnline;
         bool m_shortcutOffline;
         QString m_shortcutName;
         QString m_shortcutOfflineName;
@@ -252,12 +231,9 @@ class Settings
         QString m_updaterVersion;
         QString m_javaVersion;
 
-        bool m_proxyUse;
-        bool m_proxyAuto;
-        bool m_proxyManual;
+        bool m_proxyUsed;
         QString m_proxyHostname;
         int m_proxyPort;
-        bool m_proxyAuthentification;
         QString m_proxyLogin;
         QString m_proxyPassword;
 };

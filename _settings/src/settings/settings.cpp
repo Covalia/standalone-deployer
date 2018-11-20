@@ -2,35 +2,28 @@
 #include "log/logger.h"
 #include "utils/crypt/cryptmanager.h"
 #include "lang/languagemanager.h"
+#include "secret/keymanager.h"
 
 #include <QMutexLocker>
 #include <QSettings>
 
-const QString Settings::GroupInfo("INFO");
-const QString Settings::GroupProxy("PROXY");
-const QString Settings::GroupLang("LANG");
-const QString Settings::GroupShortcut("SHORTCUT");
-const QString Settings::GroupData("DATA");
-const QString Settings::GroupServer("SERVER");
-const QString Settings::GroupStart("START");
-const QString Settings::GroupTheme("THEME");
+const QString Settings::GroupProxy("proxy");
+const QString Settings::GroupUninst("uninst");
+const QString Settings::GroupConfig("config");
+const QString Settings::GroupTheme("theme");
 
 const QString Settings::AppName("app_name");
 const QString Settings::UpdaterVersion("updater_version");
 const QString Settings::JavaVersion("java_version");
 
-const QString Settings::ProxyUse("proxy_use");
-const QString Settings::ProxyAuto("proxy_auto");
-const QString Settings::ProxyManual("proxy_manual");
+const QString Settings::ProxyUsed("proxy_use");
 const QString Settings::ProxyHostname("proxy_hostname");
 const QString Settings::ProxyPort("proxy_port");
-const QString Settings::ProxyAuthentication("proxy_authentication");
 const QString Settings::ProxyLogin("proxy_login");
 const QString Settings::ProxyPassword("proxy_password");
 
-const QString Settings::Lang("lang");
+const QString Settings::Locale("locale");
 
-const QString Settings::ShortcutOnline("shortcut_online");
 const QString Settings::ShortcutOffline("shortcut_offline");
 const QString Settings::ShortcutName("shortcut_name");
 const QString Settings::ShortcutOfflineName("shortcut_offline_name");
@@ -60,8 +53,7 @@ Settings::Settings() :
     m_settings(0),
     m_deploymentUrl(""),
     m_appName("Application"),
-    m_lang(LanguageManager::getLocaleFromLanguage(Language::English)),
-    m_shortcutOnline(false),
+    m_locale(""),
     m_shortcutOffline(false),
     m_shortcutName("Application"),
     m_shortcutOfflineName("Application offline"),
@@ -79,12 +71,9 @@ Settings::Settings() :
     m_dataLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
-    m_proxyUse(false),
-    m_proxyAuto(false),
-    m_proxyManual(false),
+    m_proxyUsed(false),
     m_proxyHostname(""),
-    m_proxyPort(-1),
-    m_proxyAuthentification(false),
+    m_proxyPort(0),
     m_proxyLogin(""),
     m_proxyPassword("")
 
@@ -159,46 +148,30 @@ bool Settings::writeSettings()
     L_INFO("Starting to write all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GroupInfo);
-    putSetting(AppName, m_appName);
-    putSetting(UpdaterVersion, m_updaterVersion);
-    putSetting(JavaVersion, m_javaVersion);
-    m_settings->endGroup();
-
     m_settings->beginGroup(GroupProxy);
-    putSetting(ProxyUse, m_proxyUse);
-    putSetting(ProxyAuto, m_proxyAuto);
-    putSetting(ProxyManual, m_proxyManual);
+    putSetting(ProxyUsed, m_proxyUsed);
     putSetting(ProxyHostname, m_proxyHostname);
     putSetting(ProxyPort, m_proxyPort);
-    putSetting(ProxyAuthentication, m_proxyAuthentification);
     putSetting(ProxyLogin, m_proxyLogin);
     putSetting(ProxyPassword, m_proxyPassword);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupLang);
-    putSetting(Lang, m_lang);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupShortcut);
+    m_settings->beginGroup(GroupUninst);
     putSetting(ShortcutOffline, m_shortcutOffline);
-    putSetting(ShortcutOnline, m_shortcutOnline);
     putSetting(ShortcutName, m_shortcutName);
     putSetting(ShortcutOfflineName, m_shortcutOfflineName);
     putSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs);
     putSetting(ShortcutForAllUsers, m_shortcutForAllUsers);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupData);
-    putSetting(DataLocation, m_dataLocation);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupServer);
-    putSetting(DeploymentUrl, m_deploymentUrl);
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupStart);
     putSetting(RunAtStart, m_runAtStart);
+    m_settings->endGroup();
+
+    m_settings->beginGroup(GroupConfig);
+    putSetting(AppName, m_appName);
+    putSetting(Locale, m_locale);
+    putSetting(UpdaterVersion, m_updaterVersion);
+    putSetting(JavaVersion, m_javaVersion);
+    putSetting(DataLocation, m_dataLocation);
+    putSetting(DeploymentUrl, m_deploymentUrl);
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupTheme);
@@ -224,46 +197,30 @@ void Settings::readSettings()
     L_INFO("Starting to read all settings");
     QMutexLocker locker(&sm_settingsMutex);
 
-    m_settings->beginGroup(GroupInfo);
-    m_appName = getSetting(AppName, m_appName).toString();
-    m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
-    m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
-    m_settings->endGroup();
-
     m_settings->beginGroup(GroupProxy);
-    m_proxyUse = getSetting(ProxyUse, m_proxyUse).toBool();
-    m_proxyAuto = getSetting(ProxyAuto, m_proxyAuto).toBool();
-    m_proxyManual = getSetting(ProxyManual, m_proxyManual).toBool();
+    m_proxyUsed = getSetting(ProxyUsed, m_proxyUsed).toBool();
     m_proxyHostname = getSetting(ProxyHostname, "").toString();
     m_proxyPort = getSetting(ProxyPort, 0).toInt();
-    m_proxyAuthentification = getSetting(ProxyAuthentication, m_proxyAuthentification).toBool();
     m_proxyLogin = getSetting(ProxyLogin, "").toString();
     m_proxyPassword = getSetting(ProxyPassword, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupLang);
-    m_lang = getSetting(Lang, "").toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupShortcut);
+    m_settings->beginGroup(GroupUninst);
     m_shortcutOffline = getSetting(ShortcutOffline, m_shortcutOffline).toBool();
-    m_shortcutOnline = getSetting(ShortcutOnline, m_shortcutOnline).toBool();
     m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
     m_shortcutOfflineName = getSetting(ShortcutOfflineName, m_shortcutOfflineName).toString();
     m_shortcutOfflineArgs = getSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
     m_shortcutForAllUsers = getSetting(ShortcutForAllUsers, m_shortcutForAllUsers).toBool();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupData);
-    m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupServer);
-    m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
-    m_settings->endGroup();
-
-    m_settings->beginGroup(GroupStart);
     m_runAtStart = getSetting(RunAtStart, m_runAtStart).toBool();
+    m_settings->endGroup();
+
+    m_settings->beginGroup(GroupConfig);
+    m_appName = getSetting(AppName, m_appName).toString();
+    m_locale = getSetting(Locale, "").toString();
+    m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
+    m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
+    m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
+    m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupTheme);
@@ -287,17 +244,13 @@ QString Settings::paramListString()
     s = s + "app_name = " + m_appName + "\n";
     s = s + "updater_version = " + m_updaterVersion + "\n";
     s = s + "java_version = " + m_javaVersion + "\n";
-    s = s + "proxy_use = " + QString::number(m_proxyUse) + "\n";
-    s = s + "proxy_auto = " + QString::number(m_proxyAuto) + "\n";
-    s = s + "proxy_manual = " + QString::number(m_proxyManual)  + "\n";
+    s = s + "proxy_use = " + QString::number(m_proxyUsed) + "\n";
     s = s + "proxy_hostname = " + m_proxyHostname + "\n";
     s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
-    s = s + "proxy_authentification = " + QString::number(m_proxyAuthentification) + "\n";
     s = s + "proxy_login = " + m_proxyLogin + "\n";
     s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
-    s = s + "lang = " + m_lang + "\n";
+    s = s + "locale = " + m_locale + "\n";
     s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
-    s = s + "shortcut_online = " + QString::number(m_shortcutOnline) + "\n";
     s = s + "shortcut_name = " + m_shortcutName + "\n";
     s = s + "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
     s = s + "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
@@ -479,16 +432,6 @@ void Settings::setShortcutForAllUsers(bool shortcutForAllUsers)
     m_shortcutForAllUsers = shortcutForAllUsers;
 }
 
-bool Settings::isShortcutOnline() const
-{
-    return m_shortcutOnline;
-}
-
-void Settings::setShortcutOnline(bool shortcutOnline)
-{
-    m_shortcutOnline = shortcutOnline;
-}
-
 bool Settings::isShortcutOffline() const
 {
     return m_shortcutOffline;
@@ -509,28 +452,28 @@ void Settings::setShortcutName(const QString &shortcutName)
     m_shortcutName = shortcutName;
 }
 
-Language Settings::getLang() const
+QString Settings::getLocale() const
 {
-    return LanguageManager::getLanguageFromLocale(m_lang);
+    return m_locale;
 }
 
-void Settings::setLang(const Language &lang)
+void Settings::setLocale(const QString &_locale)
 {
-    m_lang = LanguageManager::getLocaleFromLanguage(lang);
+    m_locale = _locale;
 }
 
 QString Settings::getProxyPassword() const
 {
-    CryptManager * crypt = new CryptManager();
+    const QString key = KeyManager::readPasswordEncryptionKey();
 
-    return crypt->decryptToString(m_proxyPassword);
+    return CryptManager::decrypt(key, m_proxyPassword);
 }
 
 void Settings::setProxyPassword(const QString &proxyPassword)
 {
-    CryptManager * crypt = new CryptManager();
+    const QString key = KeyManager::readPasswordEncryptionKey();
 
-    m_proxyPassword = crypt->encryptToString(proxyPassword);
+    m_proxyPassword = CryptManager::encrypt(key, proxyPassword);
 }
 
 QString Settings::getProxyLogin() const
@@ -541,16 +484,6 @@ QString Settings::getProxyLogin() const
 void Settings::setProxyLogin(const QString &proxyLogin)
 {
     m_proxyLogin = proxyLogin;
-}
-
-bool Settings::isProxyAuthentification() const
-{
-    return m_proxyAuthentification;
-}
-
-void Settings::setProxyAuthentification(bool proxyAuthentification)
-{
-    m_proxyAuthentification = proxyAuthentification;
 }
 
 int Settings::getProxyPort() const
@@ -573,32 +506,12 @@ void Settings::setProxyHostname(const QString &proxyHostname)
     m_proxyHostname = proxyHostname;
 }
 
-bool Settings::isProxyManual() const
+bool Settings::isProxyUsed() const
 {
-    return m_proxyManual;
+    return m_proxyUsed;
 }
 
-void Settings::setProxyManual(bool proxyManual)
+void Settings::setProxyUsed(bool proxyUsed)
 {
-    m_proxyManual = proxyManual;
-}
-
-bool Settings::isProxyAuto() const
-{
-    return m_proxyAuto;
-}
-
-void Settings::setProxyAuto(bool proxyAuto)
-{
-    m_proxyAuto = proxyAuto;
-}
-
-bool Settings::isProxyUse() const
-{
-    return m_proxyUse;
-}
-
-void Settings::setProxyUse(bool proxyUse)
-{
-    m_proxyUse = proxyUse;
+    m_proxyUsed = proxyUsed;
 }

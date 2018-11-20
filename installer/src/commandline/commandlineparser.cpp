@@ -1,315 +1,148 @@
 #include "commandline/commandlineparser.h"
 
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 #include "log/logger.h"
-#include "settings/settings.h"
 #include "io/config.h"
 
-#include <QDir>
-
-CommandLineParser::CommandLineParser()
+CommandLineParser::CommandLineParser() :
+    parser(),
+    silentOption("silent", "Enable silent mode. Install application without graphical interface."),
+    installLocationOption("installLocation", "Set the application installation path.", "installLocation"),
+    dataLocationOption("dataLocation", "Set the application data path.", "dataLocation"),
+    proxyUsedOption("useProxy", "Enable the use of proxy."),
+    proxyHostnameOption("proxyHostname", "Set the proxy hostname.", "proxyHostname"),
+    proxyPortOption("proxyPort", "Set the proxy port.", "proxyPort"),
+    proxyLoginOption("proxyLogin", "Set the proxy authentication login.", "proxyLogin"),
+    proxyPasswordOption("proxyPassword", "Set the proxy authentication password.", "proxyPassword"),
+    localeOption("locale", QString("Set the application locale. %1 for English, %2 for French.").arg(IOConfig::LocaleEnUs).arg(IOConfig::LocaleFrFr), "locale"),
+    noRunAppOption("noRunApp", "Does not start the application after installation."),
+    runAtStartOption("runAtStart", "Enable application launch when computer starts."),
+    createOfflineShortcutOption("createOfflineShortcut", "Create offline shortcut."),
+    createAllUserShortcutOption("createAllUserShortcut", "Not yes implemented!!! Create application shortcuts for all users. Option reserved when installation and data location are not in user folder.")
 {
-    // silence mode
-    QCommandLineOption silent_opt("silent", "Silent mode : no configuration interface [--silent]", "silent", EMPTY);
-
-    // data location
-    QCommandLineOption installLocation_opt("installLocation", "Application installation path [--installLocation=\"XXX\"].", "installLocation", EMPTY);
-    QCommandLineOption dataLocation_opt("dataLocation", "Application data path [--dataLocation=\"XXX\"]", "dataLocation", EMPTY);
-
-    // proxy configuration
-    QCommandLineOption proxyAuto_opt("proxyAuto", "Automatic proxy detection. Use this option conbined with proxyUse [--proxyUse=true --proxyAuto=true]", "proxyAuto", EMPTY);
-    QCommandLineOption proxyHostname_opt("proxyHostname", "Proxy Hostname [--proxyHostname=XXXX]", "proxyHostname", EMPTY);
-    QCommandLineOption proxyPort_opt("proxyPort", "Proxy Port [--proxyPort=XXXX]", "proxyPort", EMPTY);
-    QCommandLineOption proxyLogin_opt("proxyLogin", "Use login in proxy authentification [--proxyLogin=XXX]", "proxyLogin", EMPTY);
-    QCommandLineOption proxyPassword_opt("proxyPassword", "Use password in proxy authentification [--proxyPassword=XXX]", "proxyPassword", EMPTY);
-
-    // language
-    QCommandLineOption language_opt("language", "Language. EN=English, FR=French; [--language=FR]", "language", EMPTY);
-
-    // start and shortcut
-    QCommandLineOption runApp_opt("runApp", "Launch application after installation. [--runApp=true]", "runApp", EMPTY);
-    QCommandLineOption runAtStart_opt("runAtStart", "Launch application when computer starts. [--runAtStart=true]", "runAtStart", EMPTY);
-    QCommandLineOption createOfflineShortcut_opt("createOfflineShortcut", "Create offline shortcut. [--createOfflineShortcut=true]", "createOfflineShortcut", EMPTY);
-    QCommandLineOption createShortcut_opt("createShortcut", "Create application shortcut. [--shortcurt=false]", "createShortcut", EMPTY);
-    QCommandLineOption createAllUserShortcut_opt("createAllUserShortcut", "Create application shortcuts for all users. Option reserved when installation and data location are not in user folder [--createAllUserShortcut=false]", "createAllUserShortcut", EMPTY);
-
-    QCommandLineParser parser;
-
-    parser.setApplicationDescription("Standalone deployment. Set --help option to display help");
+    parser.setApplicationDescription("Covalia standalone deployer. Use --help option to display help.");
     parser.addHelpOption();
-    parser.addVersionOption();
+    parser.addVersionOption(); // TODO print version only, no logs.
 
-    parser.addOption(silent_opt);
-    parser.addOption(installLocation_opt);
-    parser.addOption(dataLocation_opt);
-    parser.addOption(proxyAuto_opt);
-    parser.addOption(proxyHostname_opt);
-    parser.addOption(proxyPort_opt);
-    parser.addOption(proxyLogin_opt);
-    parser.addOption(proxyPassword_opt);
-    parser.addOption(language_opt);
-    parser.addOption(runApp_opt);
-    parser.addOption(runAtStart_opt);
-    parser.addOption(createOfflineShortcut_opt);
-    parser.addOption(createShortcut_opt);
-    parser.addOption(createAllUserShortcut_opt);
+    parser.addOption(silentOption);
+    parser.addOption(installLocationOption);
+    parser.addOption(dataLocationOption);
+    parser.addOption(proxyUsedOption);
+    parser.addOption(proxyHostnameOption);
+    parser.addOption(proxyPortOption);
+    parser.addOption(proxyLoginOption);
+    parser.addOption(proxyPasswordOption);
+    parser.addOption(localeOption);
+    parser.addOption(noRunAppOption);
+    parser.addOption(runAtStartOption);
+    parser.addOption(createOfflineShortcutOption);
+    parser.addOption(createAllUserShortcutOption);
 
-    L_INFO("Start to parse command line arguments");
+    L_INFO("Parsing command line arguments");
 
+    L_INFO("Args: " + QCoreApplication::arguments().join(", "));
     parser.process(QCoreApplication::arguments());
 
-    L_INFO("End to parse command line arguments");
-    L_INFO("Start to read command line arguments with parse data");
-
-    m_silent = getValueBool(parser, silent_opt);
-    m_installLocation = getValueString(parser, installLocation_opt);
-    m_dataLocation = getValueString(parser, dataLocation_opt);
-    m_proxyAuto = getValueBool(parser, proxyAuto_opt);
-    m_proxyHostname = getValueString(parser, proxyHostname_opt);
-    m_proxyPort = getValueString(parser, proxyPort_opt);
-    m_proxyLogin = getValueString(parser, proxyLogin_opt);
-    m_proxyPassword = getValueString(parser, proxyPassword_opt);
-    m_language = getValueString(parser, language_opt);
-    m_runApp = getValueBool(parser, runApp_opt);
-    m_runAtStart = getValueBool(parser, runAtStart_opt);
-    m_offlineShortcut = getValueBool(parser, createOfflineShortcut_opt);
-    m_shortcut = getValueBool(parser, createShortcut_opt);
-    m_allUserShortcut = getValueBool(parser, createAllUserShortcut_opt);
-
-    L_INFO("End to read command line arguments with parse data");
+    L_INFO("Parsed values");
+    L_INFO("silent: " + QString(parser.isSet(silentOption) ? "yes" : "no"));
+    L_INFO("installLocation: " + parser.value(installLocationOption));
+    L_INFO("dataLocation: " + parser.value(dataLocationOption));
+    L_INFO("useProxy:" + QString(parser.isSet(proxyUsedOption) ? "yes" : "no"));
+    L_INFO("proxyHostname: " + parser.value(proxyHostnameOption));
+    L_INFO("proxyPort: " + parser.value(proxyPortOption));
+    L_INFO("proxyLogin: " + parser.value(proxyLoginOption));
+    L_INFO("locale: " + parser.value(localeOption));
+    L_INFO("noRunApp: " + QString(parser.isSet(noRunAppOption) ? "yes" : "no"));
+    L_INFO("runAtStart: " + QString(parser.isSet(runAtStartOption) ? "yes" : "no"));
+    L_INFO("createOfflineShortcut: " + QString(parser.isSet(createOfflineShortcutOption) ? "yes" : "no"));
+    L_INFO("createAllUserShortcut: " + QString(parser.isSet(createAllUserShortcutOption) ? "yes" : "no"));
 }
 
-void CommandLineParser::sendToSettings()
+bool CommandLineParser::isRunApp() const
 {
-    Settings * settings = Settings::getInstance();
-
-    if (!isEmptyValue(m_installLocation)) {
-        settings->setDataLocation(m_installLocation + QDir::separator() + IOConfig::DataDir);
-    }
-    if (!isEmptyValue(m_dataLocation)) {
-        settings->setDataLocation(m_dataLocation);
-    }
-
-    if (!isEmptyValue(m_proxyAuto)) {
-        settings->setProxyAuto(parseBool(m_proxyAuto));
-        // activate proxy automatically
-        if (parseBool(m_proxyAuto)) {
-            settings->setProxyUse(true);
-        }
-    }
-    if (!isEmptyValue(m_proxyHostname)) {
-        settings->setProxyUse(true);
-        settings->setProxyHostname(m_proxyHostname);
-        settings->setProxyAuto(false);
-        settings->setProxyManual(true);
-    }
-
-    // port to int
-    if (!isEmptyValue(m_proxyPort)) {
-        bool okParsePort = false;
-        int port = m_proxyPort.toInt(&okParsePort, 10);
-        if (okParsePort) {
-            settings->setProxyPort(port);
-        }
-    }
-
-    if (!isEmptyValue(m_proxyLogin)) {
-        settings->setProxyLogin(m_proxyLogin);
-        settings->setProxyAuthentification(true);
-    }
-    if (!isEmptyValue(m_proxyPassword)) {
-        settings->setProxyPassword(m_proxyPassword);
-    }
-
-    if (!isEmptyValue(m_offlineShortcut)) {
-        settings->setShortcutOffline(parseBool(m_offlineShortcut));
-    }
-    if (!isEmptyValue(m_shortcut)) {
-        settings->setShortcutOnline(parseBool(m_shortcut));
-    }
-    if (!isEmptyValue(m_allUserShortcut)) {
-        settings->setShortcutForAllUsers(parseBool(m_allUserShortcut));
-    }
-
-    if (!isEmptyValue(m_runAtStart)) {
-        settings->setRunAtStart(parseBool(m_runAtStart));
-    }
-} // CommandLineParser::sendToSettings
-
-QString CommandLineParser::getValueBool(QCommandLineParser & parser, QCommandLineOption & commandOption)
-{
-    if (parser.isSet(commandOption)) {
-        if (parser.value(commandOption) == "false") {
-            return "false";
-        } else {
-            return "true";
-        }
-    } else {
-        return EMPTY;
-    }
+    return !parser.isSet(noRunAppOption);
 }
 
-QString CommandLineParser::getValueString(QCommandLineParser & parser, QCommandLineOption & commandOption)
+bool CommandLineParser::isCreateAllUserShortcut() const
 {
-    return parser.value(commandOption);
+    return parser.isSet(createAllUserShortcutOption);
 }
 
-bool CommandLineParser::isEmptyValue(QString value)
+bool CommandLineParser::isCreateOfflineShortcut() const
 {
-    return value == EMPTY;
+    return parser.isSet(createOfflineShortcutOption);
 }
 
-bool CommandLineParser::parseBool(QString value)
+bool CommandLineParser::isRunAtStart() const
 {
-    return value == "true";
+    return parser.isSet(runAtStartOption);
 }
 
-bool CommandLineParser::parseBoolWithDefaultValue(QString value, bool defaultValue)
+bool CommandLineParser::isProxyPasswordSet() const
 {
-    if(value == EMPTY){
-        return defaultValue;
-    }
-    return parseBool(value);
+    return parser.isSet(proxyPasswordOption);
 }
 
-
-bool CommandLineParser::isSilent()
+bool CommandLineParser::isLocaleSet() const
 {
-    return parseBoolWithDefaultValue(m_silent, false);
+    return parser.isSet(localeOption);
 }
 
-bool CommandLineParser::isRunApp()
+QString CommandLineParser::getLocale() const
 {
-    return parseBoolWithDefaultValue(m_runApp, true);
-}
-
-QString CommandLineParser::getAllUserShortcut() const
-{
-    return m_allUserShortcut;
-}
-
-QString CommandLineParser::getRunApp() const
-{
-    return m_runApp;
-}
-
-void CommandLineParser::setRunApp(const QString &runApp)
-{
-    m_runApp = runApp;
-}
-
-void CommandLineParser::setAllUserShortcut(const QString &allUserShortcut)
-{
-    m_allUserShortcut = allUserShortcut;
-}
-
-QString CommandLineParser::getShortcut() const
-{
-    return m_shortcut;
-}
-
-void CommandLineParser::setShortcut(const QString &shortcut)
-{
-    m_shortcut = shortcut;
-}
-
-QString CommandLineParser::getOffshort() const
-{
-    return m_offlineShortcut;
-}
-
-void CommandLineParser::setOffshort(const QString &offshort)
-{
-    m_offlineShortcut = offshort;
-}
-
-QString CommandLineParser::getRunAtStart() const
-{
-    return m_runAtStart;
-}
-
-void CommandLineParser::setRunAtStart(const QString &runAtStart)
-{
-    m_runAtStart = runAtStart;
-}
-
-QString CommandLineParser::getLanguage() const
-{
-    return m_language;
-}
-
-void CommandLineParser::setLanguage(const QString &language)
-{
-    m_language = language;
+    return parser.value(localeOption);
 }
 
 QString CommandLineParser::getProxyPassword() const
 {
-    return m_proxyPassword;
+    return parser.value(proxyPasswordOption);
 }
 
-void CommandLineParser::setProxyPassword(const QString &proxyPassword)
+bool CommandLineParser::isProxyLoginSet() const
 {
-    m_proxyPassword = proxyPassword;
+    return parser.isSet(proxyLoginOption);
 }
 
 QString CommandLineParser::getProxyLogin() const
 {
-    return m_proxyLogin;
+    return parser.value(proxyLoginOption);
 }
 
-void CommandLineParser::setProxyLogin(const QString &proxyLogin)
+bool CommandLineParser::isProxyPortSet() const
 {
-    m_proxyLogin = proxyLogin;
+    return parser.isSet(proxyPortOption);
 }
 
 QString CommandLineParser::getProxyPort() const
 {
-    return m_proxyPort;
+    return parser.value(proxyPortOption);
 }
 
-void CommandLineParser::setProxyPort(const QString &proxyPort)
+bool CommandLineParser::isProxyHostnameSet() const
 {
-    m_proxyPort = proxyPort;
+    return parser.isSet(proxyHostnameOption);
 }
 
 QString CommandLineParser::getProxyHostname() const
 {
-    return m_proxyHostname;
+    return parser.value(proxyHostnameOption);
 }
 
-void CommandLineParser::setProxyHostname(const QString &proxyHostname)
+QString CommandLineParser::getInstallLocation() const
 {
-    m_proxyHostname = proxyHostname;
-}
-
-QString CommandLineParser::getProxyAuto() const
-{
-    return m_proxyAuto;
-}
-
-void CommandLineParser::setProxyAuto(const QString &proxyAuto)
-{
-    m_proxyAuto = proxyAuto;
+    return parser.value(installLocationOption);
 }
 
 QString CommandLineParser::getDataLocation() const
 {
-    return m_dataLocation;
+    return parser.value(dataLocationOption);
 }
 
-void CommandLineParser::setDataLocation(const QString &dataLocation)
+bool CommandLineParser::isSilent() const
 {
-    m_dataLocation = dataLocation;
+    return parser.isSet(silentOption);
 }
 
-QString CommandLineParser::getSilent() const
+bool CommandLineParser::isProxyUsed() const
 {
-    return m_silent;
-}
-
-void CommandLineParser::setSilent(const QString &silent)
-{
-    m_silent = silent;
+    return parser.isSet(proxyUsedOption);
 }

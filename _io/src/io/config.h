@@ -5,96 +5,95 @@
 
 class IOConfig
 {
-public:
+    public:
 
-    enum AppComponent {
-        Loader,
-        Updater,
-        Installer
-    };
+        enum AppComponent {
+            Loader,
+            Updater,
+            Installer
+        };
 
-    /// Installer version number
-    static const QString InstallerVersion;
+        /// Installer version number
+        static const QString InstallerVersion;
 
-    /// Updater version number
-    static const QString UpdaterVersion;
+        /// Updater version number
+        static const QString UpdaterVersion;
 
-    /// Loader version number
-    static const QString LoaderVersion;
+        /// Loader version number
+        static const QString LoaderVersion;
 
+        /// Loader application name.
+        static const QString LoaderName;
 
-    /// Loader application name.
-    static const QString LoaderName;
+        /// Updater application name.
+        static const QString UpdaterName;
 
-    /// Updater application name.
-    static const QString UpdaterName;
+        /// Application application name.
+        static const QString AppName;
 
-    /// Application application name.
-    static const QString AppName;
+        /// Cnlp application name.
+        static const QString CnlpName;
 
-    /// Cnlp application name.
-    static const QString CnlpName;
+        /// Java application name.
+        static const QString JavaName;
 
-    /// Java application name.
-    static const QString JavaName;
+        /// Relative path of application installation application
+        static const QString AppDir;
 
+        /// Relative path of application configuration
+        static const QString ConfigurationDir;
 
-    /// Relative path of application installation application
-    static const QString AppDir;
+        /// Relative path of Image
+        static const QString ImagesDir;
 
-    /// Relative path of application configuration
-    static const QString ConfigurationDir;
+        /// Relative path of Slides
+        static const QString SlidesDir;
 
-    /// Relative path of Image
-    static const QString ImagesDir;
+        /// Relative path of Java
+        static const QString JavaDir;
 
-    /// Relative path of Slides
-    static const QString SlidesDir;
+        /// Relative path of the application logs
+        static const QString LogsDir;
 
-    /// Relative path of Java
-    static const QString JavaDir;
+        /// Relative path of the temporary directory of the application
+        static const QString TempDir;
 
-    /// Relative path of the application logs
-    static const QString LogsDir;
+        /// Relative path of the Cnlp directory
+        static const QString CnlpDir;
 
-    /// Relative path of the temporary directory of the application
-    static const QString TempDir;
+        /// Relative path of the mount directory of the application, macos only
+        static const QString MountDir;
 
-    /// Relative path of the Cnlp directory
-    static const QString CnlpDir;
+        /// Relative directory path of application updater
+        static const QString UpdaterDir;
 
-    /// Relative path of the mount directory of the application, macos only
-    static const QString MountDir;
+        /// Relative directory path of application updater
+        static const QString LoaderDir;
 
-    /// Relative directory path of application updater
-    static const QString UpdaterDir;
+        /// Relative directory path of application data
+        static const QString DataDir;
 
-    /// Relative directory path of application updater
-    static const QString LoaderDir;
+        /// Loader filename
+        static const QString LoaderFile;
 
-    /// Relative directory path of application data
-    static const QString DataDir;
+        /// Updater filename
+        static const QString UpdaterFile;
 
+        /// Executables windows extension
+        static const QString WindowsAppExtension;
 
-    /// Loader filename
-    static const QString LoaderFile;
+        /// Executables Mac OS extension
+        static const QString MacOsAppExtension;
 
-    /// Updater filename
-    static const QString UpdaterFile;
+        /// DMG images Mac OS extension
+        static const QString MacOsDmgExtension;
 
-    /// Executables windows extension
-    static const QString WindowsAppExtension;
+        /// Name of configuration file
+        static const QString ConfigurationFile;
 
-    /// Executables Mac OS extension
-    static const QString MacOsAppExtension;
-
-    /// DMG images Mac OS extension
-    static const QString MacOsDmgExtension;
-
-
-    /// Name of configuration file
-    static const QString ConfigurationFile;
-
+        /// Locales
+        static const QString LocaleFrFr;
+        static const QString LocaleEnUs;
 };
 
 #endif // ifndef IO__CONFIG_H

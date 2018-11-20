@@ -8,7 +8,6 @@
 #include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
-#include "settings/resourcessettings.h"
 #include "settings/settings.h"
 #include "settings/commandlinesingleton.h"
 #include "utils.h"
@@ -43,6 +42,9 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
+    // load settings resource static file. must be called keymanager_resources
+    Q_INIT_RESOURCE(keymanager_resources);
+
     AppPath appPath = Utils::getAppPath();
     qDebug() << "-- Installation root: " << appPath.getInstallationDir().absolutePath();
 
@@ -70,7 +72,7 @@ int main(int argc, char * argv[])
     StyleManager::setGeneralStyle();
 
     // init language with locale in settings
-    LanguageManager::updateLanguage(LanguageManager::getLocaleFromLanguage(settings->getLang()));
+    LanguageManager::updateLocale(settings->getLocale());
 
     QStringList arguments = qApp->arguments();
     arguments.removeFirst();

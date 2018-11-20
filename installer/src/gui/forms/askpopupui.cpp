@@ -1,17 +1,15 @@
 #include "gui/forms/askpopupui.h"
 #include "ui_askpopup.h"
 
-#include "gui/style/stylemanager.h"
-
 #include <QDesktopWidget>
 #include <QPoint>
 #include <QRect>
+
 #ifdef Q_OS_WIN
 #include <QPropertyAnimation>
 #endif
 
-AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) :
-    QDialog(_parent),
+AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) : QDialog(_parent),
     m_ui(new Ui::AskPopupUI),
     m_parent(0)
 {
@@ -20,8 +18,6 @@ AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) 
     m_parent = _parent;
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
-    StyleManager::transformStyle(this);
 
     m_ui->labelTitle->setText(_title);
     m_ui->labelDescription->setText(_description);
@@ -42,13 +38,13 @@ AskPopupUI::~AskPopupUI()
 int AskPopupUI::exec()
 {
 #ifdef Q_OS_WIN
-    this->setWindowOpacity(0.0);
-    QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
-    anim->setDuration(500);
-    anim->setEasingCurve(QEasingCurve::OutBack);
-    anim->setStartValue(0.0);
-    anim->setEndValue(1.0);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+        this->setWindowOpacity(0.0);
+        QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
+        anim->setDuration(500);
+        anim->setEasingCurve(QEasingCurve::OutBack);
+        anim->setStartValue(0.0);
+        anim->setEndValue(1.0);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
 #endif
     return QDialog::exec();
 }

@@ -488,3 +488,8 @@ QString AppPath::getClasspathSeparator() const
     }
     return "";
 }
+
+QString AppPath::getDataPathFromInstallPath(const QString &_installPath)
+{
+    return AppPathImpl::getDataPathFromInstallPath(_installPath);
+}

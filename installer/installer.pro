@@ -56,42 +56,46 @@ win32 {
 LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
-FORMS += ui/about.ui
 FORMS += ui/askpopup.ui
 FORMS += ui/endinstallation.ui
 FORMS += ui/installation.ui
-FORMS += ui/personalize.ui
-FORMS += ui/proxy.ui
-FORMS += ui/welcome.ui
-FORMS += ui/window.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/commandline/commandlineparser.cpp
-SOURCES += src/gui/forms/aboutui.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
 SOURCES += src/gui/forms/endinstallationui.cpp
 SOURCES += src/gui/forms/installationui.cpp
-SOURCES += src/gui/forms/personalizeui.cpp
-SOURCES += src/gui/forms/proxyui.cpp
-SOURCES += src/gui/forms/welcomeui.cpp
 SOURCES += src/gui/forms/windowui.cpp
+SOURCES += src/gui/wizard/installwizard.cpp
+SOURCES += src/gui/wizard/pages/folders.cpp
+SOURCES += src/gui/wizard/pages/launch.cpp
+SOURCES += src/gui/wizard/pages/license.cpp
+SOURCES += src/gui/wizard/pages/proxy.cpp
+SOURCES += src/gui/wizard/pages/shortcuts.cpp
+SOURCES += src/gui/wizard/pages/type.cpp
+SOURCES += src/gui/wizard/pages/welcome.cpp
 SOURCES += src/gui/manager/uimanager.cpp
-SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/manager/installmanager.cpp
+SOURCES += src/settings/resourcesettings.cpp
 SOURCES += src/utils.cpp
 
 HEADERS += src/commandline/commandlineparser.h
-HEADERS += src/gui/forms/aboutui.h
+HEADERS += src/gui/abstract_translated_ui.h
 HEADERS += src/gui/forms/askpopupui.h
 HEADERS += src/gui/forms/endinstallationui.h
 HEADERS += src/gui/forms/installationui.h
-HEADERS += src/gui/forms/personalizeui.h
-HEADERS += src/gui/forms/proxyui.h
-HEADERS += src/gui/forms/welcomeui.h
 HEADERS += src/gui/forms/windowui.h
+HEADERS += src/gui/wizard/installwizard.h
+HEADERS += src/gui/wizard/pages/folders.h
+HEADERS += src/gui/wizard/pages/launch.h
+HEADERS += src/gui/wizard/pages/license.h
+HEADERS += src/gui/wizard/pages/proxy.h
+HEADERS += src/gui/wizard/pages/shortcuts.h
+HEADERS += src/gui/wizard/pages/type.h
+HEADERS += src/gui/wizard/pages/welcome.h
 HEADERS += src/gui/manager/uimanager.h
-HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/manager/installmanager.h
+HEADERS += src/settings/resourcesettings.h
 HEADERS += src/utils.h
 
 RESOURCES += fixed_resources.qrc

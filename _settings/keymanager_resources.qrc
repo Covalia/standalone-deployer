@@ -1,5 +1,6 @@
 <RCC>
     <qresource>
         <file alias="hash_key.txt">resources/hash_key.txt</file>
+        <file alias="password_key.txt">resources/password_key.txt</file>
     </qresource>
 </RCC>

@@ -91,6 +91,8 @@ class AppPath {
 
         QString getClasspathSeparator() const;
 
+        static QString getDataPathFromInstallPath(const QString &_installPath);
+
     private:
         QSharedPointer<AppPathImpl> m_appPathImpl;
 };

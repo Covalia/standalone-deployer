@@ -2,116 +2,69 @@
 #define INSTALLER__COMMANDLINEPARSER_H
 
 #include <QCommandLineParser>
-
-const QString EMPTY = "EMPTY";
+#include <QCommandLineOption>
 
 /**
- * @class QCommandLineParser
+ * @class CommandLineParser
  *
  * @brief Read the launch the command line arguments and save them in this class.
  */
 class CommandLineParser
 {
     public:
+
         CommandLineParser();
 
-        void sendToSettings();
+        bool isSilent() const;
 
-        bool isSilent();
-        bool isRunApp();
-
-        QString getSilent() const;
-        void setSilent(const QString &silent);
-
+        QString getInstallLocation() const;
         QString getDataLocation() const;
-        void setDataLocation(const QString &dataLocation);
 
-        QString getProxyAuto() const;
-        void setProxyAuto(const QString &proxyAuto);
-
+        bool isProxyUsed() const;
+        bool isProxyHostnameSet() const;
         QString getProxyHostname() const;
-        void setProxyHostname(const QString &proxyHostname);
-
+        bool isProxyPortSet() const;
         QString getProxyPort() const;
-        void setProxyPort(const QString &proxyPort);
-
+        bool isProxyLoginSet() const;
         QString getProxyLogin() const;
-        void setProxyLogin(const QString &proxyLogin);
-
+        bool isProxyPasswordSet() const;
         QString getProxyPassword() const;
-        void setProxyPassword(const QString &proxyPassword);
 
-        QString getLanguage() const;
-        void setLanguage(const QString &language);
+        bool isLocaleSet() const;
+        QString getLocale() const;
+        void setLocale(const QString &_locale);
 
-        QString getRunApp() const;
-        void setRunApp(const QString &runApp);
-
-        QString getRunAtStart() const;
-        void setRunAtStart(const QString &runAtStart);
-
-        QString getOffshort() const;
-        void setOffshort(const QString &offshort);
-
-        QString getShortcut() const;
-        void setShortcut(const QString &shortcut);
-
-        QString getAllUserShortcut() const;
-        void setAllUserShortcut(const QString &allUserShortcut);
+        bool isRunApp() const;
+        bool isRunAtStart() const;
+        bool isCreateOfflineShortcut() const;
+        bool isCreateAllUserShortcut() const;
 
     private:
 
-        /**
-         * @brief Method used to read boolean arguments
-         * @param parser
-         * @param commandOption
-         * @return true if argument exist and have no value or true value. Example : --arg OR--arg=true
-         */
-        QString getValueBool(QCommandLineParser & parser, QCommandLineOption & commandOption);
+        QCommandLineParser parser;
 
-        /**
-         * @brief Method used to read string arguments
-         * @param parser
-         * @param commandOption
-         * @return value unless the value is "EMPTY" (defaut arg value) return empty value ("").
-         */
-        QString getValueString(QCommandLineParser & parser, QCommandLineOption & commandOption);
+        // silent mode
+        QCommandLineOption silentOption;
 
-        /**
-         * @brief Return true is value is empty : not definid in arg of parser line
-         * @param value
-         * @return
-         */
-        bool isEmptyValue(QString value);
+        // data location
+        QCommandLineOption installLocationOption;
+        QCommandLineOption dataLocationOption;
 
-        /**
-         * @brief Parse bool value
-         * @param value
-         * @return
-         */
-        bool parseBool(QString value);
+        // proxy configuration
+        QCommandLineOption proxyUsedOption;
+        QCommandLineOption proxyHostnameOption;
+        QCommandLineOption proxyPortOption;
+        QCommandLineOption proxyLoginOption;
+        QCommandLineOption proxyPasswordOption;
 
-        /**
-         * @brief Parse bool value with default value when value is EMPTY (no set in command)
-         * @param value
-         * @return
-         */
-        bool parseBoolWithDefaultValue(QString value, bool defaultValue);
+        // locale
+        QCommandLineOption localeOption;
 
-        QString m_silent;
-        QString m_installLocation;
-        QString m_dataLocation;
-        QString m_proxyAuto;
-        QString m_proxyHostname;
-        QString m_proxyPort;
-        QString m_proxyLogin;
-        QString m_proxyPassword;
-        QString m_language;
-        QString m_runApp;
-        QString m_runAtStart;
-        QString m_offlineShortcut;
-        QString m_shortcut;
-        QString m_allUserShortcut;
+        // start and shortcut
+        QCommandLineOption noRunAppOption;
+        QCommandLineOption runAtStartOption;
+        QCommandLineOption createOfflineShortcutOption;
+        QCommandLineOption createAllUserShortcutOption;
 };
 
-#endif // INSTALLER__COMMANDLINEPARSER_H
+#endif
