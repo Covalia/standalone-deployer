@@ -59,12 +59,10 @@ LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnett
 FORMS += ui/askpopup.ui
 FORMS += ui/authenticationdialog.ui
 FORMS += ui/mainwindow.ui
-FORMS += ui/splashscreen.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/gui/askpopupui.cpp
 SOURCES += src/gui/mainwindow.cpp
-SOURCES += src/gui/splashscreen.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/network/downloadmanager.cpp
 SOURCES += src/updater/appupdater.cpp
@@ -79,7 +77,6 @@ SOURCES += src/xml/deploymentxml.cpp
 
 HEADERS += src/gui/askpopupui.h
 HEADERS += src/gui/mainwindow.h
-HEADERS += src/gui/splashscreen.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h
 HEADERS += src/updater/appupdater.h

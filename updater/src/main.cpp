@@ -4,7 +4,6 @@
 #include <QtDebug>
 
 #include "gui/mainwindow.h"
-#include "gui/splashscreen.h"
 #include "gui/style/stylemanager.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
