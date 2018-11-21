@@ -4,7 +4,7 @@
 #include "log/logger.h"
 #include <QFile>
 
-const QString DeploymentXML::RDeploymentTag("deployment");
+const QString DeploymentXML::DeploymentTag("deployment");
 const QString DeploymentXML::DownloadsTag("downloads");
 const QString DeploymentXML::JarTag("jar");
 
@@ -17,7 +17,7 @@ const QString DeploymentXML::OsAnyValue("Any");
 const QString DeploymentXML::NativeAttribute("native");
 const QString DeploymentXML::HrefAttribute("href");
 const QString DeploymentXML::HashAttribute("hash");
-const QString DeploymentXML::MainAttribute("main");
+const QString DeploymentXML::ClasspathAttribute("classpath");
 
 const QString DeploymentXML::ApplicationTag("application");
 const QString DeploymentXML::FileTag("file");
@@ -96,7 +96,7 @@ QList<Download> DeploymentXML::getDownloads() const
 #endif
 
     QListIterator<Download> iterator(m_downloads);
-    while(iterator.hasNext()) {
+    while (iterator.hasNext()) {
         const Download & download = iterator.next();
         if (download.getOs() == osValue || download.getOs() == OsAnyValue) {
             downloads.append(download);
@@ -153,7 +153,7 @@ bool DeploymentXML::processDeployment()
         return false;
     }
 
-    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != RDeploymentTag) {
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != DeploymentTag) {
         return false;
     }
 
@@ -334,7 +334,7 @@ Download DeploymentXML::processDownload()
     QString hashMac = "";
     QString os = OsAnyValue;
     bool native = false;
-    bool main = false;
+    bool inClasspath = false;
     QString version = "";
 
     if (m_xmlReader.attributes().hasAttribute(HrefAttribute)) {
@@ -358,13 +358,13 @@ Download DeploymentXML::processDownload()
         native = true;
     }
 
-    if (m_xmlReader.attributes().hasAttribute(MainAttribute) && m_xmlReader.attributes().value(MainAttribute).toString() == "true") {
-        main = true;
+    if (m_xmlReader.attributes().hasAttribute(ClasspathAttribute) && m_xmlReader.attributes().value(ClasspathAttribute).toString() == "true") {
+        inClasspath = true;
     }
 
     if (m_xmlReader.attributes().hasAttribute(VersionAttribute)) {
         version = m_xmlReader.attributes().value(VersionAttribute).toString();
     }
 
-    return Download(href, hashMac, os, version, native, main);
+    return Download(href, hashMac, os, version, native, inClasspath);
 } // DeploymentXML::processDownload

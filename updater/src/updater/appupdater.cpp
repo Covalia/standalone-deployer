@@ -418,7 +418,7 @@ void AppUpdater::applicationDownloadFinished()
                 while (iterator.hasNext()) {
                     const Download & download = iterator.next();
 
-                    if (download.isMain() || (!download.isNative() && download.getOs() == DeploymentXML::getCurrentOsValue())) {
+                    if (download.isInClasspath() || (!download.isNative() && download.getOs() == DeploymentXML::getCurrentOsValue())) {
                         const QString fileToExtract = m_appPath.getAppDir().absoluteFilePath(download.getHref());
                         const QString relativeFile = installDir.relativeFilePath(fileToExtract);
                         L_INFO("Add " + relativeFile + " to classpath.");

@@ -5,13 +5,13 @@ Download::Download(QString _href,
                    QString _os,
                    QString _version,
                    bool _native,
-                   bool _main) :
+                   bool _inClasspath) :
     m_href(_href),
     m_hashMac(_hashMac),
     m_os(_os),
     m_version(_version),
     m_native(_native),
-    m_main(_main)
+    m_inClasspath(_inClasspath)
 {
 }
 
@@ -40,7 +40,7 @@ bool Download::isNative() const
     return m_native;
 }
 
-bool Download::isMain() const
+bool Download::isInClasspath() const
 {
-    return m_main;
+    return m_inClasspath;
 }

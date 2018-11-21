@@ -48,7 +48,7 @@ class DeploymentXML : public QObject
 
         static QString getCurrentOsValue();
 
-        static const QString RDeploymentTag;
+        static const QString DeploymentTag;
         static const QString DownloadsTag;
         static const QString JarTag;
 
@@ -61,7 +61,7 @@ class DeploymentXML : public QObject
         static const QString NativeAttribute;
         static const QString HrefAttribute;
         static const QString HashAttribute;
-        static const QString MainAttribute;
+        static const QString ClasspathAttribute;
 
         static const QString ApplicationTag;
         static const QString FileTag;
@@ -93,7 +93,7 @@ class DeploymentXML : public QObject
         QList<Download> m_downloads;
 
         /**
-         * @brief read deplyment tag in xml (main tag)
+         * @brief read deployment tag in xml (main tag)
          * @return true if success analysis
          */
         bool processDeployment();

@@ -17,18 +17,18 @@ class Download
                  QString _os,
                  QString _version,
                  bool _native,
-                 bool _main);
+                 bool _inClasspath);
 
         QString getHref() const;
         HashMacString getHashMac() const;
         QString getOs() const;
         QString getVersion() const;
         bool isNative() const;
-        bool isMain() const;
+        bool isInClasspath() const;
 
         operator QString() const {
             return "Download [href=" + m_href + ", hashMac=" + m_hashMac.shortHashMac() + ", os=" + m_os
-                   + ", version=" + m_version + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_main) + "]";
+                   + ", version=" + m_version + ", native=" + QString::number(m_native) + ", main=" + QString::number(m_inClasspath) + "]";
         }
 
     private:
@@ -37,7 +37,7 @@ class Download
         QString m_os;
         QString m_version;
         bool m_native;
-        bool m_main;
+        bool m_inClasspath;
 };
 
 #endif // ifndef UPDATER__DOWNLOAD_H
