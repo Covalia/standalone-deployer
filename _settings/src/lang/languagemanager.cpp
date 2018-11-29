@@ -20,7 +20,7 @@ void LanguageManager::updateLocale(const QString &_locale)
 {
     L_INFO("Language init : locale=" + _locale);
     qApp->removeTranslator(&translator);
-    QString location = ":/translations";
+    const QString location = ":/translations";
 
     L_INFO("Loading translator");
     if (translator.load(_locale, location)) {

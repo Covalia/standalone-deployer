@@ -275,7 +275,7 @@ void AppUpdater::applicationDownloadFinished()
                     if (installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename)) {
                         L_INFO("Need a restart for Updater.");
                         // restart process
-                        QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
+                        const QStringList args = CommandLineSingleton::getInstance()->getAllArguments();
                         if (m_appPath.startLoader(args)) {
                             if (CommandLineSingleton::getInstance()->isDebugMode()) {
                                 // debug mode, print args
@@ -604,7 +604,7 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
 
         QDirIterator it(dir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot | QDir::Hidden, QDirIterator::Subdirectories);
         while (it.hasNext()) {
-            QString filename = dir.relativeFilePath(it.next());
+            const QString filename = dir.relativeFilePath(it.next());
 
             // startWith tests use hardcoded "/" instead of QDir::separator() because
             // on windows, filename variable still contains "/", so tests will fail
@@ -708,7 +708,7 @@ void AppUpdater::processCnlpDownloadFileList()
     const QString hash_key = KeyManager::readHashKey();
 
     // list of all local files (installed and in temporary directory)
-    QMultiMap<Application, QString> allLocalFiles = AppUpdater::getLocalFiles();
+    const QMultiMap<Application, QString> allLocalFiles = AppUpdater::getLocalFiles();
 
     // iterate over files read from cnlp files
     QSetIterator<Application> applicationIterator(QSet<Application>::fromList(m_cnlpParsedFiles.keys()));
@@ -750,7 +750,7 @@ void AppUpdater::processCnlpDownloadFileList()
 
                 // must be true but we test anyway
                 if (QFile::exists(localFile)) {
-                    HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                    const HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
                     L_INFO("Local file: " + localFile + " has hashmac: " + hashmac.shortHashMac());
 
                     if (hashmac == parsedDownload.getHashMac()) {
@@ -827,12 +827,12 @@ bool AppUpdater::checkDownloadsAreOk() const
             }
 
             // temporary location of downloaded file
-            QString localFile = dir.absoluteFilePath(downloadedFile);
+            const QString localFile = dir.absoluteFilePath(downloadedFile);
 
             if (QFile::exists(localFile)) {
                 // if this local temporary file exists
                 // checking its hashmac
-                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                const HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
                 // we find the download corresponding to the downloadedFile to get its expected hashmac
                 bool found = false;
@@ -1151,7 +1151,7 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
             if (QFile::exists(localFile)) {
                 // if this local temporary file exists
                 // checking its hashmac
-                HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
+                const HashMacString hashmac = HashMac512::hashFromFile(localFile, hash_key);
 
                 // we find the download corresponding to the downloadedFile to get its expected hashmac
                 QListIterator<Download> parsedIterator(_cnlpParsedFiles.values(application));

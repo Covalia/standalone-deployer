@@ -35,7 +35,7 @@ void AppPathImpl::setInstallationDir(QDir _path)
 
 bool AppPathImpl::createDirectoryIfNotExist()
 {
-    QDir directory(m_installationDir);
+    const QDir directory(m_installationDir);
 
     if (!directory.exists()) {
         return QDir().mkpath(directory.absolutePath());
@@ -349,8 +349,8 @@ bool AppPathImpl::prepareUpdater(QString _version)
 
 bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
 {
-    QDir javaVersionDir = getJavaVersionDir(_version);
-    QDir javaDistDir = getJavaDistDir(_version);
+    const QDir javaVersionDir = getJavaVersionDir(_version);
+    const QDir javaDistDir = getJavaDistDir(_version);
 
     L_INFO("Java version path: " + javaVersionDir.absolutePath());
 
@@ -518,7 +518,7 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
 
 QString AppPathImpl::getDataPathFromInstallPath(const QString &_installPath)
 {
-    QDir installDir(_installPath);
+    const QDir installDir(_installPath);
 
     return installDir.absoluteFilePath(IOConfig::DataDir);
 }

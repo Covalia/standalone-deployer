@@ -25,9 +25,9 @@ bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _short
 {
     L_INFO("Will create desktop shortcut");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
-    QFile shortcutFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + QDir::separator() + _shortcutName + ".lnk");
-    QDir installDir = _appPath.getInstallationDir();
-    QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
+    const QFile shortcutFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + QDir::separator() + _shortcutName + ".lnk");
+    const QDir installDir = _appPath.getInstallationDir();
+    const QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
     return createShortcut(shortcutFile, *loaderFile, _args, installDir, iconFile, _applicationName);
 }
 
@@ -35,8 +35,8 @@ bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcut
 {
     L_INFO("Will create shortcut in startup folder");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
-    QDir installDir = _appPath.getInstallationDir();
-    QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
+    const QDir installDir = _appPath.getInstallationDir();
+    const QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
     if (_allUser) {
 		L_INFO("All users installation");
         QFile file(findAllUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
@@ -83,15 +83,15 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
         return false;
     }
 
-    QString runApplicationPathShortcut =  _applicationName + ".lnk";
-    QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
+    const QString runApplicationPathShortcut =  _applicationName + ".lnk";
+    const QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
 
     QSharedPointer<QFile> loader = _appPath.getLoaderFile();
-    QString description = _applicationName;
-    QDir installDir = _appPath.getInstallationDir();
+    const QString description = _applicationName;
+    const QDir installDir = _appPath.getInstallationDir();
 
-    QString iconApplicationPath = _appPath.getImagesDir().absoluteFilePath("shortcut.ico");
-    QString iconConfigurationPath = _appPath.getImagesDir().absoluteFilePath("config.ico");
+    const QString iconApplicationPath = _appPath.getImagesDir().absoluteFilePath("shortcut.ico");
+    const QString iconConfigurationPath = _appPath.getImagesDir().absoluteFilePath("config.ico");
 
     QFile appShortcutIn(installDir.absoluteFilePath(runApplicationPathShortcut));
     QFile configShortcutIn(installDir.absoluteFilePath(settingsApplicationPathShortcut));
@@ -102,11 +102,11 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     if (runApplicationShortcut && configureApplicationShortcut) {
         L_INFO("Will copy shortcut into startmenu");
 
-        QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
-        QPair<bool, QString> copyApplicationShortcut = _appPath.extractResource(appShortcutIn, appShortcutOut);
+        const QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
+        const QPair<bool, QString> copyApplicationShortcut = _appPath.extractResource(appShortcutIn, appShortcutOut);
 
-        QFile configShortcutOut(applicationFolder + QDir::separator() + settingsApplicationPathShortcut);
-        QPair<bool, QString> copyConfigurationShortcut = _appPath.extractResource(configShortcutIn, configShortcutOut);
+        const QFile configShortcutOut(applicationFolder + QDir::separator() + settingsApplicationPathShortcut);
+        const QPair<bool, QString> copyConfigurationShortcut = _appPath.extractResource(configShortcutIn, configShortcutOut);
 
         if (copyApplicationShortcut.first && copyConfigurationShortcut.first) {
             L_INFO("Startmenu folder created and shortcuts copied");

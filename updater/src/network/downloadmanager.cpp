@@ -423,18 +423,18 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         //: This string refers to download speed as "12 ko/s".
         emit downloadSpeedMessage(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
 
-        qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
-        qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
+        const qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
+        const qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
 
         if (averageSpeed != 0) {
-            int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
-            int hours = remainingSeconds / 3600;
-            int minutes = (remainingSeconds - 3600 * hours) / 60;
-            int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
+            const int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
+            const int hours = remainingSeconds / 3600;
+            const int minutes = (remainingSeconds - 3600 * hours) / 60;
+            const int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
 
-            QString hoursStr = tr("%n hour(s)", "the estimated heures", hours);
-            QString minutesStr = tr("%n minute(s)", "the estimated minutes", minutes);
-            QString secondsStr = tr("%n second(s)", "the estimated seconds", seconds);
+            const QString hoursStr = tr("%n hour(s)", "the estimated heures", hours);
+            const QString minutesStr = tr("%n minute(s)", "the estimated minutes", minutes);
+            const QString secondsStr = tr("%n second(s)", "the estimated seconds", seconds);
 
             QString time;
             if (hours == 0) {
@@ -502,11 +502,11 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_ba
 {
     const QUrl url = _reply->url();
 
-    QString relativePath = url.toString().remove(0, _baseUrl.toString().size());
+    const QString relativePath = url.toString().remove(0, _baseUrl.toString().size());
 
-    QFileInfo fileInfo(_tempDir.absoluteFilePath(relativePath));
-    QDir parentDir = fileInfo.dir();
-    bool created = createDirIfNotExists(parentDir);
+    const QFileInfo fileInfo(_tempDir.absoluteFilePath(relativePath));
+    const QDir parentDir = fileInfo.dir();
+    const bool created = createDirIfNotExists(parentDir);
 
     if (created) {
         QString filename = "";
@@ -515,14 +515,14 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_ba
         if (!contentDisposition.isEmpty()) {
             L_INFO("Content-Disposition: " + contentDisposition);
             const QString searchString = "filename=";
-            int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
+            const int index = contentDisposition.indexOf(searchString, 0, Qt::CaseInsensitive);
             if (index != -1) {
                 filename = contentDisposition.mid(index + searchString.length());
             }
         }
 
         if (filename.isEmpty()) {
-            QString path = _reply->url().path();
+            const QString path = _reply->url().path();
             if (!QFileInfo(path).fileName().isEmpty()) {
                 filename = QFileInfo(path).fileName();
             } else {
