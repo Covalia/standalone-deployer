@@ -239,25 +239,23 @@ void Settings::readSettings()
 
 QString Settings::paramListString()
 {
-    QString s;
-
-    s = s + "app_name = " + m_appName + "\n";
-    s = s + "updater_version = " + m_updaterVersion + "\n";
-    s = s + "java_version = " + m_javaVersion + "\n";
-    s = s + "proxy_use = " + QString::number(m_proxyUsed) + "\n";
-    s = s + "proxy_hostname = " + m_proxyHostname + "\n";
-    s = s + "proxy_port = " + QString::number(m_proxyPort) + "\n";
-    s = s + "proxy_login = " + m_proxyLogin + "\n";
-    s = s + "proxy_password (encrypted) = " + m_proxyPassword + "\n";
-    s = s + "locale = " + m_locale + "\n";
-    s = s + "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
-    s = s + "shortcut_name = " + m_shortcutName + "\n";
-    s = s + "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
-    s = s + "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
-    s = s + "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
-    s = s + "data_location = " + m_dataLocation + "\n";
-    s = s + "deployment_url = " + m_deploymentUrl + "\n";
-    s = s + "run_at_start = " + QString::number(m_runAtStart) + "\n";
+    QString s = "app_name = " + m_appName + "\n";
+    s += "updater_version = " + m_updaterVersion + "\n";
+    s += "java_version = " + m_javaVersion + "\n";
+    s += "proxy_use = " + QString::number(m_proxyUsed) + "\n";
+    s += "proxy_hostname = " + m_proxyHostname + "\n";
+    s += "proxy_port = " + QString::number(m_proxyPort) + "\n";
+    s += "proxy_login = " + m_proxyLogin + "\n";
+    s += "proxy_password (encrypted) = " + m_proxyPassword + "\n";
+    s += "locale = " + m_locale + "\n";
+    s += "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
+    s += "shortcut_name = " + m_shortcutName + "\n";
+    s += "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
+    s += "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
+    s += "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
+    s += "data_location = " + m_dataLocation + "\n";
+    s += "deployment_url = " + m_deploymentUrl + "\n";
+    s += "run_at_start = " + QString::number(m_runAtStart) + "\n";
 
     return s;
 }

@@ -61,7 +61,7 @@ bool DeploymentXML::read()
 
     m_xmlReader.setDevice(&m_xmlFile);
 
-    // TODO vérifier qu'on traite bien les erreurs XML
+    // TODO verify xml error handling
     bool result = processDeployment();
     if (!result) {
         L_ERROR("Error processing deployment file.");
@@ -289,7 +289,7 @@ bool DeploymentXML::processApplication()
     QString name = "";
     QString version = "";
 
-    // TODO check attributes et return false
+    // TODO check attributes and return false
     if (m_xmlReader.attributes().hasAttribute(NameAttribute)) {
         name = m_xmlReader.attributes().value(NameAttribute).toString();
     }
