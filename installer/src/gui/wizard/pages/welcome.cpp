@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/welcome.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -32,6 +33,8 @@ int WelcomePage::nextId() const
 
 void WelcomePage::retranslateUi()
 {
+	L_INFO("WelcomePage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText).arg(m_appName));

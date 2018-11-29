@@ -1,5 +1,4 @@
 #include "gui/forms/windowui.h"
-
 #include "gui/forms/askpopupui.h"
 #include "lang/languagemanager.h"
 #include "log/logger.h"
@@ -140,6 +139,8 @@ void WindowUI::comboBoxLanguageEvent(int _index)
 
 void WindowUI::retranslateUi()
 {
+	L_INFO("WindowUI::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     m_titleLabel->setText(translate_helper(className, m_titleLabelText).arg(m_appName));

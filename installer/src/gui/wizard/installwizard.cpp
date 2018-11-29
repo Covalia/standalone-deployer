@@ -1,7 +1,6 @@
 #include <QtWidgets>
 #include <QtDebug>
 #include "gui/wizard/installwizard.h"
-
 #include "gui/wizard/pages/welcome.h"
 #include "gui/wizard/pages/license.h"
 #include "gui/wizard/pages/type.h"
@@ -9,6 +8,7 @@
 #include "gui/wizard/pages/shortcuts.h"
 #include "gui/wizard/pages/proxy.h"
 #include "gui/wizard/pages/launch.h"
+#include "log/logger.h"
 
 InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAllowed, QWidget * parent) : QWizard(parent),
     m_nextButtonText(QT_TR_NOOP("Next >")),
@@ -185,6 +185,8 @@ void InstallWizard::keyPressEvent(QKeyEvent * _event)
 
 void InstallWizard::retranslateUi()
 {
+	L_INFO("InstallWizard::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setButtonText(QWizard::NextButton, translate_helper(className, m_nextButtonText));

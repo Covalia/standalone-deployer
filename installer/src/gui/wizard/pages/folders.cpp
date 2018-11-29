@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/folders.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -121,6 +122,8 @@ QString FoldersPage::fileChooserDialog(QString directory)
 
 void FoldersPage::retranslateUi()
 {
+	L_INFO("FoldersPage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText));

@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/launch.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -25,6 +26,8 @@ int LaunchPage::nextId() const
 
 void LaunchPage::retranslateUi()
 {
+	L_INFO("LaunchPage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText));

@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/type.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -42,6 +43,8 @@ int TypePage::nextId() const
 
 void TypePage::retranslateUi()
 {
+	L_INFO("TypePage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText));

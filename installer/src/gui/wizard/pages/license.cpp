@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/license.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -46,6 +47,8 @@ int LicensePage::nextId() const
 
 void LicensePage::retranslateUi()
 {
+	L_INFO("LicensePage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText));

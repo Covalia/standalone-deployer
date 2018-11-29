@@ -1,5 +1,6 @@
 #include "gui/wizard/pages/proxy.h"
 #include "gui/wizard/installwizard.h"
+#include "log/logger.h"
 
 #include <QtWidgets>
 
@@ -108,6 +109,8 @@ void ProxyPage::updateVisibleFields()
 
 void ProxyPage::retranslateUi()
 {
+	L_INFO("ProxyPage::retranslateUi() called");
+
     const QString className = metaObject()->className();
 
     setTitle(translate_helper(className, m_titleText));

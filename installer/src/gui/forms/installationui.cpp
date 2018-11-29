@@ -1,6 +1,5 @@
 #include "gui/forms/installationui.h"
 #include "ui_installation.h"
-
 #include "log/logger.h"
 
 InstallationUI::InstallationUI(QWidget * _parent) :
@@ -28,5 +27,7 @@ InstallationUI::~InstallationUI()
 
 void InstallationUI::retranslateUi()
 {
+	L_INFO("InstallationUI::retranslateUi() called");
+
     m_ui->retranslateUi(this);
 }

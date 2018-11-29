@@ -1,5 +1,6 @@
 #include "endinstallationui.h"
 #include "ui_endinstallation.h"
+#include "log/logger.h"
 
 EndInstallationUI::EndInstallationUI(QWidget * _parent) :
     QWidget(_parent),
@@ -46,6 +47,8 @@ void EndInstallationUI::closeInstallationEvent()
 
 void EndInstallationUI::retranslateUi()
 {
+	L_INFO("EndInstallationUI::retranslateUi() called");
+
     if (!m_errors.isEmpty()) {
         QString errorMessage = "";
         for (QStringList::iterator it = m_errors.begin(); it != m_errors.end(); ++it) {
