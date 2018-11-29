@@ -16,7 +16,7 @@ InstallationUI::InstallationUI(QWidget * _parent) :
 
     m_ui->labelGif->setMovie(movie);
 
-    L_INFO("Start gif animation");
+    L_INFO("Start animation movie");
     movie->start();
 }
 

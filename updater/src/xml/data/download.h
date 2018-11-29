@@ -40,4 +40,4 @@ class Download
         bool m_inClasspath;
 };
 
-#endif // ifndef UPDATER__DOWNLOAD_H
+#endif

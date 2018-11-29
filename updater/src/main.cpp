@@ -72,6 +72,7 @@ int main(int argc, char * argv[])
 
     // init language with locale in settings
     LanguageManager::updateLocale(settings->getLocale());
+	L_INFO("Updated locale with: " + settings->getLocale());
 
     QStringList arguments = qApp->arguments();
     arguments.removeFirst();
@@ -87,4 +88,4 @@ int main(int argc, char * argv[])
     window.center();
 
     return app.exec();
-} // main
+}

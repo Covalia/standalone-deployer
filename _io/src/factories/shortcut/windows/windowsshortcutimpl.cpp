@@ -23,7 +23,7 @@ WindowsShortcutImpl::~WindowsShortcutImpl()
 
 bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _shortcutName, QString _args, QString _applicationName)
 {
-    L_INFO("Start preparation of desktop shortcut");
+    L_INFO("Will create desktop shortcut");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
     QFile shortcutFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + QDir::separator() + _shortcutName + ".lnk");
     QDir installDir = _appPath.getInstallationDir();
@@ -33,14 +33,16 @@ bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _short
 
 bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _applicationName)
 {
-    L_INFO("Start creation shortcut in startup folder to run at computer start");
+    L_INFO("Will create shortcut in startup folder");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
     QDir installDir = _appPath.getInstallationDir();
     QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
     if (_allUser) {
+		L_INFO("All users installation");
         QFile file(findAllUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
         return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
     } else {
+		L_INFO("One user installation");
         QFile file(findUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
         return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
     }
@@ -48,12 +50,14 @@ bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcut
 
 bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _applicationName)
 {
-    L_INFO("Start creation shortcut in startMenu folder");
+    L_INFO("Will create shortcut in startMenu folder");
     QString folderPath("");
 
-    if (_allUser) {
+    if (_allUser)
+		L_INFO("All users installation");
         folderPath = findAllUserStartMenuProgramsFolder();
     } else {
+		L_INFO("One user installation");
         folderPath = findUserStartMenuProgramFolder();
     }
 
@@ -63,19 +67,19 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     bool successCreationStartMenuFolder = _appPath.makeDirectoryIfNotExisting(QDir(folderPath + QDir::separator() + _startMenuFolderName));
 
     if (!successCreationStartMenuFolder) {
-        L_ERROR("Startmenu folder doesn't exist : " + applicationFolder +  " . Startmenu installation failure");
+        L_ERROR("Startmenu folder does not exist: " + applicationFolder +  ". Startmenu installation failed.");
         return false;
     } else {
-        L_INFO("Success Startmenu folder creation " + applicationFolder);
+        L_INFO("Startmenu folder created: " + applicationFolder);
     }
 
     QFileInfo applicationFolderInfo(applicationFolder);
     if (!applicationFolderInfo.isDir()) {
-        L_ERROR("Startmenu folder is not Dir : " + applicationFolder +  " . Startmenu installation failure");
+        L_ERROR("Startmenu folder is not a directory: " + applicationFolder +  ". Startmenu installation failed.");
         return false;
     }
     if (!applicationFolderInfo.isWritable()) {
-        L_ERROR("Startmenu folder is not writable : " + applicationFolder +  " . Startmenu installation failure");
+        L_ERROR("Startmenu folder is not writable: " + applicationFolder +  ". Startmenu installation failed.");
         return false;
     }
 
@@ -96,7 +100,7 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     bool configureApplicationShortcut = createShortcut(configShortcutIn, *loader, "-configure", installDir, iconConfigurationPath, description);
 
     if (runApplicationShortcut && configureApplicationShortcut) {
-        L_INFO("Start copie shortcut in startmenu");
+        L_INFO("Will copy shortcut into startmenu");
 
         QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
         QPair<bool, QString> copyApplicationShortcut = _appPath.extractResource(appShortcutIn, appShortcutOut);
@@ -105,10 +109,10 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
         QPair<bool, QString> copyConfigurationShortcut = _appPath.extractResource(configShortcutIn, configShortcutOut);
 
         if (copyApplicationShortcut.first && copyConfigurationShortcut.first) {
-            L_INFO("Success Startmenu folder creation and shortcuts copie");
+            L_INFO("Startmenu folder created and shortcuts copied");
             return true;
         } else {
-            // verirfy if shorcut has been moved in all user start menu programs
+            // verify if shorcut has been moved in all user start menu programs
             folderPath = findAllUserStartMenuProgramsFolder();
             applicationFolder = folderPath + QDir::separator() + _startMenuFolderName;
             if (QDir(applicationFolder).exists()) {
@@ -122,9 +126,9 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
                 }
                 return true;
             }
-            // shorcut doesn't exist, and no moved in all user start menu programs
+            // shorcut doesn't exist, and not moved in all users start menu programs
             else {
-                L_ERROR("Error when copy shortcut in startMenu folder");
+                L_ERROR("Error when copying shortcuts in startMenu folder");
                 L_ERROR(copyApplicationShortcut.second);
                 L_ERROR(copyConfigurationShortcut.second);
                 return false;
@@ -137,20 +141,24 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
 
 bool WindowsShortcutImpl::createShortcut(QFile &_shortcutFile, const QFile &_targetFile, QString _args, QDir _workingDir, const QFile &_iconFile, QString _description)
 {
-    L_INFO("Shortcut creation : shortcutFile=" + _shortcutFile.fileName() + " targetFile=" + _targetFile.fileName() + " description=" + _description + " workingDir=" + _workingDir.absolutePath() + " iconFile=" + _iconFile.fileName() + " args=" + _args);
+    L_INFO("Shortcut creation: shortcutFile=" + _shortcutFile.fileName() + " targetFile="
+			+ _targetFile.fileName() + " description=" + _description + " workingDir="
+			+ _workingDir.absolutePath() + " iconFile=" + _iconFile.fileName() + " args=" + _args);
 
     // remove file if exist
     if (_shortcutFile.exists()) {
-        L_INFO("Start remove existing shortcut " + _shortcutFile.fileName());
+        L_INFO("Removing existing shortcut: " + _shortcutFile.fileName());
         _shortcutFile.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner);
         bool remove = _shortcutFile.remove();
         if (!remove || _shortcutFile.exists()) {
-            L_ERROR("Error when remove file" + _shortcutFile.fileName());
+            L_ERROR("Unable to remove file: " + _shortcutFile.fileName());
             return false;
-        }
+        } else {
+            L_INFO("File removed: " + _shortcutFile.fileName());
+		}
     }
 
-    L_INFO("Starting shortcut creation ");
+    L_INFO("Will create shortcut");
     return createWindowsShortcut(_targetFile.fileName(), _args, _shortcutFile.fileName(), _description,
                                            _workingDir.absolutePath(), _iconFile.fileName(), 0);
 }
@@ -168,7 +176,7 @@ HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString 
                                                QString _currentDir, QString _iconFile, int _iconIndex)
 {
     if (_targetFile.isEmpty() || _linkFile.isEmpty()) {
-       L_INFO("target file or link file is empty");
+       L_WARN("Target file or link file are empty. Aborting.");
        return false;
     }
 
@@ -299,10 +307,9 @@ QString WindowsShortcutImpl::findWindowsPath(int hToken)
     HRESULT hr = SHGetFolderPathW(NULL, hToken, NULL, 0, path);
 
     if (SUCCEEDED(hr)) {
-        QString p = QString::fromWCharArray(path);
-        return p;
+        return QString::fromWCharArray(path);
     } else {
-        L_INFO("Impossible to find windows path with handle = " + QString::number(hToken));
+        L_WARN("Unable to find windows path for key: " + QString::number(hToken));
     }
     return "";
 }

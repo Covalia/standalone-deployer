@@ -67,6 +67,7 @@ bool DeploymentXML::read()
         L_ERROR("Error processing deployment file.");
     }
     m_xmlFile.close();
+	L_INFO("Closed deployment file.");
 
     return result;
 }
@@ -185,7 +186,7 @@ bool DeploymentXML::processDeployment()
     }
 
     return result;
-} // DeploymentXML::processDeployment
+}
 
 bool DeploymentXML::processVersion()
 {
@@ -367,4 +368,4 @@ Download DeploymentXML::processDownload()
     }
 
     return Download(href, hashMac, os, version, native, inClasspath);
-} // DeploymentXML::processDownload
+}

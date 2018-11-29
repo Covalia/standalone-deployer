@@ -71,4 +71,4 @@ class UIManager : public QObject
         void quitInstaller(bool _startApp);
 };
 
-#endif // INSTALLER__UIMANAGER_H
+#endif

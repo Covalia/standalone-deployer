@@ -5,14 +5,16 @@
 bool FileUtils::copyDirRecursively(const QString &_fromDir, const QString &_toDir)
 {
     if (_fromDir.isEmpty() || _toDir.isEmpty()) {
+		L_INFO("either source or destination directory name is empty.");
         return false;
     }
 
     QDir dir;
     dir.setPath(_fromDir);
 
-    L_INFO("make directory: " + _toDir);
+    L_INFO("Making directory: " + _toDir);
     if (!dir.mkpath(_toDir)) {
+		L_ERROR("Unable to make directory.");
         return false;
     }
 
@@ -24,14 +26,16 @@ bool FileUtils::copyDirRecursively(const QString &_fromDir, const QString &_toDi
             const QString to = _toDir + QDir::separator() + copy_file;
 
             if (QFile::exists(to)) {
-                L_INFO("remove file: " + to);
+                L_INFO("Removing file: " + to);
                 if (!QFile::remove(to)) {
+					L_ERROR("Unable to remove file.");
                     return false;
                 }
             }
 
-            L_INFO("copy file: " + from + " to: " + to);
+            L_INFO("Copying file: " + from + " to: " + to);
             if (!QFile::copy(from, to)) {
+				L_ERROR("Unable to copy file.");
                 return false;
             }
         }

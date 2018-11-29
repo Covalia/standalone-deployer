@@ -15,7 +15,8 @@ const QString AppPathImpl::OldDirSuffix("-old");
 
 AppPathImpl::AppPathImpl(IOConfig::AppComponent _app)
 {
-    qDebug() << "installation directory" << m_installationDir.absolutePath() << _app;
+	// logger is not yet instantiated here.
+    qDebug() << "Installation directory: " << m_installationDir.absolutePath() << _app;
 }
 
 AppPathImpl::~AppPathImpl()
@@ -491,10 +492,6 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
 
     arguments << getTempDataBuildDir().absolutePath();
     arguments << _dataLocation;
-
-    for (int i = 0; i < arguments.length(); i++) {
-        L_DEBUG(arguments.at(i));
-    }
 
     const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
     L_INFO("Java executable: " + java_command);

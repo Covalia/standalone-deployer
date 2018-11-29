@@ -18,4 +18,4 @@ class LanguageManager
         static QTranslator translator;
 };
 
-#endif // SETTINGS__LANGUAGEMANAGER_H
+#endif

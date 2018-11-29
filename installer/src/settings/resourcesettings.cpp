@@ -50,8 +50,7 @@ ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_defaultInstallationPath("$HOME"),
     m_changeDataLocationAllowed(false)
 {
-    L_INFO("Initialise ResourceSettings singleton instance");
-
+    L_INFO("Initialise ResourceSettings");
     m_settings.setFallbacksEnabled(false);
 }
 
@@ -61,8 +60,7 @@ ResourceSettings::~ResourceSettings()
 
 void ResourceSettings::readSettings()
 {
-    L_INFO("Starting to read all settings");
-
+	L_INFO("Read resource settings");
     m_deploymentUrl = m_settings.value(DeploymentUrl, m_deploymentUrl).toString();
     m_appName = m_settings.value(AppName, m_appName).toString();
     m_defaultLocale = m_settings.value(DefaultLocale, m_defaultLocale).toString();

@@ -130,8 +130,8 @@ void WindowUI::closeEvent(QCloseEvent * _event)
 
 void WindowUI::comboBoxLanguageEvent(int _index)
 {
-    L_INFO("Detect language change in language combobox");
     const QString language = m_comboBoxLanguage->itemData(_index).toString();
+    L_INFO("Detect language change in language combobox: " + language);
     if (!language.isNull() && !language.isEmpty()) {
         LanguageManager::updateLocale(language);
         emit changeLanguageSignal(language);
@@ -148,6 +148,7 @@ void WindowUI::retranslateUi()
 
 void WindowUI::setLocale(const QString &_locale)
 {
+	L_INFO("Set combobox index for locale: " + _locale);
     const int index = m_comboBoxLanguage->findData(_locale);
 
     if (index != -1) {

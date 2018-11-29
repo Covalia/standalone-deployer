@@ -33,4 +33,4 @@ class ZipExtractor : public QObject {
 
 };
 
-#endif // ifndef UPDATER__ZIPEXTRACTOR_H
+#endif

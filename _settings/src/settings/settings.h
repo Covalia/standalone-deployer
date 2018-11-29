@@ -238,4 +238,4 @@ class Settings
         QString m_proxyPassword;
 };
 
-#endif // SETTINGS__SETTINGS_H
+#endif

@@ -25,4 +25,4 @@ class InstallationUI : public QWidget, public AbstractTranslatedUi
         QMovie * movie;
 };
 
-#endif // INSTALLATIONUI_H
+#endif

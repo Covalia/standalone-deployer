@@ -96,4 +96,4 @@ class IOConfig
         static const QString LocaleEnUs;
 };
 
-#endif // ifndef IO__CONFIG_H
+#endif

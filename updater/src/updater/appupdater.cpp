@@ -333,7 +333,7 @@ void AppUpdater::applicationDownloadFinished()
                     if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
                         L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
                     } else {
-                        L_INFO("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
+                        L_ERROR("Unable to soft prepare Java " + m_remoteJavaVersion + ".");
                         javaInstalledOk = false;
                     }
                 }
@@ -647,7 +647,6 @@ QList<QString> AppUpdater::getLocalFiles(const Application &_application)
                 continue;
             }
 
-            // TODO check la valeur de filename
             // and application/natives/
             if (_application == Application::getAppApplication()
                 && filename.startsWith(AppPathImpl::NativesDirName + "/")) {

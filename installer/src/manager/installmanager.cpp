@@ -9,7 +9,6 @@
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
-#include <QtDebug>
 
 #include "log/logger.h"
 #include "factories/shortcut/shortcut.h"
@@ -37,6 +36,7 @@ InstallManager::InstallManager() : QThread(),
     m_runAtStart(false),
     m_createOfflineShortcut(false)
 {
+	L_INFO("Init InstallManager");
     // init project resources
     m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
     m_projectSettings->readSettings();
@@ -247,17 +247,17 @@ void InstallManager::run()
         m_locale = m_uiManager->getLocale();
     }
 
-    qDebug() << ">>>>> m_installLocation: " << m_installLocation;
-    qDebug() << ">>>>> m_dataLocation: " << m_dataLocation;
-    qDebug() << ">>>>> m_proxyUsed: " << QString(m_proxyUsed ? "yes" : "no");
-    qDebug() << ">>>>> m_proxyHostname:" << m_proxyHostname;
-    qDebug() << ">>>>> m_proxyPort:" << m_proxyPort;
-    qDebug() << ">>>>> m_proxyLogin:" << m_proxyLogin;
-    qDebug() << ">>>>> m_proxyPassword:" << m_proxyPassword;
-    qDebug() << ">>>>> m_locale: " << m_locale;
-    qDebug() << ">>>>> m_runApp: " << QString(m_runApp ? "yes" : "no");
-    qDebug() << ">>>>> m_runAtStart: " << QString(m_runAtStart ? "yes" : "no");
-    qDebug() << ">>>>> m_createOfflineShortcut: " << QString(m_createOfflineShortcut ? "yes" : "no");
+    L_INFO("installLocation: " + m_installLocation);
+    L_INFO("dataLocation: " + m_dataLocation);
+    L_INFO("proxyUsed: " + QString(m_proxyUsed ? "yes" : "no"));
+    L_INFO("proxyHostname:" + m_proxyHostname);
+    L_INFO("proxyPort:" + m_proxyPort);
+    L_INFO("proxyLogin:" + m_proxyLogin);
+    // no print of proxyPassword
+    L_INFO("locale: " + m_locale);
+    L_INFO("runApp: " + QString(m_runApp ? "yes" : "no"));
+    L_INFO("runAtStart: " + QString(m_runAtStart ? "yes" : "no"));
+    L_INFO("createOfflineShortcut: " + QString(m_createOfflineShortcut ? "yes" : "no"));
 
     m_appPath.setInstallationDir(QDir(m_installLocation));
 
@@ -279,9 +279,7 @@ void InstallManager::run()
 
 void InstallManager::startInstallation()
 {
-    L_INFO("End of parameters initialization");
-
-    L_INFO("Settings before start installation  : \n********\n" + m_settings->paramListString() + "********\n");
+    L_INFO("Settings before installation start:\n********\n" + m_settings->paramListString() + "********\n");
 
     QStringList errorMessages;
 
@@ -332,6 +330,7 @@ void InstallManager::startInstallation()
             L_INFO("Success Installation");
             emit endInstallation(success, errorMessages);
         } else {
+			L_ERROR("Installation error");
             emit endInstallation(success, errorMessages);
         }
     } else {
@@ -358,13 +357,13 @@ bool InstallManager::cleanInstallationFolders()
 
 bool InstallManager::createInstallationFolders()
 {
-    L_INFO("Start the installation in directory : " + m_settings->getDataLocation());
+    L_INFO("Start the installation in directory: " + m_settings->getDataLocation());
 
     if (!m_appPath.createDirectoryIfNotExist()) {
-        L_ERROR("Error when create installation folder ");
+        L_ERROR("Error while creating installation folder.");
         return false;
     } else {
-        L_INFO("Succes of installation folder verification ");
+        L_INFO("Installation folder created.");
 
         // trying to clean old directories.
         if (!cleanInstallationFolders()) {
@@ -373,7 +372,7 @@ bool InstallManager::createInstallationFolders()
         }
 
         if (!m_appPath.makeAppDirectories()) {
-            L_ERROR("Error when create sub-installation folder (application tree) ");
+            L_ERROR("Error when create sub-installation folder (application tree).");
             return false;
         }
 
@@ -409,7 +408,7 @@ bool InstallManager::createIniConfigurationFile()
     m_settings->initSettings(*installFilePath);
 
     if (!m_settings->isWritable()) {
-        L_ERROR("File configuration is no writable. It's impossible to write ini configurlation file in path = " + installFilePath->fileName());
+        L_ERROR("File configuration is no writable. It's impossible to write ini configuration file in path = " + installFilePath->fileName());
         return false;
     }
 
@@ -567,6 +566,7 @@ bool InstallManager::launchLoader()
 void InstallManager::closeInstallation(bool _launchApplication)
 {
     if (_launchApplication) {
+		L_INFO("Application must be started.");
         launchLoader();
     }
     L_INFO("End treatment, close application");

@@ -55,4 +55,4 @@ class MainWindow : public QMainWindow
         void loadSlideShowImagesFromResources();
 };
 
-#endif // ifndef UPDATER__MAINWINDOW_H
+#endif

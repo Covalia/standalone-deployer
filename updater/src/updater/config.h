@@ -38,4 +38,4 @@ public:
 
 };
 
-#endif // ifndef UPDATER__CONFIG_H
+#endif

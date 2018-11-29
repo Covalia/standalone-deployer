@@ -19,4 +19,4 @@ class LoaderManager : public QObject
         void closeAppSignal();
 };
 
-#endif // LOADERMANAGER_H
+#endif

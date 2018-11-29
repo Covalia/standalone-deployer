@@ -11,7 +11,9 @@ QTranslator LanguageManager::translator;
 
 QString LanguageManager::getSystemLocale()
 {
-    return QLocale::system().name();
+	const QString locale = QLocale::system().name();
+	L_INFO("System Locale detected: " + locale);
+	return locale;
 }
 
 void LanguageManager::updateLocale(const QString &_locale)
@@ -25,6 +27,6 @@ void LanguageManager::updateLocale(const QString &_locale)
         L_INFO("Loading translator Finished");
         qApp->installTranslator(&translator);
     } else {
-        L_INFO("Could not intall translations " + _locale);
+        L_INFO("Could not intall translation " + _locale);
     }
 }

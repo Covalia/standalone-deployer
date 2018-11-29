@@ -31,4 +31,4 @@ class AskPopupUI : public QDialog
         void noEvent();
 };
 
-#endif // INSTALLER__ASKPOPUP_H
+#endif

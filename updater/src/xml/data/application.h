@@ -112,4 +112,4 @@ inline uint qHash(const Application &_key, uint _seed)
            ^ qHash(_key.getCnlpLocalFileName(), _seed);
 }
 
-#endif // ifndef UPDATER__APPLICATION_H
+#endif

@@ -165,4 +165,4 @@ class DeploymentXML : public QObject
         QString readNextText();
 };
 
-#endif // ifndef UPDATER__DEPLOYMENTXML_H
+#endif

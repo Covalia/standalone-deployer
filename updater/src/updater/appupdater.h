@@ -91,4 +91,4 @@ signals:
     void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 };
 
-#endif // ifndef UPDATER__APPUPDATER_H
+#endif

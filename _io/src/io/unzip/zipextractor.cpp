@@ -36,12 +36,20 @@ void ZipExtractor::extract()
 
         if (directory.exists()) {
             L_INFO("Java version directory already exists, removing content.");
-            directory.removeRecursively();
+            if (directory.removeRecursively()) {
+				L_INFO("Directory successfully removed.");
+			} else {
+				L_WARN("Error while removing directory.");
+			}
         }
 
         if (!directory.exists()) {
             L_INFO("Java version directory does not exist, creating.");
-            QDir().mkpath(directory.absolutePath());
+            if (QDir().mkpath(directory.absolutePath())) {
+				L_INFO("Directory successfully created.");
+			} else {
+				L_ERROR("Error while creating directory.");
+			}
         }
 
         L_INFO("Starting extraction...");
@@ -51,7 +59,7 @@ void ZipExtractor::extract()
         L_ERROR("Extractor is not defined.");
         emit error();
     }
-} // ZipExtractor::extract
+}
 
 void ZipExtractor::extract_success()
 {
@@ -83,7 +91,7 @@ void ZipExtractor::extract_error(short _errorCode, const QString &_file)
     ok = false;
     emit error();
     emit finished();
-} // ZipExtractor::extract_error
+}
 
 bool ZipExtractor::isOk() const
 {

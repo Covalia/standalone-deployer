@@ -58,4 +58,4 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
         void comboBoxLanguageEvent(int _index);
 };
 
-#endif // INSTALLER__WINDOW_H
+#endif

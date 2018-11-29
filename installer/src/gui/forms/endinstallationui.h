@@ -34,4 +34,4 @@ class EndInstallationUI : public QWidget, public AbstractTranslatedUi
         void quitInstaller(bool _startApp);
 };
 
-#endif // ENDINSTALLATIONUI_H
+#endif
