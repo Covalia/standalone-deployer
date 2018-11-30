@@ -20,7 +20,7 @@ int main(int argc, char * argv[])
     new Logger(appPath.getLogsDir().absoluteFilePath("loader.log"));
 
     QSharedPointer<QFile> settingsPath = appPath.getConfigurationFile();
-    L_INFO("Start read settings in " +  settingsPath->fileName());
+    L_INFO(QString("Start read settings in %1").arg(settingsPath->fileName()));
 
     Settings * settings = Settings::getInstance();
     settings->initSettings(*settingsPath);

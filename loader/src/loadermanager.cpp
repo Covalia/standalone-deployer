@@ -21,16 +21,16 @@ bool LoaderManager::launchUpdater()
 
     AppPath appPath = Utils::getAppPath();
 
-    L_INFO("Install location = " + appPath.getInstallationDir().absolutePath());
+    L_INFO(QString("Install location: %1").arg(appPath.getInstallationDir().absolutePath()));
 
     QStringList args = qApp->arguments();
     args.removeFirst();
 
     if (args.contains("--debug")) {
-        L_INFO("Loader Arguments = " + args.join(" "));
+        L_INFO(QString("Loader Arguments: %1").arg(args.join(" ")));
     }
 
-    L_INFO("Starting Updater " + settings->getUpdaterVersion());
+    L_INFO(QString("Starting Updater: %1").arg(settings->getUpdaterVersion()));
     bool success = appPath.startUpdater(settings->getUpdaterVersion(), args);
     if (!success) {
         L_ERROR("Error when launching updater");

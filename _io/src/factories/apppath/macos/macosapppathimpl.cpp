@@ -73,40 +73,40 @@ bool MacosAppPathImpl::extractAppFromDmgIfNotExist(const QString &_appName, cons
 {
     bool result = true;
 
-    L_INFO(_appName + " dmg path: " + _dmgPath.fileName());
-    L_INFO(_appName + " app path: " + _appPath.fileName());
-    L_INFO(_appName + " app in dmg path: " + _appInDmgPath);
+    L_INFO(QString("%1 dmg path: %2").arg(_appName).arg(_dmgPath.fileName()));
+    L_INFO(QString("%1 app path: %2").arg(_appName).arg(_appPath.fileName()));
+    L_INFO(QString("%1 app in dmg path: %2").arg(_appName).arg(_appInDmgPath));
 
     if (_forceOverwrite) {
-        L_INFO(_appName + " force overwrite");
+        L_INFO(QString("%1 force overwrite").arg(_appName));
         if (FileUtils::removeDirRecursively(_appPath.fileName())) {
-            L_INFO(_appName + " app removed: " + _appPath.fileName());
+            L_INFO(QString("%1 app removed: %2").arg(_appName).arg(_appPath.fileName()));
         } else {
-            L_ERROR(_appName + " app cannot be removed: " + _appPath.fileName());
+            L_ERROR(QString("%1 app cannot be removed: %2").arg(_appName).arg(_appPath.fileName()));
         }
     }
 
     if (!FileUtils::directoryExists(_appPath.fileName())) {
-        L_INFO(_appName + " app does not exist: " + _appPath.fileName());
+        L_INFO(QString("%1 app does not exist: %2").arg(_appName).arg(_appPath.fileName()));
         if (openDmgFile(_dmgPath)) {
-            L_INFO("Opening " + _appName + " dmg");
+            L_INFO(QString("Opening %1 dmg").arg(_appName));
             if (FileUtils::copyDirRecursively(_appInDmgPath, _appPath.fileName())) {
-                L_INFO(_appName + " app copied from dmg");
+                L_INFO(QString("%1 app copied from dmg").arg(_appName));
             } else {
-                L_ERROR("Error while copying " + _appName + " app from dmg");
+                L_ERROR(QString("Error while copying %1 app from dmg").arg(_appName));
                 result = false;
             }
             if (closeDmgFile(_dmgPath)) {
-                L_INFO("Success closing " + _appName + " dmg");
+                L_INFO(QString("Success closing %1 dmg").arg(_appName));
             } else {
-                L_ERROR("Error while closing " + _appName + " dmg");
+                L_ERROR(QString("Error while closing %1 dmg").arg(_appName));
             }
         } else {
-            L_ERROR("Error while opening " + _appName + " dmg");
+            L_ERROR(QString("Error while opening %1 dmg").arg(_appName));
             result = false;
         }
     } else {
-        L_INFO(_appName + " app already exists: " + _appPath.fileName());
+        L_INFO(QString("%1 app already exists: %2").arg(_appName).arg(_appPath.fileName()));
     }
     return result;
 }

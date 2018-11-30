@@ -39,22 +39,22 @@ CommandLineParser::CommandLineParser() :
 
     L_INFO("Parsing command line arguments");
 
-    L_INFO("Args: " + QCoreApplication::arguments().join(", "));
+    L_INFO(QString("Args: %1").arg(QCoreApplication::arguments().join(", ")));
     parser.process(QCoreApplication::arguments());
 
     L_INFO("Parsed values");
-    L_INFO("silent: " + QString(parser.isSet(silentOption) ? "yes" : "no"));
-    L_INFO("installLocation: " + parser.value(installLocationOption));
-    L_INFO("dataLocation: " + parser.value(dataLocationOption));
-    L_INFO("useProxy:" + QString(parser.isSet(proxyUsedOption) ? "yes" : "no"));
-    L_INFO("proxyHostname: " + parser.value(proxyHostnameOption));
-    L_INFO("proxyPort: " + parser.value(proxyPortOption));
-    L_INFO("proxyLogin: " + parser.value(proxyLoginOption));
-    L_INFO("locale: " + parser.value(localeOption));
-    L_INFO("noRunApp: " + QString(parser.isSet(noRunAppOption) ? "yes" : "no"));
-    L_INFO("runAtStart: " + QString(parser.isSet(runAtStartOption) ? "yes" : "no"));
-    L_INFO("createOfflineShortcut: " + QString(parser.isSet(createOfflineShortcutOption) ? "yes" : "no"));
-    L_INFO("createAllUserShortcut: " + QString(parser.isSet(createAllUserShortcutOption) ? "yes" : "no"));
+    L_INFO(QString("silent: %1").arg(QString(parser.isSet(silentOption) ? "yes" : "no")));
+    L_INFO(QString("installLocation: %1").arg(parser.value(installLocationOption)));
+    L_INFO(QString("dataLocation: %1").arg(parser.value(dataLocationOption)));
+    L_INFO(QString("useProxy:%1").arg(QString(parser.isSet(proxyUsedOption) ? "yes" : "no")));
+    L_INFO(QString("proxyHostname: %1").arg(parser.value(proxyHostnameOption)));
+    L_INFO(QString("proxyPort: %1").arg(parser.value(proxyPortOption)));
+    L_INFO(QString("proxyLogin: %1").arg(parser.value(proxyLoginOption)));
+    L_INFO(QString("locale: %1").arg(parser.value(localeOption)));
+    L_INFO(QString("noRunApp: %1").arg(QString(parser.isSet(noRunAppOption) ? "yes" : "no")));
+    L_INFO(QString("runAtStart: %1").arg(QString(parser.isSet(runAtStartOption) ? "yes" : "no")));
+    L_INFO(QString("createOfflineShortcut: %1").arg(QString(parser.isSet(createOfflineShortcutOption) ? "yes" : "no")));
+    L_INFO(QString("createAllUserShortcut: %1").arg(QString(parser.isSet(createAllUserShortcutOption) ? "yes" : "no")));
 }
 
 bool CommandLineParser::isRunApp() const

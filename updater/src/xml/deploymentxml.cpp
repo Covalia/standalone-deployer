@@ -55,7 +55,7 @@ DeploymentXML::~DeploymentXML()
 bool DeploymentXML::read()
 {
     if (!m_xmlFile.open(QFile::ReadOnly | QFile::Text)) {
-        L_ERROR("Cannot read file " + m_xmlFile.errorString());
+        L_ERROR(QString("Cannot read file: %1").arg(m_xmlFile.errorString()));
         return false;
     }
 

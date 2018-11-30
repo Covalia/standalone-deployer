@@ -41,7 +41,7 @@ InstallManager::InstallManager() : QThread(),
     m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
     m_projectSettings->readSettings();
 
-    L_INFO("Deployment URL: " + m_projectSettings->getDeploymentUrl());
+    L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
 
     m_settings = Settings::getInstance();
     m_settings->setAppName(m_projectSettings->getAppName());
@@ -247,17 +247,17 @@ void InstallManager::run()
         m_locale = m_uiManager->getLocale();
     }
 
-    L_INFO("installLocation: " + m_installLocation);
-    L_INFO("dataLocation: " + m_dataLocation);
-    L_INFO("proxyUsed: " + QString(m_proxyUsed ? "yes" : "no"));
-    L_INFO("proxyHostname:" + m_proxyHostname);
-    L_INFO("proxyPort:" + m_proxyPort);
-    L_INFO("proxyLogin:" + m_proxyLogin);
+    L_INFO(QString("installLocation: %1").arg(m_installLocation));
+    L_INFO(QString("dataLocation: %1").arg(m_dataLocation));
+    L_INFO(QString("proxyUsed: %1").arg(QString(m_proxyUsed ? "yes" : "no")));
+    L_INFO(QString("proxyHostname:%1").arg(m_proxyHostname));
+    L_INFO(QString("proxyPort:%1").arg(m_proxyPort));
+    L_INFO(QString("proxyLogin:%1").arg(m_proxyLogin));
     // no print of proxyPassword
-    L_INFO("locale: " + m_locale);
-    L_INFO("runApp: " + QString(m_runApp ? "yes" : "no"));
-    L_INFO("runAtStart: " + QString(m_runAtStart ? "yes" : "no"));
-    L_INFO("createOfflineShortcut: " + QString(m_createOfflineShortcut ? "yes" : "no"));
+    L_INFO(QString("locale: %1").arg(m_locale));
+    L_INFO(QString("runApp: %1").arg(QString(m_runApp ? "yes" : "no")));
+    L_INFO(QString("runAtStart: %1").arg(QString(m_runAtStart ? "yes" : "no")));
+    L_INFO(QString("createOfflineShortcut: %1").arg(QString(m_createOfflineShortcut ? "yes" : "no")));
 
     m_appPath.setInstallationDir(QDir(m_installLocation));
 
@@ -279,7 +279,7 @@ void InstallManager::run()
 
 void InstallManager::startInstallation()
 {
-    L_INFO("Settings before installation start:\n********\n" + m_settings->paramListString() + "********\n");
+    L_INFO(QString("Settings before installation start:\n********\n%1********\n").arg(m_settings->paramListString()));
 
     QStringList errorMessages;
 
@@ -357,7 +357,7 @@ bool InstallManager::cleanInstallationFolders()
 
 bool InstallManager::createInstallationFolders()
 {
-    L_INFO("Start the installation in directory: " + m_settings->getDataLocation());
+    L_INFO(QString("Start the installation in directory: %1").arg(m_settings->getDataLocation()));
 
     if (!m_appPath.createDirectoryIfNotExist()) {
         L_ERROR("Error while creating installation folder.");
@@ -404,11 +404,11 @@ bool InstallManager::createIniConfigurationFile()
 {
     QSharedPointer<QFile> installFilePath = m_appPath.getConfigurationFile();
 
-    L_INFO("Start to create param file. Path = " + installFilePath->fileName());
+    L_INFO(QString("Start to create param file. Path: %1").arg(installFilePath->fileName()));
     m_settings->initSettings(*installFilePath);
 
     if (!m_settings->isWritable()) {
-        L_ERROR("File configuration is no writable. It's impossible to write ini configuration file in path = " + installFilePath->fileName());
+        L_ERROR(QString("File configuration is no writable. It's impossible to write ini configuration file in path: %1").arg(installFilePath->fileName()));
         return false;
     }
 
@@ -417,7 +417,7 @@ bool InstallManager::createIniConfigurationFile()
     if (installFilePath->exists()) {
         return true;
     } else {
-        L_ERROR("An error occurred on the configuration file " + installFilePath->fileName() + ". File is not created. ");
+        L_ERROR(QString("An error occurred on the configuration file %1. File is not created.").arg(installFilePath->fileName()));
         return false;
     }
 }

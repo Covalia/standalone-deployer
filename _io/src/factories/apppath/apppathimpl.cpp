@@ -243,7 +243,7 @@ bool AppPathImpl::makeDirectoryIfNotExisting(const QDir &_directory)
 bool AppPathImpl::cleanDir(const QString &_folder)
 {
     if (FileUtils::directoryExists(_folder)) {
-        L_INFO("Directory to clean: " + _folder);
+        L_INFO(QString("Directory to clean: %1").arg(_folder));
 
         if (FileUtils::removeDirRecursively(_folder)) {
             L_INFO("Removed");
@@ -296,14 +296,14 @@ bool AppPathImpl::cleanUpdaterDir()
 
 bool AppPathImpl::cleanExceptVersion(const QDir &_dir, const QString &_version)
 {
-    L_INFO("Cleaning: " + _dir.absolutePath() + " except: " + _version);
+    L_INFO(QString("Cleaning: %1 except: %2").arg(_dir.absolutePath()).arg(_version));
     const QFileInfoList fileInfoList = _dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
     bool success = true;
     for (int i = 0; i < fileInfoList.size(); i++) {
         const QFileInfo fileInfo = fileInfoList[i];
         if (fileInfo.fileName() != _version) {
             const QString filePath = _dir.absoluteFilePath(fileInfo.fileName());
-            L_INFO("Cleaning: " + filePath);
+            L_INFO(QString("Cleaning: %1").arg(filePath));
 
             if (fileInfo.isDir()) {
                 if (FileUtils::removeDirRecursively(filePath)) {
@@ -352,10 +352,10 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
     const QDir javaVersionDir = getJavaVersionDir(_version);
     const QDir javaDistDir = getJavaDistDir(_version);
 
-    L_INFO("Java version path: " + javaVersionDir.absolutePath());
+    L_INFO(QString("Java version path: %1").arg(javaVersionDir.absolutePath()));
 
     if (_forceOverwrite) {
-        L_INFO("Force overwrite of Java dist directory: " + javaDistDir.absolutePath());
+        L_INFO(QString("Force overwrite of Java dist directory: %1").arg(javaDistDir.absolutePath()));
         if (FileUtils::removeDirRecursively(javaDistDir.absolutePath())) {
             L_INFO("Java dist directory removed.");
         } else {
@@ -370,29 +370,29 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
         if (FileUtils::directoryExists(javaDistDir.absolutePath())) {
             // directory containing an extracted version of java exists
             // nothing to do
-            L_INFO("Java dist directory already exists. " + javaDistDir.absolutePath());
+            L_INFO(QString("Java dist directory already exists: %1").arg(javaDistDir.absolutePath()));
             return true;
         } else {
             // directory containing an extracted version of java does not exist
-            L_INFO("Java dist directory does not exist. " + javaDistDir.absolutePath());
+            L_INFO(QString("Java dist directory does not exist: %1").arg(javaDistDir.absolutePath()));
             if (QDir().mkpath(javaDistDir.absolutePath())) {
-                L_INFO("Java dist directory created: " + javaDistDir.absolutePath());
+                L_INFO(QString("Java dist directory created: %1").arg(javaDistDir.absolutePath()));
 
                 QDirIterator it(javaVersionDir.absolutePath(), QDir::Files | QDir::NoDotAndDotDot);
                 while (it.hasNext()) {
                     const QString file = javaVersionDir.relativeFilePath(it.next());
                     if (file.endsWith(".zip")) {
-                        L_INFO("Found zip to extract: " + file);
+                        L_INFO(QString("Found zip to extract: %1").arg(file));
                         // extract zip to dist
                         ZipExtractor zip(javaVersionDir.absoluteFilePath(file), javaDistDir.absolutePath());
 
                         // start extraction
                         zip.extract();
                         if (zip.isOk()) {
-                            L_INFO(javaVersionDir.absoluteFilePath(file) + " extracted to " + javaDistDir.absolutePath());
+                            L_INFO(QString("%1 extracted to %2").arg(javaVersionDir.absoluteFilePath(file)).arg(javaDistDir.absolutePath()));
                             return true;
                         } else {
-                            L_ERROR(javaVersionDir.absoluteFilePath(file) + " can not be extracted to " + javaDistDir.absolutePath());
+                            L_ERROR(QString("%1 can not be extracted to %2").arg(javaVersionDir.absoluteFilePath(file)).arg(javaDistDir.absolutePath()));
                             return false;
                         }
                         break;
@@ -402,7 +402,7 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
                 L_ERROR("No zip found.");
                 return false;
             } else {
-                L_ERROR("Unable to create Java dist directory: " + javaDistDir.absolutePath());
+                L_ERROR(QString("Unable to create Java dist directory: %1").arg(javaDistDir.absolutePath()));
                 return false;
             }
         }
@@ -428,11 +428,11 @@ bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
 bool AppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
 {
     if (!_app->exists()) {
-        L_ERROR("An error occured when launching " + _app->fileName() + ". The exe file doesn't exist.");
+        L_ERROR(QString("An error occured when launching %1. The exe file doesn't exist.").arg(_app->fileName()));
         return false;
     }
 
-    L_INFO("Launching file " + _app->fileName());
+    L_INFO(QString("Launching file %1").arg(_app->fileName()));
     QProcess process;
     return process.startDetached(_app->fileName(), _args);
 }
@@ -459,7 +459,7 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
     arguments << _arguments;
 
     const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
-    L_INFO("Java executable: " + java_command);
+    L_INFO(QString("Java executable: %1").arg(java_command));
 
     QProcess process;
     bool result = process.startDetached(java_command, arguments, installDir.absolutePath());
@@ -467,7 +467,7 @@ bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_
     if (result) {
         L_INFO("Process is started...");
     } else {
-        L_ERROR("Process can not start: " + process.errorString());
+        L_ERROR(QString("Process can not start: %1").arg(process.errorString()));
     }
 
     return result;
@@ -494,7 +494,7 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
     arguments << _dataLocation;
 
     const QString java_command = installDir.relativeFilePath(getJavaExecutablePath(_javaVersion));
-    L_INFO("Java executable: " + java_command);
+    L_INFO(QString("Java executable: %1").arg(java_command));
 
     QProcess process;
     process.setWorkingDirectory(installDir.absolutePath());
@@ -510,7 +510,7 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
     if (result) {
         L_INFO("Post Install Process has finished...");
     } else {
-        L_ERROR("Error starting Post Install Process: " + process.errorString());
+        L_ERROR(QString("Error starting Post Install Process: %1").arg(process.errorString()));
     }
 
     return result;

@@ -8,7 +8,7 @@ ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, 
     m_extractor(0),
     ok(false)
 {
-    L_INFO("Initializing extraction of " + _zipPath + " to directory " + _extractDir);
+    L_INFO(QString("Initializing extraction of %1 to directory %2").arg(_zipPath).arg(_extractDir));
 
     if (!_zipPath.isEmpty() && (_zipPath.toLower().endsWith(".zip", Qt::CaseInsensitive)
                                 || _zipPath.toLower().endsWith(".jar", Qt::CaseInsensitive))) {
@@ -31,7 +31,7 @@ ZipExtractor::~ZipExtractor()
 void ZipExtractor::extract()
 {
     if (m_extractor) {
-        L_INFO("Checking if destination " + m_extractDir + " is an empty directory");
+        L_INFO(QString("Checking if destination %1 is an empty directory").arg(m_extractDir));
         QDir directory(m_extractDir);
 
         if (directory.exists()) {
@@ -71,20 +71,20 @@ void ZipExtractor::extract_success()
 
 void ZipExtractor::extract_error(short _errorCode, const QString &_file)
 {
-    L_INFO("Extraction finished with error code: " + QString::number(_errorCode));
+    L_INFO(QString("Extraction finished with error code: %1").arg(QString::number(_errorCode)));
 
     switch (_errorCode) {
         case QArchive::ARCHIVE_READ_ERROR:
-            L_ERROR("unable to find archive: " + _file);
+            L_ERROR(QString("unable to find archive: %1").arg(_file));
             break;
         case QArchive::ARCHIVE_QUALITY_ERROR:
-            L_ERROR("bad archive: " + _file);
+            L_ERROR(QString("bad archive: %1").arg(_file));
             break;
         case QArchive::ARCHIVE_UNCAUGHT_ERROR:
-            L_ERROR("fatal error: " + _file);
+            L_ERROR(QString("fatal error: %1").arg(_file));
             break;
         default:
-            L_ERROR("unknown error: " + _file);
+            L_ERROR(QString("unknown error: %1").arg(_file));
             break;
     }
 

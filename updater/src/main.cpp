@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
 
     QSharedPointer<QFile> settingsPath = appPath.getConfigurationFile();
 
-    L_INFO("Start read install folder resources" + settingsPath->fileName());
+    L_INFO(QString("Start read install folder resources: %1").arg(settingsPath->fileName()));
     Settings * settings = Settings::getInstance();
     settings->initSettings(*settingsPath);
     settings->readSettings();
@@ -72,15 +72,15 @@ int main(int argc, char * argv[])
 
     // init language with locale in settings
     LanguageManager::updateLocale(settings->getLocale());
-	L_INFO("Updated locale with: " + settings->getLocale());
+	L_INFO(QString("Updated locale with: %1").arg(settings->getLocale()));
 
     QStringList arguments = qApp->arguments();
     arguments.removeFirst();
     CommandLineSingleton::getInstance()->setArguments(arguments);
 
     if (CommandLineSingleton::getInstance()->isDebugMode()) {
-        L_INFO("Updater Arguments: " + CommandLineSingleton::getInstance()->getAllArguments().join(" "));
-        L_INFO("Query Arguments: " + CommandLineSingleton::getInstance()->getApplicationHttpArguments());
+        L_INFO(QString("Updater Arguments: %1").arg(CommandLineSingleton::getInstance()->getAllArguments().join(" ")));
+        L_INFO(QString("Query Arguments: %1").arg(CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
     }
 
     MainWindow window;
