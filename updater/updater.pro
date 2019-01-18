@@ -107,7 +107,7 @@ TRANSLATIONS += resources/lang/en_US.ts
 
 macx {
 QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
-QMAKE_POST_LINK += ../tools/macosx/dmg/build.sh \"$$TARGET\" "background-no-run.png";
+QMAKE_POST_LINK += $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/"$$TARGET".dmg\"
 dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
 distclean.depends += dmgclean
 QMAKE_EXTRA_TARGETS += distclean dmgclean
