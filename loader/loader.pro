@@ -4,6 +4,8 @@ CONFIG += warn_on
 CONFIG += debug_and_release
 CONFIG += app_bundle
 
+QMAKE_TARGET_BUNDLE_PREFIX = com.covalia.standalonedeployer
+
 CONFIG(debug, release|debug) {
 	CONFIG += console
 }
@@ -46,11 +48,11 @@ LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
 
 macx {
-LIBS += -L./libs/libarchive/macosx -larchive
+	LIBS += -L./libs/libarchive/macosx -larchive
 }
 win32 {
-# attention, l'ordre est important.
-LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
+	# attention, l'ordre est important.
+	LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
 SOURCES += src/main.cpp
@@ -65,19 +67,36 @@ HEADERS += src/utils.h
 DISTFILES += ../uncrustify.cfg
 
 macx {
-QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
-QMAKE_POST_LINK += $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/"$$TARGET".dmg\"
-dmgclean.commands = rm -f $$DESTDIR/$$TARGET\.dmg
-distclean.depends += dmgclean
-QMAKE_EXTRA_TARGETS += distclean dmgclean
-}
+	CONFIG(release, debug|release) {
+		!defined(SIGNATURE_IDENTITY, var) {
+			error(SIGNATURE_IDENTITY must be specified in order to sign app and dmg files.)
+		}
+	}
 
 win32 {
 CONFIG(release, debug|release) {
 QMAKE_POST_LINK += ../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
 }
 }
+	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
+	CONFIG(release, debug|release) {
+		defined(SIGNATURE_IDENTITY, var) {
+			QMAKE_POST_LINK += codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app;
+		}
+	}
 
+	QMAKE_POST_LINK += $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg;
 
+	CONFIG(release, debug|release) {
+		defined(SIGNATURE_IDENTITY, var) {
+			QMAKE_POST_LINK += codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg;
+		}
+	}
+
+	dmgclean.commands = rm -f \"$$DESTDIR/$$TARGET\".dmg
+	distclean.depends += dmgclean
+
+	QMAKE_EXTRA_TARGETS += distclean dmgclean
+}
 
