@@ -22,10 +22,12 @@ class LicensePage : public QWizardPage, public AbstractTranslatedUi
         // UI strings
         const QString m_titleText;
         const QString m_licenseLabelText;
+        const QString m_linkToSourcesLabelText;
         const QString m_agreeLicenseCheckBoxText;
 
     private:
         QLabel * m_licenseLabel;
+        QLabel * m_linkToSourcesLabel;
         QPlainTextEdit * m_licensePlainTextEdit;
         QCheckBox * m_agreeLicenseCheckBox;
 };

@@ -94,6 +94,9 @@ class IOConfig
         /// Locales
         static const QString LocaleFrFr;
         static const QString LocaleEnUs;
+
+        /// Source code URL repository
+        static const QString SourceCodeUrl;
 };
 
 #endif

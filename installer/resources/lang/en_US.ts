@@ -32,7 +32,7 @@
         <translation>Finish</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/endinstallationui.cpp" line="26"/>
+        <location filename="../../src/gui/forms/endinstallationui.cpp" line="27"/>
         <source>An error occurred during installation</source>
         <translation>An error occurred during installation</translation>
     </message>
@@ -40,23 +40,23 @@
 <context>
     <name>FoldersPage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/folders.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/folders.cpp" line="8"/>
         <source>Customize installation folders</source>
         <translation>Customize installation folders</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/folders.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/folders.cpp" line="9"/>
         <source>&amp;Application installation directory</source>
         <translation>&amp;Application installation directory</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/folders.cpp" line="9"/>
-        <location filename="../../src/gui/wizard/pages/folders.cpp" line="11"/>
+        <location filename="../../src/gui/wizard/pages/folders.cpp" line="10"/>
+        <location filename="../../src/gui/wizard/pages/folders.cpp" line="12"/>
         <source>Change</source>
         <translation>Change</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/folders.cpp" line="10"/>
+        <location filename="../../src/gui/wizard/pages/folders.cpp" line="11"/>
         <source>&amp;Choose a custom data directory</source>
         <translation>&amp;Choose a custom data directory</translation>
     </message>
@@ -64,32 +64,32 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="109"/>
+        <location filename="../../src/manager/installmanager.cpp" line="289"/>
         <source>Unable to create directory tree</source>
         <translation>Unable to create directory tree</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="115"/>
+        <location filename="../../src/manager/installmanager.cpp" line="295"/>
         <source>Unable to create updater version folder</source>
         <translation>Unable to create updater version folder</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="121"/>
+        <location filename="../../src/manager/installmanager.cpp" line="301"/>
         <source>Unable to write settings file</source>
         <translation>Unable to write settings file</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="127"/>
+        <location filename="../../src/manager/installmanager.cpp" line="307"/>
         <source>Unable to extract resources</source>
         <translation>Unable to extract resources</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="133"/>
+        <location filename="../../src/manager/installmanager.cpp" line="313"/>
         <source>Unable to create shortcuts</source>
         <translation>Unable to create shortcuts</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="139"/>
+        <location filename="../../src/manager/installmanager.cpp" line="319"/>
         <source>Unable to prepare applications</source>
         <translation>Unable to prepare applications</translation>
     </message>
@@ -97,17 +97,17 @@
 <context>
     <name>InstallWizard</name>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="13"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="14"/>
         <source>Next &gt;</source>
         <translation>Next &gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="14"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="15"/>
         <source>&lt; Back</source>
         <translation>&lt; Back</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="15"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="16"/>
         <source>Install</source>
         <translation>Install</translation>
     </message>
@@ -123,12 +123,12 @@
 <context>
     <name>LaunchPage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/launch.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/launch.cpp" line="8"/>
         <source>Launching</source>
         <translation>Launching</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/launch.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/launch.cpp" line="9"/>
         <source>Start the application when closing</source>
         <translation>Start the application when closing</translation>
     </message>
@@ -136,17 +136,22 @@
 <context>
     <name>LicensePage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/license.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/license.cpp" line="9"/>
         <source>License agreement</source>
         <translation>License agreement</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/license.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/license.cpp" line="10"/>
         <source>This software installer is distributed under the terms of the GNU General Public License version 3 (GPLv3).</source>
         <translation>This software installer is distributed under the terms of the GNU General Public License version 3 (GPLv3).</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/license.cpp" line="9"/>
+        <location filename="../../src/gui/wizard/pages/license.cpp" line="11"/>
+        <source>Source code can be downloaded from: %1</source>
+        <translation>Source code can be downloaded from: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/wizard/pages/license.cpp" line="12"/>
         <source>I agree to the terms of the license</source>
         <translation>I agree to the terms of the license</translation>
     </message>
@@ -154,32 +159,32 @@
 <context>
     <name>ProxyPage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="8"/>
         <source>Proxy configuration</source>
         <translation>Proxy configuration</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="9"/>
         <source>Use Proxy</source>
         <translation>Use Proxy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="9"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="10"/>
         <source>&amp;Hostname</source>
         <translation>&amp;Hostname</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="10"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="11"/>
         <source>&amp;Port</source>
         <translation>&amp;Port</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="11"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="12"/>
         <source>&amp;Login</source>
         <translation>&amp;Login</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="12"/>
+        <location filename="../../src/gui/wizard/pages/proxy.cpp" line="13"/>
         <source>&amp;Password</source>
         <translation>&amp;Password</translation>
     </message>
@@ -187,7 +192,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="70"/>
+        <location filename="../../src/manager/installmanager.cpp" line="110"/>
         <source>Standalone deployment</source>
         <translation>Standalone deployment</translation>
     </message>
@@ -195,17 +200,17 @@
 <context>
     <name>ShortcutsPage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="8"/>
         <source>Shortcuts options</source>
         <translation>Shortcuts options</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="9"/>
         <source>Add an offline launch shortcut</source>
         <translation>Add an offline launch shortcut</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="9"/>
+        <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="10"/>
         <source>Launch the application at start-up</source>
         <translation>Launch the application at start-up</translation>
     </message>
@@ -213,22 +218,22 @@
 <context>
     <name>TypePage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/type.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/type.cpp" line="8"/>
         <source>Installation type</source>
         <translation>Installation type</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/type.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/type.cpp" line="9"/>
         <source>Simple installation uses default settings. Custom installation allows you to choose installation folders, configure the proxy...</source>
         <translation>Simple installation uses default settings. Custom installation allows you to choose installation folders, configure the proxy...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/type.cpp" line="9"/>
+        <location filename="../../src/gui/wizard/pages/type.cpp" line="10"/>
         <source>&amp;Simple installation</source>
         <translation>&amp;Simple installation</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/type.cpp" line="10"/>
+        <location filename="../../src/gui/wizard/pages/type.cpp" line="11"/>
         <source>&amp;Custom installation</source>
         <translation>&amp;Custom installation</translation>
     </message>
@@ -236,17 +241,17 @@
 <context>
     <name>WelcomePage</name>
     <message>
-        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="7"/>
+        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="8"/>
         <source>Welcome to the %1 setup wizard</source>
         <translation>Welcome to the %1 setup wizard</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="8"/>
+        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="9"/>
         <source>This wizard will guide you through the installation of %1.</source>
         <translation>This wizard will guide you through the installation of %1.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="9"/>
+        <location filename="../../src/gui/wizard/pages/welcome.cpp" line="10"/>
         <source>Click Next to continue.</source>
         <translation>Click Next to continue.</translation>
     </message>
