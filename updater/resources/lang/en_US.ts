@@ -9,6 +9,16 @@
         <translation>Question</translation>
     </message>
     <message>
+        <location filename="../../ui/askpopup.ui" line="108"/>
+        <source>Do you want to exit the application?</source>
+        <translation>Do you want to exit the application?</translation>
+    </message>
+    <message>
+        <location filename="../../ui/askpopup.ui" line="124"/>
+        <source>The update will be stopped and the application will not be started</source>
+        <translation>The update will be stopped and the application will not be started</translation>
+    </message>
+    <message>
         <location filename="../../ui/askpopup.ui" line="184"/>
         <source>Yes</source>
         <translation>Yes</translation>
@@ -162,34 +172,6 @@
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <source>Updater</source>
-        <translation type="vanished">Updater</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Download</translation>
-    </message>
-    <message>
-        <source>Warning!</source>
-        <extracomment>This string refers to the exit message title.</extracomment>
-        <translation type="vanished">Warning!</translation>
-    </message>
-    <message>
-        <source>You are about to quit the application, do you want to continue?</source>
-        <extracomment>This string refers to the exit message.</extracomment>
-        <translation type="vanished">You are about to quit the application, do you want to continue?</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/mainwindow.cpp" line="98"/>
-        <source>Do you want to exit the application?</source>
-        <translation>Do you want to exit the application?</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/mainwindow.cpp" line="98"/>
-        <source>The installation will be stopped</source>
-        <translation>The installation will be stopped</translation>
-    </message>
     <message>
         <location filename="../../src/gui/mainwindow.cpp" line="158"/>
         <source>Estimated time: %1</source>

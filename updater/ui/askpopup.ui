@@ -105,7 +105,7 @@ color : @gray-text-color;</string>
              </font>
             </property>
             <property name="text">
-             <string notr="true">title question</string>
+             <string>Do you want to exit the application?</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -121,7 +121,7 @@ color : @gray-text-color;</string>
              </font>
             </property>
             <property name="text">
-             <string notr="true">description question</string>
+             <string>The update will be stopped and the application will not be started</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

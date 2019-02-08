@@ -9,6 +9,16 @@
         <translation>Question</translation>
     </message>
     <message>
+        <location filename="../../ui/askpopup.ui" line="98"/>
+        <source>Do you want to exit the application?</source>
+        <translation>Voulez-vous quitter l&apos;application ?</translation>
+    </message>
+    <message>
+        <location filename="../../ui/askpopup.ui" line="114"/>
+        <source>The installation will be stopped</source>
+        <translation>L&apos;installation sera interrompue</translation>
+    </message>
+    <message>
         <location filename="../../ui/askpopup.ui" line="166"/>
         <source>Yes</source>
         <translation>Oui</translation>
@@ -272,16 +282,6 @@
         <location filename="../../src/gui/forms/windowui.cpp" line="11"/>
         <source>Close</source>
         <translation>Fermer</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="119"/>
-        <source>Do you want to exit the application?</source>
-        <translation>Voulez-vous quitter l&apos;application ?</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="119"/>
-        <source>The installation will be stopped</source>
-        <translation>L&apos;installation sera interrompue</translation>
     </message>
 </context>
 </TS>

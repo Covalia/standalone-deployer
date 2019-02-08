@@ -116,7 +116,7 @@ void WindowUI::closeEvent(QCloseEvent * _event)
     if (m_alreadyClosedOnMacOs) {
         _event->accept();
     } else {
-        AskPopupUI * popupClose = new AskPopupUI(this, tr("Do you want to exit the application?"), tr("The installation will be stopped"));
+        AskPopupUI * popupClose = new AskPopupUI(this);
         popupClose->show();
         if (popupClose->exec() == QDialog::Accepted) {
             _event->accept();

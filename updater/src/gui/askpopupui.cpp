@@ -23,8 +23,12 @@ AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) 
 
     StyleManager::transformStyle(this);
 
-    m_ui->labelTitle->setText(_title);
-    m_ui->labelDescription->setText(_description);
+    if (!_title.isEmpty()) {
+        m_ui->labelTitle->setText(_title);
+    }
+    if (!_description.isEmpty()) {
+        m_ui->labelDescription->setText(_description);
+    }
 
     connect(m_ui->buttonYes, SIGNAL(clicked()), this, SLOT(yesEvent()));
     connect(m_ui->buttonNo, SIGNAL(clicked()), this, SLOT(noEvent()));
