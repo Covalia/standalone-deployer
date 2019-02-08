@@ -53,7 +53,7 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
 
 int LicensePage::nextId() const
 {
-    return InstallWizard::Page_Type;
+    return InstallWizard::Page_ThirdParty;
 }
 
 void LicensePage::retranslateUi()

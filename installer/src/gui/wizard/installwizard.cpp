@@ -8,6 +8,7 @@
 #include "gui/wizard/pages/shortcuts.h"
 #include "gui/wizard/pages/proxy.h"
 #include "gui/wizard/pages/launch.h"
+#include "gui/wizard/pages/thirdparty.h"
 #include "log/logger.h"
 
 InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAllowed, QWidget * parent) : QWizard(parent),
@@ -22,6 +23,7 @@ InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAl
     setPage(Page_Shortcuts, new ShortcutsPage);
     setPage(Page_Proxy, new ProxyPage);
     setPage(Page_Launch, new LaunchPage);
+    setPage(Page_ThirdParty, new ThirdPartyPage);
 
     setStartId(Page_Welcome);
     setOption(QWizard::IndependentPages, true);
@@ -185,7 +187,7 @@ void InstallWizard::keyPressEvent(QKeyEvent * _event)
 
 void InstallWizard::retranslateUi()
 {
-	L_INFO("InstallWizard::retranslateUi() called");
+    L_INFO("InstallWizard::retranslateUi() called");
 
     const QString className = metaObject()->className();
 
@@ -195,6 +197,7 @@ void InstallWizard::retranslateUi()
 
     static_cast<WelcomePage *>(page(Page_Welcome))->retranslateUi();
     static_cast<LicensePage *>(page(Page_License))->retranslateUi();
+    static_cast<ThirdPartyPage *>(page(Page_ThirdParty))->retranslateUi();
     static_cast<TypePage *>(page(Page_Type))->retranslateUi();
     static_cast<FoldersPage *>(page(Page_Folders))->retranslateUi();
     static_cast<ShortcutsPage *>(page(Page_Shortcuts))->retranslateUi();

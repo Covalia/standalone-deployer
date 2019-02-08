@@ -107,17 +107,17 @@
 <context>
     <name>InstallWizard</name>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="14"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="15"/>
         <source>Next &gt;</source>
         <translation>Suivant &gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="15"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="16"/>
         <source>&lt; Back</source>
         <translation>&lt; Retour</translation>
     </message>
     <message>
-        <location filename="../../src/gui/wizard/installwizard.cpp" line="16"/>
+        <location filename="../../src/gui/wizard/installwizard.cpp" line="17"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>
@@ -223,6 +223,19 @@
         <location filename="../../src/gui/wizard/pages/shortcuts.cpp" line="10"/>
         <source>Launch the application at start-up</source>
         <translation>Lancer l&apos;application au démarrage de l&apos;ordinateur</translation>
+    </message>
+</context>
+<context>
+    <name>ThirdPartyPage</name>
+    <message>
+        <location filename="../../src/gui/wizard/pages/thirdparty.cpp" line="8"/>
+        <source>Third-party resources and softwares</source>
+        <translation>Ressources et logiciels tiers</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/wizard/pages/thirdparty.cpp" line="9"/>
+        <source>This software installer may contain third-party resources and softwares which require additional notice.</source>
+        <translation>Cet installeur peut contenir des ressources et logiciels tiers qui nécessitent des informations complémentaires.</translation>
     </message>
 </context>
 <context>
