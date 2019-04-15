@@ -31,7 +31,7 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     m_linkToSourcesLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_linkToSourcesLabel->setOpenExternalLinks(true);
 
-    QFile f(":/resources/contract.txt");
+    QFile f(":/resources/gpl-3.0.txt");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
         m_licensePlainTextEdit->appendPlainText(in.readAll());
