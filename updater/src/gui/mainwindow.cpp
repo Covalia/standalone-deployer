@@ -57,7 +57,7 @@ MainWindow::MainWindow(QWidget * _parent) :
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 
     Settings * settings = Settings::getInstance();
-    m_appUpdater = new AppUpdater(settings->getDeploymentUrl(), UpdaterConfig::InstallationDir, this);
+    m_appUpdater = new AppUpdater(settings->getDeploymentUrl(), this);
 
     connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));

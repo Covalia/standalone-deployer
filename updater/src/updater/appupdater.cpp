@@ -13,7 +13,7 @@
 #include <QDirIterator>
 #include <QCoreApplication>
 
-AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
+AppUpdater::AppUpdater(const QUrl &_appUrl, QObject * _parent) : QObject(_parent),
     m_updater(nullptr),
     m_appPath(Utils::getAppPath()),
     m_remoteUpdaterVersion(""),
