@@ -28,8 +28,8 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
     m_currentAttempt(0),
     m_currentAuthAttempt(0),
     m_currentApplication(Application::getEmptyApplication()),
-    m_currentReply(0),
-    m_saveFile(0),
+    m_currentReply(nullptr),
+    m_saveFile(nullptr),
     m_temporaryDir(_temporaryDir),
     m_httpAuthCanceled(0)
 {
@@ -41,14 +41,14 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
         L_INFO(QString("Proxy to use: %1:%2").arg(_proxy.hostName()).arg(_proxy.port()));
         QNetworkProxy::setApplicationProxy(_proxy);
 
-        connect(&m_manager, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator *)),
-                SLOT(slotProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator *)));
+        connect(&m_manager, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)),
+                SLOT(slotProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)));
     } else {
         L_INFO("No proxy.");
     }
 
-    connect(&m_manager, SIGNAL(authenticationRequired(QNetworkReply *,QAuthenticator *)),
-            SLOT(slotAuthenticationRequired(QNetworkReply *,QAuthenticator *)));
+    connect(&m_manager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)),
+            SLOT(slotAuthenticationRequired(QNetworkReply*,QAuthenticator*)));
 }
 
 DownloadManager::~DownloadManager()
@@ -89,15 +89,15 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_
         // lancement les requêtes head
         QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
     } else {
-		L_WARN("Download queue is not empty, cannot add to queue.");
-	}
+        L_WARN("Download queue is not empty, cannot add to queue.");
+    }
 }
 
 void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString> &_downloadsMap)
 {
     QMultiMap<Application, QUrl> urlMap;
 
-	L_INFO("Converting QMultiMap<Application, QString> to QMultiMap<Application, QUrl>.");
+    L_INFO("Converting QMultiMap<Application, QString> to QMultiMap<Application, QUrl>.");
 
     QMapIterator<Application, QString> iterator(_downloadsMap);
     while (iterator.hasNext()) {
@@ -127,7 +127,7 @@ void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthen
             L_INFO("Aborting all downloads, too many attempts.");
             _reply->abort();
             _reply->deleteLater();
-            _reply = 0;
+            _reply = nullptr;
 
             // tous les fichiers restants seront en erreur, car même serveur.
             m_errorSet += m_headQueue.toSet();
@@ -155,7 +155,7 @@ void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthen
                 L_INFO("Aborting all downloads, canceled by user.");
                 _reply->abort();
                 _reply->deleteLater();
-                _reply = 0;
+                _reply = nullptr;
 
                 // tous les fichiers restants seront en erreur, car même serveur.
                 m_errorSet += m_headQueue.toSet();
@@ -196,7 +196,7 @@ void DownloadManager::slotProxyAuthenticationRequired(const QNetworkProxy &_prox
 
         m_currentReply->abort();
         m_currentReply->deleteLater();
-        m_currentReply = 0;
+        m_currentReply = nullptr;
 
         // tous les fichiers restants seront en erreur, car même serveur.
         m_errorSet += m_headQueue.toSet();
@@ -290,7 +290,7 @@ void DownloadManager::currentHeadFinished()
     }
 
     m_currentReply->deleteLater();
-    m_currentReply = 0;
+    m_currentReply = nullptr;
     startNextHeadRequest();
 }
 
@@ -351,7 +351,7 @@ void DownloadManager::downloadMetaDataChanged()
         m_errorSet.insert(QPair<Application, QUrl>(m_currentApplication, m_currentReply->url()));
         m_currentReply->abort();
         m_currentReply->deleteLater();
-        m_currentReply = 0;
+        m_currentReply = nullptr;
         // réinit compteur tentatives
         m_currentAttempt = 0;
         startNextDownload();
@@ -384,10 +384,10 @@ void DownloadManager::currentDownloadFinished()
     }
 
     delete m_saveFile;
-    m_saveFile = 0;
+    m_saveFile = nullptr;
 
     m_currentReply->deleteLater();
-    m_currentReply = 0;
+    m_currentReply = nullptr;
     startNextDownload();
 }
 
@@ -427,7 +427,7 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         const qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
 
         if (averageSpeed != 0) {
-            const int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
+            const int remainingSeconds = static_cast<int>(remainingBytesToDownload / averageSpeed / 1000);
             const int hours = remainingSeconds / 3600;
             const int minutes = (remainingSeconds - 3600 * hours) / 60;
             const int seconds = remainingSeconds - 3600 * hours - 60 * minutes;

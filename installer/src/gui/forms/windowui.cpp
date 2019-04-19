@@ -11,11 +11,11 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     m_closeActionText(QT_TR_NOOP("Close")),
     m_titleLabelText(QT_TR_NOOP("Installation of %1")),
     m_appName(_appName),
-    m_closeAction(0),
-    m_toolbar(0),
-    m_iconLabel(0),
-    m_titleLabel(0),
-    m_comboBoxLanguage(0)
+    m_closeAction(nullptr),
+    m_toolbar(nullptr),
+    m_iconLabel(nullptr),
+    m_titleLabel(nullptr),
+    m_comboBoxLanguage(nullptr)
 {
     setMinimumWidth(700);
     setMinimumHeight(450);
@@ -103,7 +103,7 @@ void WindowUI::mouseReleaseEvent(QMouseEvent *)
 void WindowUI::mouseMoveEvent(QMouseEvent * _e)
 {
     QWidget::mouseMoveEvent(_e);
-    if (_e->buttons() && Qt::LeftButton) {
+    if (_e->buttons() & Qt::LeftButton) {
         QPoint toMove = _e->globalPos() - m_position;
         move(toMove);
         repaint();
@@ -130,6 +130,7 @@ void WindowUI::closeEvent(QCloseEvent * _event)
 void WindowUI::comboBoxLanguageEvent(int _index)
 {
     const QString language = m_comboBoxLanguage->itemData(_index).toString();
+
     L_INFO(QString("Detect language change in language combobox: %1").arg(language));
     if (!language.isNull() && !language.isEmpty()) {
         LanguageManager::updateLocale(language);
@@ -139,7 +140,7 @@ void WindowUI::comboBoxLanguageEvent(int _index)
 
 void WindowUI::retranslateUi()
 {
-	L_INFO("WindowUI::retranslateUi() called");
+    L_INFO("WindowUI::retranslateUi() called");
 
     const QString className = metaObject()->className();
 
@@ -149,7 +150,7 @@ void WindowUI::retranslateUi()
 
 void WindowUI::setLocale(const QString &_locale)
 {
-	L_INFO(QString("Set combobox index for locale: %1").arg(_locale));
+    L_INFO(QString("Set combobox index for locale: %1").arg(_locale));
     const int index = m_comboBoxLanguage->findData(_locale);
 
     if (index != -1) {

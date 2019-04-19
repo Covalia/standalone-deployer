@@ -9,7 +9,7 @@ class WindowsFactory : public Factory {
     public:
         static WindowsFactory * getFactoryInstance()
         {
-            static WindowsFactory * factory = 0;
+            static WindowsFactory * factory = nullptr;
 
             sm_mutex.lock();
             if (!factory) {

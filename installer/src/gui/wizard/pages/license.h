@@ -15,7 +15,7 @@ class LicensePage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        LicensePage(QWidget * parent = 0);
+        LicensePage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

@@ -23,7 +23,7 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        explicit WindowUI(QWidget * _centralWidget, const QString &_appName, QWidget * _parent = 0);
+        explicit WindowUI(QWidget * _centralWidget, const QString &_appName, QWidget * _parent = nullptr);
         virtual ~WindowUI();
         void center();
         virtual void retranslateUi();

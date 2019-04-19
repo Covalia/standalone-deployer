@@ -14,7 +14,7 @@ class EndInstallationUI : public QWidget, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        explicit EndInstallationUI(QWidget * _parent = 0);
+        explicit EndInstallationUI(QWidget * _parent = nullptr);
         virtual ~EndInstallationUI();
 
         void showErrors(QStringList _errors);

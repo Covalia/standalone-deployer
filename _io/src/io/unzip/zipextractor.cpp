@@ -5,7 +5,7 @@
 ZipExtractor::ZipExtractor(const QString &_zipPath, const QString &_extractDir, QObject * _parent) :
     QObject(_parent),
     m_extractDir(_extractDir),
-    m_extractor(0),
+    m_extractor(nullptr),
     ok(false)
 {
     L_INFO(QString("Initializing extraction of %1 to directory %2").arg(_zipPath).arg(_extractDir));
@@ -37,19 +37,19 @@ void ZipExtractor::extract()
         if (directory.exists()) {
             L_INFO("Java version directory already exists, removing content.");
             if (directory.removeRecursively()) {
-				L_INFO("Directory successfully removed.");
-			} else {
-				L_WARN("Error while removing directory.");
-			}
+                L_INFO("Directory successfully removed.");
+            } else {
+                L_WARN("Error while removing directory.");
+            }
         }
 
         if (!directory.exists()) {
             L_INFO("Java version directory does not exist, creating.");
             if (QDir().mkpath(directory.absolutePath())) {
-				L_INFO("Directory successfully created.");
-			} else {
-				L_ERROR("Error while creating directory.");
-			}
+                L_INFO("Directory successfully created.");
+            } else {
+                L_ERROR("Error while creating directory.");
+            }
         }
 
         L_INFO("Starting extraction...");

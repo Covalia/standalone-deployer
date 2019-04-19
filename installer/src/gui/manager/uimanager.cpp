@@ -9,11 +9,11 @@
 #include "gui/wizard/installwizard.h"
 
 UIManager::UIManager(const QString &_appName, bool _changeDataLocationAllowed) : QObject(),
-    m_window(0),
-    m_installation(0),
-    m_endInstallation(0),
-    m_wizard(0),
-    m_currentWidget(0)
+    m_window(nullptr),
+    m_installation(nullptr),
+    m_endInstallation(nullptr),
+    m_wizard(nullptr),
+    m_currentWidget(nullptr)
 {
     m_installation = new InstallationUI;
     m_endInstallation = new EndInstallationUI;
@@ -36,7 +36,7 @@ UIManager::UIManager(const QString &_appName, bool _changeDataLocationAllowed) :
 UIManager::~UIManager()
 {
     // remove m_window ownership in case wizard is currently running.
-    m_wizard->setParent(0);
+    m_wizard->setParent(nullptr);
 
     delete m_window;
     delete m_wizard;
@@ -144,7 +144,7 @@ void UIManager::wizardFinished(int _result)
     Q_UNUSED(_result)
 
     // remove m_window ownership to be able to later access wizard properties.
-    m_wizard->setParent(0);
+    m_wizard->setParent(nullptr);
 
     m_installation->retranslateUi();
     m_window->setCentralWidget(m_installation);

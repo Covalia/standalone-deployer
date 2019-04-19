@@ -14,7 +14,7 @@
 #include <QCoreApplication>
 
 AppUpdater::AppUpdater(const QUrl &_appUrl, const QDir &_appInstallDir, QObject * _parent) : QObject(_parent),
-    m_updater(0),
+    m_updater(nullptr),
     m_appPath(Utils::getAppPath()),
     m_remoteUpdaterVersion(""),
     m_localUpdaterVersion(""),
@@ -157,11 +157,10 @@ void AppUpdater::cnlpDownloadFinished()
 
         // retrieving remote java version.
         m_remoteJavaVersion = "";
-        for (int i = 0; i < javaDownloads.size(); ++i) {
-            m_remoteJavaVersion = javaDownloads[i].getVersion();
+        if (javaDownloads.size() > 0) {
+            m_remoteJavaVersion = javaDownloads[0].getVersion();
             // only one java version for one operating system
             L_INFO(QString("Remote java version: %1").arg(m_remoteJavaVersion));
-            break;
         }
 
         m_cnlpParsedFiles.clear();
@@ -805,6 +804,7 @@ bool AppUpdater::checkDownloadsAreOk() const
 
     // check downloaded hash mac
     QMapIterator<Application, QString> iterator(m_filesToDownload);
+
     while (iterator.hasNext()) {
         iterator.next();
         const Application & application = iterator.key();
@@ -843,9 +843,9 @@ bool AppUpdater::checkDownloadsAreOk() const
                         found = true;
                         if (hashmac != download.getHashMac()) {
                             L_WARN(QString("Bad hashmac, expected: %1, found: %2 for file: %3")
-									.arg(download.getHashMac().shortHashMac())
-									.arg(hashmac.shortHashMac())
-									.arg(localFile));
+                                   .arg(download.getHashMac().shortHashMac())
+                                   .arg(hashmac.shortHashMac())
+                                   .arg(localFile));
                             downloadsOk = false;
                         }
                         break;
@@ -1125,6 +1125,7 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
 
     // check downloaded hash mac
     QMutableMapIterator<Application, QString> iterator(outMap);
+
     while (iterator.hasNext()) {
         iterator.next();
         const Application & application = iterator.key();

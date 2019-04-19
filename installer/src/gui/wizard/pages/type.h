@@ -14,7 +14,7 @@ class TypePage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        TypePage(QWidget * parent = 0);
+        TypePage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

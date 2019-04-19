@@ -15,7 +15,7 @@ class InstallationUI : public QWidget, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        explicit InstallationUI(QWidget * _parent = 0);
+        explicit InstallationUI(QWidget * _parent = nullptr);
         virtual ~InstallationUI();
 
         virtual void retranslateUi();

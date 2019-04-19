@@ -13,7 +13,7 @@ class LaunchPage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        LaunchPage(QWidget * parent = 0);
+        LaunchPage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

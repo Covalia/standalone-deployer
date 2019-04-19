@@ -17,7 +17,7 @@ class FoldersPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        FoldersPage(bool _changeDataLocationAllowed, QWidget * parent = 0);
+        FoldersPage(bool _changeDataLocationAllowed, QWidget * parent = nullptr);
         int nextId() const override;
         bool isComplete() const override;
         void retranslateUi() override;

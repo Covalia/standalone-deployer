@@ -1,7 +1,7 @@
 #include "factories/apppath/apppath.h"
 #include "factories/factory/factory.h"
 
-AppPath::AppPath(IOConfig::AppComponent _app) : m_appPathImpl(0)
+AppPath::AppPath(IOConfig::AppComponent _app) : m_appPathImpl(nullptr)
 {
     Factory * factory = Factory::getFactory();
 

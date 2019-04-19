@@ -13,7 +13,7 @@ std::mutex Factory::sm_mutex;
 
 Factory * Factory::getFactory()
 {
-    static Factory * factory = 0;
+    static Factory * factory = nullptr;
 
     if (!factory) {
 #ifdef Q_OS_WIN

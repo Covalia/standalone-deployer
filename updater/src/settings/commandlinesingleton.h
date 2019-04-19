@@ -8,7 +8,7 @@ class CommandLineSingleton {
     public:
         static CommandLineSingleton * getInstance()
         {
-            static CommandLineSingleton * factory = 0;
+            static CommandLineSingleton * factory = nullptr;
 
             sm_mutex.lock();
             if (!factory) {

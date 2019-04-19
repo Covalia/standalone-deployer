@@ -4,15 +4,17 @@
 #include <QString>
 
 class HashMacString : public QString {
-private:
-    static const int SHORT_HASHMAC_LEN = 10;
-public:
-    HashMacString(QString _hashmac) : QString(_hashmac) {
-    }
+    private:
+        static const int SHORT_HASHMAC_LEN = 10;
+    public:
+        HashMacString(QString _hashmac) : QString(_hashmac)
+        {
+        }
 
-    QString shortHashMac() const {
-        return left(SHORT_HASHMAC_LEN) + "...";
-    }
+        QString shortHashMac() const
+        {
+            return left(SHORT_HASHMAC_LEN) + "...";
+        }
 };
 
 class HashMac512 {

@@ -16,7 +16,7 @@ class ProxyPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        ProxyPage(QWidget * parent = 0);
+        ProxyPage(QWidget * parent = nullptr);
         int nextId() const override;
         bool isComplete() const override;
         // bool validatePage() override; // TODO check proxy connection

@@ -11,7 +11,7 @@
 
 AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) : QDialog(_parent),
     m_ui(new Ui::AskPopupUI),
-    m_parent(0)
+    m_parent(nullptr)
 {
     m_ui->setupUi(this);
 

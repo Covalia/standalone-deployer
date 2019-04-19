@@ -9,9 +9,9 @@ TypePage::TypePage(QWidget * parent) : QWizardPage(parent),
     m_topLabelText(QT_TR_NOOP("Simple installation uses default settings. Custom installation allows you to choose installation folders, configure the proxy...")),
     m_simpleInstallationRadioButtonText(QT_TR_NOOP("&Simple installation")),
     m_customInstallationRadioButtonText(QT_TR_NOOP("&Custom installation")),
-    m_topLabel(0),
-    m_simpleInstallationRadioButton(0),
-    m_customInstallationRadioButton(0)
+    m_topLabel(nullptr),
+    m_simpleInstallationRadioButton(nullptr),
+    m_customInstallationRadioButton(nullptr)
 {
     setTitle(tr_helper(m_titleText));
 
@@ -43,7 +43,7 @@ int TypePage::nextId() const
 
 void TypePage::retranslateUi()
 {
-	L_INFO("TypePage::retranslateUi() called");
+    L_INFO("TypePage::retranslateUi() called");
 
     const QString className = metaObject()->className();
 

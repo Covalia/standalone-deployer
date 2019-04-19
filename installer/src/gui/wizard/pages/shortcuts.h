@@ -14,7 +14,7 @@ class ShortcutsPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        ShortcutsPage(QWidget * parent = 0);
+        ShortcutsPage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

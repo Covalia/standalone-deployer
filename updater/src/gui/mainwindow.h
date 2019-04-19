@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     public:
-        explicit MainWindow(QWidget * _parent = 0);
+        explicit MainWindow(QWidget * _parent = nullptr);
         ~MainWindow();
         void center();
 

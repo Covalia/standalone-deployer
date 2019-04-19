@@ -9,8 +9,8 @@ WelcomePage::WelcomePage(const QString &_appName, QWidget * parent) : QWizardPag
     m_topLabelText(QT_TR_NOOP("This wizard will guide you through the installation of %1.")),
     m_bottomLabelText(QT_TR_NOOP("Click Next to continue.")),
     m_appName(_appName),
-    m_topLabel(0),
-    m_bottomLabel(0)
+    m_topLabel(nullptr),
+    m_bottomLabel(nullptr)
 {
     setTitle(tr_helper(m_titleText).arg(m_appName));
 
@@ -33,7 +33,7 @@ int WelcomePage::nextId() const
 
 void WelcomePage::retranslateUi()
 {
-	L_INFO("WelcomePage::retranslateUi() called");
+    L_INFO("WelcomePage::retranslateUi() called");
 
     const QString className = metaObject()->className();
 

@@ -13,7 +13,7 @@
 AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) :
     QDialog(_parent),
     m_ui(new Ui::AskPopupUI),
-    m_parent(0)
+    m_parent(nullptr)
 {
     m_ui->setupUi(this);
 
@@ -46,13 +46,13 @@ AskPopupUI::~AskPopupUI()
 int AskPopupUI::exec()
 {
 #ifdef Q_OS_WIN
-    this->setWindowOpacity(0.0);
-    QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
-    anim->setDuration(500);
-    anim->setEasingCurve(QEasingCurve::OutBack);
-    anim->setStartValue(0.0);
-    anim->setEndValue(1.0);
-    anim->start(QAbstractAnimation::DeleteWhenStopped);
+        this->setWindowOpacity(0.0);
+        QPropertyAnimation * anim = new QPropertyAnimation(this, "windowOpacity");
+        anim->setDuration(500);
+        anim->setEasingCurve(QEasingCurve::OutBack);
+        anim->setStartValue(0.0);
+        anim->setEndValue(1.0);
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
 #endif
     return QDialog::exec();
 }

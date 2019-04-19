@@ -12,7 +12,7 @@ class ZipExtractor : public QObject {
     Q_OBJECT
 
     public:
-        ZipExtractor(const QString &_zipPath, const QString &_extractDir, QObject * _parent = 0);
+        ZipExtractor(const QString &_zipPath, const QString &_extractDir, QObject * _parent = nullptr);
         virtual ~ZipExtractor();
         void extract();
         bool isOk() const;
@@ -28,9 +28,8 @@ class ZipExtractor : public QObject {
 
     private:
         const QString m_extractDir;
-        QArchive::Extractor *m_extractor;
+        QArchive::Extractor * m_extractor;
         bool ok;
-
 };
 
 #endif

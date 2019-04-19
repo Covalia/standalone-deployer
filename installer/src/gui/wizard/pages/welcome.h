@@ -14,7 +14,7 @@ class WelcomePage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        WelcomePage(const QString &_appName, QWidget * parent = 0);
+        WelcomePage(const QString &_appName, QWidget * parent = nullptr);
 
         int nextId() const override;
         void retranslateUi() override;

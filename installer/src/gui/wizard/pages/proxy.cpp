@@ -11,15 +11,15 @@ ProxyPage::ProxyPage(QWidget * parent) : QWizardPage(parent),
     m_portLabelText(QT_TR_NOOP("&Port")),
     m_loginLabelText(QT_TR_NOOP("&Login")),
     m_passwordLabelText(QT_TR_NOOP("&Password")),
-    m_useProxyCheckBox(0),
-    m_hostnameLabel(0),
-    m_hostnameLineEdit(0),
-    m_portLabel(0),
-    m_portLineEdit(0),
-    m_loginLabel(0),
-    m_loginLineEdit(0),
-    m_passwordLabel(0),
-    m_passwordLineEdit(0)
+    m_useProxyCheckBox(nullptr),
+    m_hostnameLabel(nullptr),
+    m_hostnameLineEdit(nullptr),
+    m_portLabel(nullptr),
+    m_portLineEdit(nullptr),
+    m_loginLabel(nullptr),
+    m_loginLineEdit(nullptr),
+    m_passwordLabel(nullptr),
+    m_passwordLineEdit(nullptr)
 {
     setTitle(tr_helper(m_titleText));
 
@@ -109,7 +109,7 @@ void ProxyPage::updateVisibleFields()
 
 void ProxyPage::retranslateUi()
 {
-	L_INFO("ProxyPage::retranslateUi() called");
+    L_INFO("ProxyPage::retranslateUi() called");
 
     const QString className = metaObject()->className();
 

@@ -123,7 +123,7 @@ QString InstallWizard::getProxyHostname() const
 quint16 InstallWizard::getProxyPort() const
 {
     if (isCustomInstallation()) {
-        return field("proxy.port").toUInt();
+        return static_cast<quint16>(field("proxy.port").toUInt());
     } else {
         return 1;
     }

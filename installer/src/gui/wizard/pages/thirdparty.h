@@ -14,7 +14,7 @@ class ThirdPartyPage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        ThirdPartyPage(QWidget * parent = 0);
+        ThirdPartyPage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

@@ -31,10 +31,9 @@ static int update_counter = -1;
 MainWindow::MainWindow(QWidget * _parent) :
     QMainWindow(_parent),
     m_ui(new Ui::MainWindow),
-    m_timer(0),
-    m_appUpdater(0)
+    m_timer(nullptr),
+    m_appUpdater(nullptr)
 {
-
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
@@ -75,7 +74,6 @@ MainWindow::MainWindow(QWidget * _parent) :
             SLOT(updateRemainingTimeMessage(const QString&)));
 
     QTimer::singleShot(0, this, SLOT(startUpdate()));
-
 }
 
 /*!
@@ -140,8 +138,8 @@ void MainWindow::startUpdate()
 
 void MainWindow::updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
-    m_ui->singleProgressBar->setMaximum(_bytesTotal);
-    m_ui->singleProgressBar->setValue(_bytesReceived);
+    m_ui->singleProgressBar->setMaximum(static_cast<int>(_bytesTotal));
+    m_ui->singleProgressBar->setValue(static_cast<int>(_bytesReceived));
 }
 
 void MainWindow::updateDownloadSpeedMessage(const QString &_speed)

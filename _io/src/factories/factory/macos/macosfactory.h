@@ -9,7 +9,7 @@ class MacosFactory : public Factory {
     public:
         static MacosFactory * getFactoryInstance()
         {
-            static MacosFactory * factory = 0;
+            static MacosFactory * factory = nullptr;
 
             sm_mutex.lock();
             if (!factory) {

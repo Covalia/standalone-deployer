@@ -8,8 +8,8 @@ ShortcutsPage::ShortcutsPage(QWidget * parent) : QWizardPage(parent),
     m_titleText(QT_TR_NOOP("Shortcuts options")),
     m_createOfflineShortcutCheckBoxText(QT_TR_NOOP("Add an offline launch shortcut")),
     m_launchAppAtStartUpCheckBoxText(QT_TR_NOOP("Launch the application at start-up")),
-    m_createOfflineShortcutCheckBox(0),
-    m_launchAppAtStartUpCheckBox(0)
+    m_createOfflineShortcutCheckBox(nullptr),
+    m_launchAppAtStartUpCheckBox(nullptr)
 {
     setTitle(tr_helper(m_titleText));
 
@@ -32,7 +32,7 @@ int ShortcutsPage::nextId() const
 
 void ShortcutsPage::retranslateUi()
 {
-	L_INFO("ShortcutsPage::retranslateUi() called");
+    L_INFO("ShortcutsPage::retranslateUi() called");
 
     const QString className = metaObject()->className();
 
