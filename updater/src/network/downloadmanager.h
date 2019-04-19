@@ -42,7 +42,7 @@ class DownloadManager : public QObject
 
     private slots:
 
-        void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
+        void onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
 
         void startNextHeadRequest();
         void headMetaDataChanged();

@@ -40,7 +40,7 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
         QNetworkProxy::setApplicationProxy(_proxy);
 
         connect(&m_manager, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)),
-                SLOT(slotProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)));
+                SLOT(onProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)));
     } else {
         L_INFO("No proxy.");
     }
@@ -109,7 +109,7 @@ QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
     return m_errorSet;
 }
 
-void DownloadManager::slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
+void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
 {
     L_INFO("Proxy Authentication required");
     QDialog authenticationDialog;
