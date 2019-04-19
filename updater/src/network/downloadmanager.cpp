@@ -17,21 +17,19 @@
 // TODO : gérer plusieurs tentatives de téléchargement + réinitialiser barre globale en cas de retry ??
 // TODO : gérer les mauvais hôtes + barre téléchargement.
 // TODO : détecter authentification proxy réussie.
-// TODO : tester auth proxy + auth http simultanée
+// TODO : tester auth proxy
 // TODO : gérer les redirections sur l'URL de base
-// TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies, http auth.
+// TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies.
 
 DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
     m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
     m_currentAttempt(0),
-    m_currentAuthAttempt(0),
     m_currentApplication(Application::getEmptyApplication()),
     m_currentReply(nullptr),
     m_saveFile(nullptr),
-    m_temporaryDir(_temporaryDir),
-    m_httpAuthCanceled(0)
+    m_temporaryDir(_temporaryDir)
 {
     L_INFO(QString("Creating DownloadManager with base URL: %1").arg(_baseUrl.toString()));
     L_INFO(QString("Temporary directory: %1").arg(_temporaryDir.absolutePath()));
@@ -46,9 +44,6 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
     } else {
         L_INFO("No proxy.");
     }
-
-    connect(&m_manager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)),
-            SLOT(slotAuthenticationRequired(QNetworkReply*,QAuthenticator*)));
 }
 
 DownloadManager::~DownloadManager()
@@ -63,8 +58,6 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_
         m_totalBytesToDownload = 0;
         m_totalBytesDownloaded = 0;
         m_currentAttempt = 0;
-        m_currentAuthAttempt = 0;
-        m_httpAuthCanceled = 0;
 
         // réinitialisation des fichiers en error
         m_errorSet.clear();
@@ -114,62 +107,6 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString>
 QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
 {
     return m_errorSet;
-}
-
-void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator)
-{
-    if (!m_httpAuthCanceled) {
-        L_INFO("HTTP Authentication required");
-        QUrl url = _reply->url();
-
-        if (m_currentAuthAttempt >= MaxAttemptNumber) {
-            // annuler tout (vider toutes les queues)
-            L_INFO("Aborting all downloads, too many attempts.");
-            _reply->abort();
-            _reply->deleteLater();
-            _reply = nullptr;
-
-            // tous les fichiers restants seront en erreur, car même serveur.
-            m_errorSet += m_headQueue.toSet();
-            // on vide les files de téléchargement
-            m_downloadQueue.clear();
-            m_headQueue.clear();
-        } else {
-            QDialog authenticationDialog;
-            Ui::Dialog ui;
-            ui.setupUi(&authenticationDialog);
-            authenticationDialog.setWindowTitle(tr("HTTP authentification required"));
-            authenticationDialog.adjustSize();
-            ui.siteDescription->setText(tr("%1 on %2", "The realm on host").arg(_authenticator->realm(), url.host()));
-
-            if (authenticationDialog.exec() == QDialog::Accepted) {
-                L_INFO(QString("Authentication with user: %1").arg(ui.userEdit->text()));
-
-                _authenticator->setUser(ui.userEdit->text());
-                _authenticator->setPassword(ui.passwordEdit->text());
-            } else {
-                // annulation, on stoppe.
-                m_httpAuthCanceled = true;
-
-                // annuler tout (vider toutes les queues)
-                L_INFO("Aborting all downloads, canceled by user.");
-                _reply->abort();
-                _reply->deleteLater();
-                _reply = nullptr;
-
-                // tous les fichiers restants seront en erreur, car même serveur.
-                m_errorSet += m_headQueue.toSet();
-                // on vide les files
-                m_downloadQueue.clear();
-                m_headQueue.clear();
-
-                // m_currentAuthAttempt = MaxAttemptNumber;
-            }
-            ++m_currentAuthAttempt;
-        }
-    } else {
-        L_INFO("HTTP Authentication required, but already canceled by user");
-    }
 }
 
 void DownloadManager::slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
@@ -275,7 +212,6 @@ void DownloadManager::currentHeadFinished()
             // on rajoute l'url dans le head pour refaire une tentative
             L_ERROR(QString("Tried: %1 but error occured: %2").arg(QString(pair.second.toEncoded().constData())).arg(m_currentReply->errorString()));
             if (m_currentReply->error() != QNetworkReply::NetworkError::OperationCanceledError
-                && m_currentReply->error() != QNetworkReply::NetworkError::AuthenticationRequiredError
                 && m_currentReply->error() != QNetworkReply::NetworkError::ProxyAuthenticationRequiredError) {
                 L_INFO(QString("Prepend URL: %1 because of error: %2").arg(pair.second.toString()).arg(m_currentReply->error()));
                 // pour tout autre type d'erreur, on remet en file

@@ -42,7 +42,6 @@ class DownloadManager : public QObject
 
     private slots:
 
-        void slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator);
         void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
 
         void startNextHeadRequest();
@@ -71,7 +70,6 @@ class DownloadManager : public QObject
         qint64 m_totalBytesDownloaded;
 
         short m_currentAttempt;
-        short m_currentAuthAttempt;
 
         QSet<QPair<Application, QUrl> > m_errorSet;
 
@@ -88,8 +86,6 @@ class DownloadManager : public QObject
         QTime m_currentDownloadTime;
         QTime m_totalDownloadTime;
         QTime m_lastSampleTime;
-
-        bool m_httpAuthCanceled;
 };
 
 #endif
