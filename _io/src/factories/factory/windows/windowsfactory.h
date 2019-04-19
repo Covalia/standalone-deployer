@@ -1,5 +1,5 @@
-#ifndef IO__WINDOWSFACTORY_H
-#define IO__WINDOWSFACTORY_H
+#ifndef IO_WINDOWSFACTORY_H
+#define IO_WINDOWSFACTORY_H
 
 #include "factories/factory/factory.h"
 #include "factories/apppath/apppathimpl.h"

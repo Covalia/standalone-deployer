@@ -1,5 +1,5 @@
-#ifndef LOADER__UTILS_H
-#define LOADER__UTILS_H
+#ifndef INSTALLER_UTILS_H
+#define INSTALLER_UTILS_H
 
 #include "factories/apppath/apppath.h"
 

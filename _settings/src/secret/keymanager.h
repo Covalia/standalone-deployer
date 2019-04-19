@@ -1,5 +1,5 @@
-#ifndef UPDATER__HASH_KEY_H
-#define UPDATER__HASH_KEY_H
+#ifndef SETTINGS_HASH_KEY_H
+#define SETTINGS_HASH_KEY_H
 
 #include <QString>
 

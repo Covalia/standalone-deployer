@@ -1,5 +1,5 @@
-#ifndef IO__APPPATHIMPL_H
-#define IO__APPPATHIMPL_H
+#ifndef IO_APPPATHIMPL_H
+#define IO_APPPATHIMPL_H
 
 #include "factories/apppath/apppath.h"
 #include "io/config.h"

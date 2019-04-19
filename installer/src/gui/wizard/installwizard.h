@@ -1,5 +1,5 @@
-#ifndef INSTALLER__LICENSEWIZARD_H
-#define INSTALLER__LICENSEWIZARD_H
+#ifndef INSTALLER_INSTALLWIZARD_H
+#define INSTALLER_INSTALLWIZARD_H
 
 #include "gui/abstract_translated_ui.h"
 

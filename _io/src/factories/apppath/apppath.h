@@ -1,5 +1,5 @@
-#ifndef IO__APPPATH_H
-#define IO__APPPATH_H
+#ifndef IO_APPPATH_H
+#define IO_APPPATH_H
 
 #include <QDir>
 #include <QSharedPointer>

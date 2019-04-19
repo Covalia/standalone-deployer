@@ -1,5 +1,5 @@
-#ifndef UPDATER__MAINWINDOW_H
-#define UPDATER__MAINWINDOW_H
+#ifndef UPDATER_MAINWINDOW_H
+#define UPDATER_MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QUrl>

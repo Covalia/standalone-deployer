@@ -1,5 +1,5 @@
-#ifndef UPDATER__HASHMAC512_H
-#define UPDATER__HASHMAC512_H
+#ifndef UPDATER_HASHMAC512_H
+#define UPDATER_HASHMAC512_H
 
 #include <QString>
 

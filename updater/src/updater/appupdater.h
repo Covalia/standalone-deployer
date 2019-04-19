@@ -1,5 +1,5 @@
-#ifndef UPDATER__APPUPDATER_H
-#define UPDATER__APPUPDATER_H
+#ifndef UPDATER_APPUPDATER_H
+#define UPDATER_APPUPDATER_H
 
 #include <QObject>
 #include <QUrl>

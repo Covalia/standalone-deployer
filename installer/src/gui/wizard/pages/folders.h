@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_FOLDERS_H
-#define INSTALLER__WIZARD_PAGE_FOLDERS_H
+#ifndef INSTALLER_WIZARD_PAGE_FOLDERS_H
+#define INSTALLER_WIZARD_PAGE_FOLDERS_H
 
 #include "gui/abstract_translated_ui.h"
 

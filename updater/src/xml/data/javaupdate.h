@@ -1,5 +1,5 @@
-#ifndef UPDATER__JAVAUPDATE_H
-#define UPDATER__JAVAUPDATE_H
+#ifndef UPDATER_JAVAUPDATE_H
+#define UPDATER_JAVAUPDATE_H
 
 #include <QString>
 

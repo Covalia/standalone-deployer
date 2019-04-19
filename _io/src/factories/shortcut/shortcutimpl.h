@@ -1,5 +1,5 @@
-#ifndef IO__SHORTCUTIMPL_H
-#define IO__SHORTCUTIMPL_H
+#ifndef IO_SHORTCUTIMPL_H
+#define IO_SHORTCUTIMPL_H
 
 #include "factories/shortcut/shortcut.h"
 #include "factories/apppath/apppath.h"

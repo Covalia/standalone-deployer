@@ -1,5 +1,5 @@
-#ifndef ENDINSTALLATIONUI_H
-#define ENDINSTALLATIONUI_H
+#ifndef INSTALLER_ENDINSTALLATIONUI_H
+#define INSTALLER_ENDINSTALLATIONUI_H
 
 #include "gui/abstract_translated_ui.h"
 

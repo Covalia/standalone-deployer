@@ -1,5 +1,5 @@
-#ifndef UPDATER__ZIPEXTRACTOR_H
-#define UPDATER__ZIPEXTRACTOR_H
+#ifndef IO_ZIPEXTRACTOR_H
+#define IO_ZIPEXTRACTOR_H
 
 #include <QObject>
 #include <QString>

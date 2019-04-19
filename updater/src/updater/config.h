@@ -1,5 +1,5 @@
-#ifndef UPDATER__CONFIG_H
-#define UPDATER__CONFIG_H
+#ifndef UPDATER_CONFIG_H
+#define UPDATER_CONFIG_H
 
 #include <QString>
 

@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_TYPE_H
-#define INSTALLER__WIZARD_PAGE_TYPE_H
+#ifndef INSTALLER_WIZARD_PAGE_TYPE_H
+#define INSTALLER_WIZARD_PAGE_TYPE_H
 
 #include "gui/abstract_translated_ui.h"
 

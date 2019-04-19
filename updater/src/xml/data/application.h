@@ -1,5 +1,5 @@
-#ifndef UPDATER__APPLICATION_H
-#define UPDATER__APPLICATION_H
+#ifndef UPDATER_APPLICATION_H
+#define UPDATER_APPLICATION_H
 
 #include <QString>
 #include <QHash>

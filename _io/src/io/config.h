@@ -1,5 +1,5 @@
-#ifndef IO__CONFIG_H
-#define IO__CONFIG_H
+#ifndef IO_CONFIG_H
+#define IO_CONFIG_H
 
 #include <QString>
 
