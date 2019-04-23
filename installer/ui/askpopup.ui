@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string notr="true"/>
   </property>
+  <property name="locale">
+   <locale language="French" country="France"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>9</number>
