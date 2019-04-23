@@ -112,6 +112,10 @@ QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
 void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
 {
     L_INFO("Proxy Authentication required");
+
+    // we get here if there is no given credential or bad credentials.
+
+    // ask for credentials
     QDialog authenticationDialog;
     Ui::Dialog ui;
     ui.setupUi(&authenticationDialog);
@@ -127,6 +131,9 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy,
 
         _authenticator->setUser(ui.userEdit->text());
         _authenticator->setPassword(ui.passwordEdit->text());
+
+        // user clicked accepted, so we store credential into settings
+        emit proxyCredentialsChanged(ui.userEdit->text(), ui.passwordEdit->text());
     } else {
         // annuler tout (vider toutes les queues)
         L_INFO("Aborting all downloads, canceled by user.");

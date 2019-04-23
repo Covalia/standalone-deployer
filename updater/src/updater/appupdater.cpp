@@ -27,13 +27,21 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QObject * _parent) : QObject(_parent
 {
     m_appUrl = _appUrl;
 
+    Settings * settings = Settings::getInstance();
+
     QNetworkProxy proxy;
-    // TODO récupérer ici la configuration du proxy.
-    // proxy.setType(QNetworkProxy::HttpProxy);
-    // proxy.setHostName("10.33.26.250");
-    // proxy.setPort(3129);
-    // proxy.setUser("user");
-    // proxy.setPassword("password");
+    // get proxy configuration
+    if (!settings->getProxyHostname().isEmpty()) {
+        proxy.setType(QNetworkProxy::HttpProxy);
+        proxy.setHostName(settings->getProxyHostname());
+        proxy.setPort(static_cast<quint16>(settings->getProxyPort()));
+        if (!settings->getProxyLogin().isEmpty()) {
+            proxy.setUser(settings->getProxyLogin());
+            if (!settings->getProxyPassword().isEmpty()) {
+                proxy.setPassword(settings->getProxyPassword());
+            }
+        }
+    }
 
     m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl.resolved(UpdaterConfig::DeployRootPath + "/"), proxy, this);
 
@@ -47,6 +55,8 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QObject * _parent) : QObject(_parent
             SLOT(updateDownloadFileMessage(const QString&)));
     connect(m_updater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
+    connect(m_updater, SIGNAL(proxyCredentialsChanged(const QString&,const QString&)),
+            SLOT(updateProxyCredentials(const QString&,const QString&)));
 }
 
 AppUpdater::~AppUpdater()
@@ -1175,4 +1185,14 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
     }
 
     return outMap;
+}
+
+void AppUpdater::updateProxyCredentials(const QString &_login, const QString &_password)
+{
+    Settings * settings = Settings::getInstance();
+
+    settings->setProxyLogin(_login);
+    settings->setProxyPassword(_password);
+
+    settings->writeSettings();
 }

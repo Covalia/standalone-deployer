@@ -29,6 +29,7 @@ class AppUpdater : public QObject
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void cnlpDownloadFinished();
         void applicationDownloadFinished();
+        void updateProxyCredentials(const QString &_login, const QString &_password);
 
     private:
 

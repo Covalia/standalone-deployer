@@ -40,6 +40,9 @@ class DownloadManager : public QObject
         // progression totale
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
+        // new proxy credentials filled
+        void proxyCredentialsChanged(const QString &_login, const QString &_password);
+
     private slots:
 
         void onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
