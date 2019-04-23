@@ -53,7 +53,7 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     L_INFO("Will create shortcut in startMenu folder");
     QString folderPath("");
 
-    if (_allUser)
+    if (_allUser) {
 		L_INFO("All users installation");
         folderPath = findAllUserStartMenuProgramsFolder();
     } else {
