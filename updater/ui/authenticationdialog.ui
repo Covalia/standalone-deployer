@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AuthenticationDialog</class>
- <widget class="QDialog" name="AuthenticationDialog">
+ <class>AuthenticationDialogUI</class>
+ <widget class="QDialog" name="AuthenticationDialogUI">
   <property name="windowModality">
    <enum>Qt::WindowModal</enum>
   </property>
@@ -139,7 +139,7 @@ background:#12aa52;
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>AuthenticationDialog</receiver>
+   <receiver>AuthenticationDialogUI</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -155,7 +155,7 @@ background:#12aa52;
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>AuthenticationDialog</receiver>
+   <receiver>AuthenticationDialogUI</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

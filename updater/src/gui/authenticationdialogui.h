@@ -5,14 +5,14 @@
 #include <QString>
 
 namespace Ui {
-class AuthenticationDialog;
+class AuthenticationDialogUI;
 }
 
 class QAbstractButton;
 
 /**
  * @class AuthenticationDialogUI
- * @brief AuthenticationDialog dialog window
+ * @brief AuthenticationDialogUI dialog window
  */
 class AuthenticationDialogUI : public QDialog
 {
@@ -29,7 +29,7 @@ class AuthenticationDialogUI : public QDialog
         QString getPassword() const;
 
     private:
-        Ui::AuthenticationDialog * m_ui;
+        Ui::AuthenticationDialogUI * m_ui;
         QWidget * m_parent;
         void center();
 

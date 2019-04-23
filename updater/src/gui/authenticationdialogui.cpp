@@ -11,7 +11,7 @@
 
 AuthenticationDialogUI::AuthenticationDialogUI(QWidget * _parent, const QString &_siteDescription) :
     QDialog(_parent),
-    m_ui(new Ui::AuthenticationDialog),
+    m_ui(new Ui::AuthenticationDialogUI),
     m_parent(_parent)
 {
     m_ui->setupUi(this);
