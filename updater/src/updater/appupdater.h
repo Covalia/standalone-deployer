@@ -17,7 +17,7 @@ class AppUpdater : public QObject
     Q_OBJECT
 
     public:
-        explicit AppUpdater(const QUrl &_appUrl, QObject * _parent = nullptr);
+        explicit AppUpdater(const QUrl &_appUrl, QWidget * _parent = nullptr);
         virtual ~AppUpdater();
         void start();
 

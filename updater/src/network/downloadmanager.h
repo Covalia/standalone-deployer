@@ -20,7 +20,7 @@ class DownloadManager : public QObject
     Q_OBJECT
 
     public:
-        explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = nullptr);
+        explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * parent = nullptr);
         virtual ~DownloadManager();
 
         void setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloads);
@@ -63,6 +63,8 @@ class DownloadManager : public QObject
 
         static bool createDirIfNotExists(const QDir &_dir);
         static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
+
+        QWidget * m_parent;
 
         // url of deployment
         QUrl m_baseUrl;

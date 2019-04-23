@@ -9,11 +9,12 @@
 #include "settings/settings.h"
 #include "io/unzip/zipextractor.h"
 #include "settings/commandlinesingleton.h"
+#include <QWidget>
 
 #include <QDirIterator>
 #include <QCoreApplication>
 
-AppUpdater::AppUpdater(const QUrl &_appUrl, QObject * _parent) : QObject(_parent),
+AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent),
     m_updater(nullptr),
     m_appPath(Utils::getAppPath()),
     m_remoteUpdaterVersion(""),
@@ -43,7 +44,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QObject * _parent) : QObject(_parent
         }
     }
 
-    m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl.resolved(UpdaterConfig::DeployRootPath + "/"), proxy, this);
+    m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl.resolved(UpdaterConfig::DeployRootPath + "/"), proxy, _parent);
 
     connect(m_updater, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));

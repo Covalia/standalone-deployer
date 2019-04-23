@@ -9,9 +9,9 @@
 #include <QSaveFile>
 #include <QDir>
 #include "updater/config.h"
-#include "ui_authenticationdialog.h"
 #include "log/logger.h"
 #include "xml/data/application.h"
+#include "gui/authenticationdialogui.h"
 
 // TODO : gérer les coupures dans le download + head.
 // TODO : gérer plusieurs tentatives de téléchargement + réinitialiser barre globale en cas de retry ??
@@ -21,7 +21,8 @@
 // TODO : gérer les redirections sur l'URL de base
 // TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies.
 
-DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * _parent) : QObject(_parent),
+    m_parent(_parent),
     m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
@@ -116,24 +117,20 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy,
     // we get here if there is no given credential or bad credentials.
 
     // ask for credentials
-    QDialog authenticationDialog;
-    Ui::Dialog ui;
-    ui.setupUi(&authenticationDialog);
-    authenticationDialog.setWindowTitle(tr("Proxy authentication required"));
-    authenticationDialog.adjustSize();
-    ui.siteDescription->setText(tr("%1", "The proxy domain").arg(_authenticator->realm()));
+    AuthenticationDialogUI authenticationDialog(m_parent, tr("%1", "The proxy domain").arg(_authenticator->realm()));
+    authenticationDialog.show();
 
-    ui.userEdit->setText(_proxy.user());
-    ui.passwordEdit->setText(_proxy.password());
+    authenticationDialog.setLogin(_proxy.user());
+    authenticationDialog.setPassword(_proxy.password());
 
     if (authenticationDialog.exec() == QDialog::Accepted) {
-        L_INFO(QString("Authentication with user: %1").arg(ui.userEdit->text()));
+        L_INFO(QString("Authentication with user: %1").arg(authenticationDialog.getLogin()));
 
-        _authenticator->setUser(ui.userEdit->text());
-        _authenticator->setPassword(ui.passwordEdit->text());
+        _authenticator->setUser(authenticationDialog.getLogin());
+        _authenticator->setPassword(authenticationDialog.getPassword());
 
         // user clicked accepted, so we store credential into settings
-        emit proxyCredentialsChanged(ui.userEdit->text(), ui.passwordEdit->text());
+        emit proxyCredentialsChanged(authenticationDialog.getLogin(), authenticationDialog.getPassword());
     } else {
         // annuler tout (vider toutes les queues)
         L_INFO("Aborting all downloads, canceled by user.");
