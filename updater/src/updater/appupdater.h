@@ -8,6 +8,7 @@
 #include <QMultiMap>
 #include "xml/data/application.h"
 #include "xml/data/download.h"
+#include "network/downloadmanagererror.h"
 #include "utils.h"
 
 class DownloadManager;
@@ -30,6 +31,7 @@ class AppUpdater : public QObject
         void cnlpDownloadFinished();
         void applicationDownloadFinished();
         void updateProxyCredentials(const QString &_login, const QString &_password);
+        void handleDownloaderError(DownloadManagerError::ErrorType _error);
 
     private:
 

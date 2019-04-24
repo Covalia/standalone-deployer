@@ -144,6 +144,8 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy,
         // on vide les files
         m_downloadQueue.clear();
         m_headQueue.clear();
+
+        emit error(DownloadManagerError::ErrorType::ProxyAuthenticationError);
     }
 }
 
@@ -246,6 +248,7 @@ void DownloadManager::startNextDownload()
                 const QPair<Application, QUrl> pair = *it;
                 L_ERROR(QString("Not downloaded: %1").arg(QString(pair.second.toEncoded().constData())));
             }
+            emit error(DownloadManagerError::ErrorType::DownloadError);
         }
 
         emit downloadSpeedMessage("");

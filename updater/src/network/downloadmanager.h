@@ -10,6 +10,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include "xml/data/application.h"
+#include "network/downloadmanagererror.h"
 
 class QNetworkReply;
 class QSaveFile;
@@ -42,6 +43,8 @@ class DownloadManager : public QObject
 
         // new proxy credentials filled
         void proxyCredentialsChanged(const QString &_login, const QString &_password);
+
+        void error(DownloadManagerError::ErrorType _error);
 
     private slots:
 

@@ -58,6 +58,8 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
     connect(m_updater, SIGNAL(proxyCredentialsChanged(const QString&,const QString&)),
             SLOT(updateProxyCredentials(const QString&,const QString&)));
+    connect(m_updater, SIGNAL(error(DownloadManagerError::ErrorType)),
+            SLOT(handleDownloaderError(DownloadManagerError::ErrorType)));
 }
 
 AppUpdater::~AppUpdater()
@@ -1196,4 +1198,13 @@ void AppUpdater::updateProxyCredentials(const QString &_login, const QString &_p
     settings->setProxyPassword(_password);
 
     settings->writeSettings();
+}
+
+void AppUpdater::handleDownloaderError(DownloadManagerError::ErrorType _error)
+{
+    switch (_error) {
+        case DownloadManagerError::ErrorType::ProxyAuthenticationError:
+            L_ERROR(QString("Authentication error with proxy."));
+            break;
+    }
 }

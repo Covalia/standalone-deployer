@@ -83,6 +83,7 @@ HEADERS += src/gui/authenticationdialogui.h
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h
+HEADERS += src/network/downloadmanagererror.h
 HEADERS += src/updater/appupdater.h
 HEADERS += src/updater/config.h
 HEADERS += src/utils.h
