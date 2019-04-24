@@ -105,11 +105,6 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString>
     setUrlListToDownload(urlMap);
 }
 
-QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
-{
-    return m_errorSet;
-}
-
 void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
 {
     L_INFO("Proxy Authentication required");

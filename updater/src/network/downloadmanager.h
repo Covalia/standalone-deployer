@@ -27,8 +27,6 @@ class DownloadManager : public QObject
         void setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloads);
         void setUrlListToDownload(const QMultiMap<Application, QString> &_downloads);
 
-        QSet<QPair<Application, QUrl> > getUrlsInError() const;
-
         static const short MaxAttemptNumber = 3;
 
     signals:
