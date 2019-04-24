@@ -56,7 +56,7 @@ class DownloadManager : public QObject
         void downloadMetaDataChanged();
         void currentDownloadFinished();
         void downloadReadyRead();
-        void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
     private:
 

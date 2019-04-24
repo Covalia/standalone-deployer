@@ -266,7 +266,7 @@ void DownloadManager::startNextDownload()
     connect(m_currentReply, SIGNAL(metaDataChanged()),
             SLOT(downloadMetaDataChanged()));
     connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
-            SLOT(updateProgress(qint64,qint64)));
+            SLOT(onDownloadProgress(qint64,qint64)));
     connect(m_currentReply, SIGNAL(finished()),
             SLOT(currentDownloadFinished()));
     connect(m_currentReply, SIGNAL(readyRead()),
@@ -334,7 +334,7 @@ void DownloadManager::downloadReadyRead()
     m_totalBytesDownloaded += m_saveFile->write(m_currentReply->readAll());
 }
 
-void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
+void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
     emit downloadProgress(_bytesReceived, _bytesTotal);
     emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
