@@ -1204,7 +1204,15 @@ void AppUpdater::handleDownloaderError(DownloadManagerError::ErrorType _error)
 {
     switch (_error) {
         case DownloadManagerError::ErrorType::ProxyAuthenticationError:
-            L_ERROR(QString("Authentication error with proxy."));
+            L_ERROR(QString(">>> Authentication error with proxy."));
+            break;
+
+        case DownloadManagerError::ErrorType::DownloadError:
+            L_ERROR(QString(">>> Download error."));
+            break;
+
+        case DownloadManagerError::ErrorType::TimeoutError:
+            L_ERROR(QString(">>> Timeout error."));
             break;
     }
 }

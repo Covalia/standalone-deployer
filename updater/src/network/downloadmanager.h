@@ -15,6 +15,7 @@
 class QNetworkReply;
 class QSaveFile;
 class QAuthenticator;
+class QTimer;
 
 class DownloadManager : public QObject
 {
@@ -57,15 +58,22 @@ class DownloadManager : public QObject
         void currentDownloadFinished();
         void downloadReadyRead();
         void onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void onHeadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+
+        void onTimeout();
 
     private:
 
         void headsFinished();
+        void logFilesInError() const;
 
         static bool createDirIfNotExists(const QDir &_dir);
         static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
 
         QWidget * m_parent;
+
+        // global timer to check for timeout
+        QTimer * m_timeoutTimer;
 
         // url of deployment
         QUrl m_baseUrl;

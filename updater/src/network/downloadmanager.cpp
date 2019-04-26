@@ -23,6 +23,7 @@
 
 DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * _parent) : QObject(_parent),
     m_parent(_parent),
+    m_timeoutTimer(nullptr),
     m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
@@ -50,6 +51,7 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
 DownloadManager::~DownloadManager()
 {
     delete m_saveFile;
+    delete m_timeoutTimer;
 }
 
 void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloadsMap)
@@ -79,6 +81,14 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_
             m_headQueue.enqueue(pair);
             m_downloadQueue.enqueue(pair);
         }
+
+        if (m_timeoutTimer == nullptr) {
+            m_timeoutTimer = new QTimer(this);
+            m_timeoutTimer->setSingleShot(true);
+            m_timeoutTimer->setInterval(IOConfig::TimeOut);
+            connect(m_timeoutTimer, SIGNAL(timeout()), SLOT(onTimeout()));
+        }
+        m_timeoutTimer->start();
 
         // lancement les requêtes head
         QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
@@ -110,6 +120,7 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy,
     L_INFO("Proxy Authentication required");
 
     // we get here if there is no given credential or bad credentials.
+    m_timeoutTimer->stop();
 
     // ask for credentials
     AuthenticationDialogUI authenticationDialog(m_parent, tr("%1", "The proxy domain").arg(_authenticator->realm()));
@@ -124,18 +135,22 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy &_proxy,
         _authenticator->setUser(authenticationDialog.getLogin());
         _authenticator->setPassword(authenticationDialog.getPassword());
 
+        m_timeoutTimer->start();
+
         // user clicked accepted, so we store credential into settings
         emit proxyCredentialsChanged(authenticationDialog.getLogin(), authenticationDialog.getPassword());
     } else {
         // annuler tout (vider toutes les queues)
         L_INFO("Aborting all downloads, canceled by user.");
 
+        QUrl currentUrl = m_currentReply->url();
         m_currentReply->abort();
         m_currentReply->deleteLater();
         m_currentReply = nullptr;
 
         // tous les fichiers restants seront en erreur, car même serveur.
-        m_errorSet += m_headQueue.toSet();
+        m_errorSet.insert(qMakePair<Application, QUrl>(m_currentApplication, currentUrl));
+        m_errorSet += m_downloadQueue.toSet();
         // on vide les files
         m_downloadQueue.clear();
         m_headQueue.clear();
@@ -162,6 +177,8 @@ void DownloadManager::startNextHeadRequest()
             SLOT(headMetaDataChanged()));
     connect(m_currentReply, SIGNAL(finished()),
             SLOT(currentHeadFinished()));
+    connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
+            SLOT(onHeadProgress(qint64,qint64)));
 }
 
 void DownloadManager::headMetaDataChanged()
@@ -209,6 +226,7 @@ void DownloadManager::currentHeadFinished()
             if (m_downloadQueue.removeOne(pair)) {
                 L_ERROR(QString("Remove %1 from download queue because of error: %2").arg(QString(pair.second.toEncoded().constData())).arg(m_currentReply->errorString()));
             }
+            m_currentAttempt = 0;
         } else {
             // on rajoute l'url dans le head pour refaire une tentative
             L_ERROR(QString("Tried: %1 but error occured: %2").arg(QString(pair.second.toEncoded().constData())).arg(m_currentReply->errorString()));
@@ -236,20 +254,17 @@ void DownloadManager::startNextDownload()
     if (m_downloadQueue.isEmpty()) {
         if (m_errorSet.isEmpty()) {
             L_INFO("All files downloaded successfully");
+            emit downloadsFinished();
         } else {
-            L_ERROR("Some files could not be downloaded");
-            QSet<QPair<Application, QUrl> >::const_iterator it;
-            for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
-                const QPair<Application, QUrl> pair = *it;
-                L_ERROR(QString("Not downloaded: %1").arg(QString(pair.second.toEncoded().constData())));
-            }
+            logFilesInError();
             emit error(DownloadManagerError::ErrorType::DownloadError);
         }
 
         emit downloadSpeedMessage("");
         emit remainingTimeMessage("");
 
-        emit downloadsFinished();
+        m_timeoutTimer->stop();
+
         return;
     }
 
@@ -336,6 +351,11 @@ void DownloadManager::downloadReadyRead()
 
 void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
+    if (_bytesReceived != 0 || _bytesTotal != 0) {
+        // restart timer
+        m_timeoutTimer->start();
+    }
+
     emit downloadProgress(_bytesReceived, _bytesTotal);
     emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
 
@@ -411,6 +431,15 @@ void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTot
     }
 }
 
+void DownloadManager::onHeadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
+{
+    // _bytesReceived seems to always be zero
+    if (_bytesReceived != 0 || _bytesTotal != 0) {
+        // restart timer if data received
+        m_timeoutTimer->start();
+    }
+}
+
 void DownloadManager::headsFinished()
 {
     // les requêtes head sont terminées, on passe aux téléchargements
@@ -472,4 +501,40 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_ba
     }
 
     return "";
+}
+
+void DownloadManager::onTimeout()
+{
+    L_ERROR("Timeout occured...");
+
+    if (m_currentReply != nullptr) {
+        QUrl currentUrl = m_currentReply->url();
+        m_currentReply->abort();
+        m_currentReply->deleteLater();
+        m_currentReply = nullptr;
+
+        // réinit compteur tentatives
+        m_currentAttempt = 0;
+
+        // tous les fichiers restants seront en erreur, car même serveur.
+        m_errorSet.insert(qMakePair<Application, QUrl>(m_currentApplication, currentUrl));
+        m_errorSet += m_downloadQueue.toSet();
+        // on vide les files
+        m_downloadQueue.clear();
+        m_headQueue.clear();
+
+        logFilesInError();
+
+        emit error(DownloadManagerError::ErrorType::TimeoutError);
+    }
+}
+
+void DownloadManager::logFilesInError() const
+{
+    L_ERROR("Some files could not be downloaded");
+    QSet<QPair<Application, QUrl> >::const_iterator it;
+    for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
+        const QPair<Application, QUrl> pair = *it;
+        L_ERROR(QString("Not downloaded: %1").arg(QString(pair.second.toEncoded().constData())));
+    }
 }

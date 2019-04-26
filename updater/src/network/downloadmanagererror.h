@@ -9,7 +9,8 @@ class DownloadManagerError {
     public:
         enum ErrorType {
             ProxyAuthenticationError,
-            DownloadError
+            DownloadError,
+            TimeoutError
         };
         Q_ENUM(ErrorType)
 

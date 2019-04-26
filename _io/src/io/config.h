@@ -97,6 +97,9 @@ class IOConfig
 
         /// Source code URL repository
         static const QString SourceCodeUrl;
+
+        /// Network Timeout in ms
+        static const int TimeOut = 10000;
 };
 
 #endif
