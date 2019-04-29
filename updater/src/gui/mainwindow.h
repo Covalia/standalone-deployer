@@ -32,7 +32,6 @@ class MainWindow : public QMainWindow
 
     private slots:
         void startUpdate();
-        void updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateRemainingTimeMessage(const QString &_time);
         void updateServerUrlMessage(const QUrl &_url);

@@ -74,7 +74,6 @@ void AppUpdater::start()
 
     m_appPath.makeAppDirectories();
 
-    // TODO disable progress bar for cnlp files
     QMultiMap<Application, QUrl> map;
     map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::AppCnlpRemoteFilename + CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
     map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::LoaderCnlpRemoteFilename));

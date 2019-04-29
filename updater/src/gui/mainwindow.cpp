@@ -65,8 +65,6 @@ MainWindow::MainWindow(QWidget * _parent) :
     connect(m_appUpdater, SIGNAL(downloadFileMessage(const QString&)),
             SLOT(updateDownloadFileMessage(const QString&)));
 
-    connect(m_appUpdater, SIGNAL(downloadProgress(qint64,qint64)),
-            SLOT(updateSingleProgress(qint64,qint64)));
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
     connect(m_appUpdater, SIGNAL(downloadSpeedMessage(const QString&)),
@@ -135,12 +133,6 @@ void MainWindow::center()
 void MainWindow::startUpdate()
 {
     m_appUpdater->start();
-}
-
-void MainWindow::updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal)
-{
-    m_ui->singleProgressBar->setMaximum(static_cast<int>(_bytesTotal));
-    m_ui->singleProgressBar->setValue(static_cast<int>(_bytesReceived));
 }
 
 void MainWindow::updateDownloadSpeedMessage(const QString &_speed)

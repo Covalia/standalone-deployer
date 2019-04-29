@@ -303,29 +303,7 @@ QProgressBar::chunk:horizontal {
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0" colspan="3">
-                 <widget class="QProgressBar" name="singleProgressBar">
-                  <property name="styleSheet">
-                   <string notr="true">QProgressBar:horizontal { 
-	 background: #364058; 
-	 border-radius: 3px;
-	padding: 3px; 
-	 margin: 5px 10px 5px 10px;
-	 height: 2px;
-}
-QProgressBar::chunk:horizontal {
-	 background: #7dd1ee;
-}</string>
-                  </property>
-                  <property name="value">
-                   <number>0</number>
-                  </property>
-                  <property name="textVisible">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
+                <item row="2" column="0">
                  <widget class="QLabel" name="remainingTimeLabel">
                   <property name="styleSheet">
                    <string notr="true">color : @gray-text-color;</string>
@@ -338,7 +316,7 @@ QProgressBar::chunk:horizontal {
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="2">
+                <item row="2" column="2">
                  <widget class="QLabel" name="speedLabel">
                   <property name="styleSheet">
                    <string notr="true">color : @gray-text-color;</string>

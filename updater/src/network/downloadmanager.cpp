@@ -13,10 +13,6 @@
 #include "xml/data/application.h"
 #include "gui/authenticationdialogui.h"
 
-// TODO : réinitialiser barre globale en cas de retry ??
-// TODO : une seule barre de téléchargement.
-// TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies.
-
 DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * _parent) : QObject(_parent),
     m_parent(_parent),
     m_timeoutTimer(nullptr),
