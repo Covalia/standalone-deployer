@@ -70,6 +70,7 @@ class DownloadManager : public QObject
         static bool createDirIfNotExists(const QDir &_dir);
         static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
 
+        // widget parent
         QWidget * m_parent;
 
         // global timer to check for timeout

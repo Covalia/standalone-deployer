@@ -3,6 +3,7 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDirIterator>
+#include <QTimer>
 
 #include "gui/askpopupui.h"
 #include "ui_mainwindow.h"

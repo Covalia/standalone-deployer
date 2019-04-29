@@ -5,12 +5,12 @@
 #include <QUrl>
 #include <QPixmap>
 #include <QPushButton>
-#include <QTimer>
 
 class QCloseEvent;
 class QMouseEvent;
 class QWidget;
 class AppUpdater;
+class QTimer;
 
 namespace Ui {
 class MainWindow;
