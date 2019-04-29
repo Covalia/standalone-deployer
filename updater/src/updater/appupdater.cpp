@@ -271,6 +271,8 @@ void AppUpdater::applicationDownloadFinished()
             }
         }
 
+        QCoreApplication::processEvents();
+
         if (doesAppNeedToBeRebuild(Application::getUpdaterApplication())) {
             L_INFO(QString("Need to rebuild and install %1").arg(Application::getUpdaterApplication().getName()));
             updaterInstalledOk &= buildApplicationInTempDirectory(Application::getUpdaterApplication());
@@ -310,6 +312,8 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on updater build.");
             }
         }
+
+        QCoreApplication::processEvents();
 
         if (doesAppNeedToBeRebuild(Application::getJavaApplication())) {
             L_INFO(QString("Need to rebuild and install %1").arg(Application::getJavaApplication().getName()));
@@ -351,6 +355,8 @@ void AppUpdater::applicationDownloadFinished()
             }
         }
 
+        QCoreApplication::processEvents();
+
         if (doesAppNeedToBeRebuild(Application::getAppApplication())) {
             L_INFO(QString("Need to rebuild and install %1").arg(Application::getAppApplication().getName()));
             appInstalledOk &= buildApplicationInTempDirectory(Application::getAppApplication());
@@ -373,6 +379,8 @@ void AppUpdater::applicationDownloadFinished()
                 L_ERROR("Errors have been reported on application build.");
             }
         }
+
+        QCoreApplication::processEvents();
 
         if (loaderInstalledOk && updaterInstalledOk && javaInstalledOk && appInstalledOk) {
             // application, loader and updater didn't throw error.
@@ -417,6 +425,8 @@ void AppUpdater::applicationDownloadFinished()
             } else {
                 L_INFO(QString("Natives directory %1 already exists. No extraction done.").arg(extractDir));
             }
+
+            QCoreApplication::processEvents();
 
             if (native_extracted) {
                 const QString classpathSeparator = m_appPath.getClasspathSeparator();
@@ -850,6 +860,7 @@ bool AppUpdater::checkDownloadsAreOk() const
                 bool found = false;
                 QListIterator<Download> parsedIterator(m_cnlpParsedFiles.values(application));
                 while (parsedIterator.hasNext()) {
+                    QCoreApplication::processEvents();
                     const Download & download = parsedIterator.next();
                     if (download.getHref() == downloadedFile) {
                         found = true;
