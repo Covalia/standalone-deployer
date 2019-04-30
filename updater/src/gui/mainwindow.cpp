@@ -159,7 +159,11 @@ void MainWindow::updateServerUrlMessage(const QUrl &_url)
 void MainWindow::updateDownloadFileMessage(const QString &_file)
 {
     //: This string refers to a downloaded file.
-    m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
+    if (_file.isEmpty()) {
+        m_ui->currentFileLabel->setText("");
+    } else {
+        m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
+    }
 }
 
 void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)

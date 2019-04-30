@@ -254,6 +254,7 @@ void DownloadManager::startNextDownload()
 
         emit downloadSpeedMessage("");
         emit remainingTimeMessage("");
+        emit downloadFileMessage("");
 
         m_timeoutTimer->stop();
 
