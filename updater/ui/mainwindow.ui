@@ -264,7 +264,10 @@ QPushButton:hover {
                 <item row="1" column="0" colspan="2">
                  <widget class="QLabel" name="currentFileLabel">
                   <property name="styleSheet">
-                   <string notr="true">color : @gray-text-color;</string>
+                   <string notr="true">color: @gray-text-color;
+padding: 3px; 
+margin: 2px 10px;
+font-size: 11px;</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -276,10 +279,7 @@ QPushButton:hover {
                   <property name="styleSheet">
                    <string notr="true">QProgressBar:horizontal { 
 	 background: #364058; 
-	 border-radius: 3px;
-	padding: 3px; 
-	 margin: 5px 10px 5px 10px;
-	 height: 2px;
+	 height: 5px;
 }
 QProgressBar::chunk:horizontal {
 	 background: #7dd1ee;
@@ -296,7 +296,10 @@ QProgressBar::chunk:horizontal {
                 <item row="0" column="1" colspan="2">
                  <widget class="QLabel" name="serverLabel">
                   <property name="styleSheet">
-                   <string notr="true">color : @gray-text-color;</string>
+                   <string notr="true">color: @gray-text-color;
+padding: 3px;
+margin: 5px 10px;
+font-size: 12px;</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -306,7 +309,10 @@ QProgressBar::chunk:horizontal {
                 <item row="2" column="0">
                  <widget class="QLabel" name="remainingTimeLabel">
                   <property name="styleSheet">
-                   <string notr="true">color : @gray-text-color;</string>
+                   <string notr="true">color: @gray-text-color;
+padding: 3px; 
+margin: 2px 10px;
+font-size: 11px;</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -319,7 +325,10 @@ QProgressBar::chunk:horizontal {
                 <item row="2" column="2">
                  <widget class="QLabel" name="speedLabel">
                   <property name="styleSheet">
-                   <string notr="true">color : @gray-text-color;</string>
+                   <string notr="true">color: @gray-text-color;
+padding: 3px;
+margin: 2px 10px;
+font-size: 11px;</string>
                   </property>
                   <property name="text">
                    <string/>
