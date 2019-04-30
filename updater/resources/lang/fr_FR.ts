@@ -107,7 +107,7 @@
         <source>%n second(s)</source>
         <comment>the estimated seconds</comment>
         <translation>
-            <numerusform>%n seconds</numerusform>
+            <numerusform>%n seconde</numerusform>
             <numerusform>%n secondes</numerusform>
         </translation>
     </message>
