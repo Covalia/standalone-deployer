@@ -48,17 +48,17 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
 
     connect(m_updater, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
-    connect(m_updater, SIGNAL(downloadSpeedMessage(const QString&)),
+    connect(m_updater, SIGNAL(downloadSpeedupdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
-    connect(m_updater, SIGNAL(remainingTimeMessage(const QString&)),
+    connect(m_updater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
-    connect(m_updater, SIGNAL(downloadFileMessage(const QString&)),
-            SLOT(updateDownloadFileMessage(const QString&)));
+    connect(m_updater, SIGNAL(downloadingFileUpdated(const QString&)),
+            SLOT(updateDownloadingFileMessage(const QString&)));
     connect(m_updater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
     connect(m_updater, SIGNAL(proxyCredentialsChanged(const QString&,const QString&)),
             SLOT(updateProxyCredentials(const QString&,const QString&)));
-    connect(m_updater, SIGNAL(error(DownloadManagerError::ErrorType)),
+    connect(m_updater, SIGNAL(errorOccurred(DownloadManagerError::ErrorType)),
             SLOT(handleDownloaderError(DownloadManagerError::ErrorType)));
 }
 
@@ -70,7 +70,7 @@ AppUpdater::~AppUpdater()
 void AppUpdater::start()
 {
     L_INFO("Updater started");
-    emit serverUrlMessage(m_appUrl);
+    emit serverUrlUpdated(m_appUrl);
 
     m_appPath.makeAppDirectories();
 
@@ -80,7 +80,7 @@ void AppUpdater::start()
     map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::UpdaterCnlpRemoteFilename));
     map.insert(Application::getCnlpApplication(), QUrl(UpdaterConfig::JavaCnlpRemoteFilename));
 
-    connect(m_updater, SIGNAL(downloadsFinished()),
+    connect(m_updater, SIGNAL(allDownloadsFinished()),
             SLOT(cnlpDownloadFinished()));
 
     m_updater->setUrlListToDownload(map);
@@ -93,17 +93,17 @@ void AppUpdater::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
 void AppUpdater::updateDownloadSpeedMessage(const QString &_speed)
 {
-    emit downloadSpeedMessage(_speed);
+    emit downloadSpeedupdated(_speed);
 }
 
 void AppUpdater::updateRemainingTimeMessage(const QString &_time)
 {
-    emit remainingTimeMessage(_time);
+    emit remainingTimeUpdated(_time);
 }
 
-void AppUpdater::updateDownloadFileMessage(const QString &_file)
+void AppUpdater::updateDownloadingFileMessage(const QString &_file)
 {
-    emit downloadFileMessage(_file);
+    emit downloadingFileUpdated(_file);
 }
 
 void AppUpdater::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
@@ -115,7 +115,7 @@ void AppUpdater::cnlpDownloadFinished()
 {
     L_INFO("CNLP files downloads finished");
 
-    disconnect(m_updater, SIGNAL(downloadsFinished()),
+    disconnect(m_updater, SIGNAL(allDownloadsFinished()),
                this, SLOT(cnlpDownloadFinished()));
 
     const QString loaderCnlpPath = m_appPath.getTempCnlpDir().absoluteFilePath(UpdaterConfig::LoaderCnlpLocalFilename);
@@ -203,7 +203,7 @@ void AppUpdater::cnlpDownloadFinished()
 
         processCnlpDownloadFileList();
 
-        connect(m_updater, SIGNAL(downloadsFinished()),
+        connect(m_updater, SIGNAL(allDownloadsFinished()),
                 SLOT(applicationDownloadFinished()));
 
         const QMultiMap<Application, QString> nonAlreadyDownloadedFiles = getFilesNonAlreadyInTempDir(m_filesToDownload, m_cnlpParsedFiles);
@@ -217,7 +217,7 @@ void AppUpdater::cnlpDownloadFinished()
 
 void AppUpdater::applicationDownloadFinished()
 {
-    disconnect(m_updater, SIGNAL(downloadsFinished()),
+    disconnect(m_updater, SIGNAL(allDownloadsFinished()),
                this, SLOT(applicationDownloadFinished()));
 
     L_INFO("Files successfully downloaded");

@@ -26,7 +26,7 @@ class AppUpdater : public QObject
         void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateRemainingTimeMessage(const QString &_time);
-        void updateDownloadFileMessage(const QString &_file);
+        void updateDownloadingFileMessage(const QString &_file);
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void cnlpDownloadFinished();
         void applicationDownloadFinished();
@@ -87,10 +87,10 @@ class AppUpdater : public QObject
 
     signals:
         void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void downloadSpeedMessage(const QString &_speed);
-        void remainingTimeMessage(const QString &_time);
-        void serverUrlMessage(const QUrl &_url);
-        void downloadFileMessage(const QString &_file);
+        void downloadSpeedupdated(const QString &_speed);
+        void remainingTimeUpdated(const QString &_time);
+        void serverUrlUpdated(const QUrl &_url);
+        void downloadingFileUpdated(const QString &_file);
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 };
 

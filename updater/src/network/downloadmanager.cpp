@@ -147,7 +147,7 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy&_proxy, 
         m_downloadQueue.clear();
         m_headQueue.clear();
 
-        emit error(DownloadManagerError::ErrorType::ProxyAuthenticationError);
+        emit errorOccurred(DownloadManagerError::ErrorType::ProxyAuthenticationError);
     }
 }
 
@@ -166,14 +166,14 @@ void DownloadManager::startNextHeadRequest()
     m_currentReply->ignoreSslErrors();
 
     connect(m_currentReply, SIGNAL(metaDataChanged()),
-            SLOT(headMetaDataChanged()));
+            SLOT(onHeadMetaDataChanged()));
     connect(m_currentReply, SIGNAL(finished()),
-            SLOT(currentHeadFinished()));
+            SLOT(onCurrentHeadFinished()));
     connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(onHeadProgress(qint64,qint64)));
 }
 
-void DownloadManager::headMetaDataChanged()
+void DownloadManager::onHeadMetaDataChanged()
 {
     QVariant statusVariant = m_currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     int status = statusVariant.toInt();
@@ -207,7 +207,7 @@ void DownloadManager::headMetaDataChanged()
     }
 }
 
-void DownloadManager::currentHeadFinished()
+void DownloadManager::onCurrentHeadFinished()
 {
     if (m_currentReply->error()) {
         QPair<Application, QUrl> pair(m_currentApplication, m_currentReply->url());
@@ -246,15 +246,15 @@ void DownloadManager::startNextDownload()
     if (m_downloadQueue.isEmpty()) {
         if (m_errorSet.isEmpty()) {
             L_INFO("All files downloaded successfully");
-            emit downloadsFinished();
+            emit allDownloadsFinished();
         } else {
             logFilesInError();
-            emit error(DownloadManagerError::ErrorType::DownloadError);
+            emit errorOccurred(DownloadManagerError::ErrorType::DownloadError);
         }
 
-        emit downloadSpeedMessage("");
-        emit remainingTimeMessage("");
-        emit downloadFileMessage("");
+        emit downloadSpeedUpdated("");
+        emit remainingTimeUpdated("");
+        emit downloadingFileUpdated("");
 
         m_timeoutTimer->stop();
 
@@ -272,22 +272,22 @@ void DownloadManager::startNextDownload()
     m_currentReply->ignoreSslErrors();
 
     connect(m_currentReply, SIGNAL(metaDataChanged()),
-            SLOT(downloadMetaDataChanged()));
+            SLOT(onDownloadMetaDataChanged()));
     connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(onDownloadProgress(qint64,qint64)));
     connect(m_currentReply, SIGNAL(finished()),
-            SLOT(currentDownloadFinished()));
+            SLOT(onCurrentDownloadFinished()));
     connect(m_currentReply, SIGNAL(readyRead()),
-            SLOT(downloadReadyRead()));
+            SLOT(onReadyRead()));
 
     m_currentDownloadTime.start();
 }
 
-void DownloadManager::downloadMetaDataChanged()
+void DownloadManager::onDownloadMetaDataChanged()
 {
     QString currentFilename = getFilenameAndCreateRequiredDirectories(m_baseUrl, m_currentReply, m_temporaryDir);
 
-    emit downloadFileMessage(QFileInfo(currentFilename).fileName());
+    emit downloadingFileUpdated(QFileInfo(currentFilename).fileName());
 
     m_saveFile = new QSaveFile(currentFilename);
 
@@ -304,7 +304,7 @@ void DownloadManager::downloadMetaDataChanged()
     }
 }
 
-void DownloadManager::currentDownloadFinished()
+void DownloadManager::onCurrentDownloadFinished()
 {
     if (m_currentReply->error()) {
         QPair<Application, QUrl> pair(m_currentApplication, m_currentReply->url());
@@ -337,7 +337,7 @@ void DownloadManager::currentDownloadFinished()
     startNextDownload();
 }
 
-void DownloadManager::downloadReadyRead()
+void DownloadManager::onReadyRead()
 {
     m_totalBytesDownloaded += m_saveFile->write(m_currentReply->readAll());
 }
@@ -372,7 +372,7 @@ void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTot
         }
 
         //: This string refers to download speed as "12 ko/s".
-        emit downloadSpeedMessage(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
+        emit downloadSpeedUpdated(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
 
         const qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
         const qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
@@ -418,7 +418,7 @@ void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTot
                 }
             }
 
-            emit remainingTimeMessage(time);
+            emit remainingTimeUpdated(time);
         }
         m_lastSampleTime.restart();
     }
@@ -518,7 +518,7 @@ void DownloadManager::onTimeout()
 
         logFilesInError();
 
-        emit error(DownloadManagerError::ErrorType::TimeoutError);
+        emit errorOccurred(DownloadManagerError::ErrorType::TimeoutError);
     }
 }
 

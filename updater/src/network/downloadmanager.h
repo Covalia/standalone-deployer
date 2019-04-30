@@ -31,11 +31,11 @@ class DownloadManager : public QObject
         static const short MaxAttemptNumber = 3;
 
     signals:
-        void downloadsFinished();
         void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void downloadSpeedMessage(const QString &_speed);
-        void remainingTimeMessage(const QString &_time);
-        void downloadFileMessage(const QString &_file);
+        void allDownloadsFinished();
+        void downloadSpeedUpdated(const QString &_speed);
+        void remainingTimeUpdated(const QString &_time);
+        void downloadingFileUpdated(const QString &_file);
 
         // progression totale
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
@@ -43,20 +43,18 @@ class DownloadManager : public QObject
         // new proxy credentials filled
         void proxyCredentialsChanged(const QString &_login, const QString &_password);
 
-        void error(DownloadManagerError::ErrorType _error);
+        void errorOccurred(DownloadManagerError::ErrorType _error);
 
     private slots:
 
         void onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
-
         void startNextHeadRequest();
-        void headMetaDataChanged();
-        void currentHeadFinished();
-
+        void onHeadMetaDataChanged();
+        void onCurrentHeadFinished();
         void startNextDownload();
-        void downloadMetaDataChanged();
-        void currentDownloadFinished();
-        void downloadReadyRead();
+        void onDownloadMetaDataChanged();
+        void onCurrentDownloadFinished();
+        void onReadyRead();
         void onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void onHeadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 

@@ -60,16 +60,16 @@ MainWindow::MainWindow(QWidget * _parent) :
     Settings * settings = Settings::getInstance();
     m_appUpdater = new AppUpdater(settings->getDeploymentUrl(), this);
 
-    connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
+    connect(m_appUpdater, SIGNAL(serverUrlUpdated(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));
-    connect(m_appUpdater, SIGNAL(downloadFileMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(downloadingFileUpdated(const QString&)),
             SLOT(updateDownloadFileMessage(const QString&)));
 
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
-    connect(m_appUpdater, SIGNAL(downloadSpeedMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(downloadSpeedupdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
-    connect(m_appUpdater, SIGNAL(remainingTimeMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
 
     QTimer::singleShot(0, this, SLOT(startUpdate()));
