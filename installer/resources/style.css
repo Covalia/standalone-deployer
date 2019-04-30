@@ -86,8 +86,9 @@ QLabel#iconLabel {
 
 QLabel#titleLabel {
 	color:#222222;
-	font-weight:bold;
 	padding:5px;
+	font-size:14px;
+	font-weight:normal;
 }
 
 /* wizard style */

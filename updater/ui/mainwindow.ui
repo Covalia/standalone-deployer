@@ -115,14 +115,14 @@
              <property name="font">
               <font>
                <family>Helvetica,Helvetica,serif</family>
-               <pointsize>10</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
+               <weight>50</weight>
+               <bold>false</bold>
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">font-family: &quot;Helvetica&quot;, Helvetica, serif;
-color: @default-text-color ;</string>
+              <string notr="true">color: @default-text-color;
+font-size: 14px;
+font-weight: normal;</string>
              </property>
              <property name="text">
               <string notr="true">Updater</string>
