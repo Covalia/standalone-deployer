@@ -206,17 +206,17 @@ void MainWindow::loadSlideShowImagesFromResources()
         button->setMaximumSize(QSize(10, 10));
         button->setCheckable(true);
 
-        QString bSlideStyle = " QPushButton{                      \
-                                    border-radius: 2px;                     \
-                                    background : @gray-text-color;          \
-                                    margin : 3px;                           \
-                                }                                           \
-                                QPushButton:hover {                         \
-                                    background : @default-text-color; \
-                                }                                           \
-                                QPushButton:checked {                       \
-                                  background : @default-text-color;   \
-                                }";
+        QString bSlideStyle = "QPushButton {"
+            "border-radius:2px;"
+            "background:@gray-text-color;"
+            "margin:3px;"
+            "}"
+            "QPushButton:hover {"
+            "background:@default-text-color;"
+            "}"
+            "QPushButton:checked {"
+            "background:@default-text-color;"
+            "}";
         button->setStyleSheet(StyleManager::transformStyle(bSlideStyle));
         button->setCursor(Qt::PointingHandCursor);
         connect(button, SIGNAL(clicked(bool)), this, SLOT(buttonSlideEvent()));
