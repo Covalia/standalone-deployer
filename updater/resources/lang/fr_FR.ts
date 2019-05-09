@@ -2,6 +2,24 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR" sourcelanguage="en_US">
 <context>
+    <name>AppUpdater</name>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="1218"/>
+        <source>The proxy has not been able to authenticate the user.</source>
+        <translation>Le proxy n&apos;a pas été en mesure d&apos;authentifier l&apos;utilisateur.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="1223"/>
+        <source>Errors occurred while downloading files.</source>
+        <translation>Des erreurs ont eu lieu lors du téléchargement des fichiers.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="1228"/>
+        <source>A timeout occurred while downloading files.</source>
+        <translation>Le délai d&apos;attente a été dépassé lors du téléchargement des fichiers.</translation>
+    </message>
+</context>
+<context>
     <name>AskPopupUI</name>
     <message>
         <location filename="../../ui/askpopup.ui" line="77"/>
@@ -55,37 +73,37 @@
 <context>
     <name>DownloadManager</name>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="367"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="378"/>
         <source>%1 %2</source>
         <extracomment>This string refers to download speed as &quot;12 ko/s&quot;.</extracomment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="120"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="121"/>
         <source>%1</source>
         <comment>The proxy domain</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="355"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="366"/>
         <source>B/s</source>
         <extracomment>This string refers to bytes per second.</extracomment>
         <translation>o/s</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="359"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="370"/>
         <source>kB/s</source>
         <extracomment>This string refers to kilobytes per second.</extracomment>
         <translation>ko/s</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="363"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="374"/>
         <source>MB/s</source>
         <extracomment>This string refers to megabytes per second.</extracomment>
         <translation>Mo/s</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="378"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="389"/>
         <source>%n hour(s)</source>
         <comment>the estimated heures</comment>
         <translation>
@@ -94,7 +112,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="379"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="390"/>
         <source>%n minute(s)</source>
         <comment>the estimated minutes</comment>
         <translation>
@@ -103,7 +121,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="380"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="391"/>
         <source>%n second(s)</source>
         <comment>the estimated seconds</comment>
         <translation>
@@ -112,43 +130,43 @@
         </translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="388"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="399"/>
         <source>%1</source>
         <comment>seconds only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="392"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="403"/>
         <source>%1</source>
         <comment>minutes only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="394"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="405"/>
         <source>%1 %2</source>
         <comment>minutes and seconds only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="400"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="411"/>
         <source>%1</source>
         <comment>hours only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="402"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="413"/>
         <source>%1 %2</source>
         <comment>hours and seconds only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="406"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="417"/>
         <source>%1 %2</source>
         <comment>hours and minutes only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="408"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="419"/>
         <source>%1 %2 %3</source>
         <comment>hours minutes seconds</comment>
         <translation>%1 %2 %3</translation>
@@ -157,22 +175,31 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/gui/mainwindow.cpp" line="156"/>
+        <location filename="../../src/gui/mainwindow.cpp" line="151"/>
         <source>Estimated time: %1</source>
         <extracomment>This string refers to a remaining time.</extracomment>
         <translation>Temps estimé : %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainwindow.cpp" line="163"/>
+        <location filename="../../src/gui/mainwindow.cpp" line="158"/>
         <source>Server %1</source>
         <extracomment>This string refers to a web URL.</extracomment>
         <translation>Serveur %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/mainwindow.cpp" line="169"/>
+        <location filename="../../src/gui/mainwindow.cpp" line="167"/>
         <source>Downloading %1</source>
-        <extracomment>This string refers to a downloaded file.</extracomment>
         <translation>Téléchargement de %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/mainwindow.cpp" line="268"/>
+        <source>An error occurred!</source>
+        <translation>Une erreur s&apos;est produite !</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/mainwindow.cpp" line="269"/>
+        <source>The application will quit because of an error.</source>
+        <translation>L&apos;application va s&apos;arrêter suite à une erreur.</translation>
     </message>
 </context>
 </TS>

@@ -92,6 +92,7 @@ class AppUpdater : public QObject
         void serverUrlUpdated(const QUrl &_url);
         void downloadingFileUpdated(const QString &_file);
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void errorOccurred(const QString &_message);
 };
 
 #endif

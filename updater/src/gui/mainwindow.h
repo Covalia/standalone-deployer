@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow
         void updateSlideShow();
         void updateSlideShow(int _index);
         void buttonSlideEvent();
+        void handleDownloaderError(const QString &_message);
 
     private:
         QPoint m_clickedPosition;

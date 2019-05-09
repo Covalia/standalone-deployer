@@ -4,6 +4,7 @@
 #include <QDesktopWidget>
 #include <QDirIterator>
 #include <QTimer>
+#include <QMessageBox>
 
 #include "gui/askpopupui.h"
 #include "ui_mainwindow.h"
@@ -64,13 +65,14 @@ MainWindow::MainWindow(QWidget * _parent) :
             SLOT(updateServerUrlMessage(const QUrl&)));
     connect(m_appUpdater, SIGNAL(downloadingFileUpdated(const QString&)),
             SLOT(updateDownloadFileMessage(const QString&)));
-
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
     connect(m_appUpdater, SIGNAL(downloadSpeedupdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
     connect(m_appUpdater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
+    connect(m_appUpdater, SIGNAL(errorOccurred(const QString&)),
+            SLOT(handleDownloaderError(const QString&)));
 
     QTimer::singleShot(0, this, SLOT(startUpdate()));
 }
@@ -254,4 +256,19 @@ void MainWindow::updateSlideShow()
     update_counter++;
     update_counter %= m_imagesList.size();
     updateSlideShow(update_counter);
+}
+
+void MainWindow::handleDownloaderError(const QString &_message)
+{
+    m_ui->totalProgressBar->setVisible(false);
+    m_ui->currentFileLabel->setVisible(false);
+    m_ui->remainingTimeLabel->setVisible(false);
+    m_ui->speedLabel->setVisible(false);
+
+    QMessageBox msgBox(QMessageBox::Critical, tr("An error occurred!"),
+                       QString("%1\n\n%2").arg(tr("The application will quit because of an error.")).arg(_message),
+                       QMessageBox::Ok, this, Qt::Window | Qt::FramelessWindowHint);
+    msgBox.exec();
+
+    qApp->quit();
 }
