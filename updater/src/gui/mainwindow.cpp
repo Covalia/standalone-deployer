@@ -266,7 +266,7 @@ void MainWindow::handleDownloaderError(const QString &_message)
     m_ui->speedLabel->setVisible(false);
 
     QMessageBox msgBox(QMessageBox::Critical, tr("An error occurred!"),
-                       QString("%1\n\n%2").arg(tr("The application will quit because of an error.")).arg(_message),
+                       QString("%1\n\n%2").arg(tr("The application will quit.")).arg(_message),
                        QMessageBox::Ok, this, Qt::Window | Qt::FramelessWindowHint);
     msgBox.exec();
 
