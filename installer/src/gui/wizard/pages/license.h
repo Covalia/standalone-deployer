@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_LICENSE_H
-#define INSTALLER__WIZARD_PAGE_LICENSE_H
+#ifndef INSTALLER_WIZARD_PAGE_LICENSE_H
+#define INSTALLER_WIZARD_PAGE_LICENSE_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -15,7 +15,7 @@ class LicensePage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        LicensePage(QWidget * parent = 0);
+        LicensePage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

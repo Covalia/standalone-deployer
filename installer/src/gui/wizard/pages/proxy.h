@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_PROXY_H
-#define INSTALLER__WIZARD_PAGE_PROXY_H
+#ifndef INSTALLER_WIZARD_PAGE_PROXY_H
+#define INSTALLER_WIZARD_PAGE_PROXY_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -16,7 +16,7 @@ class ProxyPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        ProxyPage(QWidget * parent = 0);
+        ProxyPage(QWidget * parent = nullptr);
         int nextId() const override;
         bool isComplete() const override;
         // bool validatePage() override; // TODO check proxy connection

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>AuthenticationDialogUI</class>
+ <widget class="QDialog" name="AuthenticationDialogUI">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,13 +14,31 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QDialog{
+	border :  1px solid gray;
+	background : white
+}</string>
+  </property>
+  <property name="locale">
+   <locale language="French" country="France"/>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="titlelabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color : @gray-text-color;</string>
+     </property>
      <property name="text">
       <string>Credentials are required by the remote host</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -50,11 +71,28 @@
    </item>
    <item row="5" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+border-radius:3px;
+border:1px solid gray;
+color:white;
+padding:5px 5px;
+color:#4f5661;
+}
+
+QPushButton:hover {
+color:white;
+background:#12aa52;
+}</string>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -101,7 +139,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AuthenticationDialogUI</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -117,7 +155,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>AuthenticationDialogUI</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

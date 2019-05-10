@@ -1,5 +1,5 @@
-#ifndef INSTALLMANAGER_H
-#define INSTALLMANAGER_H
+#ifndef INSTALLER_INSTALLMANAGER_H
+#define INSTALLER_INSTALLMANAGER_H
 
 #include <QString>
 #include <QObject>

@@ -15,7 +15,7 @@ const QString AppPathImpl::OldDirSuffix("-old");
 
 AppPathImpl::AppPathImpl(IOConfig::AppComponent _app)
 {
-	// logger is not yet instantiated here.
+    // logger is not yet instantiated here.
     qDebug() << "Installation directory: " << m_installationDir.absolutePath() << _app;
 }
 
@@ -395,7 +395,6 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
                             L_ERROR(QString("%1 can not be extracted to %2").arg(javaVersionDir.absoluteFilePath(file)).arg(javaDistDir.absolutePath()));
                             return false;
                         }
-                        break;
                     }
                 }
 
@@ -410,8 +409,6 @@ bool AppPathImpl::prepareJava(const QString &_version, bool _forceOverwrite)
         L_ERROR("Java version path does not exist.");
         return false;
     }
-
-    return false;
 }
 
 bool AppPathImpl::cdUp(QDir &_dir, int _numUp)

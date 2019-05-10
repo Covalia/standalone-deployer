@@ -1,16 +1,16 @@
-#ifndef UPDATER__MAINWINDOW_H
-#define UPDATER__MAINWINDOW_H
+#ifndef UPDATER_MAINWINDOW_H
+#define UPDATER_MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QUrl>
 #include <QPixmap>
 #include <QPushButton>
-#include <QTimer>
 
 class QCloseEvent;
 class QMouseEvent;
 class QWidget;
 class AppUpdater;
+class QTimer;
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     public:
-        explicit MainWindow(QWidget * _parent = 0);
+        explicit MainWindow(QWidget * _parent = nullptr);
         ~MainWindow();
         void center();
 
@@ -32,7 +32,6 @@ class MainWindow : public QMainWindow
 
     private slots:
         void startUpdate();
-        void updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal);
         void updateDownloadSpeedMessage(const QString &_speed);
         void updateRemainingTimeMessage(const QString &_time);
         void updateServerUrlMessage(const QUrl &_url);
@@ -42,6 +41,7 @@ class MainWindow : public QMainWindow
         void updateSlideShow();
         void updateSlideShow(int _index);
         void buttonSlideEvent();
+        void handleDownloaderError(const QString &_message);
 
     private:
         QPoint m_clickedPosition;

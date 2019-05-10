@@ -1,5 +1,5 @@
-#ifndef UPDATER__DOWNLOAD_H
-#define UPDATER__DOWNLOAD_H
+#ifndef UPDATER_DOWNLOAD_H
+#define UPDATER_DOWNLOAD_H
 
 #include <QString>
 #include "utils/hashmac/hashmac512.h"

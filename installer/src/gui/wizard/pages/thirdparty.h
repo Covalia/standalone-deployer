@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_THIRDPARTY_H
-#define INSTALLER__WIZARD_PAGE_THIRDPARTY_H
+#ifndef INSTALLER_WIZARD_PAGE_THIRDPARTY_H
+#define INSTALLER_WIZARD_PAGE_THIRDPARTY_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -14,7 +14,7 @@ class ThirdPartyPage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        ThirdPartyPage(QWidget * parent = 0);
+        ThirdPartyPage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

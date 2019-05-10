@@ -1,7 +1,7 @@
 #include "factories/shortcut/shortcut.h"
 #include "factories/factory/factory.h"
 
-Shortcut::Shortcut() : m_shortcutImpl(0)
+Shortcut::Shortcut() : m_shortcutImpl(nullptr)
 {
     Factory * factory = Factory::getFactory();
 

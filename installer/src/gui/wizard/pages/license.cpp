@@ -10,10 +10,10 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     m_licenseLabelText(QT_TR_NOOP("This software installer is distributed under the terms of the GNU General Public License version 3 (GPLv3).")),
     m_linkToSourcesLabelText(QT_TR_NOOP("Source code can be downloaded from: %1")),
     m_agreeLicenseCheckBoxText(QT_TR_NOOP("I agree to the terms of the license")),
-    m_licenseLabel(0),
-    m_linkToSourcesLabel(0),
-    m_licensePlainTextEdit(0),
-    m_agreeLicenseCheckBox(0)
+    m_licenseLabel(nullptr),
+    m_linkToSourcesLabel(nullptr),
+    m_licensePlainTextEdit(nullptr),
+    m_agreeLicenseCheckBox(nullptr)
 {
     setTitle(tr_helper(m_titleText));
 

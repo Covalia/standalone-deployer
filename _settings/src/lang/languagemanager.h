@@ -1,5 +1,5 @@
-#ifndef SETTINGS__LANGUAGEMANAGER_H
-#define SETTINGS__LANGUAGEMANAGER_H
+#ifndef SETTINGS_LANGUAGEMANAGER_H
+#define SETTINGS_LANGUAGEMANAGER_H
 
 #include <QTranslator>
 #include <QString>

@@ -1,5 +1,5 @@
-#ifndef UPDATER__DOWNLOADMANAGER_H
-#define UPDATER__DOWNLOADMANAGER_H
+#ifndef UPDATER_DOWNLOADMANAGER_H
+#define UPDATER_DOWNLOADMANAGER_H
 
 #include <QFile>
 #include <QObject>
@@ -10,86 +10,95 @@
 #include <QNetworkAccessManager>
 #include <QNetworkProxy>
 #include "xml/data/application.h"
+#include "network/downloadmanagererror.h"
 
 class QNetworkReply;
 class QSaveFile;
 class QAuthenticator;
+class QTimer;
 
 class DownloadManager : public QObject
 {
     Q_OBJECT
 
-public:
-    explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * parent = 0);
-    virtual ~DownloadManager();
+    public:
+        explicit DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * parent = nullptr);
+        virtual ~DownloadManager();
 
-    void setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloads);
-    void setUrlListToDownload(const QMultiMap<Application, QString> &_downloads);
+        void setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloads);
+        void setUrlListToDownload(const QMultiMap<Application, QString> &_downloads);
 
-    QSet<QPair<Application, QUrl> > getUrlsInError() const;
+        static const short MaxAttemptNumber = 3;
 
-    static const short MaxAttemptNumber = 3;
+    signals:
+        void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void allDownloadsFinished();
+        void downloadSpeedUpdated(const QString &_speed);
+        void remainingTimeUpdated(const QString &_time);
+        void downloadingFileUpdated(const QString &_file);
 
-signals:
-    void downloadsFinished();
-    void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-    void downloadSpeedMessage(const QString &_speed);
-    void remainingTimeMessage(const QString &_time);
-    void downloadFileMessage(const QString &_file);
+        // progression totale
+        void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
-    // progression totale
-    void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        // new proxy credentials filled
+        void proxyCredentialsChanged(const QString &_login, const QString &_password);
 
-private slots:
+        void errorOccurred(DownloadManagerError::ErrorType _error);
 
-    void slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator);
-    void slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
+    private slots:
 
-    void startNextHeadRequest();
-    void headMetaDataChanged();
-    void currentHeadFinished();
+        void onProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator);
+        void startNextHeadRequest();
+        void onHeadMetaDataChanged();
+        void onCurrentHeadFinished();
+        void startNextDownload();
+        void onDownloadMetaDataChanged();
+        void onCurrentDownloadFinished();
+        void onReadyRead();
+        void onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void onHeadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
 
-    void startNextDownload();
-    void downloadMetaDataChanged();
-    void currentDownloadFinished();
-    void downloadReadyRead();
-    void updateProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void onTimeout();
 
-private:
+    private:
 
-    void headsFinished();
+        void headsFinished();
+        void logFilesInError() const;
 
-    static bool createDirIfNotExists(const QDir &_dir);
-    static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
+        static bool createDirIfNotExists(const QDir &_dir);
+        static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
 
-    // url of deployment
-    QUrl m_baseUrl;
+        // widget parent
+        QWidget * m_parent;
 
-    QNetworkAccessManager m_manager;
+        // global timer to check for timeout
+        QTimer * m_timeoutTimer;
 
-    qint64 m_totalBytesToDownload;
-    qint64 m_totalBytesDownloaded;
+        // url of deployment
+        QUrl m_baseUrl;
 
-    short m_currentAttempt;
-    short m_currentAuthAttempt;
+        QNetworkAccessManager m_manager;
 
-    QSet<QPair<Application, QUrl> > m_errorSet;
+        qint64 m_totalBytesToDownload;
+        qint64 m_totalBytesDownloaded;
 
-    Application m_currentApplication;
-    QNetworkReply * m_currentReply;
+        short m_currentAttempt;
 
-    QQueue<QPair<Application, QUrl> > m_headQueue;
-    QQueue<QPair<Application, QUrl> > m_downloadQueue;
+        QSet<QPair<Application, QUrl> > m_errorSet;
 
-    QSaveFile * m_saveFile;
-    QDir m_temporaryDir;
+        Application m_currentApplication;
+        QNetworkReply * m_currentReply;
 
-    /// download time to calculate download speed.
-    QTime m_currentDownloadTime;
-    QTime m_totalDownloadTime;
-    QTime m_lastSampleTime;
+        QQueue<QPair<Application, QUrl> > m_headQueue;
+        QQueue<QPair<Application, QUrl> > m_downloadQueue;
 
-    bool m_httpAuthCanceled;
+        QSaveFile * m_saveFile;
+        QDir m_temporaryDir;
+
+        /// download time to calculate download speed.
+        QTime m_currentDownloadTime;
+        QTime m_totalDownloadTime;
+        QTime m_lastSampleTime;
 };
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_FOLDERS_H
-#define INSTALLER__WIZARD_PAGE_FOLDERS_H
+#ifndef INSTALLER_WIZARD_PAGE_FOLDERS_H
+#define INSTALLER_WIZARD_PAGE_FOLDERS_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -17,7 +17,7 @@ class FoldersPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        FoldersPage(bool _changeDataLocationAllowed, QWidget * parent = 0);
+        FoldersPage(bool _changeDataLocationAllowed, QWidget * parent = nullptr);
         int nextId() const override;
         bool isComplete() const override;
         void retranslateUi() override;

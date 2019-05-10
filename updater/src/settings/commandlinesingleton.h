@@ -1,5 +1,5 @@
-#ifndef UPDATER__COMMANDLINESINGLETON_H
-#define UPDATER__COMMANDLINESINGLETON_H
+#ifndef UPDATER_COMMANDLINESINGLETON_H
+#define UPDATER_COMMANDLINESINGLETON_H
 
 #include <mutex>
 #include <QStringList>
@@ -8,7 +8,7 @@ class CommandLineSingleton {
     public:
         static CommandLineSingleton * getInstance()
         {
-            static CommandLineSingleton * factory = 0;
+            static CommandLineSingleton * factory = nullptr;
 
             sm_mutex.lock();
             if (!factory) {

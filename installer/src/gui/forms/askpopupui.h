@@ -1,5 +1,5 @@
-#ifndef INSTALLER__ASKPOPUP_H
-#define INSTALLER__ASKPOPUP_H
+#ifndef INSTALLER_ASKPOPUPUI_H
+#define INSTALLER_ASKPOPUPUI_H
 
 #include <QDialog>
 #include <QString>
@@ -17,7 +17,7 @@ class AskPopupUI : public QDialog
     Q_OBJECT
 
     public:
-        explicit AskPopupUI(QWidget * _parent = 0, QString _title = "", QString _description = "");
+        explicit AskPopupUI(QWidget * _parent = nullptr, QString _title = "", QString _description = "");
         virtual ~AskPopupUI();
         int exec();
 

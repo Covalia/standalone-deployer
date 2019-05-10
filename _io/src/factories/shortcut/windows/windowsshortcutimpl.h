@@ -1,5 +1,5 @@
-#ifndef IO__WINDOWSSHORTCUTIMPL_H
-#define IO__WINDOWSSHORTCUTIMPL_H
+#ifndef IO_WINDOWSSHORTCUTIMPL_H
+#define IO_WINDOWSSHORTCUTIMPL_H
 
 #include "factories/shortcut/shortcutimpl.h"
 
@@ -99,7 +99,6 @@ class WindowsShortcutImpl : public ShortcutImpl {
         HRESULT createWindowsShortcut(QString _targetFile, QString _targetArgs,
                                       QString _linkFile, QString _description,
                                       QString _currentDir, QString _iconFile, int _iconIndex);
-
 };
 
 #endif

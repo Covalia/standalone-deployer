@@ -4,27 +4,27 @@
 <context>
     <name>AskPopupUI</name>
     <message>
-        <location filename="../../ui/askpopup.ui" line="64"/>
+        <location filename="../../ui/askpopup.ui" line="67"/>
         <source>Question</source>
         <translation>Question</translation>
     </message>
     <message>
-        <location filename="../../ui/askpopup.ui" line="98"/>
+        <location filename="../../ui/askpopup.ui" line="101"/>
         <source>Do you want to exit the application?</source>
         <translation>Do you want to exit the application?</translation>
     </message>
     <message>
-        <location filename="../../ui/askpopup.ui" line="114"/>
+        <location filename="../../ui/askpopup.ui" line="117"/>
         <source>The installation will be stopped</source>
         <translation>The installation will be stopped</translation>
     </message>
     <message>
-        <location filename="../../ui/askpopup.ui" line="166"/>
+        <location filename="../../ui/askpopup.ui" line="169"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../../ui/askpopup.ui" line="207"/>
+        <location filename="../../ui/askpopup.ui" line="210"/>
         <source>No</source>
         <translation>No</translation>
     </message>

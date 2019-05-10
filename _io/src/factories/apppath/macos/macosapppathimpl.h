@@ -1,5 +1,5 @@
-#ifndef IO__MACOSAPPPATHIMPL_H
-#define IO__MACOSAPPPATHIMPL_H
+#ifndef IO_MACOSAPPPATHIMPL_H
+#define IO_MACOSAPPPATHIMPL_H
 
 #include "factories/apppath/apppathimpl.h"
 

@@ -1,5 +1,5 @@
-#ifndef IO__CONFIG_H
-#define IO__CONFIG_H
+#ifndef IO_CONFIG_H
+#define IO_CONFIG_H
 
 #include <QString>
 
@@ -97,6 +97,9 @@ class IOConfig
 
         /// Source code URL repository
         static const QString SourceCodeUrl;
+
+        /// Network Timeout in ms
+        static const int TimeOut = 10000;
 };
 
 #endif

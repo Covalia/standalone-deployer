@@ -1,5 +1,5 @@
-#ifndef LOADERMANAGER_H
-#define LOADERMANAGER_H
+#ifndef LOADER_LOADERMANAGER_H
+#define LOADER_LOADERMANAGER_H
 
 #include <QObject>
 

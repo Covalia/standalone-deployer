@@ -1,5 +1,5 @@
-#ifndef IO__WINDOWSAPPPATHIMPL_H
-#define IO__WINDOWSAPPPATHIMPL_H
+#ifndef IO_WINDOWSAPPPATHIMPL_H
+#define IO_WINDOWSAPPPATHIMPL_H
 
 #include "factories/apppath/apppathimpl.h"
 

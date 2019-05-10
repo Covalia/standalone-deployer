@@ -10,12 +10,12 @@ FoldersPage::FoldersPage(bool _changeDataLocationAllowed, QWidget * parent) : QW
     m_changeInstallationFolderPushButtonText(QT_TR_NOOP("Change")),
     m_chooseDataFolderCheckBoxText(QT_TR_NOOP("&Choose a custom data directory")),
     m_changeDataFolderPushButtonText(QT_TR_NOOP("Change")),
-    m_installationFolderLabel(0),
-    m_installationFolderLineEdit(0),
-    m_changeInstallationFolderPushButton(0),
-    m_chooseDataFolderCheckBox(0),
-    m_dataFolderLineEdit(0),
-    m_changeDataFolderPushButton(0),
+    m_installationFolderLabel(nullptr),
+    m_installationFolderLineEdit(nullptr),
+    m_changeInstallationFolderPushButton(nullptr),
+    m_chooseDataFolderCheckBox(nullptr),
+    m_dataFolderLineEdit(nullptr),
+    m_changeDataFolderPushButton(nullptr),
     m_changeDataLocationAllowed(_changeDataLocationAllowed)
 {
     setTitle(tr_helper(m_titleText));
@@ -122,7 +122,7 @@ QString FoldersPage::fileChooserDialog(QString directory)
 
 void FoldersPage::retranslateUi()
 {
-	L_INFO("FoldersPage::retranslateUi() called");
+    L_INFO("FoldersPage::retranslateUi() called");
 
     const QString className = metaObject()->className();
 

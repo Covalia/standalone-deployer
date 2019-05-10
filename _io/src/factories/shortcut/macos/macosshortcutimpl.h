@@ -1,5 +1,5 @@
-#ifndef IO__MACOSSHORTCUTIMPL_H
-#define IO__MACOSSHORTCUTIMPL_H
+#ifndef IO_MACOSSHORTCUTIMPL_H
+#define IO_MACOSSHORTCUTIMPL_H
 
 #include "factories/shortcut/shortcutimpl.h"
 

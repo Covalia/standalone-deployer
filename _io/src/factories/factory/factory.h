@@ -1,5 +1,5 @@
-#ifndef IO__FACTORY_H
-#define IO__FACTORY_H
+#ifndef IO_FACTORY_H
+#define IO_FACTORY_H
 
 #include <mutex>
 #include <QDir>

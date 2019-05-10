@@ -1,5 +1,5 @@
-#ifndef UPDATER__DEPLOYMENTXML_H
-#define UPDATER__DEPLOYMENTXML_H
+#ifndef UPDATER_DEPLOYMENTXML_H
+#define UPDATER_DEPLOYMENTXML_H
 
 #include <QString>
 #include <QXmlStreamReader>
@@ -24,7 +24,7 @@ class DeploymentXML : public QObject
          * @param _pathCnlp : path to Cnlp file
          * @param _parent
          */
-        explicit DeploymentXML(const QString &_pathCnlp, QObject * _parent = 0);
+        explicit DeploymentXML(const QString &_pathCnlp, QObject * _parent = nullptr);
 
         /**
          * @brief destructor

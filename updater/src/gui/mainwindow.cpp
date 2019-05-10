@@ -3,6 +3,8 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDirIterator>
+#include <QTimer>
+#include <QMessageBox>
 
 #include "gui/askpopupui.h"
 #include "ui_mainwindow.h"
@@ -31,10 +33,9 @@ static int update_counter = -1;
 MainWindow::MainWindow(QWidget * _parent) :
     QMainWindow(_parent),
     m_ui(new Ui::MainWindow),
-    m_timer(0),
-    m_appUpdater(0)
+    m_timer(nullptr),
+    m_appUpdater(nullptr)
 {
-
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
@@ -58,24 +59,22 @@ MainWindow::MainWindow(QWidget * _parent) :
     connect(m_ui->closeButton, SIGNAL(clicked()), qApp, SLOT(closeAllWindows()));
 
     Settings * settings = Settings::getInstance();
-    m_appUpdater = new AppUpdater(settings->getDeploymentUrl(), UpdaterConfig::InstallationDir, this);
+    m_appUpdater = new AppUpdater(settings->getDeploymentUrl(), this);
 
-    connect(m_appUpdater, SIGNAL(serverUrlMessage(const QUrl&)),
+    connect(m_appUpdater, SIGNAL(serverUrlUpdated(const QUrl&)),
             SLOT(updateServerUrlMessage(const QUrl&)));
-    connect(m_appUpdater, SIGNAL(downloadFileMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(downloadingFileUpdated(const QString&)),
             SLOT(updateDownloadFileMessage(const QString&)));
-
-    connect(m_appUpdater, SIGNAL(downloadProgress(qint64,qint64)),
-            SLOT(updateSingleProgress(qint64,qint64)));
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
-    connect(m_appUpdater, SIGNAL(downloadSpeedMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(downloadSpeedupdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
-    connect(m_appUpdater, SIGNAL(remainingTimeMessage(const QString&)),
+    connect(m_appUpdater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
+    connect(m_appUpdater, SIGNAL(errorOccurred(const QString&)),
+            SLOT(handleDownloaderError(const QString&)));
 
     QTimer::singleShot(0, this, SLOT(startUpdate()));
-
 }
 
 /*!
@@ -138,12 +137,6 @@ void MainWindow::startUpdate()
     m_appUpdater->start();
 }
 
-void MainWindow::updateSingleProgress(qint64 _bytesReceived, qint64 _bytesTotal)
-{
-    m_ui->singleProgressBar->setMaximum(_bytesTotal);
-    m_ui->singleProgressBar->setValue(_bytesReceived);
-}
-
 void MainWindow::updateDownloadSpeedMessage(const QString &_speed)
 {
     m_ui->speedLabel->setText(_speed);
@@ -168,7 +161,11 @@ void MainWindow::updateServerUrlMessage(const QUrl &_url)
 void MainWindow::updateDownloadFileMessage(const QString &_file)
 {
     //: This string refers to a downloaded file.
-    m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
+    if (_file.isEmpty()) {
+        m_ui->currentFileLabel->setText("");
+    } else {
+        m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
+    }
 }
 
 void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
@@ -259,4 +256,19 @@ void MainWindow::updateSlideShow()
     update_counter++;
     update_counter %= m_imagesList.size();
     updateSlideShow(update_counter);
+}
+
+void MainWindow::handleDownloaderError(const QString &_message)
+{
+    m_ui->totalProgressBar->setVisible(false);
+    m_ui->currentFileLabel->setVisible(false);
+    m_ui->remainingTimeLabel->setVisible(false);
+    m_ui->speedLabel->setVisible(false);
+
+    QMessageBox msgBox(QMessageBox::Critical, tr("An error occurred!"),
+                       QString("%1\n\n%2").arg(tr("The application will quit.")).arg(_message),
+                       QMessageBox::Ok, this, Qt::Window | Qt::FramelessWindowHint);
+    msgBox.exec();
+
+    qApp->quit();
 }

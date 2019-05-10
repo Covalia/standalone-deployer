@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_SHORTCUTS_H
-#define INSTALLER__WIZARD_PAGE_SHORTCUTS_H
+#ifndef INSTALLER_WIZARD_PAGE_SHORTCUTS_H
+#define INSTALLER_WIZARD_PAGE_SHORTCUTS_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -14,7 +14,7 @@ class ShortcutsPage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        ShortcutsPage(QWidget * parent = 0);
+        ShortcutsPage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

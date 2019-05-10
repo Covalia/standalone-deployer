@@ -19,10 +19,10 @@
 #include "io/fileutils.h"
 
 InstallManager::InstallManager() : QThread(),
-    m_uiManager(0),
+    m_uiManager(nullptr),
     m_appPath(Utils::getAppPath()),
-    m_projectSettings(0),
-    m_settings(0),
+    m_projectSettings(nullptr),
+    m_settings(nullptr),
     m_lineParser(),
     m_installLocation(""),
     m_dataLocation(""),
@@ -36,7 +36,7 @@ InstallManager::InstallManager() : QThread(),
     m_runAtStart(false),
     m_createOfflineShortcut(false)
 {
-	L_INFO("Init InstallManager");
+    L_INFO("Init InstallManager");
     // init project resources
     m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
     m_projectSettings->readSettings();
@@ -145,7 +145,7 @@ void InstallManager::initInstallation()
         }
 
         if (m_lineParser.isProxyPortSet()) {
-            m_uiManager->setProxyPort(m_lineParser.getProxyPort().toUInt());
+            m_uiManager->setProxyPort(static_cast<quint16>(m_lineParser.getProxyPort().toUInt()));
             m_uiManager->setCustomInstallation(true);
         }
 
@@ -265,7 +265,7 @@ void InstallManager::run()
 
     m_settings->setProxyUsed(m_proxyUsed);
     m_settings->setProxyHostname(m_proxyHostname);
-    m_settings->setProxyPort(m_proxyPort.toUInt());
+    m_settings->setProxyPort(static_cast<int>(m_proxyPort.toUInt()));
     m_settings->setProxyLogin(m_proxyLogin);
     m_settings->setProxyPassword(m_proxyPassword);
 
@@ -330,7 +330,7 @@ void InstallManager::startInstallation()
             L_INFO("Success Installation");
             emit endInstallation(success, errorMessages);
         } else {
-			L_ERROR("Installation error");
+            L_ERROR("Installation error");
             emit endInstallation(success, errorMessages);
         }
     } else {
@@ -425,6 +425,7 @@ bool InstallManager::createIniConfigurationFile()
 bool InstallManager::extractResources()
 {
     QPair<bool, QString> extractUpdater = m_appPath.extractResource(*m_appPath.getUpdaterResourcesFile(), *m_appPath.getUpdaterFile(m_appPath.getUpdaterVersion()));
+
     if (extractUpdater.first) {
         L_INFO(extractUpdater.second);
     } else {
@@ -566,7 +567,7 @@ bool InstallManager::launchLoader()
 void InstallManager::closeInstallation(bool _launchApplication)
 {
     if (_launchApplication) {
-		L_INFO("Application must be started.");
+        L_INFO("Application must be started.");
         launchLoader();
     }
     L_INFO("End treatment, close application");

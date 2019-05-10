@@ -1,5 +1,5 @@
-#ifndef IO__MACOSFACTORY_H
-#define IO__MACOSFACTORY_H
+#ifndef IO_MACOSFACTORY_H
+#define IO_MACOSFACTORY_H
 
 #include "factories/factory/factory.h"
 #include "factories/apppath/apppathimpl.h"
@@ -9,7 +9,7 @@ class MacosFactory : public Factory {
     public:
         static MacosFactory * getFactoryInstance()
         {
-            static MacosFactory * factory = 0;
+            static MacosFactory * factory = nullptr;
 
             sm_mutex.lock();
             if (!factory) {

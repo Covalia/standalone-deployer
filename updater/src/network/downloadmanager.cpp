@@ -9,66 +9,54 @@
 #include <QSaveFile>
 #include <QDir>
 #include "updater/config.h"
-#include "ui_authenticationdialog.h"
 #include "log/logger.h"
 #include "xml/data/application.h"
+#include "gui/authenticationdialogui.h"
 
-// TODO : gérer les coupures dans le download + head.
-// TODO : gérer plusieurs tentatives de téléchargement + réinitialiser barre globale en cas de retry ??
-// TODO : gérer les mauvais hôtes + barre téléchargement.
-// TODO : détecter authentification proxy réussie.
-// TODO : tester auth proxy + auth http simultanée
-// TODO : gérer les redirections sur l'URL de base
-// TODO : refaire un debug / refactor global concernant les codes d'erreurs, proxies, http auth.
-
-DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QObject * _parent) : QObject(_parent),
+DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * _parent) : QObject(_parent),
+    m_parent(_parent),
+    m_timeoutTimer(nullptr),
     m_baseUrl(_baseUrl),
     m_totalBytesToDownload(0),
     m_totalBytesDownloaded(0),
     m_currentAttempt(0),
-    m_currentAuthAttempt(0),
     m_currentApplication(Application::getEmptyApplication()),
-    m_currentReply(0),
-    m_saveFile(0),
-    m_temporaryDir(_temporaryDir),
-    m_httpAuthCanceled(0)
+    m_currentReply(nullptr),
+    m_saveFile(nullptr),
+    m_temporaryDir(_temporaryDir)
 {
     L_INFO(QString("Creating DownloadManager with base URL: %1").arg(_baseUrl.toString()));
     L_INFO(QString("Temporary directory: %1").arg(_temporaryDir.absolutePath()));
 
-    // définition du proxy si host et port définis
+    // define proxy if host and port are defined
     if (!_proxy.hostName().isEmpty() && _proxy.port() > 0) {
         L_INFO(QString("Proxy to use: %1:%2").arg(_proxy.hostName()).arg(_proxy.port()));
         QNetworkProxy::setApplicationProxy(_proxy);
 
-        connect(&m_manager, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator *)),
-                SLOT(slotProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator *)));
+        connect(&m_manager, SIGNAL(proxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)),
+                SLOT(onProxyAuthenticationRequired(const QNetworkProxy&,QAuthenticator*)));
     } else {
         L_INFO("No proxy.");
     }
-
-    connect(&m_manager, SIGNAL(authenticationRequired(QNetworkReply *,QAuthenticator *)),
-            SLOT(slotAuthenticationRequired(QNetworkReply *,QAuthenticator *)));
 }
 
 DownloadManager::~DownloadManager()
 {
     delete m_saveFile;
+    delete m_timeoutTimer;
 }
 
 void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloadsMap)
 {
-    // la file doit être vide pour ne pas écraser d'autres downloads en cours !
+    // queue must be empty
     if (m_downloadQueue.isEmpty()) {
         m_totalBytesToDownload = 0;
         m_totalBytesDownloaded = 0;
         m_currentAttempt = 0;
-        m_currentAuthAttempt = 0;
-        m_httpAuthCanceled = 0;
 
-        // réinitialisation des fichiers en error
+        // reinit files in error set
         m_errorSet.clear();
-        // réinitialisation de la file d'entêtes à récupérer
+        // reinit head requests queue
         m_headQueue.clear();
 
         QMapIterator<Application, QUrl> iterator(_downloadsMap);
@@ -77,7 +65,7 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_
             const Application & application = iterator.key();
             const QUrl url = iterator.value();
 
-            // concatenation base avec url
+            // concat base with url
             const QUrl buildUrl = m_baseUrl.resolved(application.getName() + "/").resolved(url);
 
             L_INFO(QString("%1 - build URL: %2").arg(application.getName()).arg(buildUrl.toString()));
@@ -86,24 +74,32 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_
             m_downloadQueue.enqueue(pair);
         }
 
-        // lancement les requêtes head
+        if (m_timeoutTimer == nullptr) {
+            m_timeoutTimer = new QTimer(this);
+            m_timeoutTimer->setSingleShot(true);
+            m_timeoutTimer->setInterval(IOConfig::TimeOut);
+            connect(m_timeoutTimer, SIGNAL(timeout()), SLOT(onTimeout()));
+        }
+        m_timeoutTimer->start();
+
+        // start head requests
         QTimer::singleShot(0, this, SLOT(startNextHeadRequest()));
     } else {
-		L_WARN("Download queue is not empty, cannot add to queue.");
-	}
+        L_WARN("Download queue is not empty, cannot add to queue.");
+    }
 }
 
-void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString> &_downloadsMap)
+void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString>&_downloadsMap)
 {
     QMultiMap<Application, QUrl> urlMap;
 
-	L_INFO("Converting QMultiMap<Application, QString> to QMultiMap<Application, QUrl>.");
+    L_INFO("Converting QMultiMap<Application, QString> to QMultiMap<Application, QUrl>.");
 
     QMapIterator<Application, QString> iterator(_downloadsMap);
     while (iterator.hasNext()) {
         iterator.next();
-        const Application & application = iterator.key();
-        const QString & url = iterator.value();
+        const Application& application = iterator.key();
+        const QString& url = iterator.value();
 
         urlMap.insert(application, QUrl(url));
     }
@@ -111,98 +107,47 @@ void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QString>
     setUrlListToDownload(urlMap);
 }
 
-QSet<QPair<Application, QUrl> > DownloadManager::getUrlsInError() const
-{
-    return m_errorSet;
-}
-
-void DownloadManager::slotAuthenticationRequired(QNetworkReply * _reply, QAuthenticator * _authenticator)
-{
-    if (!m_httpAuthCanceled) {
-        L_INFO("HTTP Authentication required");
-        QUrl url = _reply->url();
-
-        if (m_currentAuthAttempt >= MaxAttemptNumber) {
-            // annuler tout (vider toutes les queues)
-            L_INFO("Aborting all downloads, too many attempts.");
-            _reply->abort();
-            _reply->deleteLater();
-            _reply = 0;
-
-            // tous les fichiers restants seront en erreur, car même serveur.
-            m_errorSet += m_headQueue.toSet();
-            // on vide les files de téléchargement
-            m_downloadQueue.clear();
-            m_headQueue.clear();
-        } else {
-            QDialog authenticationDialog;
-            Ui::Dialog ui;
-            ui.setupUi(&authenticationDialog);
-            authenticationDialog.setWindowTitle(tr("HTTP authentification required"));
-            authenticationDialog.adjustSize();
-            ui.siteDescription->setText(tr("%1 on %2", "The realm on host").arg(_authenticator->realm(), url.host()));
-
-            if (authenticationDialog.exec() == QDialog::Accepted) {
-                L_INFO(QString("Authentication with user: %1").arg(ui.userEdit->text()));
-
-                _authenticator->setUser(ui.userEdit->text());
-                _authenticator->setPassword(ui.passwordEdit->text());
-            } else {
-                // annulation, on stoppe.
-                m_httpAuthCanceled = true;
-
-                // annuler tout (vider toutes les queues)
-                L_INFO("Aborting all downloads, canceled by user.");
-                _reply->abort();
-                _reply->deleteLater();
-                _reply = 0;
-
-                // tous les fichiers restants seront en erreur, car même serveur.
-                m_errorSet += m_headQueue.toSet();
-                // on vide les files
-                m_downloadQueue.clear();
-                m_headQueue.clear();
-
-                // m_currentAuthAttempt = MaxAttemptNumber;
-            }
-            ++m_currentAuthAttempt;
-        }
-    } else {
-        L_INFO("HTTP Authentication required, but already canceled by user");
-    }
-}
-
-void DownloadManager::slotProxyAuthenticationRequired(const QNetworkProxy &_proxy, QAuthenticator * _authenticator)
+void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy&_proxy, QAuthenticator * _authenticator)
 {
     L_INFO("Proxy Authentication required");
-    QDialog authenticationDialog;
-    Ui::Dialog ui;
-    ui.setupUi(&authenticationDialog);
-    authenticationDialog.setWindowTitle(tr("Proxy authentication required"));
-    authenticationDialog.adjustSize();
-    ui.siteDescription->setText(tr("%1", "The proxy domain").arg(_authenticator->realm()));
 
-    ui.userEdit->setText(_proxy.user());
-    ui.passwordEdit->setText(_proxy.password());
+    // we get here if there is no given credential or bad credentials.
+    m_timeoutTimer->stop();
+
+    // ask for credentials
+    AuthenticationDialogUI authenticationDialog(m_parent, tr("%1", "The proxy domain").arg(_authenticator->realm()));
+    authenticationDialog.show();
+
+    authenticationDialog.setLogin(_proxy.user());
+    authenticationDialog.setPassword(_proxy.password());
 
     if (authenticationDialog.exec() == QDialog::Accepted) {
-        L_INFO(QString("Authentication with user: %1").arg(ui.userEdit->text()));
+        L_INFO(QString("Authentication with user: %1").arg(authenticationDialog.getLogin()));
 
-        _authenticator->setUser(ui.userEdit->text());
-        _authenticator->setPassword(ui.passwordEdit->text());
+        _authenticator->setUser(authenticationDialog.getLogin());
+        _authenticator->setPassword(authenticationDialog.getPassword());
+
+        m_timeoutTimer->start();
+
+        // user clicked accepted, so we store credential into settings
+        emit proxyCredentialsChanged(authenticationDialog.getLogin(), authenticationDialog.getPassword());
     } else {
-        // annuler tout (vider toutes les queues)
+        // cancel everything (empty all queues)
         L_INFO("Aborting all downloads, canceled by user.");
 
+        QUrl currentUrl = m_currentReply->url();
         m_currentReply->abort();
         m_currentReply->deleteLater();
-        m_currentReply = 0;
+        m_currentReply = nullptr;
 
-        // tous les fichiers restants seront en erreur, car même serveur.
-        m_errorSet += m_headQueue.toSet();
-        // on vide les files
+        // all remaining files will be in error because same server
+        m_errorSet.insert(qMakePair<Application, QUrl>(m_currentApplication, currentUrl));
+        m_errorSet += m_downloadQueue.toSet();
+        // we empty queues
         m_downloadQueue.clear();
         m_headQueue.clear();
+
+        emit errorOccurred(DownloadManagerError::ErrorType::ProxyAuthenticationError);
     }
 }
 
@@ -221,12 +166,14 @@ void DownloadManager::startNextHeadRequest()
     m_currentReply->ignoreSslErrors();
 
     connect(m_currentReply, SIGNAL(metaDataChanged()),
-            SLOT(headMetaDataChanged()));
+            SLOT(onHeadMetaDataChanged()));
     connect(m_currentReply, SIGNAL(finished()),
-            SLOT(currentHeadFinished()));
+            SLOT(onCurrentHeadFinished()));
+    connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
+            SLOT(onHeadProgress(qint64,qint64)));
 }
 
-void DownloadManager::headMetaDataChanged()
+void DownloadManager::onHeadMetaDataChanged()
 {
     QVariant statusVariant = m_currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     int status = statusVariant.toInt();
@@ -239,18 +186,19 @@ void DownloadManager::headMetaDataChanged()
     if (urlVariant.isValid()) {
         QPair<Application, QUrl> redirectedUrlPair(m_currentApplication, urlVariant.toUrl());
         L_INFO(QString("Redirected to: %1").arg(QString(redirectedUrlPair.second.toEncoded().constData())));
-        // on est redirigé
+        // redirected
         if (!m_downloadQueue.isEmpty()) {
-            // on supprime l'élément de la file download, pour éviter d'avoir à rejouer les redirections.
+            // remove original url
             if (m_downloadQueue.removeOne(currentUrlPair)) {
                 L_INFO(QString("Remove %1 from download queue because of redirection").arg(QString(currentUrlPair.second.toEncoded().constData())));
             }
         }
+        // prepend new redirected url
         L_INFO(QString("Adding %1 to download queue because of redirection").arg(QString(redirectedUrlPair.second.toEncoded().constData())));
         m_downloadQueue.prepend(redirectedUrlPair);
         m_headQueue.prepend(redirectedUrlPair);
     } else {
-        // ceci n'est pas une redirection, ajout de la taille du téléchargement au compteur
+        // this is not a redirection, add download size to the counter
         if (status == 200) {
             qint64 contentLength = m_currentReply->header(QNetworkRequest::ContentLengthHeader).toString().toLongLong();
             L_INFO(QString("Head Request for: %1 - Content-Length: %2").arg(QString(m_currentReply->url().toEncoded().constData())).arg(QString::number(contentLength)));
@@ -259,26 +207,25 @@ void DownloadManager::headMetaDataChanged()
     }
 }
 
-void DownloadManager::currentHeadFinished()
+void DownloadManager::onCurrentHeadFinished()
 {
     if (m_currentReply->error()) {
         QPair<Application, QUrl> pair(m_currentApplication, m_currentReply->url());
 
         if (m_currentAttempt >= MaxAttemptNumber - 1) {
-            // ajout dans la liste d'erreurs
+            // add into errors
             m_errorSet.insert(pair);
-            // La requête head a échoué, alors inutile de démarrer le téléchargement...
+            // head requests failed, no need to start downloads...
             if (m_downloadQueue.removeOne(pair)) {
                 L_ERROR(QString("Remove %1 from download queue because of error: %2").arg(QString(pair.second.toEncoded().constData())).arg(m_currentReply->errorString()));
             }
+            m_currentAttempt = 0;
         } else {
-            // on rajoute l'url dans le head pour refaire une tentative
+            // prepend current url to try again if error is not a proxy auth or operation canceled
             L_ERROR(QString("Tried: %1 but error occured: %2").arg(QString(pair.second.toEncoded().constData())).arg(m_currentReply->errorString()));
             if (m_currentReply->error() != QNetworkReply::NetworkError::OperationCanceledError
-                && m_currentReply->error() != QNetworkReply::NetworkError::AuthenticationRequiredError
                 && m_currentReply->error() != QNetworkReply::NetworkError::ProxyAuthenticationRequiredError) {
                 L_INFO(QString("Prepend URL: %1 because of error: %2").arg(pair.second.toString()).arg(m_currentReply->error()));
-                // pour tout autre type d'erreur, on remet en file
                 m_headQueue.prepend(pair);
             } else {
                 m_errorSet.insert(pair);
@@ -290,7 +237,7 @@ void DownloadManager::currentHeadFinished()
     }
 
     m_currentReply->deleteLater();
-    m_currentReply = 0;
+    m_currentReply = nullptr;
     startNextHeadRequest();
 }
 
@@ -299,19 +246,18 @@ void DownloadManager::startNextDownload()
     if (m_downloadQueue.isEmpty()) {
         if (m_errorSet.isEmpty()) {
             L_INFO("All files downloaded successfully");
+            emit allDownloadsFinished();
         } else {
-            L_ERROR("Some files could not be downloaded");
-            QSet<QPair<Application, QUrl> >::const_iterator it;
-            for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
-                const QPair<Application, QUrl> pair = *it;
-                L_ERROR(QString("Not downloaded: %1").arg(QString(pair.second.toEncoded().constData())));
-            }
+            logFilesInError();
+            emit errorOccurred(DownloadManagerError::ErrorType::DownloadError);
         }
 
-        emit downloadSpeedMessage("");
-        emit remainingTimeMessage("");
+        emit downloadSpeedUpdated("");
+        emit remainingTimeUpdated("");
+        emit downloadingFileUpdated("");
 
-        emit downloadsFinished();
+        m_timeoutTimer->stop();
+
         return;
     }
 
@@ -326,39 +272,49 @@ void DownloadManager::startNextDownload()
     m_currentReply->ignoreSslErrors();
 
     connect(m_currentReply, SIGNAL(metaDataChanged()),
-            SLOT(downloadMetaDataChanged()));
+            SLOT(onDownloadMetaDataChanged()));
     connect(m_currentReply, SIGNAL(downloadProgress(qint64,qint64)),
-            SLOT(updateProgress(qint64,qint64)));
+            SLOT(onDownloadProgress(qint64,qint64)));
     connect(m_currentReply, SIGNAL(finished()),
-            SLOT(currentDownloadFinished()));
+            SLOT(onCurrentDownloadFinished()));
     connect(m_currentReply, SIGNAL(readyRead()),
-            SLOT(downloadReadyRead()));
+            SLOT(onReadyRead()));
 
     m_currentDownloadTime.start();
 }
 
-void DownloadManager::downloadMetaDataChanged()
+void DownloadManager::onDownloadMetaDataChanged()
 {
     QString currentFilename = getFilenameAndCreateRequiredDirectories(m_baseUrl, m_currentReply, m_temporaryDir);
 
-    emit downloadFileMessage(QFileInfo(currentFilename).fileName());
+    bool opened = false;
 
-    m_saveFile = new QSaveFile(currentFilename);
+    if (!currentFilename.isEmpty()) {
+        emit downloadingFileUpdated(QFileInfo(currentFilename).fileName());
+        m_saveFile = new QSaveFile(currentFilename);
+        L_INFO(QString("Saving to temporary file: %1").arg(m_saveFile->fileName()));
 
-    L_INFO(QString("Saving to temporary file: %1").arg(m_saveFile->fileName()));
-    if (currentFilename.isEmpty() || !m_saveFile->open(QIODevice::WriteOnly)) {
-        L_ERROR(QString("Error opening temporary file for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        opened = m_saveFile->open(QIODevice::WriteOnly);
+    }
+
+    if (currentFilename.isEmpty() || !opened) {
+        if (currentFilename.isEmpty()) {
+            L_ERROR(QString("Empty filename received for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        }
+        if (!opened) {
+            L_ERROR(QString("Error opening temporary file for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        }
         m_errorSet.insert(QPair<Application, QUrl>(m_currentApplication, m_currentReply->url()));
         m_currentReply->abort();
         m_currentReply->deleteLater();
-        m_currentReply = 0;
-        // réinit compteur tentatives
+        m_currentReply = nullptr;
+        // reinit attempt counter
         m_currentAttempt = 0;
         startNextDownload();
     }
 }
 
-void DownloadManager::currentDownloadFinished()
+void DownloadManager::onCurrentDownloadFinished()
 {
     if (m_currentReply->error()) {
         QPair<Application, QUrl> pair(m_currentApplication, m_currentReply->url());
@@ -368,12 +324,12 @@ void DownloadManager::currentDownloadFinished()
             // download failed
             m_errorSet.insert(pair);
         } else {
-            // on rajoute l'url dans le download pour refaire une tentative
+            // prepend url to try again
             ++m_currentAttempt;
             m_downloadQueue.prepend(pair);
         }
 
-        // dans tous les cas, on cancel le fichier, on va le recréer
+        // in all cases, cancel file, and recreate it on next try
         if (m_saveFile) {
             m_saveFile->cancelWriting();
         }
@@ -384,24 +340,29 @@ void DownloadManager::currentDownloadFinished()
     }
 
     delete m_saveFile;
-    m_saveFile = 0;
+    m_saveFile = nullptr;
 
     m_currentReply->deleteLater();
-    m_currentReply = 0;
+    m_currentReply = nullptr;
     startNextDownload();
 }
 
-void DownloadManager::downloadReadyRead()
+void DownloadManager::onReadyRead()
 {
     m_totalBytesDownloaded += m_saveFile->write(m_currentReply->readAll());
 }
 
-void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
+void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 {
+    if (_bytesReceived != 0 || _bytesTotal != 0) {
+        // restart timer
+        m_timeoutTimer->start();
+    }
+
     emit downloadProgress(_bytesReceived, _bytesTotal);
     emit totalDownloadProgress(m_totalBytesDownloaded, m_totalBytesToDownload);
 
-    // on met à jour la vitesse et temps restant une fois par seconde, au plus
+    // update speed and remaining time, one a second
     if (m_lastSampleTime.elapsed() > 1000) {
         // calculate the download speed
         double speed = _bytesReceived * 1000 / m_currentDownloadTime.elapsed();
@@ -421,13 +382,13 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
         }
 
         //: This string refers to download speed as "12 ko/s".
-        emit downloadSpeedMessage(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
+        emit downloadSpeedUpdated(tr("%1 %2").arg(speed, 3, 'f', 1).arg(unit));
 
         const qint64 averageSpeed = m_totalBytesDownloaded / m_totalDownloadTime.elapsed();
         const qint64 remainingBytesToDownload = m_totalBytesToDownload - m_totalBytesDownloaded;
 
         if (averageSpeed != 0) {
-            const int remainingSeconds = remainingBytesToDownload / averageSpeed / 1000;
+            const int remainingSeconds = static_cast<int>(remainingBytesToDownload / averageSpeed / 1000);
             const int hours = remainingSeconds / 3600;
             const int minutes = (remainingSeconds - 3600 * hours) / 60;
             const int seconds = remainingSeconds - 3600 * hours - 60 * minutes;
@@ -467,15 +428,24 @@ void DownloadManager::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
                 }
             }
 
-            emit remainingTimeMessage(time);
+            emit remainingTimeUpdated(time);
         }
         m_lastSampleTime.restart();
     }
 }
 
+void DownloadManager::onHeadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
+{
+    // _bytesReceived seems to always be zero
+    if (_bytesReceived != 0 || _bytesTotal != 0) {
+        // restart timer if data received
+        m_timeoutTimer->start();
+    }
+}
+
 void DownloadManager::headsFinished()
 {
-    // les requêtes head sont terminées, on passe aux téléchargements
+    // head requests finished, now start downloads
     m_totalDownloadTime.start();
     m_lastSampleTime.start();
 
@@ -483,7 +453,7 @@ void DownloadManager::headsFinished()
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
 
-bool DownloadManager::createDirIfNotExists(const QDir &_dir)
+bool DownloadManager::createDirIfNotExists(const QDir&_dir)
 {
     if (_dir.exists()) {
         return true;
@@ -498,7 +468,7 @@ bool DownloadManager::createDirIfNotExists(const QDir &_dir)
     }
 }
 
-QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir)
+QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl&_baseUrl, const QNetworkReply * const _reply, const QDir&_tempDir)
 {
     const QUrl url = _reply->url();
 
@@ -534,4 +504,40 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl &_ba
     }
 
     return "";
+}
+
+void DownloadManager::onTimeout()
+{
+    L_ERROR("Timeout occured...");
+
+    if (m_currentReply != nullptr) {
+        QUrl currentUrl = m_currentReply->url();
+        m_currentReply->abort();
+        m_currentReply->deleteLater();
+        m_currentReply = nullptr;
+
+        // reinit attempt counter
+        m_currentAttempt = 0;
+
+        // all remaining files will be in error because same server
+        m_errorSet.insert(qMakePair<Application, QUrl>(m_currentApplication, currentUrl));
+        m_errorSet += m_downloadQueue.toSet();
+        // we empty queues
+        m_downloadQueue.clear();
+        m_headQueue.clear();
+
+        logFilesInError();
+
+        emit errorOccurred(DownloadManagerError::ErrorType::TimeoutError);
+    }
+}
+
+void DownloadManager::logFilesInError() const
+{
+    L_ERROR("Some files could not be downloaded");
+    QSet<QPair<Application, QUrl> >::const_iterator it;
+    for (it = m_errorSet.constBegin(); it != m_errorSet.constEnd(); ++it) {
+        const QPair<Application, QUrl> pair = *it;
+        L_ERROR(QString("Not downloaded: %1").arg(QString(pair.second.toEncoded().constData())));
+    }
 }

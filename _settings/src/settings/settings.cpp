@@ -45,12 +45,12 @@ const QString Settings::GrayTextColor("gray_text_color");
 const QString Settings::DisabledColor("disabled_color");
 const QString Settings::WindowBorderWidth("window_border_width");
 
-Settings * Settings::sm_instance = 0;
+Settings * Settings::sm_instance = nullptr;
 QMutex Settings::sm_instanceMutex;
 QMutex Settings::sm_settingsMutex;
 
 Settings::Settings() :
-    m_settings(0),
+    m_settings(nullptr),
     m_deploymentUrl(""),
     m_appName("Application"),
     m_locale(""),
@@ -88,9 +88,9 @@ Settings::~Settings()
 
 Settings * Settings::getInstance()
 {
-    if (Settings::sm_instance == 0) {
+    if (Settings::sm_instance == nullptr) {
         Settings::sm_instanceMutex.lock();
-        if (Settings::sm_instance == 0) {
+        if (Settings::sm_instance == nullptr) {
             Settings::sm_instance = new Settings();
         }
         Settings::sm_instanceMutex.unlock();
@@ -104,7 +104,7 @@ void Settings::kill()
         Settings::sm_instanceMutex.lock();
         if (Settings::sm_instance) {
             delete Settings::sm_instance;
-            Settings::sm_instance = 0;
+            Settings::sm_instance = nullptr;
         }
         Settings::sm_instanceMutex.unlock();
     }
@@ -112,7 +112,7 @@ void Settings::kill()
 
 void Settings::initSettings(QFile &_settingsFile)
 {
-    if (m_settings == 0) {
+    if (m_settings == nullptr) {
         m_settings = new QSettings(_settingsFile.fileName(), QSettings::IniFormat);
         m_settings->setFallbacksEnabled(false);
     }
@@ -240,6 +240,7 @@ void Settings::readSettings()
 QString Settings::paramListString()
 {
     QString s = "app_name = " + m_appName + "\n";
+
     s += "updater_version = " + m_updaterVersion + "\n";
     s += "java_version = " + m_javaVersion + "\n";
     s += "proxy_use = " + QString::number(m_proxyUsed) + "\n";

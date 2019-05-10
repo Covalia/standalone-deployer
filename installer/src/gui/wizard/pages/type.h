@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_TYPE_H
-#define INSTALLER__WIZARD_PAGE_TYPE_H
+#ifndef INSTALLER_WIZARD_PAGE_TYPE_H
+#define INSTALLER_WIZARD_PAGE_TYPE_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -14,7 +14,7 @@ class TypePage : public QWizardPage, public AbstractTranslatedUi
 {
     Q_OBJECT
     public:
-        TypePage(QWidget * parent = 0);
+        TypePage(QWidget * parent = nullptr);
         int nextId() const override;
         void retranslateUi() override;
 

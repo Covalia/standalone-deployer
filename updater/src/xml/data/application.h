@@ -1,5 +1,5 @@
-#ifndef UPDATER__APPLICATION_H
-#define UPDATER__APPLICATION_H
+#ifndef UPDATER_APPLICATION_H
+#define UPDATER_APPLICATION_H
 
 #include <QString>
 #include <QHash>
@@ -75,12 +75,10 @@ inline bool operator<(const Application &_e1, const Application &_e2)
         } else {
             if (_e1.getCnlpRemoteFileName() < _e2.getCnlpRemoteFileName()) {
                 return true;
-            }
-            else {
+            } else {
                 if (_e1.getCnlpLocalFileName() < _e2.getCnlpLocalFileName()) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
@@ -99,9 +97,9 @@ inline bool operator==(const Application &_e1, const Application &_e2)
 inline bool operator!=(const Application &_e1, const Application &_e2)
 {
     return _e1.getName() != _e2.getName()
-            || _e1.getVersion() != _e2.getVersion()
-            || _e1.getCnlpRemoteFileName() != _e2.getCnlpRemoteFileName()
-            || _e1.getCnlpLocalFileName() != _e2.getCnlpLocalFileName();
+           || _e1.getVersion() != _e2.getVersion()
+           || _e1.getCnlpRemoteFileName() != _e2.getCnlpRemoteFileName()
+           || _e1.getCnlpLocalFileName() != _e2.getCnlpLocalFileName();
 }
 
 inline uint qHash(const Application &_key, uint _seed)

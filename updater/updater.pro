@@ -64,6 +64,7 @@ FORMS += ui/mainwindow.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/gui/askpopupui.cpp
+SOURCES += src/gui/authenticationdialogui.cpp
 SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/network/downloadmanager.cpp
@@ -78,9 +79,11 @@ SOURCES += src/xml/data/javaupdate.cpp
 SOURCES += src/xml/deploymentxml.cpp
 
 HEADERS += src/gui/askpopupui.h
+HEADERS += src/gui/authenticationdialogui.h
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h
+HEADERS += src/network/downloadmanagererror.h
 HEADERS += src/updater/appupdater.h
 HEADERS += src/updater/config.h
 HEADERS += src/utils.h

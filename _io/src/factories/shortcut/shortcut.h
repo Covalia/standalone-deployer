@@ -1,5 +1,5 @@
-#ifndef IO__SHORTCUT_H
-#define IO__SHORTCUT_H
+#ifndef IO_SHORTCUT_H
+#define IO_SHORTCUT_H
 
 #include <QString>
 #include <QSharedPointer>

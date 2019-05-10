@@ -1,5 +1,5 @@
-#ifndef INSTALLER__WIZARD_PAGE_WELCOME_H
-#define INSTALLER__WIZARD_PAGE_WELCOME_H
+#ifndef INSTALLER_WIZARD_PAGE_WELCOME_H
+#define INSTALLER_WIZARD_PAGE_WELCOME_H
 
 #include "gui/abstract_translated_ui.h"
 
@@ -14,7 +14,7 @@ class WelcomePage : public QWizardPage, public AbstractTranslatedUi
     Q_OBJECT
 
     public:
-        WelcomePage(const QString &_appName, QWidget * parent = 0);
+        WelcomePage(const QString &_appName, QWidget * parent = nullptr);
 
         int nextId() const override;
         void retranslateUi() override;

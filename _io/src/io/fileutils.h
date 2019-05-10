@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM__FILEUTILS_H
-#define FILESYSTEM__FILEUTILS_H
+#ifndef IO_FILEUTILS_H
+#define IO_FILEUTILS_H
 
 #include <QString>
 

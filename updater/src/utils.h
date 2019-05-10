@@ -1,5 +1,5 @@
-#ifndef UPDATER__UTILS_H
-#define UPDATER__UTILS_H
+#ifndef UPDATER_UTILS_H
+#define UPDATER_UTILS_H
 
 #include "factories/apppath/apppath.h"
 
