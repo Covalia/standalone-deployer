@@ -174,37 +174,37 @@
 <context>
     <name>DownloadManager</name>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="388"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="385"/>
         <source>%1 %2</source>
         <extracomment>This string refers to download speed as &quot;12 ko/s&quot;.</extracomment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="121"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="118"/>
         <source>%1</source>
         <comment>The proxy domain</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="376"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="373"/>
         <source>B/s</source>
         <extracomment>This string refers to bytes per second.</extracomment>
         <translation>o/s</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="380"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="377"/>
         <source>kB/s</source>
         <extracomment>This string refers to kilobytes per second.</extracomment>
         <translation>ko/s</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="384"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="381"/>
         <source>MB/s</source>
         <extracomment>This string refers to megabytes per second.</extracomment>
         <translation>Mo/s</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="399"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="396"/>
         <source>%n hour(s)</source>
         <comment>the estimated heures</comment>
         <translation>
@@ -213,7 +213,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="400"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="397"/>
         <source>%n minute(s)</source>
         <comment>the estimated minutes</comment>
         <translation>
@@ -222,7 +222,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/network/downloadmanager.cpp" line="401"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="398"/>
         <source>%n second(s)</source>
         <comment>the estimated seconds</comment>
         <translation>
@@ -231,43 +231,43 @@
         </translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="409"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="406"/>
         <source>%1</source>
         <comment>seconds only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="413"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="410"/>
         <source>%1</source>
         <comment>minutes only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="415"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="412"/>
         <source>%1 %2</source>
         <comment>minutes and seconds only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="421"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="418"/>
         <source>%1</source>
         <comment>hours only</comment>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="423"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="420"/>
         <source>%1 %2</source>
         <comment>hours and seconds only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="427"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="424"/>
         <source>%1 %2</source>
         <comment>hours and minutes only</comment>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/network/downloadmanager.cpp" line="429"/>
+        <location filename="../../src/network/downloadmanager.cpp" line="426"/>
         <source>%1 %2 %3</source>
         <comment>hours minutes seconds</comment>
         <translation>%1 %2 %3</translation>
