@@ -287,13 +287,23 @@ void DownloadManager::onDownloadMetaDataChanged()
 {
     QString currentFilename = getFilenameAndCreateRequiredDirectories(m_baseUrl, m_currentReply, m_temporaryDir);
 
-    emit downloadingFileUpdated(QFileInfo(currentFilename).fileName());
+    bool opened = false;
 
-    m_saveFile = new QSaveFile(currentFilename);
+    if (!currentFilename.isEmpty()) {
+        emit downloadingFileUpdated(QFileInfo(currentFilename).fileName());
+        m_saveFile = new QSaveFile(currentFilename);
+        L_INFO(QString("Saving to temporary file: %1").arg(m_saveFile->fileName()));
 
-    L_INFO(QString("Saving to temporary file: %1").arg(m_saveFile->fileName()));
-    if (currentFilename.isEmpty() || !m_saveFile->open(QIODevice::WriteOnly)) {
-        L_ERROR(QString("Error opening temporary file for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        opened = m_saveFile->open(QIODevice::WriteOnly);
+    }
+
+    if (currentFilename.isEmpty() || !opened) {
+        if (currentFilename.isEmpty()) {
+            L_ERROR(QString("Empty filename received for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        }
+        if (!opened) {
+            L_ERROR(QString("Error opening temporary file for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
+        }
         m_errorSet.insert(QPair<Application, QUrl>(m_currentApplication, m_currentReply->url()));
         m_currentReply->abort();
         m_currentReply->deleteLater();
