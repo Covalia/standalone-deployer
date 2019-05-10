@@ -25,7 +25,7 @@ bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _short
 {
     L_INFO("Will create desktop shortcut");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
-    const QFile shortcutFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + QDir::separator() + _shortcutName + ".lnk");
+    QFile shortcutFile(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + QDir::separator() + _shortcutName + ".lnk");
     const QDir installDir = _appPath.getInstallationDir();
     const QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
     return createShortcut(shortcutFile, *loaderFile, _args, installDir, iconFile, _applicationName);
@@ -102,10 +102,10 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     if (runApplicationShortcut && configureApplicationShortcut) {
         L_INFO("Will copy shortcut into startmenu");
 
-        const QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
+        QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
         const QPair<bool, QString> copyApplicationShortcut = _appPath.extractResource(appShortcutIn, appShortcutOut);
 
-        const QFile configShortcutOut(applicationFolder + QDir::separator() + settingsApplicationPathShortcut);
+        QFile configShortcutOut(applicationFolder + QDir::separator() + settingsApplicationPathShortcut);
         const QPair<bool, QString> copyConfigurationShortcut = _appPath.extractResource(configShortcutIn, configShortcutOut);
 
         if (copyApplicationShortcut.first && copyConfigurationShortcut.first) {
