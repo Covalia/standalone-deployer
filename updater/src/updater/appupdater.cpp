@@ -135,7 +135,7 @@ void AppUpdater::cnlpDownloadFinished()
     if (loaderXml.read() && updaterXml.read() && javaXml.read() && applicationXml.read()) {
         // retrieving remote updater version.
         m_remoteUpdaterVersion = updaterXml.getApplication().getVersion();
-        L_INFO(QString("Remote updater version: %1").arg(m_remoteUpdaterVersion));
+        L_INFO(QString("Remote Updater version: %1").arg(m_remoteUpdaterVersion));
 
         // retrieving application encoding
         m_encoding = applicationXml.getEncoding();
@@ -153,9 +153,9 @@ void AppUpdater::cnlpDownloadFinished()
 
         Settings * settings = Settings::getInstance();
         m_localUpdaterVersion = settings->getUpdaterVersion();
-        L_INFO(QString("Local updater version: %1").arg(m_localUpdaterVersion));
+        L_INFO(QString("Local Updater version: %1").arg(m_localUpdaterVersion));
         m_localJavaVersion = settings->getJavaVersion();
-        L_INFO(QString("Local java version: %1").arg(m_localJavaVersion));
+        L_INFO(QString("Local Java version: %1").arg(m_localJavaVersion));
 
         const Application loaderApplication = Application::getLoaderApplication();
         const Application updaterApplication = Application::getUpdaterApplication();
@@ -172,7 +172,7 @@ void AppUpdater::cnlpDownloadFinished()
         if (javaDownloads.size() > 0) {
             m_remoteJavaVersion = javaDownloads[0].getVersion();
             // only one java version for one operating system
-            L_INFO(QString("Remote java version: %1").arg(m_remoteJavaVersion));
+            L_INFO(QString("Remote Java version: %1").arg(m_remoteJavaVersion));
         }
 
         m_cnlpParsedFiles.clear();
@@ -210,8 +210,9 @@ void AppUpdater::cnlpDownloadFinished()
 
         m_updater->setUrlListToDownload(nonAlreadyDownloadedFiles);
     } else {
-        L_ERROR("Unable to read the application cnlp files");
-        // TODO handle error
+        L_FATAL("Unable to read the Application cnlp files");
+        emit errorOccurred(tr("Unable to read CNLP files."));
+        return;
     }
 }
 
@@ -240,7 +241,7 @@ void AppUpdater::applicationDownloadFinished()
                 loaderInstalledOk &= installLoader();
 
                 if (loaderInstalledOk) {
-                    L_INFO("No error reported on loader installation.");
+                    L_INFO("No error reported on Loader installation.");
 
                     // install loader cnlp file
                     if (installCnlpFile(UpdaterConfig::LoaderCnlpLocalFilename)) {
@@ -250,24 +251,31 @@ void AppUpdater::applicationDownloadFinished()
                         if (m_appPath.startLoader(args)) {
                             if (CommandLineSingleton::getInstance()->isDebugMode()) {
                                 // debug mode, print args
-                                L_INFO(QString("Restart loader with: %1").arg(args.join(" ")));
+                                L_INFO(QString("Restart Loader with: %1").arg(args.join(" ")));
                             } else {
-                                L_INFO("Restart loader...");
+                                L_INFO("Restart Loader...");
                             }
+                            QCoreApplication::quit();
+                            return;
                         } else {
-                            L_ERROR("Loader restart failed.");
+                            L_FATAL("Loader restart failed.");
+                            emit errorOccurred(tr("Loader restart failed."));
+                            return;
                         }
                     } else {
-                        L_ERROR("Error installing loader cnlp.");
+                        L_FATAL("Error installing Loader CNLP.");
+                        emit errorOccurred(tr("Error installing Loader CNLP."));
+                        return;
                     }
-
-                    QCoreApplication::quit();
-                    return;
                 } else {
-                    L_ERROR("Errors have been reported on loader installation.");
+                    L_FATAL("Errors have been reported on Loader installation.");
+                    emit errorOccurred(tr("Errors have been reported on Loader installation."));
+                    return;
                 }
             } else {
-                L_ERROR("Errors have been reported on loader build.");
+                L_FATAL("Errors have been reported on Loader build.");
+                emit errorOccurred(tr("Errors have been reported on Loader build."));
+                return;
             }
         }
 
@@ -282,7 +290,7 @@ void AppUpdater::applicationDownloadFinished()
                 updaterInstalledOk &= installUpdater();
 
                 if (updaterInstalledOk) {
-                    L_INFO("No error reported on updater installation.");
+                    L_INFO("No error reported on Updater installation.");
 
                     // install updater cnlp file
                     if (installCnlpFile(UpdaterConfig::UpdaterCnlpLocalFilename)) {
@@ -292,24 +300,31 @@ void AppUpdater::applicationDownloadFinished()
                         if (m_appPath.startLoader(args)) {
                             if (CommandLineSingleton::getInstance()->isDebugMode()) {
                                 // debug mode, print args
-                                L_INFO(QString("Restart loader with: %1").arg(args.join(" ")));
+                                L_INFO(QString("Restart Loader with: %1").arg(args.join(" ")));
                             } else {
-                                L_INFO("Restart loader...");
+                                L_INFO("Restart Loader...");
                             }
+                            QCoreApplication::quit();
+                            return;
                         } else {
-                            L_ERROR("Loader restart failed.");
+                            L_FATAL("Loader restart failed.");
+                            emit errorOccurred(tr("Loader restart failed."));
+                            return;
                         }
                     } else {
-                        L_ERROR("Error installing updater cnlp.");
+                        L_FATAL("Error installing Updater CNLP.");
+                        emit errorOccurred(tr("Error installing Updater CNLP."));
+                        return;
                     }
-
-                    QCoreApplication::quit();
-                    return;
                 } else {
-                    L_ERROR("Errors have been reported on updater installation.");
+                    L_FATAL("Errors have been reported on Updater installation.");
+                    emit errorOccurred(tr("Errors have been reported on Updater installation."));
+                    return;
                 }
             } else {
-                L_ERROR("Errors have been reported on updater build.");
+                L_FATAL("Errors have been reported on Updater build.");
+                emit errorOccurred(tr("Errors have been reported on Updater build."));
+                return;
             }
         }
 
@@ -324,17 +339,23 @@ void AppUpdater::applicationDownloadFinished()
                 javaInstalledOk &= installJava();
 
                 if (javaInstalledOk) {
-                    L_INFO("No error reported on java installation.");
+                    L_INFO("No error reported on Java installation.");
 
                     // install java cnlp file
                     if (!installCnlpFile(UpdaterConfig::JavaCnlpLocalFilename)) {
-                        L_ERROR("Error installing java cnlp.");
+                        L_FATAL("Error installing Java CNLP.");
+                        emit errorOccurred(tr("Error installing Java CNLP."));
+                        return;
                     }
                 } else {
-                    L_ERROR("Errors have been reported on java installation.");
+                    L_FATAL("Errors have been reported on Java installation.");
+                    emit errorOccurred(tr("Errors have been reported on Java installation."));
+                    return;
                 }
             } else {
-                L_ERROR("Errors have been reported on java build.");
+                L_FATAL("Errors have been reported on Java build.");
+                emit errorOccurred(tr("Errors have been reported on Java build."));
+                return;
             }
         } else {
             L_INFO("Java does not need to be updated.");
@@ -348,8 +369,9 @@ void AppUpdater::applicationDownloadFinished()
                     if (m_appPath.prepareJava(m_remoteJavaVersion, false)) {
                         L_INFO("Java " + m_remoteJavaVersion + " soft prepared.");
                     } else {
-                        L_ERROR(QString("Unable to soft prepare Java: %1").arg(m_remoteJavaVersion));
+                        L_FATAL(QString("Unable to soft prepare Java: %1").arg(m_remoteJavaVersion));
                         javaInstalledOk = false;
+                        emit errorOccurred(tr("Unable to soft prepare Java: %1").arg(m_remoteJavaVersion));
                     }
                 }
             }
@@ -366,17 +388,23 @@ void AppUpdater::applicationDownloadFinished()
                 appInstalledOk &= installApp();
 
                 if (appInstalledOk) {
-                    L_INFO("No error reported on application installation.");
+                    L_INFO("No error reported on Application installation.");
 
                     // install app cnlp file
                     if (!installCnlpFile(UpdaterConfig::AppCnlpLocalFilename)) {
-                        L_ERROR("Error installing application cnlp.");
+                        L_FATAL("Error installing Application CNLP.");
+                        emit errorOccurred(tr("Error installing Application CNLP."));
+                        return;
                     }
                 } else {
-                    L_ERROR("Errors have been reported on application installation.");
+                    L_FATAL("Errors have been reported on Application installation.");
+                    emit errorOccurred(tr("Errors have been reported on Application installation."));
+                    return;
                 }
             } else {
-                L_ERROR("Errors have been reported on application build.");
+                L_FATAL("Errors have been reported on Application build.");
+                emit errorOccurred(tr("Errors have been reported on Application build."));
+                return;
             }
         }
 
@@ -416,9 +444,10 @@ void AppUpdater::applicationDownloadFinished()
                         if (zip.isOk()) {
                             L_INFO(QString("%1 extracted to %2").arg(fileToExtract).arg(extractDir));
                         } else {
-                            L_ERROR(QString("%1 can not be extracted to %2").arg(fileToExtract).arg(extractDir));
                             native_extracted = false;
-                            break;
+                            L_FATAL(QString("%1 can not be extracted to %2").arg(fileToExtract).arg(extractDir));
+                            emit errorOccurred(tr("Natives can not be extracted."));
+                            return;
                         }
                     }
                 }
@@ -467,40 +496,46 @@ void AppUpdater::applicationDownloadFinished()
                         }
 
                         // clean old updater versions
-                        L_INFO("Clean old updater versions");
+                        L_INFO("Clean old Updater versions");
                         if (m_appPath.cleanUpdaterDirExceptVersion(m_remoteUpdaterVersion)) {
-                            L_INFO("Old updater versions cleaned");
+                            L_INFO("Old Updater versions cleaned");
                         } else {
-                            L_WARN("Unable to clean old updater versions");
+                            L_WARN("Unable to clean old Updater versions");
                         }
 
                         // clean old java versions
-                        L_INFO("Clean old java versions");
+                        L_INFO("Clean old Java versions");
                         if (m_appPath.cleanJavaDirExceptVersion(m_remoteJavaVersion)) {
-                            L_INFO("Old java versions cleaned");
+                            L_INFO("Old Java versions cleaned");
                         } else {
-                            L_WARN("Unable to clean old java versions");
+                            L_WARN("Unable to clean old Java versions");
                         }
 
                         // quit application
-                        L_INFO("Quit application.");
+                        L_INFO("Quit Application.");
                     } else {
-                        L_ERROR("Unable to start application. Exiting.");
+                        L_FATAL("Unable to start Application. Exiting.");
+                        emit errorOccurred(tr("Unable to start Application."));
+                        return;
                     }
                 } else {
-                    L_ERROR("Error while running post install tasks. Exiting.");
+                    L_FATAL("Error while running post install tasks. Exiting.");
+                    emit errorOccurred(tr("Error while running post install tasks."));
+                    return;
                 }
 
                 QCoreApplication::quit();
                 return;
             }
         } else {
-            L_ERROR("Unable to install applications. Aborting.");
-            // TODO handle error
+            L_FATAL("Unable to install some components. Aborting.");
+            emit errorOccurred(tr("Unable to install some components."));
+            return;
         }
     } else {
-        L_ERROR("Error occured when downloading files. Aborting.");
-        // TODO handle error
+        L_FATAL("Error occured when downloading files. Aborting.");
+        emit errorOccurred(tr("Error occured when downloading files."));
+        return;
     }
 }
 
@@ -903,7 +938,7 @@ bool AppUpdater::installLoader()
 
     // remove an old loader directory if it already exists
     if (FileUtils::directoryExists(loaderOldDir)) {
-        L_INFO(QString("Existing old loader directory needs to be removed: %1").arg(loaderOldDir));
+        L_INFO(QString("Existing old Loader directory needs to be removed: %1").arg(loaderOldDir));
 
         if (FileUtils::removeDirRecursively(loaderOldDir)) {
             L_INFO(QString("Removed %1").arg(loaderOldDir));
@@ -1071,7 +1106,7 @@ bool AppUpdater::installApp()
 
     // remove an old app directory if it already exists
     if (FileUtils::directoryExists(appOldDir)) {
-        L_INFO(QString("Existing old application directory needs to be removed: %1").arg(appOldDir));
+        L_INFO(QString("Existing old Application directory needs to be removed: %1").arg(appOldDir));
 
         if (FileUtils::removeDirRecursively(appOldDir)) {
             L_INFO(QString("Removed %1").arg(appOldDir));
@@ -1186,7 +1221,7 @@ QMultiMap<Application, QString> AppUpdater::getFilesNonAlreadyInTempDir(const QM
                     const Download & download = parsedIterator.next();
                     if (download.getHref() == downloadedFile) {
                         if (hashmac == download.getHashMac()) {
-                            L_INFO(QString("File for application: %1 already downloaded: %2").arg(application.getName()).arg(download.getHref()));
+                            L_INFO(QString("File for Application: %1 already downloaded: %2").arg(application.getName()).arg(download.getHref()));
                             // remove this from temp list
                             iterator.remove();
                         }
@@ -1214,17 +1249,17 @@ void AppUpdater::handleDownloaderError(DownloadManagerError::ErrorType _error)
 {
     switch (_error) {
         case DownloadManagerError::ErrorType::ProxyAuthenticationError:
-            L_ERROR(QString("Authentication error with proxy."));
+            L_FATAL(QString("Authentication error with proxy."));
             emit errorOccurred(tr("The proxy has not been able to authenticate the user."));
             break;
 
         case DownloadManagerError::ErrorType::DownloadError:
-            L_ERROR(QString("Download error."));
+            L_FATAL(QString("Download error."));
             emit errorOccurred(tr("Errors occurred while downloading files."));
             break;
 
         case DownloadManagerError::ErrorType::TimeoutError:
-            L_ERROR(QString("Timeout error."));
+            L_FATAL(QString("Timeout error."));
             emit errorOccurred(tr("A timeout occurred while downloading files."));
             break;
     }

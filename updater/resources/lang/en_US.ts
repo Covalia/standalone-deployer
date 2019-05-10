@@ -4,17 +4,118 @@
 <context>
     <name>AppUpdater</name>
     <message>
-        <location filename="../../src/updater/appupdater.cpp" line="1218"/>
+        <location filename="../../src/updater/appupdater.cpp" line="214"/>
+        <source>Unable to read CNLP files.</source>
+        <translation>Unable to read CNLP files.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="262"/>
+        <location filename="../../src/updater/appupdater.cpp" line="311"/>
+        <source>Loader restart failed.</source>
+        <translation>Loader restart failed.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="374"/>
+        <source>Unable to soft prepare Java: %1</source>
+        <translation>Unable to soft prepare Java: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="347"/>
+        <source>Error installing Java CNLP.</source>
+        <translation>Error installing Java CNLP.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="352"/>
+        <source>Errors have been reported on Java installation.</source>
+        <translation>Errors have been reported on Java installation.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="357"/>
+        <source>Errors have been reported on Java build.</source>
+        <translation>Errors have been reported on Java build.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="267"/>
+        <source>Error installing Loader CNLP.</source>
+        <translation>Error installing Loader CNLP.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="272"/>
+        <source>Errors have been reported on Loader installation.</source>
+        <translation>Errors have been reported on Loader installation.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="277"/>
+        <source>Errors have been reported on Loader build.</source>
+        <translation>Errors have been reported on Loader build.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="316"/>
+        <source>Error installing Updater CNLP.</source>
+        <translation>Error installing Updater CNLP.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="321"/>
+        <source>Errors have been reported on Updater installation.</source>
+        <translation>Errors have been reported on Updater installation.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="326"/>
+        <source>Errors have been reported on Updater build.</source>
+        <translation>Errors have been reported on Updater build.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="396"/>
+        <source>Error installing Application CNLP.</source>
+        <translation>Error installing Application CNLP.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="401"/>
+        <source>Errors have been reported on Application installation.</source>
+        <translation>Errors have been reported on Application installation.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="406"/>
+        <source>Errors have been reported on Application build.</source>
+        <translation>Errors have been reported on Application build.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="449"/>
+        <source>Natives can not be extracted.</source>
+        <translation>Natives can not be extracted.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="518"/>
+        <source>Unable to start Application.</source>
+        <translation>Unable to start Application.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="532"/>
+        <source>Unable to install some components.</source>
+        <translation>Unable to install some components.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="523"/>
+        <source>Error while running post install tasks.</source>
+        <translation>Error while running post install tasks.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="537"/>
+        <source>Error occured when downloading files.</source>
+        <translation>Error occured when downloading files.</translation>
+    </message>
+    <message>
+        <location filename="../../src/updater/appupdater.cpp" line="1253"/>
         <source>The proxy has not been able to authenticate the user.</source>
         <translation>The proxy has not been able to authenticate the user.</translation>
     </message>
     <message>
-        <location filename="../../src/updater/appupdater.cpp" line="1223"/>
+        <location filename="../../src/updater/appupdater.cpp" line="1258"/>
         <source>Errors occurred while downloading files.</source>
         <translation>Errors occurred while downloading files.</translation>
     </message>
     <message>
-        <location filename="../../src/updater/appupdater.cpp" line="1228"/>
+        <location filename="../../src/updater/appupdater.cpp" line="1263"/>
         <source>A timeout occurred while downloading files.</source>
         <translation>A timeout occurred while downloading files.</translation>
     </message>
