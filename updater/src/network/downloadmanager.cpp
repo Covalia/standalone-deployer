@@ -136,6 +136,7 @@ void DownloadManager::onProxyAuthenticationRequired(const QNetworkProxy&_proxy, 
         L_INFO("Aborting all downloads, canceled by user.");
 
         QUrl currentUrl = m_currentReply->url();
+        m_currentReply->disconnect();
         m_currentReply->abort();
         m_currentReply->deleteLater();
         m_currentReply = nullptr;
@@ -236,6 +237,7 @@ void DownloadManager::onCurrentHeadFinished()
         m_currentAttempt = 0;
     }
 
+    m_currentReply->disconnect();
     m_currentReply->deleteLater();
     m_currentReply = nullptr;
     startNextHeadRequest();
@@ -305,6 +307,7 @@ void DownloadManager::onDownloadMetaDataChanged()
             L_ERROR(QString("Error opening temporary file for URL: %1").arg(QString(m_currentReply->url().toEncoded().constData())));
         }
         m_errorSet.insert(QPair<Application, QUrl>(m_currentApplication, m_currentReply->url()));
+        m_currentReply->disconnect();
         m_currentReply->abort();
         m_currentReply->deleteLater();
         m_currentReply = nullptr;
@@ -342,6 +345,7 @@ void DownloadManager::onCurrentDownloadFinished()
     delete m_saveFile;
     m_saveFile = nullptr;
 
+    m_currentReply->disconnect();
     m_currentReply->deleteLater();
     m_currentReply = nullptr;
     startNextDownload();
@@ -512,6 +516,7 @@ void DownloadManager::onTimeout()
 
     if (m_currentReply != nullptr) {
         QUrl currentUrl = m_currentReply->url();
+        m_currentReply->disconnect();
         m_currentReply->abort();
         m_currentReply->deleteLater();
         m_currentReply = nullptr;
