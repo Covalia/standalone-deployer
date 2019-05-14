@@ -42,8 +42,12 @@ DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl
 
 DownloadManager::~DownloadManager()
 {
-    delete m_saveFile;
-    delete m_timeoutTimer;
+    if (m_saveFile != nullptr) {
+        delete m_saveFile;
+    }
+    if (m_timeoutTimer != nullptr) {
+        delete m_timeoutTimer;
+    }
 }
 
 void DownloadManager::setUrlListToDownload(const QMultiMap<Application, QUrl> &_downloadsMap)
@@ -293,6 +297,10 @@ void DownloadManager::onDownloadMetaDataChanged()
 
     if (!currentFilename.isEmpty()) {
         emit downloadingFileUpdated(QFileInfo(currentFilename).fileName());
+        if (m_saveFile != nullptr) {
+            delete m_saveFile;
+            m_saveFile = nullptr;
+        }
         m_saveFile = new QSaveFile(currentFilename);
         L_INFO(QString("Saving to temporary file: %1").arg(m_saveFile->fileName()));
 
@@ -333,16 +341,20 @@ void DownloadManager::onCurrentDownloadFinished()
         }
 
         // in all cases, cancel file, and recreate it on next try
-        if (m_saveFile) {
+        if (m_saveFile != nullptr) {
             m_saveFile->cancelWriting();
         }
     } else {
         L_INFO("Success.");
-        m_saveFile->commit();
+        if (m_saveFile != nullptr) {
+            m_saveFile->commit();
+        }
         m_currentAttempt = 0;
     }
 
-    delete m_saveFile;
+    if (m_saveFile != nullptr) {
+        delete m_saveFile;
+    }
     m_saveFile = nullptr;
 
     m_currentReply->disconnect();
@@ -353,7 +365,9 @@ void DownloadManager::onCurrentDownloadFinished()
 
 void DownloadManager::onReadyRead()
 {
-    m_totalBytesDownloaded += m_saveFile->write(m_currentReply->readAll());
+    if (m_saveFile != nullptr) {
+        m_totalBytesDownloaded += m_saveFile->write(m_currentReply->readAll());
+    }
 }
 
 void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal)
