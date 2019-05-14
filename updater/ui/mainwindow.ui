@@ -277,12 +277,13 @@ font-size: 11px;</string>
                 <item row="4" column="0" colspan="3">
                  <widget class="QProgressBar" name="totalProgressBar">
                   <property name="styleSheet">
-                   <string notr="true">QProgressBar:horizontal { 
-	 background: #364058; 
-	 height: 5px;
+                   <string notr="true">QProgressBar { 
+background: white; 
+height: 5px;
+border: none;
 }
-QProgressBar::chunk:horizontal {
-	 background: #7dd1ee;
+QProgressBar::chunk {
+background: #7dd1ee;
 }</string>
                   </property>
                   <property name="value">
