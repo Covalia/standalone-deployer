@@ -382,6 +382,12 @@ void DownloadManager::onDownloadProgress(qint64 _bytesReceived, qint64 _bytesTot
 
     // update speed and remaining time, one a second
     if (m_lastSampleTime.elapsed() > 1000) {
+
+        // avoid division by zero
+        if (m_currentDownloadTime.elapsed() <= 0) {
+            return;
+        }
+
         // calculate the download speed
         double speed = _bytesReceived * 1000 / m_currentDownloadTime.elapsed();
 
