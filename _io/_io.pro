@@ -53,21 +53,21 @@ HEADERS += src/factories/shortcut/shortcut.h
 HEADERS += src/factories/shortcut/shortcutimpl.h
 
 win32 {
-HEADERS += src/factories/factory/windows/windowsfactory.h
-HEADERS += src/factories/apppath/windows/windowsapppathimpl.h
-HEADERS += src/factories/shortcut/windows/windowsshortcutimpl.h
+	HEADERS += src/factories/factory/windows/windowsfactory.h
+	HEADERS += src/factories/apppath/windows/windowsapppathimpl.h
+	HEADERS += src/factories/shortcut/windows/windowsshortcutimpl.h
 
-SOURCES += src/factories/factory/windows/windowsfactory.cpp
-SOURCES += src/factories/apppath/windows/windowsapppathimpl.cpp
-SOURCES += src/factories/shortcut/windows/windowsshortcutimpl.cpp
+	SOURCES += src/factories/factory/windows/windowsfactory.cpp
+	SOURCES += src/factories/apppath/windows/windowsapppathimpl.cpp
+	SOURCES += src/factories/shortcut/windows/windowsshortcutimpl.cpp
 }
 
 macx {
-HEADERS += src/factories/factory/macos/macosfactory.h
-HEADERS += src/factories/apppath/macos/macosapppathimpl.h
-HEADERS += src/factories/shortcut/macos/macosshortcutimpl.h
+	HEADERS += src/factories/factory/macos/macosfactory.h
+	HEADERS += src/factories/apppath/macos/macosapppathimpl.h
+	HEADERS += src/factories/shortcut/macos/macosshortcutimpl.h
 
-SOURCES += src/factories/factory/macos/macosfactory.cpp
-SOURCES += src/factories/apppath/macos/macosapppathimpl.cpp
-SOURCES += src/factories/shortcut/macos/macosshortcutimpl.cpp
+	SOURCES += src/factories/factory/macos/macosfactory.cpp
+	SOURCES += src/factories/apppath/macos/macosapppathimpl.cpp
+	SOURCES += src/factories/shortcut/macos/macosshortcutimpl.cpp
 }

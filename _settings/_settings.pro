@@ -45,10 +45,10 @@ HEADERS += src/utils/crypt/qblowfish/qblowfish.h
 HEADERS += src/utils/crypt/qblowfish/qblowfish_p.h
 
 defined(KEYMANAGER_RESOURCES, var) {
-    RESOURCES += $$KEYMANAGER_RESOURCES
-    message("Using key manager resources from file: $$KEYMANAGER_RESOURCES")
+	RESOURCES += $$KEYMANAGER_RESOURCES
+	message("Using key manager resources from file: $$KEYMANAGER_RESOURCES")
 }
 else {
-    RESOURCES += keymanager_resources.qrc
+	RESOURCES += keymanager_resources.qrc
 }
 
