@@ -250,6 +250,8 @@ void DownloadManager::onCurrentHeadFinished()
 void DownloadManager::startNextDownload()
 {
     if (m_downloadQueue.isEmpty()) {
+        m_timeoutTimer->stop();
+
         if (m_errorSet.isEmpty()) {
             L_INFO("All files downloaded successfully");
             emit allDownloadsFinished();
@@ -261,8 +263,6 @@ void DownloadManager::startNextDownload()
         emit downloadSpeedUpdated("");
         emit remainingTimeUpdated("");
         emit downloadingFileUpdated("");
-
-        m_timeoutTimer->stop();
 
         return;
     }
