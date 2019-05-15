@@ -69,7 +69,7 @@ bool WindowsAppPathImpl::startUpdater(QString _version, QStringList _args)
 
 QString WindowsAppPathImpl::getJavaExecutablePath(const QString &_javaVersion) const
 {
-    return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("javaw"));
+    return getJavaDistDir(_javaVersion).absoluteFilePath(QString("bin") + QDir::separator() + QString("javaw.exe"));
 }
 
 QString WindowsAppPathImpl::getClasspathSeparator() const
