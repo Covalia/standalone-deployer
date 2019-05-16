@@ -28,6 +28,7 @@ InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAl
     setStartId(Page_Welcome);
     setOption(QWizard::IndependentPages, true);
     setOption(QWizard::NoBackButtonOnStartPage, true);
+    setOption(QWizard::NoCancelButton, true);
 
     setWizardStyle(ModernStyle);
 
