@@ -225,3 +225,15 @@ QString MacosAppPathImpl::getClasspathSeparator() const
 {
     return ":";
 }
+
+bool MacosAppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
+{
+    if (!_app->exists()) {
+        L_ERROR(QString("An error occured when launching %1. The exe file doesn't exist.").arg(_app->fileName()));
+        return false;
+    }
+
+    L_INFO(QString("Launching file %1").arg(_app->fileName()));
+    QProcess process;
+    return process.startDetached(_app->fileName(), _args);
+}

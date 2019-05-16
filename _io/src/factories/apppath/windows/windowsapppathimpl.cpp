@@ -76,3 +76,17 @@ QString WindowsAppPathImpl::getClasspathSeparator() const
 {
     return ";";
 }
+
+bool WindowsAppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
+{
+    if (!_app->exists()) {
+        L_ERROR(QString("An error occured when launching %1. The exe file doesn't exist.").arg(_app->fileName()));
+        return false;
+    }
+
+    const QString workingDir = m_installationDir.absolutePath();
+
+    L_INFO(QString("Launching file %1 with working directory %2").arg(_app->fileName()).arg(workingDir));
+    QProcess process;
+    return process.startDetached(_app->fileName(), _args, workingDir);
+}

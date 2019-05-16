@@ -30,6 +30,7 @@ class MacosAppPathImpl : public AppPathImpl {
         bool extractAppFromDmgIfNotExist(const QString &_appName, const QFile &_dmgPath, const QFile &_appPath, const QString &_appInDmgPath, bool _forceOverwrite);
         bool openDmgFile(const QFile &_dmgFile);
         bool closeDmgFile(const QFile &_dmgFile);
+        bool startComponent(QSharedPointer<QFile> _app, QStringList _args);
 };
 
 #endif

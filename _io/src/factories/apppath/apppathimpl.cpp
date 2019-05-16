@@ -422,18 +422,6 @@ bool AppPathImpl::cdUp(QDir &_dir, int _numUp)
     return result;
 }
 
-bool AppPathImpl::startComponent(QSharedPointer<QFile> _app, QStringList _args)
-{
-    if (!_app->exists()) {
-        L_ERROR(QString("An error occured when launching %1. The exe file doesn't exist.").arg(_app->fileName()));
-        return false;
-    }
-
-    L_INFO(QString("Launching file %1").arg(_app->fileName()));
-    QProcess process;
-    return process.startDetached(_app->fileName(), _args);
-}
-
 bool AppPathImpl::startApplication(const QString &_javaVersion, const QString &_xmxMemory, const QString &_classPath,
                                    const QString &_mainClass, const QString &_encoding, const QString &_dataLocation,
                                    const QStringList &_arguments)
