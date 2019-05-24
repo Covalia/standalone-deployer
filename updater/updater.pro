@@ -22,7 +22,12 @@ TARGET = updater
 TEMPLATE = app
 
 # icone macosx
-ICON = "$$TARGET".icns
+defined(UPDATER_MACOS_ICON, var) {
+    ICON = "$$UPDATER_MACOS_ICON"
+}
+else {
+    ICON = "$$TARGET".icns
+}
 
 DESTDIR = bin
 

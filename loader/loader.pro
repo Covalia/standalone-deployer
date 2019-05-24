@@ -19,7 +19,12 @@ TARGET = loader
 TEMPLATE = app
 
 # icone macosx
-ICON = "$$TARGET".icns
+defined(LOADER_MACOS_ICON, var) {
+    ICON = "$$LOADER_MACOS_ICON"
+}
+else {
+    ICON = "$$TARGET".icns
+}
 
 DESTDIR = bin
 
