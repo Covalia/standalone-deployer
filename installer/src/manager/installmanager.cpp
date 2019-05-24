@@ -106,7 +106,6 @@ void InstallManager::initInstallation()
 
         start();
     } else {
-        qApp->setWindowIcon(QIcon(":/images/installer.png"));
         qApp->setApplicationName(QString(QObject::tr("Standalone deployment")));
 
         if (!m_uiManager) {

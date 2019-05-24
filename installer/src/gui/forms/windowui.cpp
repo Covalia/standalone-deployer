@@ -42,7 +42,7 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
 
     m_iconLabel = new QLabel(this);
     m_iconLabel->setObjectName("iconLabel");
-    m_iconLabel->setPixmap(QPixmap(":/images/logo_title.png"));
+    m_iconLabel->setPixmap(QPixmap(":/images/installer.png"));
     m_titleLabel = new QLabel(tr_helper(m_titleLabelText).arg(m_appName), this);
     m_titleLabel->setObjectName("titleLabel");
     m_comboBoxLanguage = new QComboBox(this);
