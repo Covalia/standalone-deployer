@@ -22,7 +22,12 @@ TARGET = installer
 TEMPLATE = app
 
 # icone macosx
-ICON = "$$TARGET".icns
+defined(INSTALLER_MACOS_ICON, var) {
+    ICON = "$$INSTALLER_MACOS_ICON"
+}
+else {
+    ICON = "$$TARGET".icns
+}
 
 DESTDIR = bin
 
