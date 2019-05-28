@@ -18,7 +18,7 @@
         <file alias="config.ico">resources/images/config.ico</file>
         <file alias="trash.ico">resources/images/trash.ico</file>
         <file alias="loading.gif">resources/images/loading.gif</file>
-        <file alias="succes.png">resources/images/succes.png</file>
+        <file alias="success.png">resources/images/success.png</file>
         <file alias="failure.png">resources/images/failure.png</file>
     </qresource>
 </RCC>
