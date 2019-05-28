@@ -7,7 +7,6 @@
         <file alias="mockup.png">resources/slideshow/mockup.png</file>
         <file alias="mockup1.png">resources/slideshow/mockup1.png</file>
         <file alias="mockup2.png">resources/slideshow/mockup2.png</file>
-        <file alias="mockup3.png">resources/slideshow/mockup3.png</file>
     </qresource>
     <qresource prefix="/images">
         <file alias="close.png">resources/images/close.png</file>
