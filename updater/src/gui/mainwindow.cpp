@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget * _parent) :
 
     AppPath appPath = Utils::getAppPath();
     m_ui->closeButton->setIcon(QIcon(appPath.getImagesDir().absoluteFilePath("close.png")));
-    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("logo_title.png")));
+    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("title.png")));
 
     QTimer::singleShot(0, this, SLOT(updateSlideShow()));
 

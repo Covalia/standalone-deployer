@@ -515,8 +515,8 @@ bool InstallManager::extractResources()
 
     QPair<bool, QString> extractTitleLogo;
     {
-        QFile fin(":/images/logo_title.png");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("logo_title.png"));
+        QFile fin(":/images/title.png");
+        QFile fout(m_appPath.getImagesDir().absoluteFilePath("title.png"));
         extractTitleLogo = m_appPath.extractResource(fin, fout);
         if (extractTitleLogo.first) {
             L_INFO(extractTitleLogo.second);

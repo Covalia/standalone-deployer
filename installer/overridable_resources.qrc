@@ -13,7 +13,7 @@
         <file alias="close.png">resources/images/close.png</file>
         <file alias="down.png">resources/images/down.png</file>
         <file alias="installer.png">resources/images/installer.png</file>
-        <file alias="logo_title.png">resources/images/logo_title.png</file>
+        <file alias="title.png">resources/images/title.png</file>
         <file alias="shortcut.ico">resources/images/shortcut.ico</file>
         <file alias="config.ico">resources/images/config.ico</file>
         <file alias="trash.ico">resources/images/trash.ico</file>
