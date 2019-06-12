@@ -9,6 +9,7 @@
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
+#include <QTemporaryFile>
 
 #include "log/logger.h"
 #include "factories/shortcut/shortcut.h"
@@ -17,6 +18,7 @@
 #include "lang/languagemanager.h"
 #include "io/config.h"
 #include "io/fileutils.h"
+#include "manager/resources/windowsresources.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -38,26 +40,43 @@ InstallManager::InstallManager() : QThread(),
 {
     L_INFO("Init InstallManager");
     // init project resources
-    m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
-    m_projectSettings->readSettings();
 
-    L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
+    // extract project.ini to temp file
+    QTemporaryFile projectIniFile;
+    if (projectIniFile.open()) {
 
-    m_settings = Settings::getInstance();
-    m_settings->setAppName(m_projectSettings->getAppName());
-    m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
-    m_settings->setShortcutName(m_projectSettings->getShortcutName());
-    m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
-    m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
+#ifdef Q_OS_WIN
+        WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
+        wr.extractProjectIniToTempFile(projectIniFile.fileName());
+#endif
+//#ifdef Q_OS_MACOS
+//#endif
 
-    m_settings->setInsetColor(m_projectSettings->getInsetColor());
-    m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
-    m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
-    m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
-    m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
-    m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
-    m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
-    m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
+        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+        m_projectSettings->readSettings();
+
+        L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
+
+        m_settings = Settings::getInstance();
+        m_settings->setAppName(m_projectSettings->getAppName());
+        m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
+        m_settings->setShortcutName(m_projectSettings->getShortcutName());
+        m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
+        m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
+
+        m_settings->setInsetColor(m_projectSettings->getInsetColor());
+        m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
+        m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
+        m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
+        m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
+        m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
+        m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
+        m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
+
+    }
+    else {
+        L_ERROR("Unable to open temporary file for project.ini.");
+    }
 }
 
 InstallManager::~InstallManager()
@@ -438,94 +457,16 @@ bool InstallManager::extractResources()
         L_ERROR(extractLoader.second);
     }
 
-    QPair<bool, QString> extractAppIcon;
-    {
-        QFile fin(":/images/shortcut.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
-        extractAppIcon = m_appPath.extractResource(fin, fout);
-        if (extractAppIcon.first) {
-            L_INFO(extractAppIcon.second);
-        } else {
-            L_ERROR(extractAppIcon.second);
-        }
-    }
+    bool extractImages = true;
 
-    QPair<bool, QString> extractTrashIcon;
-    {
-        QFile fin(":/images/trash.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("trash.ico"));
-        extractTrashIcon = m_appPath.extractResource(fin, fout);
-        if (extractTrashIcon.first) {
-            L_INFO(extractTrashIcon.second);
-        } else {
-            L_ERROR(extractTrashIcon.second);
-        }
-    }
+#ifdef Q_OS_WIN
+    WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
+    extractImages = wr.extractResources();
+#endif
+//#ifdef Q_OS_MACOS
+//#endif
 
-    QPair<bool, QString> extractConfigIcon;
-    {
-        QFile fin(":/images/config.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("config.ico"));
-        extractConfigIcon = m_appPath.extractResource(fin, fout);
-        if (extractConfigIcon.first) {
-            L_INFO(extractConfigIcon.second);
-        } else {
-            L_ERROR(extractConfigIcon.second);
-        }
-    }
-
-    QPair<bool, QString> extractStyle;
-    {
-        QFile fin(":/style.css");
-        QFile fout(m_appPath.getConfigurationDir().absoluteFilePath("style.css"));
-        extractStyle = m_appPath.extractResource(fin, fout);
-        if (extractStyle.first) {
-            L_INFO(extractStyle.second);
-        } else {
-            L_ERROR(extractStyle.second);
-        }
-    }
-
-    QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
-    bool extractSlides = true;
-    while (it.hasNext()) {
-        QFile resourcePath(it.next());
-        QFileInfo fileInfo(resourcePath);
-        QFile fout(m_appPath.getSlidesDir().absoluteFilePath(fileInfo.fileName()));
-        QPair<bool, QString> extractSlide = m_appPath.extractResource(resourcePath, fout);
-        if (extractSlide.first) {
-            L_INFO(extractSlide.second);
-        } else {
-            L_ERROR(extractSlide.second);
-        }
-        extractSlides &= extractSlide.first;
-    }
-
-    QPair<bool, QString> extractClose;
-    {
-        QFile fin(":/images/close.png");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("close.png"));
-        extractClose = m_appPath.extractResource(fin, fout);
-        if (extractClose.first) {
-            L_INFO(extractClose.second);
-        } else {
-            L_ERROR(extractClose.second);
-        }
-    }
-
-    QPair<bool, QString> extractTitleLogo;
-    {
-        QFile fin(":/images/title.png");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("title.png"));
-        extractTitleLogo = m_appPath.extractResource(fin, fout);
-        if (extractTitleLogo.first) {
-            L_INFO(extractTitleLogo.second);
-        } else {
-            L_ERROR(extractTitleLogo.second);
-        }
-    }
-
-    return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first && extractStyle.first && extractSlides && extractClose.first && extractTitleLogo.first;
+    return extractUpdater.first && extractLoader.first && extractImages;
 }
 
 bool InstallManager::createShortcut()

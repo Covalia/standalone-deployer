@@ -1,0 +1,25 @@
+// starting with _ will not be extracted
+// __ will be replaced with .
+// _ will be replaced with file separator
+// name will be converted to lowercase
+
+_PROJECT__INI				RCDATA	"resources\\project.ini"
+
+CONFIG_STYLE__CSS			RCDATA	"resources\\style.css"
+
+IMAGES_CONFIG__ICO			RCDATA	"resources\\images\\config.ico"
+IMAGES_SHORTCUT__ICO			RCDATA	"resources\\images\\shortcut.ico"
+IMAGES_TRASH__ICO			RCDATA	"resources\\images\\trash.ico"
+
+IMAGES_LOADING__GIF			RCDATA	"resources\\images\\loading.gif"
+
+IMAGES_DOWN__PNG			RCDATA	"resources\\images\\down.png"
+IMAGES_FAILURE__PNG			RCDATA	"resources\\images\\failure.png"
+IMAGES_INSTALLER__PNG			RCDATA	"resources\\images\\installer.png"
+IMAGES_TITLE__PNG			RCDATA	"resources\\images\\title.png"
+IMAGES_SUCCESS__PNG			RCDATA	"resources\\images\\succes.png"
+
+IMAGES_SLIDES_MOKCUP__PNG		RCDATA	"resources\\slideshow\\mockup.png"
+IMAGES_SLIDES_MOKCUP1__PNG		RCDATA	"resources\\slideshow\\mockup1.png"
+IMAGES_SLIDES_MOKCUP2__PNG		RCDATA	"resources\\slideshow\\mockup2.png"
+IMAGES_SLIDES_MOKCUP3__PNG		RCDATA	"resources\\slideshow\\mockup3.png"

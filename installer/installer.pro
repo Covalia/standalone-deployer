@@ -111,6 +111,9 @@ RESOURCES += fixed_resources.qrc
 
 win32 {
 	RESOURCES += windows_resources.qrc
+
+	HEADERS += src/manager/resources/windowsresources.h
+	SOURCES += src/manager/resources/windowsresources.cpp
 }
 
 macx {
@@ -128,6 +131,8 @@ else {
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
+
+RC_FILE = windows_resources.rc
 
 macx {
 	CONFIG(release, debug|release) {
@@ -163,7 +168,6 @@ win32 {
 		# mt.exe must be in the PATH
 		QMAKE_POST_LINK += $$escape_expand(\n\t)mt.exe -nologo -manifest \"$$TARGET\".exe.manifest -outputresource:\"$$DESTDIR/"$$TARGET".exe;$${LITERAL_HASH}1\"
 
-		QMAKE_POST_LINK += $$escape_expand(\n\t)../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
 		defined(SIGNATURE_IDENTITY, var) {
 			# signtool.exe must be in the PATH
 			QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
