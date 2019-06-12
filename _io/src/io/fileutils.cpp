@@ -74,3 +74,18 @@ bool FileUtils::directoryExists(const QString &_dir)
     QDir dir(_dir);
     return dir.exists();
 }
+
+bool FileUtils::createDirIfNotExists(const QDir&_dir)
+{
+    if (_dir.exists()) {
+        return true;
+    } else {
+        bool created = QDir().mkpath(_dir.absolutePath());
+        if (created) {
+            L_INFO(QString("Success while creating parent directory: %1").arg(_dir.absolutePath()));
+        } else {
+            L_ERROR(QString("Error while creating parent directory: %1").arg(_dir.absolutePath()));
+        }
+        return created;
+    }
+}

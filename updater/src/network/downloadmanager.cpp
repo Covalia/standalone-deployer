@@ -12,6 +12,7 @@
 #include "log/logger.h"
 #include "xml/data/application.h"
 #include "gui/authenticationdialogui.h"
+#include "io/fileutils.h"
 
 DownloadManager::DownloadManager(const QDir &_temporaryDir, const QUrl &_baseUrl, const QNetworkProxy &_proxy, QWidget * _parent) : QObject(_parent),
     m_parent(_parent),
@@ -477,21 +478,6 @@ void DownloadManager::headsFinished()
     QTimer::singleShot(0, this, SLOT(startNextDownload()));
 }
 
-bool DownloadManager::createDirIfNotExists(const QDir&_dir)
-{
-    if (_dir.exists()) {
-        return true;
-    } else {
-        bool created = QDir().mkpath(_dir.absolutePath());
-        if (created) {
-            L_INFO(QString("Success while creating parent directory: %1").arg(_dir.absolutePath()));
-        } else {
-            L_ERROR(QString("Error while creating parent directory: %1").arg(_dir.absolutePath()));
-        }
-        return created;
-    }
-}
-
 QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl&_baseUrl, const QNetworkReply * const _reply, const QDir&_tempDir)
 {
     const QUrl url = _reply->url();
@@ -500,7 +486,7 @@ QString DownloadManager::getFilenameAndCreateRequiredDirectories(const QUrl&_bas
 
     const QFileInfo fileInfo(_tempDir.absoluteFilePath(relativePath));
     const QDir parentDir = fileInfo.dir();
-    const bool created = createDirIfNotExists(parentDir);
+    const bool created = FileUtils::createDirIfNotExists(parentDir);
 
     if (created) {
         QString filename = "";
