@@ -9,7 +9,6 @@
 #include <QThread>
 #include <QDirIterator>
 #include <QStringList>
-#include <QTemporaryFile>
 
 #include "log/logger.h"
 #include "factories/shortcut/shortcut.h"
@@ -20,6 +19,7 @@
 #include "io/fileutils.h"
 
 #ifdef Q_OS_WIN
+#include <QTemporaryFile>
 #include "manager/resources/windowsresources.h"
 #endif
 
@@ -44,41 +44,56 @@ InstallManager::InstallManager() : QThread(),
     L_INFO("Init InstallManager");
     // init project resources
 
-    // extract project.ini to temp file
+#ifdef Q_OS_WIN
+	// extract project.ini to temp file
     QTemporaryFile projectIniFile;
     if (projectIniFile.open()) {
-
-#ifdef Q_OS_WIN
         WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());
-#endif
-//#ifdef Q_OS_MACOS
-//#endif
-
         m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
-        m_projectSettings->readSettings();
-
-        L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
-
-        m_settings = Settings::getInstance();
-        m_settings->setAppName(m_projectSettings->getAppName());
-        m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
-        m_settings->setShortcutName(m_projectSettings->getShortcutName());
-        m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
-        m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
-
-        m_settings->setInsetColor(m_projectSettings->getInsetColor());
-        m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
-        m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
-        m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
-        m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
-        m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
-        m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
-        m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
-
     }
     else {
         L_ERROR("Unable to open temporary file for project.ini.");
+        qApp->quit();
+        return;
     }
+#endif
+#ifdef Q_OS_MACOS
+    QDir dir(QCoreApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cd("Resources");
+    const QString projectIniFilePath = dir.absoluteFilePath("project.ini");
+
+    QFile projectIniFile(projectIniFilePath);
+    if (projectIniFile.exists()) {
+        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+	}
+    else {
+        L_ERROR("Unable to open project.ini file from app resources.");
+        qApp->quit();
+        return;
+    }
+#endif
+
+    m_projectSettings->readSettings();
+
+    L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
+
+    m_settings = Settings::getInstance();
+    m_settings->setAppName(m_projectSettings->getAppName());
+    m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
+    m_settings->setShortcutName(m_projectSettings->getShortcutName());
+    m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
+    m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
+
+    m_settings->setInsetColor(m_projectSettings->getInsetColor());
+    m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
+    m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
+    m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
+    m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
+    m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
+    m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
+    m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
+
 }
 
 InstallManager::~InstallManager()
