@@ -18,7 +18,10 @@
 #include "lang/languagemanager.h"
 #include "io/config.h"
 #include "io/fileutils.h"
+
+#ifdef Q_OS_WIN
 #include "manager/resources/windowsresources.h"
+#endif
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -46,8 +49,7 @@ InstallManager::InstallManager() : QThread(),
     if (projectIniFile.open()) {
 
 #ifdef Q_OS_WIN
-        WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
-        wr.extractProjectIniToTempFile(projectIniFile.fileName());
+        WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());
 #endif
 //#ifdef Q_OS_MACOS
 //#endif

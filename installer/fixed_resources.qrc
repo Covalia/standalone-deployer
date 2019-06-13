@@ -4,7 +4,13 @@
         <file alias="en_US.qm">resources/lang/en_US.qm</file>
     </qresource>
     <qresource prefix="/">
-        <file>resources/gpl-3.0.txt</file>
-        <file>resources/third-party.txt</file>
+        <file alias="gpl-3.0.txt">resources/fixed/gpl-3.0.txt</file>
+        <file alias="third-party.txt">resources/fixed/third-party.txt</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="close.png">resources/fixed/images/close.png</file>
+        <file alias="failure.png">resources/fixed/images/failure.png</file>
+        <file alias="loading.gif">resources/fixed/images/loading.gif</file>
+        <file alias="success.png">resources/fixed/images/succes.png</file>
     </qresource>
 </RCC>

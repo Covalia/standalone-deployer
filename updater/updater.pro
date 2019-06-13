@@ -101,16 +101,6 @@ HEADERS += src/xml/deploymentxml.h
 
 RESOURCES += fixed_resources.qrc
 
-defined(OVERRIDABLE_UPDATER_RESOURCES, var) {
-	RESOURCES += $$OVERRIDABLE_UPDATER_RESOURCES
-	message("Using installer resources from file: $$OVERRIDABLE_UPDATER_RESOURCES")
-}
-else {
-	RESOURCES += overridable_resources.qrc
-}
-
-
-
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts

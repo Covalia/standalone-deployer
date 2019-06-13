@@ -17,8 +17,9 @@ class WindowsResources {
         ~WindowsResources();
 
         bool extractResources();
-        bool extractProjectIniToTempFile(const QString &_path);
-
+        static bool extractProjectIniToTempFile(const QString &_path);
+        static bool extractStyleCssToTempFile(const QString &_path);
+        static bool extractTitlePngToTempFile(const QString &_path);
 
     private:
         static BOOL EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam);

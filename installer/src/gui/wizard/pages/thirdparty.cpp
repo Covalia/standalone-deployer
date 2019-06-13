@@ -19,7 +19,7 @@ ThirdPartyPage::ThirdPartyPage(QWidget * parent) : QWizardPage(parent),
     m_thirdPartyTextBrowser->setReadOnly(true);
     m_thirdPartyTextBrowser->setOpenExternalLinks(true);
 
-    QFile f(":/resources/third-party.txt");
+    QFile f(":/third-party.txt");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
         m_thirdPartyTextBrowser->insertHtml(in.readAll());

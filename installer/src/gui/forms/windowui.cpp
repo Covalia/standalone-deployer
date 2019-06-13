@@ -5,6 +5,11 @@
 #include "io/config.h"
 
 #include <QtWidgets>
+#include <QTemporaryFile>
+
+#ifdef Q_OS_WIN
+#include "manager/resources/windowsresources.h"
+#endif
 
 WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget * _parent) :
     QMainWindow(_parent),
@@ -42,7 +47,20 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
 
     m_iconLabel = new QLabel(this);
     m_iconLabel->setObjectName("iconLabel");
-    m_iconLabel->setPixmap(QPixmap(":/images/installer.png"));
+
+    // get image from resources to temp file
+    QTemporaryFile projectIniFile;
+    if (projectIniFile.open()) {
+
+#ifdef Q_OS_WIN
+        WindowsResources::extractTitlePngToTempFile(projectIniFile.fileName());
+#endif
+        //#ifdef Q_OS_MACOS
+        //#endif
+
+        m_iconLabel->setPixmap(QPixmap(projectIniFile.fileName()));
+    }
+
     m_titleLabel = new QLabel(tr_helper(m_titleLabelText).arg(m_appName), this);
     m_titleLabel->setObjectName("titleLabel");
     m_comboBoxLanguage = new QComboBox(this);

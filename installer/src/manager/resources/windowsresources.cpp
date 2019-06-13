@@ -19,10 +19,18 @@ bool WindowsResources::extractResources()
     return res != 0;
 }
 
-
 bool WindowsResources::extractProjectIniToTempFile(const QString &_path)
 {
     return writeResourceIdToFile(L"_PROJECT__INI", _path);
+}
+
+bool WindowsResources::extractStyleCssToTempFile(const QString &_path)
+{
+    return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _path);
+}
+bool WindowsResources::extractTitlePngToTempFile(const QString &_path)
+{
+    return writeResourceIdToFile(L"IMAGES_TITLE__PNG", _path);
 }
 
 BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)
