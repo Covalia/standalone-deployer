@@ -253,9 +253,12 @@ void MainWindow::updateSlideShow()
         loadSlideShowImagesFromResources();
     }
 
-    update_counter++;
-    update_counter %= m_imagesList.size();
-    updateSlideShow(update_counter);
+    // if still empty, do nothing.
+    if (!m_imagesList.isEmpty()) {
+        update_counter++;
+        update_counter %= m_imagesList.size();
+        updateSlideShow(update_counter);
+    }
 }
 
 void MainWindow::handleDownloaderError(const QString &_message)
