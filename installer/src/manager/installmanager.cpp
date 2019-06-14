@@ -65,10 +65,12 @@ InstallManager::InstallManager() : QThread(),
 
     QFile projectIniFile(projectIniFilePath);
     if (projectIniFile.exists()) {
+        projectIniFile.close();
         m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
-	}
+    }
     else {
         L_ERROR("Unable to open project.ini file from app resources.");
+        projectIniFile.close();
         qApp->quit();
         return;
     }
