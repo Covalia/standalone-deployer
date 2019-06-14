@@ -135,9 +135,11 @@ macx {
 
 	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
+	QMAKE_POST_LINK += cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+			QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
 		}
 	}
 
