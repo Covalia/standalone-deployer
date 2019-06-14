@@ -48,7 +48,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
 
     connect(m_updater, SIGNAL(downloadProgress(qint64,qint64)),
             SLOT(updateProgress(qint64,qint64)));
-    connect(m_updater, SIGNAL(downloadSpeedupdated(const QString&)),
+    connect(m_updater, SIGNAL(downloadSpeedUpdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
     connect(m_updater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
@@ -93,7 +93,7 @@ void AppUpdater::updateProgress(qint64 _bytesReceived, qint64 _bytesTotal)
 
 void AppUpdater::updateDownloadSpeedMessage(const QString &_speed)
 {
-    emit downloadSpeedupdated(_speed);
+    emit downloadSpeedUpdated(_speed);
 }
 
 void AppUpdater::updateRemainingTimeMessage(const QString &_time)

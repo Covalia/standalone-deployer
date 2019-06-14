@@ -87,7 +87,7 @@ class AppUpdater : public QObject
 
     signals:
         void downloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
-        void downloadSpeedupdated(const QString &_speed);
+        void downloadSpeedUpdated(const QString &_speed);
         void remainingTimeUpdated(const QString &_time);
         void serverUrlUpdated(const QUrl &_url);
         void downloadingFileUpdated(const QString &_file);
