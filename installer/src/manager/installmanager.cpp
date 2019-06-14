@@ -45,7 +45,7 @@ InstallManager::InstallManager() : QThread(),
     // init project resources
 
 #ifdef Q_OS_WIN
-	// extract project.ini to temp file
+    // extract project.ini to temp file
     QTemporaryFile projectIniFile;
     if (projectIniFile.open()) {
         WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());

@@ -136,6 +136,7 @@ macx {
 	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
 	QMAKE_POST_LINK += cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t) cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
