@@ -5,9 +5,9 @@
 #include "io/config.h"
 
 #include <QtWidgets>
-#include <QTemporaryFile>
 
 #ifdef Q_OS_WIN
+#include <QTemporaryFile>
 #include "manager/resources/windowsresources.h"
 #endif
 
@@ -48,18 +48,35 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     m_iconLabel = new QLabel(this);
     m_iconLabel->setObjectName("iconLabel");
 
-    // get image from resources to temp file
-    QTemporaryFile projectIniFile;
-    if (projectIniFile.open()) {
 
 #ifdef Q_OS_WIN
-        WindowsResources::extractTitlePngToTempFile(projectIniFile.fileName());
-#endif
-        //#ifdef Q_OS_MACOS
-        //#endif
-
-        m_iconLabel->setPixmap(QPixmap(projectIniFile.fileName()));
+	// get image from resources to temp file
+	QTemporaryFile titlePngFile;
+	if (titlePngFile.open()) {
+        WindowsResources::extractTitlePngToTempFile(titlePngFile.fileName());
+		m_iconLabel->setPixmap(QPixmap(titlePngFile.fileName()));
+	}
+    else {
+        L_ERROR("Unable to open temporary file for title.png.");
     }
+#endif
+#ifdef Q_OS_MACOS
+    QDir dir(QCoreApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cd("Resources");
+    const QString titlePngFilePath = dir.absoluteFilePath("images/title.png");
+
+    QFile titlePngFile(titlePngFilePath);
+    if (titlePngFile.exists()) {
+        titlePngFile.close();
+		m_iconLabel->setPixmap(QPixmap(titlePngFile.fileName()));
+    }
+    else {
+        L_ERROR("Unable to open images/title.png file from app resources.");
+        titlePngFile.close();
+    }
+#endif
+
 
     m_titleLabel = new QLabel(tr_helper(m_titleLabelText).arg(m_appName), this);
     m_titleLabel->setObjectName("titleLabel");

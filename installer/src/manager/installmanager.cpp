@@ -22,6 +22,9 @@
 #include <QTemporaryFile>
 #include "manager/resources/windowsresources.h"
 #endif
+#ifdef Q_OS_MACOS
+#include "io/fileutils.h"
+#endif
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -45,35 +48,33 @@ InstallManager::InstallManager() : QThread(),
     // init project resources
 
 #ifdef Q_OS_WIN
-    // extract project.ini to temp file
-    QTemporaryFile projectIniFile;
-    if (projectIniFile.open()) {
-        WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());
-        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
-    }
-    else {
-        L_ERROR("Unable to open temporary file for project.ini.");
-        qApp->quit();
-        return;
-    }
+        // extract project.ini to temp file
+        QTemporaryFile projectIniFile;
+        if (projectIniFile.open()) {
+            WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());
+            m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+        } else {
+            L_ERROR("Unable to open temporary file for project.ini.");
+            qApp->quit();
+            return;
+        }
 #endif
 #ifdef Q_OS_MACOS
-    QDir dir(QCoreApplication::applicationDirPath());
-    dir.cdUp();
-    dir.cd("Resources");
-    const QString projectIniFilePath = dir.absoluteFilePath("project.ini");
+        QDir dir(QCoreApplication::applicationDirPath());
+        dir.cdUp();
+        dir.cd("Resources");
+        const QString projectIniFilePath = dir.absoluteFilePath("project.ini");
 
-    QFile projectIniFile(projectIniFilePath);
-    if (projectIniFile.exists()) {
-        projectIniFile.close();
-        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
-    }
-    else {
-        L_ERROR("Unable to open project.ini file from app resources.");
-        projectIniFile.close();
-        qApp->quit();
-        return;
-    }
+        QFile projectIniFile(projectIniFilePath);
+        if (projectIniFile.exists()) {
+            projectIniFile.close();
+            m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+        } else {
+            L_ERROR("Unable to open project.ini file from app resources.");
+            projectIniFile.close();
+            qApp->quit();
+            return;
+        }
 #endif
 
     m_projectSettings->readSettings();
@@ -95,7 +96,6 @@ InstallManager::InstallManager() : QThread(),
     m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
     m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
     m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
-
 }
 
 InstallManager::~InstallManager()
@@ -476,16 +476,34 @@ bool InstallManager::extractResources()
         L_ERROR(extractLoader.second);
     }
 
-    bool extractImages = true;
+    bool extractResources = true;
 
 #ifdef Q_OS_WIN
-    WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
-    extractImages = wr.extractResources();
+        WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
+        extractResources = wr.extractResources();
 #endif
-//#ifdef Q_OS_MACOS
-//#endif
+#ifdef Q_OS_MACOS
+        QDir dir(QCoreApplication::applicationDirPath());
+        dir.cdUp();
+        dir.cd("Resources");
+        const QString imagesDirPath = dir.absoluteFilePath("images");
 
-    return extractUpdater.first && extractLoader.first && extractImages;
+        if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath.getImagesDir().absolutePath())) {
+            L_INFO("images directory copied from app resources.");
+        } else {
+            L_ERROR("Unable to copy images directory from app resources.");
+            extractResources = false;
+        }
+
+        if (QFile::copy(dir.absoluteFilePath("style.css"), m_appPath.getConfigurationDir().absoluteFilePath("style.css"))) {
+            L_INFO("style.css file copied from app resources.");
+        } else {
+            L_ERROR("Unable to copy style.css file from app resources.");
+            extractResources = false;
+        }
+#endif
+
+    return extractUpdater.first && extractLoader.first && extractResources;
 }
 
 bool InstallManager::createShortcut()
