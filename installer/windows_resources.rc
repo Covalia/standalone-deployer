@@ -13,7 +13,7 @@ IMAGES_TRASH__ICO			RCDATA	"resources\\overridable\\images\\trash.ico"
 
 IMAGES_TITLE__PNG			RCDATA	"resources\\overridable\\images\\title.png"
 
-IMAGES_SLIDES_MOKCUP__PNG		RCDATA	"resources\\overridable\\slideshow\\mockup.png"
-IMAGES_SLIDES_MOKCUP1__PNG		RCDATA	"resources\\overridable\\slideshow\\mockup1.png"
-IMAGES_SLIDES_MOKCUP2__PNG		RCDATA	"resources\\overridable\\slideshow\\mockup2.png"
-IMAGES_SLIDES_MOKCUP3__PNG		RCDATA	"resources\\overridable\\slideshow\\mockup3.png"
+IMAGES_SLIDES_MOKCUP__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup.png"
+IMAGES_SLIDES_MOKCUP1__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup1.png"
+IMAGES_SLIDES_MOKCUP2__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup2.png"
+IMAGES_SLIDES_MOKCUP3__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup3.png"
