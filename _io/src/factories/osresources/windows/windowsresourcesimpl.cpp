@@ -1,22 +1,10 @@
-#include "manager/resources/windowsresources.h"
+#include "factories/osresources/windows/windowsresourcesimpl.h"
 
-#include <QByteArray>
-#include <QFile>
-#include <QDir>
-
-#include "log/logger.h"
-#include "io/fileutils.h"
-
-WindowsResources::WindowsResources(const AppPath _appPath) :
-    m_installPath(_appPath.getInstallationDir().absolutePath())
+WindowsResourcesImpl::WindowsResourcesImpl(const AppPath * const _appPath) : OsResourcesImpl(_appPath)
 {
 }
 
-WindowsResources::~WindowsResources()
-{
-}
-
-bool WindowsResources::extractResources()
+bool WindowsResourcesImpl::extractResources()
 {
     BOOL res = EnumResourceNames(NULL, RT_RCDATA, (ENUMRESNAMEPROC)&WindowsResources::EnumNamesFunc, (LONG_PTR)&m_installPath);
 
@@ -28,21 +16,21 @@ bool WindowsResources::extractResources()
     return res != 0;
 }
 
-bool WindowsResources::extractProjectIniToTempFile(const QString &_toPath)
+bool WindowsResourcesImpl::extractProjectIniToTempFile(const QString &_toPath)
 {
     return writeResourceIdToFile(L"_PROJECT__INI", _toPath);
 }
 
-bool WindowsResources::extractStyleCssToTempFile(const QString &_toPath)
+bool WindowsResourcesImpl::extractStyleCssToTempFile(const QString &_toPath)
 {
     return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _toPath);
 }
-bool WindowsResources::extractTitlePngToTempFile(const QString &_toPath)
+bool WindowsResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 {
     return writeResourceIdToFile(L"IMAGES_TITLE__PNG", _toPath);
 }
 
-BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)
+BOOL WindowsResourcesImpl::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)
 {
     Q_UNUSED(hModule);
     Q_UNUSED(lpType);
@@ -59,7 +47,7 @@ BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpN
         if (lParam != 0) {
             const QString installPath(*(QString *)lParam);
             L_INFO(QString("Resulting file: %1\\%2").arg(installPath).arg(processedResourceName));
-            return WindowsResources::writeResourceIdToFile(lpName, QString("%1\\%2").arg(installPath).arg(processedResourceName)) ? TRUE : FALSE;
+            return WindowsResourcesImpl::writeResourceIdToFile(lpName, QString("%1\\%2").arg(installPath).arg(processedResourceName)) ? TRUE : FALSE;
         } else {
             L_ERROR(QString("Install Path param is NULL. Unable to extract resource for: %1.").arg(processedResourceName));
             return FALSE;
@@ -70,7 +58,7 @@ BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpN
     }
 }
 
-bool WindowsResources::writeResourceIdToFile(LPCWSTR _resId, const QString &_toPath)
+bool WindowsResourcesImpl::writeResourceIdToFile(LPCWSTR _resId, const QString &_toPath)
 {
     HGLOBAL res_handle = nullptr;
     HRSRC res;

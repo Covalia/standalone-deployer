@@ -17,7 +17,7 @@
 #include "lang/languagemanager.h"
 #include "io/config.h"
 
-#include "manager/resources/osresources.h"
+#include "factories/osresources/osresources.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -456,16 +456,8 @@ bool InstallManager::extractResources()
         L_ERROR(extractLoader.second);
     }
 
-    bool extractResources = true;
-
-#ifdef Q_OS_WIN
-        WindowsResources wr(m_appPath);
-        extractResources = wr.extractResources();
-#endif
-#ifdef Q_OS_MACOS
-        MacosResources mr(m_appPath);
-        extractResources = mr.extractResources();
-#endif
+    OsResources osResources(&m_appPath);
+    bool extractResources = osResources.extractResources();
 
     return extractUpdater.first && extractLoader.first && extractResources;
 }

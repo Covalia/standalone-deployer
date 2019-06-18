@@ -1,16 +1,14 @@
-#ifndef INSTALLER_MACOSRESOURCES_H
-#define INSTALLER_MACOSRESOURCES_H
+#ifndef IO_MACOSRESOURCESIMPL_H
+#define IO_MACOSRESOURCESIMPL_H
 
-#include <QString>
+#include "factories/osresources/osresourcesimpl.h"
 
-#include "factories/apppath/apppath.h"
+class AppPath;
 
-class MacosResources {
+class MacosResourcesImpl : public OsResourcesImpl {
     public:
-        MacosResources(const AppPath _appPath);
-        ~MacosResources();
-
-        bool extractResources();
+        MacosResourcesImpl(const AppPath * const _appPath);
+        virtual bool extractResources();
 
         static bool extractProjectIniToTempFile(const QString &_toPath);
         static bool extractStyleCssToTempFile(const QString &_toPath);
@@ -18,8 +16,6 @@ class MacosResources {
 
     private:
         static bool writeFileToTempFile(const QString &_resourceFile, const QString &_toPath);
-
-        const AppPath m_appPath;
 };
 
 #endif

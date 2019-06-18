@@ -1,21 +1,13 @@
-#include "manager/resources/macosresources.h"
+#include "factories/osresources/macos/macosresourcesimpl.h"
 
 #include <QDir>
 #include <QCoreApplication>
 
-#include "io/fileutils.h"
-#include "log/simpleqtlogger.h"
-
-MacosResources::MacosResources(const AppPath _appPath) :
-    m_appPath(_appPath)
+MacosResourcesImpl::MacosResourcesImpl(const AppPath * const _appPath) : OsResourcesImpl(_appPath)
 {
 }
 
-MacosResources::~MacosResources()
-{
-}
-
-bool MacosResources::extractResources()
+bool MacosResourcesImpl::extractResources()
 {
     bool extractResources = true;
 
@@ -25,7 +17,12 @@ bool MacosResources::extractResources()
     dir.cd("Resources");
     const QString imagesDirPath = dir.absoluteFilePath("images");
 
-    if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath.getImagesDir().absolutePath())) {
+    if (m_appPath == nullptr) {
+        L_ERROR("AppPath is null, unable to extract resources.");
+        return false;
+    }
+
+    if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath->getImagesDir().absolutePath())) {
         L_INFO("images directory copied from app resources.");
     } else {
         L_ERROR("Unable to copy images directory from app resources.");
@@ -33,7 +30,7 @@ bool MacosResources::extractResources()
     }
 
     const QString styleCssFileName = "style.css";
-    const QString styleCssFileDest = m_appPath.getConfigurationDir().absoluteFilePath(styleCssFileName);
+    const QString styleCssFileDest = m_appPath->getConfigurationDir().absoluteFilePath(styleCssFileName);
     if (QFile::exists(styleCssFileDest)) {
         L_INFO(QString("%1 already exists.").arg(styleCssFileDest));
         if (QFile::remove(styleCssFileDest)) {
@@ -53,22 +50,22 @@ bool MacosResources::extractResources()
     return extractResources;
 }
 
-bool MacosResources::extractProjectIniToTempFile(const QString &_toPath)
+bool MacosResourcesImpl::extractProjectIniToTempFile(const QString &_toPath)
 {
     return writeFileToTempFile("project.ini", _toPath);
 }
 
-bool MacosResources::extractStyleCssToTempFile(const QString &_toPath)
+bool MacosResourcesImpl::extractStyleCssToTempFile(const QString &_toPath)
 {
     return writeFileToTempFile("style.css", _toPath);
 }
 
-bool MacosResources::extractTitlePngToTempFile(const QString &_toPath)
+bool MacosResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 {
     return writeFileToTempFile("images/title.png", _toPath);
 }
 
-bool MacosResources::writeFileToTempFile(const QString &_resourceFile, const QString &_toPath)
+bool MacosResourcesImpl::writeFileToTempFile(const QString &_resourceFile, const QString &_toPath)
 {
     QDir dir(QCoreApplication::applicationDirPath());
 

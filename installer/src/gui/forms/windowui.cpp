@@ -5,14 +5,7 @@
 #include "io/config.h"
 
 #include <QtWidgets>
-
-#include <QTemporaryFile>
-#ifdef Q_OS_WIN
-#include "manager/resources/windowsresources.h"
-#endif
-#ifdef Q_OS_MACOS
-#include "manager/resources/macosresources.h"
-#endif
+#include "factories/osresources/osresources.h"
 
 WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget * _parent) :
     QMainWindow(_parent),
@@ -54,14 +47,7 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     // get image from resources to temp file
     QTemporaryFile titlePngFile;
     if (titlePngFile.open()) {
-        bool extractedTitlePng = true;
-#ifdef Q_OS_WIN
-            extractedTitlePng = WindowsResources::extractTitlePngToTempFile(titlePngFile.fileName());
-#endif
-#ifdef Q_OS_MACOS
-            extractedTitlePng = MacosResources::extractTitlePngToTempFile(titlePngFile.fileName());
-#endif
-        if (extractedTitlePng) {
+        if (OsResources::extractTitlePngToTempFile(titlePngFile.fileName())) {
             L_INFO("title.png extracted from application resources.");
             m_iconLabel->setPixmap(QPixmap(titlePngFile.fileName()));
         } else {
