@@ -84,6 +84,7 @@ SOURCES += src/gui/wizard/pages/type.cpp
 SOURCES += src/gui/wizard/pages/welcome.cpp
 SOURCES += src/gui/manager/uimanager.cpp
 SOURCES += src/manager/installmanager.cpp
+SOURCES += src/manager/resources/osresources.cpp
 SOURCES += src/settings/resourcesettings.cpp
 SOURCES += src/utils.cpp
 
@@ -104,6 +105,7 @@ HEADERS += src/gui/wizard/pages/type.h
 HEADERS += src/gui/wizard/pages/welcome.h
 HEADERS += src/gui/manager/uimanager.h
 HEADERS += src/manager/installmanager.h
+HEADERS += src/manager/resources/osresources.h
 HEADERS += src/settings/resourcesettings.h
 HEADERS += src/utils.h
 
@@ -118,6 +120,9 @@ win32 {
 
 macx {
 	RESOURCES += macos_resources.qrc
+
+	HEADERS += src/manager/resources/macosresources.h
+	SOURCES += src/manager/resources/macosresources.cpp
 }
 
 DISTFILES += ../uncrustify.cfg

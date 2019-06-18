@@ -5,9 +5,12 @@
 #include "log/logger.h"
 #include "manager/installmanager.h"
 
-#ifdef Q_OS_WIN
 #include <QTemporaryFile>
+#ifdef Q_OS_WIN
 #include "manager/resources/windowsresources.h"
+#endif
+#ifdef Q_OS_MACOS
+#include "manager/resources/macosresources.h"
 #endif
 
 int main(int argc, char * argv[])
@@ -24,35 +27,28 @@ int main(int argc, char * argv[])
     p.setColor(QPalette::Mid, p.color(QPalette::Base));
     qApp->setPalette(p);
 
-#ifdef Q_OS_WIN
     // extract style.css to temp file
     QTemporaryFile styleCssFile;
     if (styleCssFile.open()) {
-        WindowsResources::extractStyleCssToTempFile(styleCssFile.fileName());
-    }
-    else {
+        bool extractedStyleCss = true;
+#ifdef Q_OS_WIN
+            extractedStyleCss = WindowsResources::extractStyleCssToTempFile(styleCssFile.fileName());
+#endif
+#ifdef Q_OS_MACOS
+            extractedStyleCss = MacosResources::extractStyleCssToTempFile(styleCssFile.fileName());
+#endif
+        if (extractedStyleCss) {
+            L_INFO("style.css extracted from application resources.");
+        } else {
+            L_ERROR("Unable to open style.css file from application resources.");
+            qApp->quit();
+            return EXIT_FAILURE;
+        }
+    } else {
         L_ERROR("Unable to open temporary file for style.css.");
         qApp->quit();
         return EXIT_FAILURE;
     }
-#endif
-#ifdef Q_OS_MACOS
-    QDir dir(QCoreApplication::applicationDirPath());
-    dir.cdUp();
-    dir.cd("Resources");
-    const QString styleCssFilePath = dir.absoluteFilePath("style.css");
-
-    QFile styleCssFile(styleCssFilePath);
-    if (styleCssFile.exists()) {
-        styleCssFile.close();
-    }
-    else {
-        L_ERROR("Unable to open style.css file from app resources.");
-        styleCssFile.close();
-        qApp->quit();
-        return EXIT_FAILURE;
-    }
-#endif
 
     QFile file(styleCssFile.fileName());
     if (file.open(QFile::ReadOnly)) {

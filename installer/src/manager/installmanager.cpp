@@ -16,15 +16,8 @@
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
 #include "io/config.h"
-#include "io/fileutils.h"
 
-#ifdef Q_OS_WIN
-#include <QTemporaryFile>
-#include "manager/resources/windowsresources.h"
-#endif
-#ifdef Q_OS_MACOS
-#include "io/fileutils.h"
-#endif
+#include "manager/resources/osresources.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -47,35 +40,22 @@ InstallManager::InstallManager() : QThread(),
     L_INFO("Init InstallManager");
     // init project resources
 
-#ifdef Q_OS_WIN
-        // extract project.ini to temp file
-        QTemporaryFile projectIniFile;
-        if (projectIniFile.open()) {
-            WindowsResources::extractProjectIniToTempFile(projectIniFile.fileName());
-            m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+    // extract project.ini to temp file
+    QTemporaryFile projectIniFile;
+    if (projectIniFile.open()) {
+        if (OsResources::extractProjectIniToTempFile(projectIniFile.fileName())) {
+            L_INFO("project.ini extracted from application resources.");
         } else {
-            L_ERROR("Unable to open temporary file for project.ini.");
+            L_ERROR("Unable to open project.ini from application resources.");
             qApp->quit();
             return;
         }
-#endif
-#ifdef Q_OS_MACOS
-        QDir dir(QCoreApplication::applicationDirPath());
-        dir.cdUp();
-        dir.cd("Resources");
-        const QString projectIniFilePath = dir.absoluteFilePath("project.ini");
-
-        QFile projectIniFile(projectIniFilePath);
-        if (projectIniFile.exists()) {
-            projectIniFile.close();
-            m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
-        } else {
-            L_ERROR("Unable to open project.ini file from app resources.");
-            projectIniFile.close();
-            qApp->quit();
-            return;
-        }
-#endif
+        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+    } else {
+        L_ERROR("Unable to open temporary file for project.ini.");
+        qApp->quit();
+        return;
+    }
 
     m_projectSettings->readSettings();
 
@@ -479,39 +459,12 @@ bool InstallManager::extractResources()
     bool extractResources = true;
 
 #ifdef Q_OS_WIN
-        WindowsResources wr(m_appPath.getInstallationDir().absolutePath());
+        WindowsResources wr(m_appPath);
         extractResources = wr.extractResources();
 #endif
 #ifdef Q_OS_MACOS
-        QDir dir(QCoreApplication::applicationDirPath());
-        dir.cdUp();
-        dir.cd("Resources");
-        const QString imagesDirPath = dir.absoluteFilePath("images");
-
-        if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath.getImagesDir().absolutePath())) {
-            L_INFO("images directory copied from app resources.");
-        } else {
-            L_ERROR("Unable to copy images directory from app resources.");
-            extractResources = false;
-        }
-
-        const QString styleCssFileName = "style.css";
-        const QString styleCssFileDest = m_appPath.getConfigurationDir().absoluteFilePath(styleCssFileName);
-        if (QFile::exists(styleCssFileDest)) {
-            L_INFO(QString("%1 already exists.").arg(styleCssFileDest));
-            if (QFile::remove(styleCssFileDest)) {
-                L_INFO(QString("%1 removed.").arg(styleCssFileDest));
-            } else {
-                L_ERROR(QString("Unable to remove %1").arg(styleCssFileDest));
-            }
-        }
-
-        if (QFile::copy(dir.absoluteFilePath(styleCssFileName), styleCssFileDest)) {
-            L_INFO("style.css file copied from app resources.");
-        } else {
-            L_ERROR("Unable to copy style.css file from app resources.");
-            extractResources = false;
-        }
+        MacosResources mr(m_appPath);
+        extractResources = mr.extractResources();
 #endif
 
     return extractUpdater.first && extractLoader.first && extractResources;

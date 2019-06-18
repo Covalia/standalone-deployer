@@ -2,28 +2,23 @@
 #define INSTALLER_WINDOWSRESOURCES_H
 
 #include <windows.h>
-
 #include <QString>
-#include <QByteArray>
-#include <QFile>
-#include <QDir>
 
-#include "log/logger.h"
-#include "io/fileutils.h"
+#include "factories/apppath/apppath.h"
 
 class WindowsResources {
     public:
-        WindowsResources(const QString _installPpath);
+        WindowsResources(const AppPath _appPath);
         ~WindowsResources();
 
         bool extractResources();
-        static bool extractProjectIniToTempFile(const QString &_path);
-        static bool extractStyleCssToTempFile(const QString &_path);
-        static bool extractTitlePngToTempFile(const QString &_path);
+        static bool extractProjectIniToTempFile(const QString &_toPath);
+        static bool extractStyleCssToTempFile(const QString &_toPath);
+        static bool extractTitlePngToTempFile(const QString &_toPath);
 
     private:
         static BOOL EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam);
-        static bool writeResourceIdToFile(LPCWSTR _resId, const QString &_path);
+        static bool writeResourceIdToFile(LPCWSTR _resId, const QString &_toPath);
 
         const QString m_installPath;
 };

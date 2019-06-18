@@ -1,15 +1,24 @@
 #include "manager/resources/windowsresources.h"
 
-WindowsResources::WindowsResources(const QString _installPath) :
-    m_installPath(_installPath) {
+#include <QByteArray>
+#include <QFile>
+#include <QDir>
+
+#include "log/logger.h"
+#include "io/fileutils.h"
+
+WindowsResources::WindowsResources(const AppPath _appPath) :
+    m_installPath(_appPath.getInstallationDir().absolutePath())
+{
 }
 
-WindowsResources::~WindowsResources() {
+WindowsResources::~WindowsResources()
+{
 }
 
 bool WindowsResources::extractResources()
 {
-    BOOL res = EnumResourceNames(NULL, RT_RCDATA, (ENUMRESNAMEPROC)&WindowsResources::EnumNamesFunc, (LONG_PTR) &m_installPath);
+    BOOL res = EnumResourceNames(NULL, RT_RCDATA, (ENUMRESNAMEPROC)&WindowsResources::EnumNamesFunc, (LONG_PTR)&m_installPath);
 
     if (!res) {
         long status = GetLastError();
@@ -19,18 +28,18 @@ bool WindowsResources::extractResources()
     return res != 0;
 }
 
-bool WindowsResources::extractProjectIniToTempFile(const QString &_path)
+bool WindowsResources::extractProjectIniToTempFile(const QString &_toPath)
 {
-    return writeResourceIdToFile(L"_PROJECT__INI", _path);
+    return writeResourceIdToFile(L"_PROJECT__INI", _toPath);
 }
 
-bool WindowsResources::extractStyleCssToTempFile(const QString &_path)
+bool WindowsResources::extractStyleCssToTempFile(const QString &_toPath)
 {
-    return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _path);
+    return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _toPath);
 }
-bool WindowsResources::extractTitlePngToTempFile(const QString &_path)
+bool WindowsResources::extractTitlePngToTempFile(const QString &_toPath)
 {
-    return writeResourceIdToFile(L"IMAGES_TITLE__PNG", _path);
+    return writeResourceIdToFile(L"IMAGES_TITLE__PNG", _toPath);
 }
 
 BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)
@@ -41,7 +50,6 @@ BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpN
     QString resourceName = QString::fromStdWString(lpName);
     L_INFO(QString("Read resource name: %1").arg(resourceName));
     if (!resourceName.startsWith("_")) {
-
         resourceName.replace("__", ".");
         resourceName.replace("_", QDir::separator());
 
@@ -52,19 +60,17 @@ BOOL WindowsResources::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpN
             const QString installPath(*(QString *)lParam);
             L_INFO(QString("Resulting file: %1\\%2").arg(installPath).arg(processedResourceName));
             return WindowsResources::writeResourceIdToFile(lpName, QString("%1\\%2").arg(installPath).arg(processedResourceName)) ? TRUE : FALSE;
-        }
-        else {
+        } else {
             L_ERROR(QString("Install Path param is NULL. Unable to extract resource for: %1.").arg(processedResourceName));
             return FALSE;
         }
-    }
-    else {
+    } else {
         L_INFO(QString("Ignoring resource: %1").arg(resourceName));
         return TRUE;
     }
 }
 
-bool WindowsResources::writeResourceIdToFile(LPCWSTR _resId, const QString &_path)
+bool WindowsResources::writeResourceIdToFile(LPCWSTR _resId, const QString &_toPath)
 {
     HGLOBAL res_handle = nullptr;
     HRSRC res;
@@ -83,33 +89,31 @@ bool WindowsResources::writeResourceIdToFile(LPCWSTR _resId, const QString &_pat
         return false;
     }
 
-    res_data = (char *) LockResource(res_handle);
+    res_data = (char *)LockResource(res_handle);
     res_size = SizeofResource(nullptr, res);
 
     const QByteArray bytes(res_data, res_size);
 
-    const QFileInfo fileInfo(_path);
+    const QFileInfo fileInfo(_toPath);
     const QDir parentDir = fileInfo.dir();
     const bool created = FileUtils::createDirIfNotExists(parentDir);
 
     if (created) {
-        QFile file(_path);
+        QFile file(_toPath);
         if (file.open(QIODevice::WriteOnly)) {
-
             bool result;
             if (file.write(bytes) == -1) {
-                L_ERROR(QString("Unable to write file %1").arg(_path));
+                L_ERROR(QString("Unable to write file %1").arg(_toPath));
                 result = false;
-            }
-            else {
-                L_INFO(QString("File %1 written.").arg(_path));
+            } else {
+                L_INFO(QString("File %1 written.").arg(_toPath));
                 result = true;
             }
 
             file.close();
             return result;
         } else {
-            L_ERROR(QString("Unable to open file %1 for write.").arg(_path));
+            L_ERROR(QString("Unable to open file %1 for write.").arg(_toPath));
         }
     }
 
