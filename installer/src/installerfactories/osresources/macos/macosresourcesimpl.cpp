@@ -1,4 +1,4 @@
-#include "factories/osresources/macos/macosresourcesimpl.h"
+#include "installerfactories/osresources/macos/macosresourcesimpl.h"
 
 #include <QDir>
 #include <QCoreApplication>

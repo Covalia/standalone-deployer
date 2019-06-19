@@ -1,10 +1,10 @@
-#ifndef IO_OSRESOURCES_H
-#define IO_OSRESOURCES_H
+#ifndef INSTALLER_OSRESOURCES_H
+#define INSTALLER_OSRESOURCES_H
 
 #include <QString>
 #include <QSharedPointer>
 #include <QTemporaryFile>
-#include "factories/osresources/osresourcesimpl.h"
+#include "installerfactories/osresources/osresourcesimpl.h"
 
 class OsResourcesImpl;
 

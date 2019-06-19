@@ -7,17 +7,16 @@
 
 class AppPathImpl;
 class ShortcutImpl;
+class OsResourcesImpl;
 
-class Factory {
+class InstallerFactory {
     public:
-        static Factory * getFactory();
+        static InstallerFactory * getFactory();
 
         // services offered by this factory
 
-        // manage working directories
-        virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app) = 0;
-        // manage shortcuts
-        virtual ShortcutImpl * makeShortcut() = 0;
+        // overridable specific os resources
+        virtual OsResourcesImpl * makeOsResources(const QString &_installPath) = 0;
 
     protected:
         static std::mutex sm_mutex;

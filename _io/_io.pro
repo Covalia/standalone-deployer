@@ -39,8 +39,6 @@ SOURCES += src/io/unzip/zipextractor.cpp
 SOURCES += src/factories/factory/factory.cpp
 SOURCES += src/factories/apppath/apppath.cpp
 SOURCES += src/factories/apppath/apppathimpl.cpp
-SOURCES += src/factories/osresources/osresources.cpp
-SOURCES += src/factories/osresources/osresourcesimpl.cpp
 SOURCES += src/factories/shortcut/shortcut.cpp
 SOURCES += src/factories/shortcut/shortcutimpl.cpp
 
@@ -51,31 +49,25 @@ HEADERS += src/io/unzip/zipextractor.h
 HEADERS += src/factories/factory/factory.h
 HEADERS += src/factories/apppath/apppath.h
 HEADERS += src/factories/apppath/apppathimpl.h
-HEADERS += src/factories/osresources/osresources.h
-HEADERS += src/factories/osresources/osresourcesimpl.h
 HEADERS += src/factories/shortcut/shortcut.h
 HEADERS += src/factories/shortcut/shortcutimpl.h
 
 win32 {
 	HEADERS += src/factories/factory/windows/windowsfactory.h
 	HEADERS += src/factories/apppath/windows/windowsapppathimpl.h
-	HEADERS += src/factories/osresources/windows/windowsresourcesimpl.h
 	HEADERS += src/factories/shortcut/windows/windowsshortcutimpl.h
 
 	SOURCES += src/factories/factory/windows/windowsfactory.cpp
 	SOURCES += src/factories/apppath/windows/windowsapppathimpl.cpp
-	SOURCES += src/factories/osresources/windows/windowsresourcesimpl.cpp
 	SOURCES += src/factories/shortcut/windows/windowsshortcutimpl.cpp
 }
 
 macx {
 	HEADERS += src/factories/factory/macos/macosfactory.h
 	HEADERS += src/factories/apppath/macos/macosapppathimpl.h
-	HEADERS += src/factories/osresources/macos/macosresourcesimpl.h
 	HEADERS += src/factories/shortcut/macos/macosshortcutimpl.h
 
 	SOURCES += src/factories/factory/macos/macosfactory.cpp
 	SOURCES += src/factories/apppath/macos/macosapppathimpl.cpp
-	SOURCES += src/factories/osresources/macos/macosresourcesimpl.cpp
 	SOURCES += src/factories/shortcut/macos/macosshortcutimpl.cpp
 }

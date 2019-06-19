@@ -1,7 +1,7 @@
-#ifndef IO_MACOSRESOURCESIMPL_H
-#define IO_MACOSRESOURCESIMPL_H
+#ifndef INSTALLER_MACOSRESOURCESIMPL_H
+#define INSTALLER_MACOSRESOURCESIMPL_H
 
-#include "factories/osresources/osresourcesimpl.h"
+#include "installerfactories/osresources/osresourcesimpl.h"
 #include "factories/apppath/apppath.h"
 
 class MacosResourcesImpl : public OsResourcesImpl {

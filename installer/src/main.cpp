@@ -4,7 +4,7 @@
 
 #include "log/logger.h"
 #include "manager/installmanager.h"
-#include "factories/osresources/osresources.h"
+#include "installerfactories/osresources/osresources.h"
 
 int main(int argc, char * argv[])
 {

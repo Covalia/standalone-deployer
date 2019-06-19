@@ -1,6 +1,5 @@
 #include "factories/factory/windows/windowsfactory.h"
 #include "factories/apppath/windows/windowsapppathimpl.h"
-#include "factories/osresources/windows/windowsresourcesimpl.h"
 #include "factories/shortcut/windows/windowsshortcutimpl.h"
 
 WindowsFactory::WindowsFactory()
@@ -21,9 +20,4 @@ ShortcutImpl * WindowsFactory::makeShortcut()
 {
     // La classe Shortcut est responsable de libérer cette instance
     return new WindowsShortcutImpl();
-}
-
-OsResourcesImpl * WindowsFactory::makeOsResources(const QString &_installPath)
-{
-    return new WindowsResourcesImpl(_installPath);
 }

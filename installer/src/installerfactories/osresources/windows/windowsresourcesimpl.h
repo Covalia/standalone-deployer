@@ -1,7 +1,7 @@
-#ifndef IO_WINDOWSRESOURCESIMPL_H
-#define IO_WINDOWSRESOURCESIMPL_H
+#ifndef INSTALLER_WINDOWSRESOURCESIMPL_H
+#define INSTALLER_WINDOWSRESOURCESIMPL_H
 
-#include "factories/osresources/osresourcesimpl.h"
+#include "installerfactories/osresources/osresourcesimpl.h"
 #include <windows.h>
 
 class WindowsResourcesImpl : public OsResourcesImpl {

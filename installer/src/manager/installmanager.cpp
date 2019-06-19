@@ -17,7 +17,7 @@
 #include "lang/languagemanager.h"
 #include "io/config.h"
 
-#include "factories/osresources/osresources.h"
+#include "installerfactories/osresources/osresources.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),

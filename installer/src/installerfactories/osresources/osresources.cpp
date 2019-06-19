@@ -1,16 +1,16 @@
-#include "factories/osresources/osresources.h"
-#include "factories/factory/factory.h"
+#include "installerfactories/osresources/osresources.h"
+#include "installerfactories/factory/installerfactory.h"
 
 #ifdef Q_OS_WIN
-#include "factories/osresources/windows/windowsresourcesimpl.h"
+#include "installerfactories/osresources/windows/windowsresourcesimpl.h"
 #endif
 #ifdef Q_OS_MACOS
-#include "factories/osresources/macos/macosresourcesimpl.h"
+#include "installerfactories/osresources/macos/macosresourcesimpl.h"
 #endif
 
 OsResources::OsResources(const QString &_installPath) : m_osResourcesImpl(nullptr)
 {
-    Factory * factory = Factory::getFactory();
+    InstallerFactory * factory = InstallerFactory::getFactory();
 
     if (factory) {
         m_osResourcesImpl = QSharedPointer<OsResourcesImpl>(factory->makeOsResources(_installPath));

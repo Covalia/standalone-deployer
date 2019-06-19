@@ -69,6 +69,9 @@ FORMS += ui/installation.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/commandline/commandlineparser.cpp
+SOURCES += src/installerfactories/factory/installerfactory.cpp
+SOURCES += src/installerfactories/osresources/osresources.cpp
+SOURCES += src/installerfactories/osresources/osresourcesimpl.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
 SOURCES += src/gui/forms/endinstallationui.cpp
 SOURCES += src/gui/forms/installationui.cpp
@@ -88,6 +91,9 @@ SOURCES += src/settings/resourcesettings.cpp
 SOURCES += src/utils.cpp
 
 HEADERS += src/commandline/commandlineparser.h
+HEADERS += src/installerfactories/factory/installerfactory.h
+HEADERS += src/installerfactories/osresources/osresources.h
+HEADERS += src/installerfactories/osresources/osresourcesimpl.h
 HEADERS += src/gui/abstract_translated_ui.h
 HEADERS += src/gui/forms/askpopupui.h
 HEADERS += src/gui/forms/endinstallationui.h
@@ -111,10 +117,22 @@ RESOURCES += fixed_resources.qrc
 
 win32 {
 	RESOURCES += windows_resources.qrc
+
+	HEADERS += src/installerfactories/factory/windows/windowsinstallerfactory.h
+	HEADERS += src/installerfactories/osresources/windows/windowsresourcesimpl.h
+
+	SOURCES += src/installerfactories/factory/windows/windowsinstallerfactory.cpp
+	SOURCES += src/installerfactories/osresources/windows/windowsresourcesimpl.cpp
 }
 
 macx {
 	RESOURCES += macos_resources.qrc
+
+	HEADERS += src/installerfactories/factory/macos/macosinstallerfactory.h
+	HEADERS += src/installerfactories/osresources/macos/macosresourcesimpl.h
+
+	SOURCES += src/installerfactories/factory/macos/macosinstallerfactory.cpp
+	SOURCES += src/installerfactories/osresources/macos/macosresourcesimpl.cpp
 }
 
 DISTFILES += ../uncrustify.cfg

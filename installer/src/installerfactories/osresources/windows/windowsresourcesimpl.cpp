@@ -1,5 +1,4 @@
-#include "factories/osresources/windows/windowsresourcesimpl.h"
-#include "factories/apppath/apppath.h"
+#include "installerfactories/osresources/windows/windowsresourcesimpl.h"
 
 WindowsResourcesImpl::WindowsResourcesImpl(const QString &_installPath) : OsResourcesImpl(_installPath),
     m_installPath(_installPath)
@@ -34,8 +33,8 @@ bool WindowsResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 
 BOOL WindowsResourcesImpl::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)
 {
-    Q_UNUSED(hModule);
-    Q_UNUSED(lpType);
+    Q_UNUSED(hModule)
+    Q_UNUSED(lpType)
 
     QString resourceName = QString::fromStdWString(lpName);
     L_INFO(QString("Read resource name: %1").arg(resourceName));

@@ -5,7 +5,7 @@
 #include "io/config.h"
 
 #include <QtWidgets>
-#include "factories/osresources/osresources.h"
+#include "installerfactories/osresources/osresources.h"
 
 WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget * _parent) :
     QMainWindow(_parent),
