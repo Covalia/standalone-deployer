@@ -8,7 +8,7 @@ WindowsResourcesImpl::WindowsResourcesImpl(const QString &_installPath) : OsReso
 
 bool WindowsResourcesImpl::extractResources()
 {
-    BOOL res = EnumResourceNames(NULL, RT_RCDATA, (ENUMRESNAMEPROC)&WindowsResources::EnumNamesFunc, (LONG_PTR)&m_installPath);
+    BOOL res = EnumResourceNames(NULL, RT_RCDATA, (ENUMRESNAMEPROC)&WindowsResourcesImpl::EnumNamesFunc, (LONG_PTR)&m_installPath);
 
     if (!res) {
         long status = GetLastError();

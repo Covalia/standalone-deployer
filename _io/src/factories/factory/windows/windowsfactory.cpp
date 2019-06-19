@@ -23,7 +23,7 @@ ShortcutImpl * WindowsFactory::makeShortcut()
     return new WindowsShortcutImpl();
 }
 
-OsResourcesImpl * WindowsFactory::makeOsResources(const AppPath * const _appPath)
+OsResourcesImpl * WindowsFactory::makeOsResources(const QString &_installPath)
 {
-    return new WindowsResourcesImpl(_appPath);
+    return new WindowsResourcesImpl(_installPath);
 }
