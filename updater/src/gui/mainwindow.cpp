@@ -160,10 +160,10 @@ void MainWindow::updateServerUrlMessage(const QUrl &_url)
 
 void MainWindow::updateDownloadFileMessage(const QString &_file)
 {
-    //: This string refers to a downloaded file.
     if (_file.isEmpty()) {
         m_ui->currentFileLabel->setText("");
     } else {
+        //: This string refers to a downloaded file.
         m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
     }
 }
