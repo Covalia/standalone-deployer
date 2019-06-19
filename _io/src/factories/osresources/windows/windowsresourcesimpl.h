@@ -4,11 +4,9 @@
 #include "factories/osresources/osresourcesimpl.h"
 #include <windows.h>
 
-class AppPath;
-
 class WindowsResourcesImpl : public OsResourcesImpl {
     public:
-        WindowsResourcesImpl(const AppPath * const _appPath);
+        WindowsResourcesImpl(const QString &_installPath);
         virtual bool extractResources();
 
         static bool extractProjectIniToTempFile(const QString &_toPath);
@@ -18,6 +16,8 @@ class WindowsResourcesImpl : public OsResourcesImpl {
     private:
         static BOOL EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam);
         static bool writeResourceIdToFile(LPCWSTR _resId, const QString &_toPath);
+
+        QString m_installPath;
 };
 
 #endif

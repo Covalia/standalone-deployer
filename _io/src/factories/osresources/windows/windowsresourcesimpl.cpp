@@ -1,6 +1,8 @@
 #include "factories/osresources/windows/windowsresourcesimpl.h"
+#include "factories/apppath/apppath.h"
 
-WindowsResourcesImpl::WindowsResourcesImpl(const AppPath * const _appPath) : OsResourcesImpl(_appPath)
+WindowsResourcesImpl::WindowsResourcesImpl(const QString &_installPath) : OsResourcesImpl(_installPath),
+    m_installPath(_installPath)
 {
 }
 

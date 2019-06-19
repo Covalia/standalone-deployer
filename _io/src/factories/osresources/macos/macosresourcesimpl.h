@@ -2,12 +2,11 @@
 #define IO_MACOSRESOURCESIMPL_H
 
 #include "factories/osresources/osresourcesimpl.h"
-
-class AppPath;
+#include "factories/apppath/apppath.h"
 
 class MacosResourcesImpl : public OsResourcesImpl {
     public:
-        MacosResourcesImpl(const AppPath * const _appPath);
+        MacosResourcesImpl(const QString &_installPath);
         virtual bool extractResources();
 
         static bool extractProjectIniToTempFile(const QString &_toPath);
@@ -16,6 +15,8 @@ class MacosResourcesImpl : public OsResourcesImpl {
 
     private:
         static bool writeFileToTempFile(const QString &_resourceFile, const QString &_toPath);
+
+        AppPath m_appPath;
 };
 
 #endif

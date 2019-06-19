@@ -7,11 +7,10 @@
 #include "factories/osresources/osresourcesimpl.h"
 
 class OsResourcesImpl;
-class AppPath;
 
 class OsResources {
     public:
-        OsResources(const AppPath * const _appPath);
+        OsResources(const QString &_installPath);
         virtual ~OsResources();
 
         bool extractResources();

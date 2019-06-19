@@ -24,7 +24,7 @@ class MacosFactory : public Factory {
         virtual ~MacosFactory();
         virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app);
         virtual ShortcutImpl * makeShortcut();
-        virtual OsResourcesImpl * makeOsResources(const AppPath * const _appPath);
+        virtual OsResourcesImpl * makeOsResources(const QString &_installPath);
 
     private:
         MacosFactory();

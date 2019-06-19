@@ -2,9 +2,12 @@
 
 #include <QDir>
 #include <QCoreApplication>
+#include "factories/apppath/apppath.h"
 
-MacosResourcesImpl::MacosResourcesImpl(const AppPath * const _appPath) : OsResourcesImpl(_appPath)
+MacosResourcesImpl::MacosResourcesImpl(const QString &_installPath) : OsResourcesImpl(_installPath),
+    m_appPath(IOConfig::AppComponent::Installer)
 {
+    m_appPath.setInstallationDir(_installPath);
 }
 
 bool MacosResourcesImpl::extractResources()
@@ -17,12 +20,7 @@ bool MacosResourcesImpl::extractResources()
     dir.cd("Resources");
     const QString imagesDirPath = dir.absoluteFilePath("images");
 
-    if (m_appPath == nullptr) {
-        L_ERROR("AppPath is null, unable to extract resources.");
-        return false;
-    }
-
-    if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath->getImagesDir().absolutePath())) {
+    if (FileUtils::copyDirRecursively(imagesDirPath, m_appPath.getImagesDir().absolutePath())) {
         L_INFO("images directory copied from app resources.");
     } else {
         L_ERROR("Unable to copy images directory from app resources.");
@@ -30,7 +28,7 @@ bool MacosResourcesImpl::extractResources()
     }
 
     const QString styleCssFileName = "style.css";
-    const QString styleCssFileDest = m_appPath->getConfigurationDir().absoluteFilePath(styleCssFileName);
+    const QString styleCssFileDest = m_appPath.getConfigurationDir().absoluteFilePath(styleCssFileName);
     if (QFile::exists(styleCssFileDest)) {
         L_INFO(QString("%1 already exists.").arg(styleCssFileDest));
         if (QFile::remove(styleCssFileDest)) {

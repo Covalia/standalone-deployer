@@ -456,7 +456,7 @@ bool InstallManager::extractResources()
         L_ERROR(extractLoader.second);
     }
 
-    OsResources osResources(&m_appPath);
+    OsResources osResources(m_appPath.getInstallationDir().absolutePath());
     bool extractResources = osResources.extractResources();
 
     return extractUpdater.first && extractLoader.first && extractResources;

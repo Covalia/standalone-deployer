@@ -8,12 +8,12 @@
 #include "factories/osresources/macos/macosresourcesimpl.h"
 #endif
 
-OsResources::OsResources(const AppPath * const _appPath) : m_osResourcesImpl(nullptr)
+OsResources::OsResources(const QString &_installPath) : m_osResourcesImpl(nullptr)
 {
     Factory * factory = Factory::getFactory();
 
     if (factory) {
-        m_osResourcesImpl = QSharedPointer<OsResourcesImpl>(factory->makeOsResources(_appPath));
+        m_osResourcesImpl = QSharedPointer<OsResourcesImpl>(factory->makeOsResources(_installPath));
     }
 }
 

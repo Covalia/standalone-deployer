@@ -8,7 +8,6 @@
 class AppPathImpl;
 class ShortcutImpl;
 class OsResourcesImpl;
-class AppPath;
 
 class Factory {
     public:
@@ -21,7 +20,7 @@ class Factory {
         // manage shortcuts
         virtual ShortcutImpl * makeShortcut() = 0;
         // overridable specific os resources
-        virtual OsResourcesImpl * makeOsResources(const AppPath * const _appPath) = 0;
+        virtual OsResourcesImpl * makeOsResources(const QString &_installPath) = 0;
 
     protected:
         static std::mutex sm_mutex;

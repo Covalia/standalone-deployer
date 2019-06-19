@@ -23,7 +23,7 @@ ShortcutImpl * MacosFactory::makeShortcut()
     return new MacosShortcutImpl();
 }
 
-OsResourcesImpl * MacosFactory::makeOsResources(const AppPath * const _appPath)
+OsResourcesImpl * MacosFactory::makeOsResources(const QString &_installPath)
 {
-    return new MacosResourcesImpl(_appPath);
+    return new MacosResourcesImpl(_installPath);
 }
