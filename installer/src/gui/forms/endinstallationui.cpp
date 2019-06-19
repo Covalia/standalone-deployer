@@ -9,8 +9,6 @@ EndInstallationUI::EndInstallationUI(QWidget * _parent) :
 {
     m_ui->setupUi(this);
 
-    m_ui->labelError->setVisible(false);
-
     connect(m_ui->buttonFinish, SIGNAL(clicked()), this, SLOT(closeInstallationEvent()));
 }
 
@@ -24,10 +22,18 @@ void EndInstallationUI::showErrors(QStringList _errors)
     m_errors = _errors;
 
     m_ui->labelIcon->setPixmap(QPixmap(":/images/failure.png"));
-    m_ui->labelTitle->setText(tr("An error occurred during installation"));
-    m_ui->labelError->setVisible(true);
+    m_ui->labelInstallationSuccess->setVisible(false);
+    m_ui->labelInstallationError->setVisible(true);
+    m_ui->labelListOfErrors->setVisible(true);
+}
 
-    retranslateUi();
+void EndInstallationUI::showSuccess()
+{
+    m_ui->labelIcon->setPixmap(QPixmap(":/images/success.png"));
+    m_ui->labelInstallationSuccess->setVisible(true);
+    m_ui->labelInstallationError->setVisible(false);
+    m_ui->labelListOfErrors->setText("");
+    m_ui->labelListOfErrors->setVisible(false);
 }
 
 void EndInstallationUI::setStartedAppWhenInstalled(bool _start)
@@ -47,17 +53,15 @@ void EndInstallationUI::closeInstallationEvent()
 
 void EndInstallationUI::retranslateUi()
 {
-	L_INFO("EndInstallationUI::retranslateUi() called");
+    L_INFO("EndInstallationUI::retranslateUi() called");
 
-    if (!m_errors.isEmpty()) {
-        QString errorMessage = "";
-        for (QStringList::iterator it = m_errors.begin(); it != m_errors.end(); ++it) {
-            QString current = *it;
-            // this string is part of InstallManager.
-            errorMessage += "• " + translate_helper("InstallManager", current) + "\n";
-        }
-        m_ui->labelError->setText(errorMessage);
+    QString errorMessage = "";
+    for (QStringList::iterator it = m_errors.begin(); it != m_errors.end(); ++it) {
+        QString current = *it;
+        // this string is part of InstallManager.
+        errorMessage += "• " + translate_helper("InstallManager", current) + "\n";
     }
+    m_ui->labelListOfErrors->setText(errorMessage);
 
     m_ui->retranslateUi(this);
 }

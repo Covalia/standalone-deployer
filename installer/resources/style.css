@@ -181,12 +181,13 @@ QWizard QPushButton {
 	background-color:#0c7438;
 }
 
-.EndInstallationUI QLabel#labelError,
+.EndInstallationUI QLabel#labelListOfErrors,
 .EndInstallationUI QLabel#labelIcon {
 	color:#555555;
 }
 
-.EndInstallationUI QLabel#labelTitle {
+.EndInstallationUI QLabel#labelInstallationSuccess,
+.EndInstallationUI QLabel#labelInstallationError {
 	color:#222222;
 }
 

@@ -18,6 +18,7 @@ class EndInstallationUI : public QWidget, public AbstractTranslatedUi
         virtual ~EndInstallationUI();
 
         void showErrors(QStringList _errors);
+        void showSuccess();
         void setStartedAppWhenInstalled(bool _start);
 
         virtual void retranslateUi();
