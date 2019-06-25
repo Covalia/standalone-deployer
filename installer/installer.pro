@@ -156,7 +156,11 @@ macx {
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+			}
 		}
 	}
 
@@ -164,7 +168,11 @@ macx {
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+			}
 		}
 	}
 
@@ -180,8 +188,12 @@ win32 {
 		QMAKE_POST_LINK += $$escape_expand(\n\t)mt.exe -nologo -manifest \"$$TARGET\".exe.manifest -outputresource:\"$$DESTDIR/"$$TARGET".exe;$${LITERAL_HASH}1\"
 
 		defined(SIGNATURE_IDENTITY, var) {
-			# signtool.exe must be in the PATH
-			QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				# signtool.exe must be in the PATH
+				QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+			}
 		}
 		else {
 			error(SIGNATURE_IDENTITY must be specified in order to sign exe files.)
