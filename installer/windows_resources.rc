@@ -1,0 +1,19 @@
+// starting with _ will not be extracted
+// __ will be replaced with .
+// _ will be replaced with file separator
+// name will be converted to lowercase
+
+_PROJECT__INI					RCDATA	"resources\\project.ini"
+
+CONFIG_STYLE__CSS				RCDATA	"resources\\style.css"
+
+IMAGES_CONFIG__ICO				RCDATA	"resources\\overridable\\images\\config.ico"
+IMAGES_SHORTCUT__ICO			RCDATA	"resources\\overridable\\images\\shortcut.ico"
+IMAGES_TRASH__ICO				RCDATA	"resources\\overridable\\images\\trash.ico"
+
+IMAGES_TITLE__PNG				RCDATA	"resources\\overridable\\images\\title.png"
+
+IMAGES_SLIDES_MOCKUP__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup.png"
+IMAGES_SLIDES_MOCKUP1__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup1.png"
+IMAGES_SLIDES_MOCKUP2__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup2.png"
+IMAGES_SLIDES_MOCKUP3__PNG		RCDATA	"resources\\overridable\\images\\slides\\mockup3.png"

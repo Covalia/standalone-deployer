@@ -21,7 +21,7 @@ CONFIG(release, debug|release) {
 TARGET = installer
 TEMPLATE = app
 
-# icone macosx
+# icone macos
 defined(INSTALLER_MACOS_ICON, var) {
     ICON = "$$INSTALLER_MACOS_ICON"
 }
@@ -56,7 +56,7 @@ LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
 
 macx {
-	LIBS += -L./libs/libarchive/macosx -larchive
+	LIBS += -L./libs/libarchive/macos -larchive
 }
 win32 {
 	# attention, l'ordre est important.
@@ -69,6 +69,9 @@ FORMS += ui/installation.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/commandline/commandlineparser.cpp
+SOURCES += src/installerfactories/factory/installerfactory.cpp
+SOURCES += src/installerfactories/osresources/osresources.cpp
+SOURCES += src/installerfactories/osresources/osresourcesimpl.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
 SOURCES += src/gui/forms/endinstallationui.cpp
 SOURCES += src/gui/forms/installationui.cpp
@@ -88,6 +91,9 @@ SOURCES += src/settings/resourcesettings.cpp
 SOURCES += src/utils.cpp
 
 HEADERS += src/commandline/commandlineparser.h
+HEADERS += src/installerfactories/factory/installerfactory.h
+HEADERS += src/installerfactories/osresources/osresources.h
+HEADERS += src/installerfactories/osresources/osresourcesimpl.h
 HEADERS += src/gui/abstract_translated_ui.h
 HEADERS += src/gui/forms/askpopupui.h
 HEADERS += src/gui/forms/endinstallationui.h
@@ -111,23 +117,29 @@ RESOURCES += fixed_resources.qrc
 
 win32 {
 	RESOURCES += windows_resources.qrc
+
+	HEADERS += src/installerfactories/factory/windows/windowsinstallerfactory.h
+	HEADERS += src/installerfactories/osresources/windows/windowsresourcesimpl.h
+
+	SOURCES += src/installerfactories/factory/windows/windowsinstallerfactory.cpp
+	SOURCES += src/installerfactories/osresources/windows/windowsresourcesimpl.cpp
 }
 
 macx {
-	RESOURCES += macosx_resources.qrc
-}
+	RESOURCES += macos_resources.qrc
 
-defined(OVERRIDABLE_INSTALLER_RESOURCES, var) {
-	RESOURCES += $$OVERRIDABLE_INSTALLER_RESOURCES
-	message("Using installer resources from file: $$OVERRIDABLE_INSTALLER_RESOURCES")
-}
-else {
-	RESOURCES += overridable_resources.qrc
+	HEADERS += src/installerfactories/factory/macos/macosinstallerfactory.h
+	HEADERS += src/installerfactories/osresources/macos/macosresourcesimpl.h
+
+	SOURCES += src/installerfactories/factory/macos/macosinstallerfactory.cpp
+	SOURCES += src/installerfactories/osresources/macos/macosresourcesimpl.cpp
 }
 
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
+
+RC_FILE = windows_resources.rc
 
 macx {
 	CONFIG(release, debug|release) {
@@ -138,17 +150,29 @@ macx {
 
 	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
+	QMAKE_POST_LINK += cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t) cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t) cp -r resources/overridable/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+			}
 		}
 	}
 
-	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
+	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+			}
 		}
 	}
 
@@ -163,10 +187,13 @@ win32 {
 		# mt.exe must be in the PATH
 		QMAKE_POST_LINK += $$escape_expand(\n\t)mt.exe -nologo -manifest \"$$TARGET\".exe.manifest -outputresource:\"$$DESTDIR/"$$TARGET".exe;$${LITERAL_HASH}1\"
 
-		QMAKE_POST_LINK += $$escape_expand(\n\t)../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
 		defined(SIGNATURE_IDENTITY, var) {
-			# signtool.exe must be in the PATH
-			QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+			equals(SIGN_INSTALLER, "false") {
+				message("Do not sign the installer.")
+			} else {
+				# signtool.exe must be in the PATH
+				QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+			}
 		}
 		else {
 			error(SIGNATURE_IDENTITY must be specified in order to sign exe files.)

@@ -16,7 +16,8 @@
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
 #include "io/config.h"
-#include "io/fileutils.h"
+
+#include "installerfactories/osresources/osresources.h"
 
 InstallManager::InstallManager() : QThread(),
     m_uiManager(nullptr),
@@ -38,7 +39,24 @@ InstallManager::InstallManager() : QThread(),
 {
     L_INFO("Init InstallManager");
     // init project resources
-    m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(":/project.ini"));
+
+    // extract project.ini to temp file
+    QTemporaryFile projectIniFile;
+    if (projectIniFile.open()) {
+        if (OsResources::extractProjectIniToTempFile(projectIniFile.fileName())) {
+            L_INFO("project.ini extracted from application resources.");
+        } else {
+            L_ERROR("Unable to open project.ini from application resources.");
+            qApp->quit();
+            return;
+        }
+        m_projectSettings = QSharedPointer<ResourceSettings>(new ResourceSettings(projectIniFile.fileName()));
+    } else {
+        L_ERROR("Unable to open temporary file for project.ini.");
+        qApp->quit();
+        return;
+    }
+
     m_projectSettings->readSettings();
 
     L_INFO(QString("Deployment URL: %1").arg(m_projectSettings->getDeploymentUrl()));
@@ -438,94 +456,10 @@ bool InstallManager::extractResources()
         L_ERROR(extractLoader.second);
     }
 
-    QPair<bool, QString> extractAppIcon;
-    {
-        QFile fin(":/images/shortcut.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
-        extractAppIcon = m_appPath.extractResource(fin, fout);
-        if (extractAppIcon.first) {
-            L_INFO(extractAppIcon.second);
-        } else {
-            L_ERROR(extractAppIcon.second);
-        }
-    }
+    OsResources osResources(m_appPath.getInstallationDir().absolutePath());
+    bool extractResources = osResources.extractResources();
 
-    QPair<bool, QString> extractTrashIcon;
-    {
-        QFile fin(":/images/trash.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("trash.ico"));
-        extractTrashIcon = m_appPath.extractResource(fin, fout);
-        if (extractTrashIcon.first) {
-            L_INFO(extractTrashIcon.second);
-        } else {
-            L_ERROR(extractTrashIcon.second);
-        }
-    }
-
-    QPair<bool, QString> extractConfigIcon;
-    {
-        QFile fin(":/images/config.ico");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("config.ico"));
-        extractConfigIcon = m_appPath.extractResource(fin, fout);
-        if (extractConfigIcon.first) {
-            L_INFO(extractConfigIcon.second);
-        } else {
-            L_ERROR(extractConfigIcon.second);
-        }
-    }
-
-    QPair<bool, QString> extractStyle;
-    {
-        QFile fin(":/style.css");
-        QFile fout(m_appPath.getConfigurationDir().absoluteFilePath("style.css"));
-        extractStyle = m_appPath.extractResource(fin, fout);
-        if (extractStyle.first) {
-            L_INFO(extractStyle.second);
-        } else {
-            L_ERROR(extractStyle.second);
-        }
-    }
-
-    QDirIterator it(":/slideshow", QDirIterator::Subdirectories);
-    bool extractSlides = true;
-    while (it.hasNext()) {
-        QFile resourcePath(it.next());
-        QFileInfo fileInfo(resourcePath);
-        QFile fout(m_appPath.getSlidesDir().absoluteFilePath(fileInfo.fileName()));
-        QPair<bool, QString> extractSlide = m_appPath.extractResource(resourcePath, fout);
-        if (extractSlide.first) {
-            L_INFO(extractSlide.second);
-        } else {
-            L_ERROR(extractSlide.second);
-        }
-        extractSlides &= extractSlide.first;
-    }
-
-    QPair<bool, QString> extractClose;
-    {
-        QFile fin(":/images/close.png");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("close.png"));
-        extractClose = m_appPath.extractResource(fin, fout);
-        if (extractClose.first) {
-            L_INFO(extractClose.second);
-        } else {
-            L_ERROR(extractClose.second);
-        }
-    }
-
-    QPair<bool, QString> extractTitleLogo;
-    {
-        QFile fin(":/images/logo_title.png");
-        QFile fout(m_appPath.getImagesDir().absoluteFilePath("logo_title.png"));
-        extractTitleLogo = m_appPath.extractResource(fin, fout);
-        if (extractTitleLogo.first) {
-            L_INFO(extractTitleLogo.second);
-        } else {
-            L_ERROR(extractTitleLogo.second);
-        }
-    }
-
-    return extractUpdater.first && extractLoader.first && extractAppIcon.first && extractTrashIcon.first && extractConfigIcon.first && extractStyle.first && extractSlides && extractClose.first && extractTitleLogo.first;
+    return extractUpdater.first && extractLoader.first && extractResources;
 }
 
 bool InstallManager::createShortcut()

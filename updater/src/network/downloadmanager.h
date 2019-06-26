@@ -65,7 +65,6 @@ class DownloadManager : public QObject
         void headsFinished();
         void logFilesInError() const;
 
-        static bool createDirIfNotExists(const QDir &_dir);
         static QString getFilenameAndCreateRequiredDirectories(const QUrl &_baseUrl, const QNetworkReply * const _reply, const QDir &_tempDir);
 
         // widget parent

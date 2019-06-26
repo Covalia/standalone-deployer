@@ -166,6 +166,7 @@ void UIManager::eventEndInstallation(bool _success, QStringList _errors)
     if (!_success) {
         m_endInstallation->showErrors(_errors);
     } else {
+        m_endInstallation->showSuccess();
         // indicate if application must start when installer will be closed
         m_endInstallation->setStartedAppWhenInstalled(m_wizard->isStartedAppWhenInstalled());
     }

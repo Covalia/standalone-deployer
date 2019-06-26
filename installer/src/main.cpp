@@ -1,8 +1,10 @@
 #include <QApplication>
 #include <QDir>
+#include <cstdlib>
 
 #include "log/logger.h"
 #include "manager/installmanager.h"
+#include "installerfactories/osresources/osresources.h"
 
 int main(int argc, char * argv[])
 {
@@ -18,15 +20,31 @@ int main(int argc, char * argv[])
     p.setColor(QPalette::Mid, p.color(QPalette::Base));
     qApp->setPalette(p);
 
-    QFile file(":/style.css");
-	if (file.open(QFile::ReadOnly)) {
-		QString styleSheet = QString::fromLatin1(file.readAll());
-		file.close();
-		qApp->setStyleSheet(styleSheet);
-		L_INFO("Stylesheet loaded");
-	} else {
-		L_ERROR("Unable to load stylesheet");
-	}
+    // extract style.css to temp file
+    QTemporaryFile styleCssFile;
+    if (styleCssFile.open()) {
+        if (OsResources::extractStyleCssToTempFile(styleCssFile.fileName())) {
+            L_INFO("style.css extracted from application resources.");
+        } else {
+            L_ERROR("Unable to open style.css file from application resources.");
+            qApp->quit();
+            return EXIT_FAILURE;
+        }
+    } else {
+        L_ERROR("Unable to open temporary file for style.css.");
+        qApp->quit();
+        return EXIT_FAILURE;
+    }
+
+    QFile file(styleCssFile.fileName());
+    if (file.open(QFile::ReadOnly)) {
+        QString styleSheet = QString::fromLatin1(file.readAll());
+        file.close();
+        qApp->setStyleSheet(styleSheet);
+        L_INFO("Stylesheet loaded");
+    } else {
+        L_ERROR("Unable to load stylesheet");
+    }
 
     L_INFO(QString("Exe path: %1").arg(QDir("./").absolutePath()));
 

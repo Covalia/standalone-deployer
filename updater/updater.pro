@@ -21,7 +21,7 @@ CONFIG(release, debug|release) {
 TARGET = updater
 TEMPLATE = app
 
-# icone macosx
+# icone macos
 defined(UPDATER_MACOS_ICON, var) {
     ICON = "$$UPDATER_MACOS_ICON"
 }
@@ -56,7 +56,7 @@ LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
 
 macx {
-	LIBS += -L./libs/libarchive/macosx -larchive
+	LIBS += -L./libs/libarchive/macos -larchive
 }
 win32 {
 	# attention, l'ordre est important.
@@ -101,16 +101,6 @@ HEADERS += src/xml/deploymentxml.h
 
 RESOURCES += fixed_resources.qrc
 
-defined(OVERRIDABLE_UPDATER_RESOURCES, var) {
-	RESOURCES += $$OVERRIDABLE_UPDATER_RESOURCES
-	message("Using installer resources from file: $$OVERRIDABLE_UPDATER_RESOURCES")
-}
-else {
-	RESOURCES += overridable_resources.qrc
-}
-
-
-
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/lang/fr_FR.ts
 TRANSLATIONS += resources/lang/en_US.ts
@@ -130,7 +120,7 @@ macx {
 		}
 	}
 
-	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
+	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {

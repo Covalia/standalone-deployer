@@ -37,12 +37,12 @@
         <translation>The installation is now complete</translation>
     </message>
     <message>
-        <location filename="../../ui/endinstallation.ui" line="145"/>
+        <location filename="../../ui/endinstallation.ui" line="163"/>
         <source>Finish</source>
         <translation>Finish</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/endinstallationui.cpp" line="27"/>
+        <location filename="../../ui/endinstallation.ui" line="109"/>
         <source>An error occurred during installation</source>
         <translation>An error occurred during installation</translation>
     </message>
@@ -74,32 +74,32 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="289"/>
+        <location filename="../../src/manager/installmanager.cpp" line="306"/>
         <source>Unable to create directory tree</source>
         <translation>Unable to create directory tree</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="295"/>
+        <location filename="../../src/manager/installmanager.cpp" line="312"/>
         <source>Unable to create updater version folder</source>
         <translation>Unable to create updater version folder</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="301"/>
+        <location filename="../../src/manager/installmanager.cpp" line="318"/>
         <source>Unable to write settings file</source>
         <translation>Unable to write settings file</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="307"/>
+        <location filename="../../src/manager/installmanager.cpp" line="324"/>
         <source>Unable to extract resources</source>
         <translation>Unable to extract resources</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="313"/>
+        <location filename="../../src/manager/installmanager.cpp" line="330"/>
         <source>Unable to create shortcuts</source>
         <translation>Unable to create shortcuts</translation>
     </message>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="319"/>
+        <location filename="../../src/manager/installmanager.cpp" line="336"/>
         <source>Unable to prepare applications</source>
         <translation>Unable to prepare applications</translation>
     </message>
@@ -125,7 +125,7 @@
 <context>
     <name>InstallationUI</name>
     <message>
-        <location filename="../../ui/installation.ui" line="72"/>
+        <location filename="../../ui/installation.ui" line="75"/>
         <source>Installing application...</source>
         <translation>Installing application...</translation>
     </message>
@@ -202,7 +202,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/manager/installmanager.cpp" line="110"/>
+        <location filename="../../src/manager/installmanager.cpp" line="127"/>
         <source>Standalone deployment</source>
         <translation>Standalone deployment</translation>
     </message>
@@ -282,17 +282,17 @@
 <context>
     <name>WindowUI</name>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="25"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="26"/>
         <source>Standalone deployment</source>
         <translation>Standalone deployment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="12"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="13"/>
         <source>Installation of %1</source>
         <translation>Installation of %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/forms/windowui.cpp" line="11"/>
+        <location filename="../../src/gui/forms/windowui.cpp" line="12"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>

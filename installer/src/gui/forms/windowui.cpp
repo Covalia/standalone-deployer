@@ -5,6 +5,7 @@
 #include "io/config.h"
 
 #include <QtWidgets>
+#include "installerfactories/osresources/osresources.h"
 
 WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget * _parent) :
     QMainWindow(_parent),
@@ -42,7 +43,20 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
 
     m_iconLabel = new QLabel(this);
     m_iconLabel->setObjectName("iconLabel");
-    m_iconLabel->setPixmap(QPixmap(":/images/installer.png"));
+
+    // get image from resources to temp file
+    QTemporaryFile titlePngFile;
+    if (titlePngFile.open()) {
+        if (OsResources::extractTitlePngToTempFile(titlePngFile.fileName())) {
+            L_INFO("title.png extracted from application resources.");
+            m_iconLabel->setPixmap(QPixmap(titlePngFile.fileName()));
+        } else {
+            L_ERROR("Unable to open title.png from application resources.");
+        }
+    } else {
+        L_ERROR("Unable to open temporary file for title.png.");
+    }
+
     m_titleLabel = new QLabel(tr_helper(m_titleLabelText).arg(m_appName), this);
     m_titleLabel->setObjectName("titleLabel");
     m_comboBoxLanguage = new QComboBox(this);

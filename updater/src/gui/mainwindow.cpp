@@ -47,8 +47,8 @@ MainWindow::MainWindow(QWidget * _parent) :
     StyleManager::transformStyle(this);
 
     AppPath appPath = Utils::getAppPath();
-    m_ui->closeButton->setIcon(QIcon(appPath.getImagesDir().absoluteFilePath("close.png")));
-    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("logo_title.png")));
+    m_ui->closeButton->setIcon(QIcon(":/images/close.png"));
+    m_ui->titleIconLabel->setPixmap(QPixmap(appPath.getImagesDir().absoluteFilePath("title.png")));
 
     QTimer::singleShot(0, this, SLOT(updateSlideShow()));
 
@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget * _parent) :
             SLOT(updateDownloadFileMessage(const QString&)));
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
-    connect(m_appUpdater, SIGNAL(downloadSpeedupdated(const QString&)),
+    connect(m_appUpdater, SIGNAL(downloadSpeedUpdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
     connect(m_appUpdater, SIGNAL(remainingTimeUpdated(const QString&)),
             SLOT(updateRemainingTimeMessage(const QString&)));
@@ -160,10 +160,10 @@ void MainWindow::updateServerUrlMessage(const QUrl &_url)
 
 void MainWindow::updateDownloadFileMessage(const QString &_file)
 {
-    //: This string refers to a downloaded file.
     if (_file.isEmpty()) {
         m_ui->currentFileLabel->setText("");
     } else {
+        //: This string refers to a downloaded file.
         m_ui->currentFileLabel->setText(tr("Downloading %1").arg(_file));
     }
 }
@@ -253,9 +253,12 @@ void MainWindow::updateSlideShow()
         loadSlideShowImagesFromResources();
     }
 
-    update_counter++;
-    update_counter %= m_imagesList.size();
-    updateSlideShow(update_counter);
+    // if still empty, do nothing.
+    if (!m_imagesList.isEmpty()) {
+        update_counter++;
+        update_counter %= m_imagesList.size();
+        updateSlideShow(update_counter);
+    }
 }
 
 void MainWindow::handleDownloaderError(const QString &_message)

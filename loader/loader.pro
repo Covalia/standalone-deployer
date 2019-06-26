@@ -18,7 +18,7 @@ CONFIG(release, debug|release) {
 TARGET = loader
 TEMPLATE = app
 
-# icone macosx
+# icone macos
 defined(LOADER_MACOS_ICON, var) {
     ICON = "$$LOADER_MACOS_ICON"
 }
@@ -53,7 +53,7 @@ LIBS += -L../_settings/bin -lsettings
 LIBS += -L../_logger/bin -llogger
 
 macx {
-	LIBS += -L./libs/libarchive/macosx -larchive
+	LIBS += -L./libs/libarchive/macos -larchive
 }
 win32 {
 	# attention, l'ordre est important.
@@ -86,7 +86,7 @@ macx {
 		}
 	}
 
-	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macosx/dmg/dmgbuild-settings.py -D background="../tools/macosx/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
+	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {

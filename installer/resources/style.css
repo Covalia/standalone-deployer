@@ -54,7 +54,7 @@ QComboBox {
 	border:none;
 	color:#222222;
 	padding:0;
-    min-width:6em;
+	min-width:6em;
 }
 
 QComboBox:hover {
@@ -145,7 +145,7 @@ QWizard QPushButton {
 	border-radius:3px;
 }
 
-.AskPopupUI {
+.AskPopupUI, QMessageBox {
 	border:1px solid gray;
 	background-color:#FFFFFF;
 }
@@ -156,7 +156,7 @@ QWizard QPushButton {
 }
 
 .AskPopupUI QPushButton#buttonNo,
-.AskPopupUI QPushButton#buttonYes {
+QMessageBox QPushButton, .AskPopupUI QPushButton#buttonYes {
 	border-radius:3px;
 	padding:5px;
 }
@@ -172,24 +172,30 @@ QWizard QPushButton {
 	background-color:gray;
 }
 
-.AskPopupUI QPushButton#buttonYes {
+QMessageBox QPushButton, .AskPopupUI QPushButton#buttonYes {
 	background-color:#12aa52;
 	color:#FFFFFF;
 }
 
-.AskPopupUI QPushButton#buttonYes:hover {
+QMessageBox QPushButton:hover, .AskPopupUI QPushButton#buttonYes:hover {
 	background-color:#0c7438;
 }
 
-.EndInstallationUI QLabel#labelError,
+QMessageBox QLabel {
+	color:#555555;
+}
+
+.EndInstallationUI QLabel#labelListOfErrors,
 .EndInstallationUI QLabel#labelIcon {
 	color:#555555;
 }
 
-.EndInstallationUI QLabel#labelTitle {
+.EndInstallationUI QLabel#labelInstallationSuccess,
+.EndInstallationUI QLabel#labelInstallationError {
 	color:#222222;
 }
 
 .InstallationUI QLabel#labelText {
 	color:#555555;
 }
+

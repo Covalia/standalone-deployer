@@ -2,9 +2,11 @@ import biplist
 import os.path
 import sys
 
-# dmgbuild -s dmgbuild-settings.py -D background="path/to/background.png" "volume_name" "filename.dmg"
+# Optional: out_of_dir_app is used to make a dmg outside of the repository. used to build others versions using build scripts.
+# dmgbuild -s dmgbuild-settings.py -D background="path/to/background.png" [-D out_of_dir_app="/path/to/my/app.app"] "volume_name" "filename.dmg"
 
 background = defines.get('background')
+out_of_dir_app = defines.get('out_of_dir_app')
 
 if not volume_name:
     sys.exit(1)
@@ -16,7 +18,11 @@ if not background:
     sys.exit(3)
 
 appname = '{}.app'.format(volume_name)
-files = ['bin/{}'.format(appname)]
+
+if not out_of_dir_app:
+    files = ['bin/{}'.format(appname)]
+else:
+    files = [out_of_dir_app]
 
 print('Volume name: {}'.format(volume_name))
 print('Out filename: {}'.format(filename))

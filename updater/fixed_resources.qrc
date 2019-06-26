@@ -3,4 +3,7 @@
         <file alias="fr_FR.qm">resources/lang/fr_FR.qm</file>
         <file alias="en_US.qm">resources/lang/en_US.qm</file>
     </qresource>
+    <qresource prefix="/images">
+        <file alias="close.png">resources/images/close.png</file>
+    </qresource>
 </RCC>
