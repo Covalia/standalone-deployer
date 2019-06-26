@@ -11,6 +11,6 @@
         <file alias="close.png">resources/fixed/images/close.png</file>
         <file alias="failure.png">resources/fixed/images/failure.png</file>
         <file alias="loading.gif">resources/fixed/images/loading.gif</file>
-        <file alias="success.png">resources/fixed/images/succes.png</file>
+        <file alias="success.png">resources/fixed/images/success.png</file>
     </qresource>
 </RCC>
