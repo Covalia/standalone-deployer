@@ -17,6 +17,7 @@ int main(int argc, char * argv[])
     AppPath appPath = Utils::getAppPath();
     qDebug() << "-- Installation root: " << appPath.getInstallationDir();
 
+    appPath.makeAppDirectories();
     new Logger(appPath.getLogsDir().absoluteFilePath("loader.log"));
 
     QSharedPointer<QFile> settingsPath = appPath.getConfigurationFile();
