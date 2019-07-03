@@ -93,37 +93,6 @@ WindowUI::~WindowUI()
     delete m_closeAction;
 }
 
-void WindowUI::center()
-{
-    QRect geometry = frameGeometry();
-    QPoint center = QDesktopWidget().availableGeometry().center();
-
-    geometry.moveCenter(center);
-    m_position = center;
-    move(geometry.topLeft());
-}
-
-void WindowUI::mousePressEvent(QMouseEvent * _e)
-{
-    m_position = QPoint(_e->globalX() - geometry().x(), _e->globalY() - geometry().y());
-    setCursor(QCursor(Qt::SizeAllCursor));
-}
-
-void WindowUI::mouseReleaseEvent(QMouseEvent *)
-{
-    setCursor(QCursor(Qt::ArrowCursor));
-}
-
-void WindowUI::mouseMoveEvent(QMouseEvent * _e)
-{
-    QWidget::mouseMoveEvent(_e);
-    if (_e->buttons() & Qt::LeftButton) {
-        QPoint toMove = _e->globalPos() - m_position;
-        move(toMove);
-        repaint();
-    }
-}
-
 void WindowUI::closeEvent(QCloseEvent * _event)
 {
     // sous macos, lors de la fermeture via command+q, on passe deux fois dans cet event.

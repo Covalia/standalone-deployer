@@ -15,7 +15,6 @@ class QStyledItemDelegate;
  * @class WindowUI
  * @brief Window frame.
  * This window is the enveloppe of application. It contain, close button, change language button.
- * This window is movable.
  * It's possible to add widget in content of this window.
  */
 class WindowUI : public QMainWindow, public AbstractTranslatedUi
@@ -25,7 +24,6 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
     public:
         explicit WindowUI(QWidget * _centralWidget, const QString &_appName, QWidget * _parent = nullptr);
         virtual ~WindowUI();
-        void center();
         virtual void retranslateUi();
         void setLocale(const QString &_locale);
         QString getLocale() const;
@@ -45,10 +43,6 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
         QComboBox * m_comboBoxLanguage;
 
         bool m_alreadyClosedOnMacOs = false;
-        QPoint m_position;
-        void mousePressEvent(QMouseEvent * _e);
-        void mouseReleaseEvent(QMouseEvent * _e);
-        void mouseMoveEvent(QMouseEvent *);
         virtual void closeEvent(QCloseEvent *);
 
     signals:

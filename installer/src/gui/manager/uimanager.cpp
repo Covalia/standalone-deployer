@@ -30,7 +30,6 @@ UIManager::UIManager(const QString &_appName, bool _changeDataLocationAllowed) :
     connect(m_endInstallation, SIGNAL(quitInstaller(bool)), this, SIGNAL(quitInstaller(bool)));
 
     m_window->show();
-    m_window->center();
 }
 
 UIManager::~UIManager()
