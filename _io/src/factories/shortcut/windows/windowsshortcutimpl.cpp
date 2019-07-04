@@ -97,7 +97,7 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     QFile configShortcutIn(installDir.absoluteFilePath(settingsApplicationPathShortcut));
 
     bool runApplicationShortcut = createShortcut(appShortcutIn, *loader, "", installDir, iconApplicationPath, description);
-    bool configureApplicationShortcut = createShortcut(configShortcutIn, *loader, "-configure", installDir, iconConfigurationPath, description);
+    bool configureApplicationShortcut = createShortcut(configShortcutIn, *loader, "--configure", installDir, iconConfigurationPath, description);
 
     if (runApplicationShortcut && configureApplicationShortcut) {
         L_INFO("Will copy shortcut into startmenu");
