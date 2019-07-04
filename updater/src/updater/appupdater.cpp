@@ -32,17 +32,19 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
 
     QNetworkProxy proxy;
     // get proxy configuration
-    if (!settings->getProxyHostname().isEmpty()) {
-        proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(settings->getProxyHostname());
-        proxy.setPort(static_cast<quint16>(settings->getProxyPort()));
-        if (!settings->getProxyLogin().isEmpty()) {
-            proxy.setUser(settings->getProxyLogin());
-            if (!settings->getProxyPassword().isEmpty()) {
-                proxy.setPassword(settings->getProxyPassword());
-            }
-        }
-    }
+	if (settings->isProxyUsed()) {
+		if (!settings->getProxyHostname().isEmpty()) {
+			proxy.setType(QNetworkProxy::HttpProxy);
+			proxy.setHostName(settings->getProxyHostname());
+			proxy.setPort(static_cast<quint16>(settings->getProxyPort()));
+			if (!settings->getProxyLogin().isEmpty()) {
+				proxy.setUser(settings->getProxyLogin());
+				if (!settings->getProxyPassword().isEmpty()) {
+					proxy.setPassword(settings->getProxyPassword());
+				}
+			}
+		}
+	}
 
     m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl.resolved(UpdaterConfig::DeployRootPath + "/"), proxy, _parent);
 
