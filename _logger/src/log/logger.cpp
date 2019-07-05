@@ -10,7 +10,7 @@ Logger::Logger(QString pathLog)
 {
     // enable sinks
     simpleqtlogger::ENABLE_LOG_SINK_FILE = true;
-    simpleqtlogger::ENABLE_LOG_SINK_CONSOLE = true;
+    simpleqtlogger::ENABLE_LOG_SINK_CONSOLE = false;
     simpleqtlogger::ENABLE_LOG_SINK_QDEBUG = false;
     simpleqtlogger::ENABLE_LOG_SINK_SIGNAL = true;
 
