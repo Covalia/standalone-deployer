@@ -6,27 +6,43 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QTranslator>
+#include <QLibraryInfo>
 
-QTranslator LanguageManager::translator;
+QTranslator LanguageManager::sm_appTranslator;
+QTranslator LanguageManager::sm_qtTranslator;
 
 QString LanguageManager::getSystemLocale()
 {
-	const QString locale = QLocale::system().name();
-	L_INFO(QString("System Locale detected: %1").arg(locale));
-	return locale;
+    const QString locale = QLocale::system().name();
+
+    L_INFO(QString("System Locale detected: %1").arg(locale));
+    return locale;
 }
 
 void LanguageManager::updateLocale(const QString &_locale)
 {
     L_INFO(QString("Language init locale: %1").arg(_locale));
-    qApp->removeTranslator(&translator);
-    const QString location = ":/translations";
 
-    L_INFO("Loading translator");
-    if (translator.load(_locale, location)) {
-        L_INFO("Loading translator Finished");
-        qApp->installTranslator(&translator);
+    // remove old translators
+    qApp->removeTranslator(&sm_appTranslator);
+    qApp->removeTranslator(&sm_qtTranslator);
+
+    const QString appTranslationsPath = ":/translations";
+    const QString qtTranslationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+
+    L_INFO("Loading app translator");
+    if (sm_appTranslator.load(_locale, appTranslationsPath)) {
+        L_INFO("Loading app translator Finished");
+        qApp->installTranslator(&sm_appTranslator);
     } else {
-		L_INFO(QString("Could not intall translation: %1").arg(_locale));
+        L_WARN(QString("Could not intall app translation: %1").arg(_locale));
+    }
+
+    L_INFO("Loading qt translator");
+    if (sm_qtTranslator.load("qt_" + _locale, qtTranslationsPath)) {
+        L_INFO("Loading qt translator Finished");
+        qApp->installTranslator(&sm_qtTranslator);
+    } else {
+        L_WARN(QString("Could not intall qt translation: %1").arg(_locale));
     }
 }

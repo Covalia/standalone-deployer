@@ -15,7 +15,11 @@ class LanguageManager
         LanguageManager();
         ~LanguageManager();
 
-        static QTranslator translator;
+        // the application translator
+        static QTranslator sm_appTranslator;
+
+        // the qt translator: translate standard buttons, etc.
+        static QTranslator sm_qtTranslator;
 };
 
 #endif
