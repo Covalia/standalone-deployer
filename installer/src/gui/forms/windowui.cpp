@@ -36,6 +36,8 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     m_toolbar = new QToolBar(this);
     m_toolbar->layout()->setContentsMargins(0, 0, 0, 0);
     m_toolbar->layout()->setSpacing(0);
+    // disable right clic to hide toolbar
+    m_toolbar->setContextMenuPolicy(Qt::PreventContextMenu);
 
     m_toolbar->setIconSize(QSize(45, 45));
     m_toolbar->setMovable(false);
