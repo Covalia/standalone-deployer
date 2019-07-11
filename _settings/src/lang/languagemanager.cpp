@@ -27,8 +27,8 @@ void LanguageManager::updateLocale(const QString &_locale)
     qApp->removeTranslator(&sm_appTranslator);
     qApp->removeTranslator(&sm_qtTranslator);
 
-    const QString appTranslationsPath = ":/translations";
-    const QString qtTranslationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    const QString appTranslationsPath = ":/translations/app";
+    const QString qtTranslationsPath = ":/translations/qt";
 
     L_INFO("Loading app translator");
     if (sm_appTranslator.load(_locale, appTranslationsPath)) {
@@ -39,7 +39,7 @@ void LanguageManager::updateLocale(const QString &_locale)
     }
 
     L_INFO("Loading qt translator");
-    if (sm_qtTranslator.load("qt_" + _locale, qtTranslationsPath)) {
+    if (sm_qtTranslator.load("qtbase_" + _locale, qtTranslationsPath)) {
         L_INFO("Loading qt translator Finished");
         qApp->installTranslator(&sm_qtTranslator);
     } else {

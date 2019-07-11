@@ -136,8 +136,8 @@ macx {
 }
 
 DISTFILES += ../uncrustify.cfg
-TRANSLATIONS += resources/lang/fr_FR.ts
-TRANSLATIONS += resources/lang/en_US.ts
+TRANSLATIONS += resources/lang/app/fr_FR.ts
+TRANSLATIONS += resources/lang/app/en_US.ts
 
 RC_FILE = windows_resources.rc
 
