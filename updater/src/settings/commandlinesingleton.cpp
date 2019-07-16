@@ -26,7 +26,6 @@ QStringList CommandLineSingleton::getApplicationArguments() const
 
     arguments.removeAll("--configure");
     arguments.removeAll("--debug");
-    arguments.removeAll("--offline");
 
     return arguments;
 }
@@ -58,9 +57,4 @@ bool CommandLineSingleton::isDebugMode() const
 bool CommandLineSingleton::isConfigureMode() const
 {
     return m_arguments.contains("--config");
-}
-
-bool CommandLineSingleton::isOfflineMode() const
-{
-    return m_arguments.contains("--offline");
 }

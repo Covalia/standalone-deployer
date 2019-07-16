@@ -42,7 +42,6 @@ class InstallManager : public QThread
         QString m_locale;
         bool m_runApp;
         bool m_runAtStart;
-        bool m_createOfflineShortcut;
 
         bool cleanInstallationFolders();
         bool createInstallationFolders();

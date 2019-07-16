@@ -20,11 +20,9 @@ class ShortcutsPage : public QWizardPage, public AbstractTranslatedUi
 
         // UI strings
         const QString m_titleText;
-        const QString m_createOfflineShortcutCheckBoxText;
         const QString m_launchAppAtStartUpCheckBoxText;
 
     private:
-        QCheckBox * m_createOfflineShortcutCheckBox;
         QCheckBox * m_launchAppAtStartUpCheckBox;
 };
 

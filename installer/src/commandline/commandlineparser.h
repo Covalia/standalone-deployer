@@ -36,7 +36,6 @@ class CommandLineParser
 
         bool isRunApp() const;
         bool isRunAtStart() const;
-        bool isCreateOfflineShortcut() const;
         bool isCreateAllUserShortcut() const;
 
     private:
@@ -63,7 +62,6 @@ class CommandLineParser
         // start and shortcut
         QCommandLineOption noRunAppOption;
         QCommandLineOption runAtStartOption;
-        QCommandLineOption createOfflineShortcutOption;
         QCommandLineOption createAllUserShortcutOption;
 };
 

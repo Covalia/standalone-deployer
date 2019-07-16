@@ -16,7 +16,6 @@ CommandLineParser::CommandLineParser() :
     localeOption("locale", QString("Set the application locale. %1 for English, %2 for French.").arg(IOConfig::LocaleEnUs).arg(IOConfig::LocaleFrFr), "locale"),
     noRunAppOption("noRunApp", "Does not start the application after installation."),
     runAtStartOption("runAtStart", "Enable application launch when computer starts."),
-    createOfflineShortcutOption("createOfflineShortcut", "Create offline shortcut."),
     createAllUserShortcutOption("createAllUserShortcut", "Not yes implemented!!! Create application shortcuts for all users. Option reserved when installation and data location are not in user folder.")
 {
     parser.setApplicationDescription("Covalia standalone deployer. Use --help option to display help.");
@@ -34,7 +33,6 @@ CommandLineParser::CommandLineParser() :
     parser.addOption(localeOption);
     parser.addOption(noRunAppOption);
     parser.addOption(runAtStartOption);
-    parser.addOption(createOfflineShortcutOption);
     parser.addOption(createAllUserShortcutOption);
 
     L_INFO("Parsing command line arguments");
@@ -53,7 +51,6 @@ CommandLineParser::CommandLineParser() :
     L_INFO(QString("locale: %1").arg(parser.value(localeOption)));
     L_INFO(QString("noRunApp: %1").arg(QString(parser.isSet(noRunAppOption) ? "yes" : "no")));
     L_INFO(QString("runAtStart: %1").arg(QString(parser.isSet(runAtStartOption) ? "yes" : "no")));
-    L_INFO(QString("createOfflineShortcut: %1").arg(QString(parser.isSet(createOfflineShortcutOption) ? "yes" : "no")));
     L_INFO(QString("createAllUserShortcut: %1").arg(QString(parser.isSet(createAllUserShortcutOption) ? "yes" : "no")));
 }
 
@@ -65,11 +62,6 @@ bool CommandLineParser::isRunApp() const
 bool CommandLineParser::isCreateAllUserShortcut() const
 {
     return parser.isSet(createAllUserShortcutOption);
-}
-
-bool CommandLineParser::isCreateOfflineShortcut() const
-{
-    return parser.isSet(createOfflineShortcutOption);
 }
 
 bool CommandLineParser::isRunAtStart() const

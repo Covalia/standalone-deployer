@@ -36,10 +36,7 @@ class Settings
 
         static const QString Locale;
 
-        static const QString ShortcutOffline;
         static const QString ShortcutName;
-        static const QString ShortcutOfflineName;
-        static const QString ShortcutOfflineArgs;
         static const QString ShortcutForAllUsers;
 
         static const QString DataLocation;
@@ -103,9 +100,6 @@ class Settings
         bool isRunAtStart() const;
         void setRunAtStart(const bool &runAtStart);
 
-        bool isShortcutOffline() const;
-        void setShortcutOffline(bool shortcutOffline);
-
         QString getAppName() const;
         void setAppName(const QString &appName);
 
@@ -114,12 +108,6 @@ class Settings
 
         QString getJavaVersion() const;
         void setJavaVersion(const QString &_javaVersion);
-
-        QString getShortcutOfflineName() const;
-        void setShortcutOfflineName(const QString &shortcutOfflineName);
-
-        QString getShortcutOfflineArgs() const;
-        void setShortcutOfflineArgs(const QString &shortcutOfflineArgs);
 
         QString getInsetColor() const;
         void setInsetColor(const QString &insetColor);
@@ -209,10 +197,7 @@ class Settings
 
         QString m_locale;
 
-        bool m_shortcutOffline;
         QString m_shortcutName;
-        QString m_shortcutOfflineName;
-        QString m_shortcutOfflineArgs;
         bool m_runAtStart;
 
         QString m_insetColor;

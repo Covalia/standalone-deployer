@@ -24,10 +24,7 @@ const QString Settings::ProxyPassword("proxy_password");
 
 const QString Settings::Locale("locale");
 
-const QString Settings::ShortcutOffline("shortcut_offline");
 const QString Settings::ShortcutName("shortcut_name");
-const QString Settings::ShortcutOfflineName("shortcut_offline_name");
-const QString Settings::ShortcutOfflineArgs("shortcut_offline_args");
 const QString Settings::ShortcutForAllUsers("shortcut_for_all_users");
 
 const QString Settings::DataLocation("data_location");
@@ -54,10 +51,7 @@ Settings::Settings() :
     m_deploymentUrl(""),
     m_appName("Application"),
     m_locale(""),
-    m_shortcutOffline(false),
     m_shortcutName("Application"),
-    m_shortcutOfflineName("Application offline"),
-    m_shortcutOfflineArgs("--offline=true"),
     m_runAtStart(false),
     m_insetColor("#364058"),
     m_panelBackgroundColor("#2d364c"),
@@ -157,10 +151,7 @@ bool Settings::writeSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupUninst);
-    putSetting(ShortcutOffline, m_shortcutOffline);
     putSetting(ShortcutName, m_shortcutName);
-    putSetting(ShortcutOfflineName, m_shortcutOfflineName);
-    putSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs);
     putSetting(ShortcutForAllUsers, m_shortcutForAllUsers);
     putSetting(RunAtStart, m_runAtStart);
     m_settings->endGroup();
@@ -206,10 +197,7 @@ void Settings::readSettings()
     m_settings->endGroup();
 
     m_settings->beginGroup(GroupUninst);
-    m_shortcutOffline = getSetting(ShortcutOffline, m_shortcutOffline).toBool();
     m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
-    m_shortcutOfflineName = getSetting(ShortcutOfflineName, m_shortcutOfflineName).toString();
-    m_shortcutOfflineArgs = getSetting(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
     m_shortcutForAllUsers = getSetting(ShortcutForAllUsers, m_shortcutForAllUsers).toBool();
     m_runAtStart = getSetting(RunAtStart, m_runAtStart).toBool();
     m_settings->endGroup();
@@ -249,10 +237,7 @@ QString Settings::paramListString()
     s += "proxy_login = " + m_proxyLogin + "\n";
     s += "proxy_password (encrypted) = " + m_proxyPassword + "\n";
     s += "locale = " + m_locale + "\n";
-    s += "shortcut_offline = " + QString::number(m_shortcutOffline) + "\n";
     s += "shortcut_name = " + m_shortcutName + "\n";
-    s += "shortcut_offine_name = " + m_shortcutOfflineName + "\n";
-    s += "shortcut_offline_args = " + m_shortcutOfflineArgs + "\n";
     s += "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
     s += "data_location = " + m_dataLocation + "\n";
     s += "deployment_url = " + m_deploymentUrl + "\n";
@@ -341,26 +326,6 @@ void Settings::setInsetColor(const QString &insetColor)
     m_insetColor = insetColor;
 }
 
-QString Settings::getShortcutOfflineArgs() const
-{
-    return m_shortcutOfflineArgs;
-}
-
-void Settings::setShortcutOfflineArgs(const QString &shortcutOfflineArgs)
-{
-    m_shortcutOfflineArgs = shortcutOfflineArgs;
-}
-
-QString Settings::getShortcutOfflineName() const
-{
-    return m_shortcutOfflineName;
-}
-
-void Settings::setShortcutOfflineName(const QString &shortcutOfflineName)
-{
-    m_shortcutOfflineName = shortcutOfflineName;
-}
-
 QString Settings::getUpdaterVersion() const
 {
     return m_updaterVersion;
@@ -429,16 +394,6 @@ bool Settings::isShortcutForAllUsers() const
 void Settings::setShortcutForAllUsers(bool shortcutForAllUsers)
 {
     m_shortcutForAllUsers = shortcutForAllUsers;
-}
-
-bool Settings::isShortcutOffline() const
-{
-    return m_shortcutOffline;
-}
-
-void Settings::setShortcutOffline(bool shortcutOffline)
-{
-    m_shortcutOffline = shortcutOffline;
 }
 
 QString Settings::getShortcutName() const

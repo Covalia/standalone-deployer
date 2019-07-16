@@ -10,9 +10,6 @@ const QString ResourceSettings::AppName("app_name");
 const QString ResourceSettings::DefaultLocale("default_locale");
 
 const QString ResourceSettings::ShortcutName("shortcut_name");
-const QString ResourceSettings::ShortcutOfflineName("shortcut_offline_name");
-const QString ResourceSettings::ShortcutOffline("shortcut_offline");
-const QString ResourceSettings::ShortcutOfflineArgs("shortcut_offline_args");
 
 const QString ResourceSettings::RunAtStart("run_at_start");
 
@@ -34,10 +31,7 @@ ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_deploymentUrl(""),
     m_appName("Application"),
     m_defaultLocale(IOConfig::LocaleEnUs),
-    m_shortcutOffline(false),
     m_shortcutName("Application"),
-    m_shortcutOfflineName("Application Offline"),
-    m_shortcutOfflineArgs("--offline=true"),
     m_runAtStart(true),
     m_insetColor("#364058"),
     m_panelBackgroundColor("#2d364c"),
@@ -66,9 +60,6 @@ void ResourceSettings::readSettings()
     m_defaultLocale = m_settings.value(DefaultLocale, m_defaultLocale).toString();
 
     m_shortcutName = m_settings.value(ShortcutName, m_shortcutName).toString();
-    m_shortcutOfflineName = m_settings.value(ShortcutOfflineName, m_shortcutOfflineName).toString();
-    m_shortcutOffline = m_settings.value(ShortcutOffline, m_shortcutOffline).toBool();
-    m_shortcutOfflineArgs = m_settings.value(ShortcutOfflineArgs, m_shortcutOfflineArgs).toString();
 
     m_runAtStart = m_settings.value(RunAtStart, m_runAtStart).toBool();
 
@@ -98,11 +89,6 @@ bool ResourceSettings::isRunAtStart() const
     return m_runAtStart;
 }
 
-QString ResourceSettings::getShortcutOfflineArgs() const
-{
-    return m_shortcutOfflineArgs;
-}
-
 QString ResourceSettings::getDeploymentUrl() const
 {
     return m_deploymentUrl;
@@ -121,16 +107,6 @@ QString ResourceSettings::getDefaultLocale() const
 QString ResourceSettings::getShortcutName() const
 {
     return m_shortcutName;
-}
-
-QString ResourceSettings::getShortcutOfflineName() const
-{
-    return m_shortcutOfflineName;
-}
-
-bool ResourceSettings::isShortcutOffline() const
-{
-    return m_shortcutOffline;
 }
 
 QString ResourceSettings::getDefaultInstallationPath() const

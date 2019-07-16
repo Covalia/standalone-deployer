@@ -73,11 +73,6 @@ QString UIManager::getDataFolder() const
     return m_wizard->getDataFolder();
 }
 
-bool UIManager::isCreatedOfflineShortcut() const
-{
-    return m_wizard->isCreatedOfflineShortcut();
-}
-
 bool UIManager::isLaunchedAppAtStartUp() const
 {
     return m_wizard->isLaunchedAppAtStartUp();
@@ -121,11 +116,6 @@ void UIManager::setInstallationFolder(const QString &_installationFolder)
 void UIManager::setDataFolder(const QString &_dataFolder)
 {
     m_wizard->setDataFolder(_dataFolder);
-}
-
-void UIManager::setCreatedOfflineShortcut(const bool _createdOfflineShortcut)
-{
-    m_wizard->setCreatedOfflineShortcut(_createdOfflineShortcut);
 }
 
 void UIManager::setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp)

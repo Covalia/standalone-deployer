@@ -24,7 +24,6 @@ class UIManager : public QObject
         bool isDataFolderChosen() const;
         void setDataFolderChosen(bool _folderChosen);
         QString getDataFolder() const;
-        bool isCreatedOfflineShortcut() const;
         bool isLaunchedAppAtStartUp() const;
         bool isProxyUsed() const;
         QString getProxyHostname() const;
@@ -35,7 +34,6 @@ class UIManager : public QObject
 
         void setInstallationFolder(const QString &_installationFolder);
         void setDataFolder(const QString &_dataFolder);
-        void setCreatedOfflineShortcut(const bool _createdOfflineShortcut);
         void setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp);
         void setStartedAppWhenInstalled(const bool _startedAppWhenInstalled);
 

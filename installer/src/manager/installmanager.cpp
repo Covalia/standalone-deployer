@@ -34,8 +34,7 @@ InstallManager::InstallManager() : QThread(),
     m_proxyPassword(""),
     m_locale(IOConfig::LocaleEnUs),
     m_runApp(false),
-    m_runAtStart(false),
-    m_createOfflineShortcut(false)
+    m_runAtStart(false)
 {
     L_INFO("Init InstallManager");
     // init project resources
@@ -65,8 +64,6 @@ InstallManager::InstallManager() : QThread(),
     m_settings->setAppName(m_projectSettings->getAppName());
     m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
     m_settings->setShortcutName(m_projectSettings->getShortcutName());
-    m_settings->setShortcutOfflineName(m_projectSettings->getShortcutOfflineName());
-    m_settings->setShortcutOfflineArgs(m_projectSettings->getShortcutOfflineArgs());
 
     m_settings->setInsetColor(m_projectSettings->getInsetColor());
     m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
@@ -119,8 +116,6 @@ void InstallManager::initInstallation()
         m_runApp = m_lineParser.isRunApp();
 
         m_runAtStart = m_lineParser.isRunAtStart();
-
-        m_createOfflineShortcut = m_lineParser.isCreateOfflineShortcut();
 
         start();
     } else {
@@ -186,7 +181,6 @@ void InstallManager::initInstallation()
         if (m_lineParser.isCreateAllUserShortcut()) {
             m_uiManager->setCustomInstallation(true);
         }
-        m_uiManager->setCreatedOfflineShortcut(m_lineParser.isCreateAllUserShortcut());
 
         connect(m_uiManager, SIGNAL(wizardFinishedSignal()),
                 this, SLOT(start()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
@@ -230,7 +224,6 @@ void InstallManager::run()
             m_proxyPassword = m_uiManager->getProxyPassword();
 
             m_runAtStart = m_uiManager->isLaunchedAppAtStartUp();
-            m_createOfflineShortcut = m_uiManager->isCreatedOfflineShortcut();
         } else {
             // user has chosen simple installation
 
@@ -257,7 +250,6 @@ void InstallManager::run()
             m_proxyPassword = "";
 
             m_runAtStart = false;
-            m_createOfflineShortcut = false;
         }
 
         m_runApp = m_uiManager->isStartedAppWhenInstalled();
@@ -274,7 +266,6 @@ void InstallManager::run()
     L_INFO(QString("locale: %1").arg(m_locale));
     L_INFO(QString("runApp: %1").arg(QString(m_runApp ? "yes" : "no")));
     L_INFO(QString("runAtStart: %1").arg(QString(m_runAtStart ? "yes" : "no")));
-    L_INFO(QString("createOfflineShortcut: %1").arg(QString(m_createOfflineShortcut ? "yes" : "no")));
 
     m_appPath.setInstallationDir(QDir(m_installLocation));
 
@@ -289,7 +280,6 @@ void InstallManager::run()
     m_settings->setLocale(m_locale);
 
     m_settings->setRunAtStart(m_runAtStart);
-    m_settings->setShortcutOffline(m_createOfflineShortcut);
 
     startInstallation();
 }
@@ -469,10 +459,6 @@ bool InstallManager::createShortcut()
 
     // online shortcut
     success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
-    // offline shortcut
-    if (m_settings->isShortcutOffline()) {
-        success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutOfflineName(), m_settings->getShortcutOfflineArgs(), m_settings->getAppName());
-    }
     // startup shortcut
     if (m_settings->isRunAtStart()) {
         success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());

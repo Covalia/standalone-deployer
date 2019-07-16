@@ -39,7 +39,6 @@ class InstallWizard : public QWizard, public AbstractTranslatedUi
         bool isDataFolderChosen() const;
         void setDataFolderChosen(bool _folderChosen);
         QString getDataFolder() const;
-        bool isCreatedOfflineShortcut() const;
         bool isLaunchedAppAtStartUp() const;
         bool isProxyUsed() const;
         QString getProxyHostname() const;
@@ -50,7 +49,6 @@ class InstallWizard : public QWizard, public AbstractTranslatedUi
 
         void setInstallationFolder(const QString &_installationFolder);
         void setDataFolder(const QString &_dataFolder);
-        void setCreatedOfflineShortcut(const bool _createdOfflineShortcut);
         void setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp);
         void setStartedAppWhenInstalled(const bool _startedAppWhenInstalled);
 

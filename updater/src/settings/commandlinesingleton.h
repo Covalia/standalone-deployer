@@ -37,9 +37,6 @@ class CommandLineSingleton {
         /// is it configuration mode?
         bool isConfigureMode() const;
 
-        /// is it offline mode?
-        bool isOfflineMode() const;
-
     private:
         CommandLineSingleton();
 

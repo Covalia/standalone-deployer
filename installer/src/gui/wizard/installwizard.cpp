@@ -85,15 +85,6 @@ QString InstallWizard::getDataFolder() const
     }
 }
 
-bool InstallWizard::isCreatedOfflineShortcut() const
-{
-    if (isCustomInstallation()) {
-        return field("shortcuts.createOfflineShortcut").toBool();
-    } else {
-        return false;
-    }
-}
-
 bool InstallWizard::isLaunchedAppAtStartUp() const
 {
     if (isCustomInstallation()) {
@@ -161,11 +152,6 @@ void InstallWizard::setInstallationFolder(const QString &_installationFolder)
 void InstallWizard::setDataFolder(const QString &_dataFolder)
 {
     setField("folders.dataFolder", _dataFolder);
-}
-
-void InstallWizard::setCreatedOfflineShortcut(const bool _createdOfflineShortcut)
-{
-    setField("shortcuts.createOfflineShortcut", _createdOfflineShortcut);
 }
 
 void InstallWizard::setLaunchedAppAtStartUp(const bool _launchedAppAtStartUp)
@@ -245,6 +231,5 @@ void InstallWizard::print() const
     qDebug() << "getProxyLogin(): " << getProxyLogin();
     qDebug() << "getProxyPassword(): " << getProxyPassword();
     qDebug() << "isLaunchedAppAtStartUp(): " << QString(isLaunchedAppAtStartUp() ? "yes" : "no");
-    qDebug() << "isCreatedOfflineShortcut(): " << QString(isCreatedOfflineShortcut() ? "yes" : "no");
     qDebug() << "----------------------------------------";
 }

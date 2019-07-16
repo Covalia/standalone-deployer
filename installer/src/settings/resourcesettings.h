@@ -13,9 +13,6 @@ class ResourceSettings
         static const QString DefaultLocale;
 
         static const QString ShortcutName;
-        static const QString ShortcutOfflineName;
-        static const QString ShortcutOffline;
-        static const QString ShortcutOfflineArgs;
 
         static const QString RunAtStart;
 
@@ -47,13 +44,10 @@ class ResourceSettings
         QString getInsetColor() const;
         bool isChangeDataLocationAllowed() const;
         QString getDefaultInstallationPath() const;
-        bool isShortcutOffline() const;
-        QString getShortcutOfflineName() const;
         QString getShortcutName() const;
         QString getDefaultLocale() const;
         QString getAppName() const;
         QString getDeploymentUrl() const;
-        QString getShortcutOfflineArgs() const;
         bool isRunAtStart() const;
 
     private:
@@ -70,10 +64,7 @@ class ResourceSettings
         QString m_appName;
 
         QString m_defaultLocale;
-        bool m_shortcutOffline;
         QString m_shortcutName;
-        QString m_shortcutOfflineName;
-        QString m_shortcutOfflineArgs;
         bool m_runAtStart;
 
         QString m_insetColor;
