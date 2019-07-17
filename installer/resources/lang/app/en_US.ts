@@ -28,8 +28,8 @@
     <name>EndInstallationUI</name>
     <message>
         <location filename="../../../ui/endinstallation.ui" line="91"/>
-        <source>The installation is almost complete. The application will be updated, at first launch.</source>
-        <translation>The installation is almost complete. The application will be updated, at first launch.</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The installation is almost complete.&lt;/p&gt;&lt;p&gt;The application will be updated, at first launch.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The installation is almost complete.&lt;/p&gt;&lt;p&gt;The application will be updated, at first launch.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../../../ui/endinstallation.ui" line="172"/>

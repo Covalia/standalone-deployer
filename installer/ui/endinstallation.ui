@@ -88,7 +88,7 @@
              </font>
             </property>
             <property name="text">
-             <string>The installation is almost complete. The application will be updated, at first launch.</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The installation is almost complete.&lt;/p&gt;&lt;p&gt;The application will be updated, at first launch.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
