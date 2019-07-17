@@ -37,7 +37,6 @@ class Settings
         static const QString Locale;
 
         static const QString ShortcutName;
-        static const QString ShortcutForAllUsers;
 
         static const QString DataLocation;
 
@@ -87,9 +86,6 @@ class Settings
 
         QString getShortcutName() const;
         void setShortcutName(const QString &shortcutName);
-
-        bool isShortcutForAllUsers() const;
-        void setShortcutForAllUsers(bool shortcutForAllUsers);
 
         QString getDataLocation() const;
         void setDataLocation(const QString &dataLocation);
@@ -208,8 +204,6 @@ class Settings
         QString m_grayTextColor;
         QString m_disabledColor;
         QString m_windowBorderWidth;
-
-        bool m_shortcutForAllUsers;
 
         QString m_dataLocation;
 

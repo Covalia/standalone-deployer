@@ -178,10 +178,6 @@ void InstallManager::initInstallation()
         }
         m_uiManager->setLaunchedAppAtStartUp(m_lineParser.isRunAtStart());
 
-        if (m_lineParser.isCreateAllUserShortcut()) {
-            m_uiManager->setCustomInstallation(true);
-        }
-
         connect(m_uiManager, SIGNAL(wizardFinishedSignal()),
                 this, SLOT(start()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
         connect(this, SIGNAL(endInstallation(bool,QStringList)),
@@ -461,10 +457,10 @@ bool InstallManager::createShortcut()
     success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
     // startup shortcut
     if (m_settings->isRunAtStart()) {
-        success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
+        success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->getAppName());
     }
     // StartMenu folder and shortcut
-    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_projectSettings->getDefaultInstallationPath()).dirName(), m_settings->isShortcutForAllUsers(), m_settings->getAppName());
+    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_projectSettings->getDefaultInstallationPath()).dirName(), m_settings->getAppName());
     return success;
 }
 

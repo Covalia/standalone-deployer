@@ -24,21 +24,19 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @brief create windows shortcut in startup folder to run application when computer starting
          * @param _appPath : objet AppPath
          * @param _shortcutName : name of  shortcut link
-         * @param _allUser : if startup alluser folder or current user
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _applicationName);
+        virtual bool createStartShorcut(AppPath _appPath, QString _shortcutName, QString _applicationName);
 
         /**
          * @brief create startmenu folder and shortcut
          * @param _appPath : objet AppPath
          * @param _startMenuFolderName : name of folder
-         * @param _allUser : in allsuer startmenu or current user
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _applicationName);
+        virtual bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName);
 
     private:
         /**
@@ -52,16 +50,6 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @return true if success
          */
         bool createShortcut(QFile &_shortcutFile, const QFile &_targetFile, QString _args, QDir _workingDir, const QFile &_iconPath, QString _description);
-
-        /**
-         * @brief Find programs path for all users in windows
-         */
-        QString findAllUserStartMenuProgramsFolder();
-
-        /**
-         * @brief Find startup path for all users in windows
-         */
-        QString findAllUserStartupFolder();
 
         /**
          * @brief Find programs path for current user in windows

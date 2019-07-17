@@ -31,35 +31,23 @@ bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _short
     return createShortcut(shortcutFile, *loaderFile, _args, installDir, iconFile, _applicationName);
 }
 
-bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutName, bool _allUser, QString _applicationName)
+bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutName, QString _applicationName)
 {
     L_INFO("Will create shortcut in startup folder");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
     const QDir installDir = _appPath.getInstallationDir();
     const QFile iconFile(_appPath.getImagesDir().absoluteFilePath("shortcut.ico"));
-    if (_allUser) {
-		L_INFO("All users installation");
-        QFile file(findAllUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
-        return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
-    } else {
-		L_INFO("One user installation");
-        QFile file(findUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
-        return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
-    }
+
+    QFile file(findUserStartupFolder() + QDir::separator() + _shortcutName + ".lnk");
+    return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
 }
 
-bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, bool _allUser, QString _applicationName)
+bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName)
 {
     L_INFO("Will create shortcut in startMenu folder");
     QString folderPath("");
 
-    if (_allUser) {
-		L_INFO("All users installation");
-        folderPath = findAllUserStartMenuProgramsFolder();
-    } else {
-		L_INFO("One user installation");
-        folderPath = findUserStartMenuProgramFolder();
-    }
+    folderPath = findUserStartMenuProgramFolder();
 
     // startMenu folder creation
     QString applicationFolder = folderPath + QDir::separator() + _startMenuFolderName;
@@ -111,28 +99,6 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
         if (copyApplicationShortcut.first && copyConfigurationShortcut.first) {
             L_INFO("Startmenu folder created and shortcuts copied");
             return true;
-        } else {
-            // verify if shorcut has been moved in all user start menu programs
-            folderPath = findAllUserStartMenuProgramsFolder();
-            applicationFolder = folderPath + QDir::separator() + _startMenuFolderName;
-            if (QDir(applicationFolder).exists()) {
-                if (!QFile::exists(applicationFolder + QDir::separator() + runApplicationPathShortcut)) {
-                    L_ERROR(copyApplicationShortcut.second);
-                    return false;
-                }
-                if (!QFile::exists(applicationFolder + QDir::separator() + settingsApplicationPathShortcut)) {
-                    L_ERROR(copyConfigurationShortcut.second);
-                    return false;
-                }
-                return true;
-            }
-            // shorcut doesn't exist, and not moved in all users start menu programs
-            else {
-                L_ERROR("Error when copying shortcuts in startMenu folder");
-                L_ERROR(copyApplicationShortcut.second);
-                L_ERROR(copyConfigurationShortcut.second);
-                return false;
-            }
         }
     } else {
         return false;
@@ -142,12 +108,12 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
 bool WindowsShortcutImpl::createShortcut(QFile &_shortcutFile, const QFile &_targetFile, QString _args, QDir _workingDir, const QFile &_iconFile, QString _description)
 {
     L_INFO(QString("Shortcut creation - shortcutFile: %1, targetFile: %2, description: %3, workingDir: %4, iconFile: %5, args: %6")
-			.arg(_shortcutFile.fileName())
-			.arg(_targetFile.fileName())
-			.arg(_description)
-			.arg(_workingDir.absolutePath())
-			.arg(_iconFile.fileName())
-			.arg(_args));
+           .arg(_shortcutFile.fileName())
+           .arg(_targetFile.fileName())
+           .arg(_description)
+           .arg(_workingDir.absolutePath())
+           .arg(_iconFile.fileName())
+           .arg(_args));
 
     // remove file if exist
     if (_shortcutFile.exists()) {
@@ -159,29 +125,30 @@ bool WindowsShortcutImpl::createShortcut(QFile &_shortcutFile, const QFile &_tar
             return false;
         } else {
             L_INFO(QString("File removed: %1").arg(_shortcutFile.fileName()));
-		}
+        }
     }
 
     L_INFO("Will create shortcut");
     return createWindowsShortcut(_targetFile.fileName(), _args, _shortcutFile.fileName(), _description,
-                                           _workingDir.absolutePath(), _iconFile.fileName(), 0);
+                                 _workingDir.absolutePath(), _iconFile.fileName(), 0);
 }
 
-LPCWSTR WindowsShortcutImpl::lpcwstrFromQString(QString _qstring) {
-    wchar_t* ch = new wchar_t[_qstring.length() + 1];
+LPCWSTR WindowsShortcutImpl::lpcwstrFromQString(QString _qstring)
+{
+    wchar_t * ch = new wchar_t[_qstring.length() + 1];
+
     _qstring.toWCharArray(ch);
     ch[_qstring.length()] = 0;
     return ch;
 }
 
-
 HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString _targetArgs,
-                                               QString _linkFile, QString _description,
-                                               QString _currentDir, QString _iconFile, int _iconIndex)
+                                                   QString _linkFile, QString _description,
+                                                   QString _currentDir, QString _iconFile, int _iconIndex)
 {
     if (_targetFile.isEmpty() || _linkFile.isEmpty()) {
-       L_WARN("Target file or link file are empty. Aborting.");
-       return false;
+        L_WARN("Target file or link file are empty. Aborting.");
+        return false;
     }
 
     bool result = true;
@@ -189,7 +156,7 @@ HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString 
     // init com library
     CoInitialize(0);
 
-    IShellLink *psl;
+    IShellLink * psl;
 
     LPCWSTR w_targetFile = lpcwstrFromQString(_targetFile);
     LPCWSTR w_targetArgs = lpcwstrFromQString(_targetArgs);
@@ -198,65 +165,56 @@ HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString 
     LPCWSTR w_iconFile = lpcwstrFromQString(_iconFile);
     LPCWSTR w_linkFile = lpcwstrFromQString(_linkFile);
 
-    HRESULT hres = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *) &psl);
+    HRESULT hres = CoCreateInstance(CLSID_ShellLink, 0, CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *)&psl);
     if (!SUCCEEDED(hres)) {
         L_ERROR("Error while creating IShellLink instance");
         result = false;
-    }
-    else {
-
+    } else {
         hres = psl->SetPath(w_targetFile);
         if (!SUCCEEDED(hres)) {
             L_ERROR("Error while setting path");
             result = false;
-        }
-        else {
+        } else {
             hres = psl->SetShowCmd(1);
             if (!SUCCEEDED(hres)) {
                 L_ERROR("Error while setting show cmd");
                 result = false;
-            }
-            else {
+            } else {
                 if (!_targetArgs.isEmpty()) {
                     hres = psl->SetArguments(w_targetArgs);
                 }
                 if (!SUCCEEDED(hres)) {
                     L_ERROR("Error while setting arguments");
                     result = false;
-                }
-                else {
+                } else {
                     if (!_description.isEmpty()) {
                         hres = psl->SetDescription(w_description);
                     }
                     if (!SUCCEEDED(hres)) {
                         L_ERROR("Error while setting description");
                         result = false;
-                    }
-                    else {
+                    } else {
                         if (!_currentDir.isEmpty()) {
                             hres = psl->SetWorkingDirectory(w_currentDir);
                         }
                         if (!SUCCEEDED(hres)) {
                             L_ERROR("Error while setting working directory");
                             result = false;
-                        }
-                        else {
+                        } else {
                             if (!_iconFile.isEmpty() && _iconIndex >= 0) {
                                 hres = psl->SetIconLocation(w_iconFile, _iconIndex);
                             }
                             if (!SUCCEEDED(hres)) {
                                 L_ERROR("Error while setting icon location");
                                 result = false;
-                            }
-                            else {
-                                IPersistFile *ppf;
+                            } else {
+                                IPersistFile * ppf;
                                 // get IPersistFile interface
-                                hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *) &ppf);
+                                hres = psl->QueryInterface(IID_IPersistFile, (LPVOID *)&ppf);
                                 if (!SUCCEEDED(hres)) {
                                     L_ERROR("Error while setting query interface");
                                     result = false;
-                                }
-                                else {
+                                } else {
                                     hres = ppf->Save(w_linkFile, 1);
                                     if (hres != S_OK) {
                                         L_ERROR("Error while saving shortcut");
@@ -273,26 +231,16 @@ HRESULT WindowsShortcutImpl::createWindowsShortcut(QString _targetFile, QString 
         psl->Release();
     }
 
-	delete[] w_targetFile;
-	delete[] w_targetArgs;
-	delete[] w_description;
-	delete[] w_currentDir;
-	delete[] w_iconFile;
-	delete[] w_linkFile;
+    delete[] w_targetFile;
+    delete[] w_targetArgs;
+    delete[] w_description;
+    delete[] w_currentDir;
+    delete[] w_iconFile;
+    delete[] w_linkFile;
 
     CoUninitialize();
 
     return result;
-}
-
-QString WindowsShortcutImpl::findAllUserStartMenuProgramsFolder()
-{
-    return findWindowsPath(CSIDL_COMMON_PROGRAMS);
-}
-
-QString WindowsShortcutImpl::findAllUserStartupFolder()
-{
-    return findWindowsPath(CSIDL_COMMON_STARTUP);
 }
 
 QString WindowsShortcutImpl::findUserStartMenuProgramFolder()
@@ -317,4 +265,3 @@ QString WindowsShortcutImpl::findWindowsPath(int hToken)
     }
     return "";
 }
-

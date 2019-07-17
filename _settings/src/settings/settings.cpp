@@ -25,7 +25,6 @@ const QString Settings::ProxyPassword("proxy_password");
 const QString Settings::Locale("locale");
 
 const QString Settings::ShortcutName("shortcut_name");
-const QString Settings::ShortcutForAllUsers("shortcut_for_all_users");
 
 const QString Settings::DataLocation("data_location");
 
@@ -61,7 +60,6 @@ Settings::Settings() :
     m_grayTextColor("#9ea0a5"),
     m_disabledColor("#656976"),
     m_windowBorderWidth("0"),
-    m_shortcutForAllUsers(false),
     m_dataLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
@@ -152,7 +150,6 @@ bool Settings::writeSettings()
 
     m_settings->beginGroup(GroupUninst);
     putSetting(ShortcutName, m_shortcutName);
-    putSetting(ShortcutForAllUsers, m_shortcutForAllUsers);
     putSetting(RunAtStart, m_runAtStart);
     m_settings->endGroup();
 
@@ -198,7 +195,6 @@ void Settings::readSettings()
 
     m_settings->beginGroup(GroupUninst);
     m_shortcutName = getSetting(ShortcutName, m_shortcutName).toString();
-    m_shortcutForAllUsers = getSetting(ShortcutForAllUsers, m_shortcutForAllUsers).toBool();
     m_runAtStart = getSetting(RunAtStart, m_runAtStart).toBool();
     m_settings->endGroup();
 
@@ -238,7 +234,6 @@ QString Settings::paramListString()
     s += "proxy_password (encrypted) = " + m_proxyPassword + "\n";
     s += "locale = " + m_locale + "\n";
     s += "shortcut_name = " + m_shortcutName + "\n";
-    s += "shortcut_for_all_users = " + QString::number(m_shortcutForAllUsers) + "\n";
     s += "data_location = " + m_dataLocation + "\n";
     s += "deployment_url = " + m_deploymentUrl + "\n";
     s += "run_at_start = " + QString::number(m_runAtStart) + "\n";
@@ -384,16 +379,6 @@ QString Settings::getDataLocation() const
 void Settings::setDataLocation(const QString &dataLocation)
 {
     m_dataLocation = dataLocation;
-}
-
-bool Settings::isShortcutForAllUsers() const
-{
-    return m_shortcutForAllUsers;
-}
-
-void Settings::setShortcutForAllUsers(bool shortcutForAllUsers)
-{
-    m_shortcutForAllUsers = shortcutForAllUsers;
 }
 
 QString Settings::getShortcutName() const
