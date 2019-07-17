@@ -28,16 +28,16 @@
     <name>EndInstallationUI</name>
     <message>
         <location filename="../../../ui/endinstallation.ui" line="91"/>
-        <source>The installation is now complete</source>
-        <translation>L&apos;installation est maintenant terminée</translation>
+        <source>The installation is almost complete. The application will be updated, at first launch.</source>
+        <translation>L&apos;installation est presque terminée. L&apos;application va se mettre à jour, au premier lancement.</translation>
     </message>
     <message>
-        <location filename="../../../ui/endinstallation.ui" line="163"/>
+        <location filename="../../../ui/endinstallation.ui" line="172"/>
         <source>Finish</source>
         <translation>Terminer</translation>
     </message>
     <message>
-        <location filename="../../../ui/endinstallation.ui" line="109"/>
+        <location filename="../../../ui/endinstallation.ui" line="115"/>
         <source>An error occurred during installation</source>
         <translation>Une erreur s&apos;est produite lors de l&apos;installation</translation>
     </message>
@@ -69,32 +69,32 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="296"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="292"/>
         <source>Unable to create directory tree</source>
         <translation>Impossible de créer l&apos;arborescence de répertoires</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="302"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="298"/>
         <source>Unable to create updater version folder</source>
         <translation>Impossible de créer le dossier de version du gestionnaire de mise à jour</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="308"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="304"/>
         <source>Unable to write settings file</source>
         <translation>Impossible d&apos;écrire le fichier de paramètres</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="314"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="310"/>
         <source>Unable to extract resources</source>
         <translation>Impossible d&apos;extraire les ressources</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="320"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="316"/>
         <source>Unable to create shortcuts</source>
         <translation>Impossible de créer les raccourcis</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="326"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="322"/>
         <source>Unable to prepare applications</source>
         <translation>Impossible de préparer les applications</translation>
     </message>
@@ -102,17 +102,17 @@
 <context>
     <name>InstallWizard</name>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="15"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="19"/>
         <source>Next &gt;</source>
         <translation>Suivant &gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="16"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="20"/>
         <source>&lt; Back</source>
         <translation>&lt; Retour</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="17"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="21"/>
         <source>Install</source>
         <translation>Installer</translation>
     </message>

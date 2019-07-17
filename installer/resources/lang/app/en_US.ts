@@ -28,16 +28,16 @@
     <name>EndInstallationUI</name>
     <message>
         <location filename="../../../ui/endinstallation.ui" line="91"/>
-        <source>The installation is now complete</source>
-        <translation>The installation is now complete</translation>
+        <source>The installation is almost complete. The application will be updated, at first launch.</source>
+        <translation>The installation is almost complete. The application will be updated, at first launch.</translation>
     </message>
     <message>
-        <location filename="../../../ui/endinstallation.ui" line="163"/>
+        <location filename="../../../ui/endinstallation.ui" line="172"/>
         <source>Finish</source>
         <translation>Finish</translation>
     </message>
     <message>
-        <location filename="../../../ui/endinstallation.ui" line="109"/>
+        <location filename="../../../ui/endinstallation.ui" line="115"/>
         <source>An error occurred during installation</source>
         <translation>An error occurred during installation</translation>
     </message>
@@ -69,32 +69,32 @@
 <context>
     <name>InstallManager</name>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="296"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="292"/>
         <source>Unable to create directory tree</source>
         <translation>Unable to create directory tree</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="302"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="298"/>
         <source>Unable to create updater version folder</source>
         <translation>Unable to create updater version folder</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="308"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="304"/>
         <source>Unable to write settings file</source>
         <translation>Unable to write settings file</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="314"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="310"/>
         <source>Unable to extract resources</source>
         <translation>Unable to extract resources</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="320"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="316"/>
         <source>Unable to create shortcuts</source>
         <translation>Unable to create shortcuts</translation>
     </message>
     <message>
-        <location filename="../../../src/manager/installmanager.cpp" line="326"/>
+        <location filename="../../../src/manager/installmanager.cpp" line="322"/>
         <source>Unable to prepare applications</source>
         <translation>Unable to prepare applications</translation>
     </message>
@@ -102,17 +102,17 @@
 <context>
     <name>InstallWizard</name>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="15"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="19"/>
         <source>Next &gt;</source>
         <translation>Next &gt;</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="16"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="20"/>
         <source>&lt; Back</source>
         <translation>&lt; Back</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/wizard/installwizard.cpp" line="17"/>
+        <location filename="../../../src/gui/wizard/installwizard.cpp" line="21"/>
         <source>Install</source>
         <translation>Install</translation>
     </message>

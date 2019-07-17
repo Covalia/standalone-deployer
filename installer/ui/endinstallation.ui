@@ -88,10 +88,16 @@
              </font>
             </property>
             <property name="text">
-             <string>The installation is now complete</string>
+             <string>The installation is almost complete. The application will be updated, at first launch.</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+            <property name="margin">
+             <number>10</number>
             </property>
            </widget>
           </item>
@@ -110,6 +116,9 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="margin">
+             <number>10</number>
             </property>
            </widget>
           </item>
