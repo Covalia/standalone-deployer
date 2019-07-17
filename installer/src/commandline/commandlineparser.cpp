@@ -31,7 +31,9 @@ CommandLineParser::CommandLineParser() :
     parser.addOption(proxyPasswordOption);
     parser.addOption(localeOption);
     parser.addOption(noRunAppOption);
+#ifdef Q_OS_WIN
     parser.addOption(runAtStartOption);
+#endif
 
     L_INFO("Parsing command line arguments");
 

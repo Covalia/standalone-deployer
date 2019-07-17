@@ -5,7 +5,11 @@
 #include "gui/wizard/pages/license.h"
 #include "gui/wizard/pages/type.h"
 #include "gui/wizard/pages/folders.h"
+
+#ifdef Q_OS_WIN
 #include "gui/wizard/pages/shortcuts.h"
+#endif
+
 #include "gui/wizard/pages/proxy.h"
 #include "gui/wizard/pages/launch.h"
 #include "gui/wizard/pages/thirdparty.h"
@@ -20,7 +24,10 @@ InstallWizard::InstallWizard(const QString &_appName, bool _changeDataLocationAl
     setPage(Page_License, new LicensePage);
     setPage(Page_Type, new TypePage);
     setPage(Page_Folders, new FoldersPage(_changeDataLocationAllowed));
-    setPage(Page_Shortcuts, new ShortcutsPage);
+
+#ifdef Q_OS_WIN
+        setPage(Page_Shortcuts, new ShortcutsPage);
+#endif
     setPage(Page_Proxy, new ProxyPage);
     setPage(Page_Launch, new LaunchPage);
     setPage(Page_ThirdParty, new ThirdPartyPage);
@@ -187,7 +194,9 @@ void InstallWizard::retranslateUi()
     static_cast<ThirdPartyPage *>(page(Page_ThirdParty))->retranslateUi();
     static_cast<TypePage *>(page(Page_Type))->retranslateUi();
     static_cast<FoldersPage *>(page(Page_Folders))->retranslateUi();
-    static_cast<ShortcutsPage *>(page(Page_Shortcuts))->retranslateUi();
+#ifdef Q_OS_WIN
+        static_cast<ShortcutsPage *>(page(Page_Shortcuts))->retranslateUi();
+#endif
     static_cast<ProxyPage *>(page(Page_Proxy))->retranslateUi();
     static_cast<LaunchPage *>(page(Page_Launch))->retranslateUi();
 }

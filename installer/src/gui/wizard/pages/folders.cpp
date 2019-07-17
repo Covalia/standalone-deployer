@@ -74,7 +74,11 @@ bool FoldersPage::isComplete() const
 
 int FoldersPage::nextId() const
 {
-    return InstallWizard::Page_Shortcuts;
+#ifdef Q_OS_WIN
+        return InstallWizard::Page_Shortcuts;
+#else
+        return InstallWizard::Page_Proxy;
+#endif
 }
 
 void FoldersPage::updateVisibleFields()
