@@ -12,7 +12,6 @@
 #include "updater/appupdater.h"
 #include "settings/settings.h"
 #include "updater/config.h"
-#include "gui/style/stylemanager.h"
 #include "utils.h"
 
 /*!
@@ -43,8 +42,6 @@ MainWindow::MainWindow(QWidget * _parent) :
     setWindowFlags(Qt::FramelessWindowHint);
 
     m_ui->setupUi(this);
-
-    StyleManager::transformStyle(this);
 
     AppPath appPath = Utils::getAppPath();
     m_ui->closeButton->setIcon(QIcon(":/images/close.png"));
@@ -202,19 +199,6 @@ void MainWindow::loadSlideShowImagesFromResources()
         QPushButton * button = new QPushButton("", this);
         button->setMaximumSize(QSize(10, 10));
         button->setCheckable(true);
-
-        QString bSlideStyle = "QPushButton {"
-            "border-radius:2px;"
-            "background:@gray-text-color;"
-            "margin:3px;"
-            "}"
-            "QPushButton:hover {"
-            "background:@default-text-color;"
-            "}"
-            "QPushButton:checked {"
-            "background:@default-text-color;"
-            "}";
-        button->setStyleSheet(StyleManager::transformStyle(bSlideStyle));
         button->setCursor(Qt::PointingHandCursor);
         connect(button, SIGNAL(clicked(bool)), this, SLOT(buttonSlideEvent()));
         m_ui->horizontalLayoutButtonSlider->addWidget(button);

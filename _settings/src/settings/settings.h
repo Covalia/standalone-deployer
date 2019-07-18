@@ -22,7 +22,6 @@ class Settings
         static const QString GroupProxy;
         static const QString GroupUninst;
         static const QString GroupConfig;
-        static const QString GroupTheme;
 
         static const QString AppName;
         static const QString UpdaterVersion;
@@ -43,15 +42,6 @@ class Settings
         static const QString DeploymentUrl;
 
         static const QString RunAtStart;
-
-        static const QString InsetColor;
-        static const QString PanelBackgroundColor;
-        static const QString ButtonHoverBackgroundColor;
-        static const QString ButtonBackgroundColor;
-        static const QString ColorTextOnBackground;
-        static const QString GrayTextColor;
-        static const QString DisabledColor;
-        static const QString WindowBorderWidth;
 
         static Settings * getInstance();
         static void kill();
@@ -104,30 +94,6 @@ class Settings
 
         QString getJavaVersion() const;
         void setJavaVersion(const QString &_javaVersion);
-
-        QString getInsetColor() const;
-        void setInsetColor(const QString &insetColor);
-
-        QString getPanelBackgroundColor() const;
-        void setPanelBackgroundColor(const QString &colorPanelBackground);
-
-        QString getButtonHoverBackgroundColor() const;
-        void setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor);
-
-        QString getButtonBackgroundColor() const;
-        void setButtonBackgroundColor(const QString &buttonBackgroundColor);
-
-        QString getDefaultTextColor() const;
-        void setDefaultTextColor(const QString &defaultTextColor);
-
-        QString getGrayTextColor() const;
-        void setGrayTextColor(const QString &grayTextColor);
-
-        QString getDisabledColor() const;
-        void setDisabledColor(const QString &disabledColor);
-
-        QString getWindowBorderWidth() const;
-        void setWindowBorderWidth(const QString &windowBorderWidth);
 
     private:
 
@@ -195,15 +161,6 @@ class Settings
 
         QString m_shortcutName;
         bool m_runAtStart;
-
-        QString m_insetColor;
-        QString m_panelBackgroundColor;
-        QString m_buttonHoverBackgroundColor;
-        QString m_buttonBackgroundColor;
-        QString m_defaultTextColor;
-        QString m_grayTextColor;
-        QString m_disabledColor;
-        QString m_windowBorderWidth;
 
         QString m_dataLocation;
 

@@ -1,8 +1,6 @@
 #include "gui/askpopupui.h"
 #include "ui_askpopup.h"
 
-#include "gui/style/stylemanager.h"
-
 #include <QDesktopWidget>
 #include <QPoint>
 #include <QRect>
@@ -18,8 +16,6 @@ AskPopupUI::AskPopupUI(QWidget * _parent, QString _title, QString _description) 
     m_ui->setupUi(this);
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
-    StyleManager::transformStyle(this);
 
     if (!_title.isEmpty()) {
         m_ui->labelTitle->setText(_title);

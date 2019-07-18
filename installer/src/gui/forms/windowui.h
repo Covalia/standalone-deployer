@@ -28,6 +28,8 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
         void setLocale(const QString &_locale);
         QString getLocale() const;
 
+        virtual void setCentralWidget(QWidget * _widget);
+
         // UI strings
         const QString m_closeActionText;
         const QString m_titleLabelText;
@@ -44,6 +46,7 @@ class WindowUI : public QMainWindow, public AbstractTranslatedUi
 
         bool m_alreadyClosedOnMacOs = false;
         virtual void closeEvent(QCloseEvent *);
+        static QWidget * encloseByWidget(QWidget * _innerWidget);
 
     signals:
         void changeLanguageSignal(const QString &_language);

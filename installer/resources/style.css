@@ -5,6 +5,7 @@ QCheckBox, QRadioButton {
 QCheckBox, QRadioButton {
 	margin-top:10px;
 }
+
 QCheckBox::indicator, QRadioButton::indicator {
 	margin-right:5px;
 }
@@ -67,15 +68,29 @@ QComboBox::drop-down {
 
 QToolBar {
 	padding:0;
+	margin-top:1px;
+	margin-left:1px;
+	margin-right:1px;
 }
 
-QToolBar * {
-	background-color:#FFFFFF;
+QToolBar QWidget#spacer, QToolBar QLabel#iconLabel, QToolBar QLabel#titleLabel, QComboBox {
+	margin-top:1px;
+}
+
+QToolBar QLabel#iconLabel {
+	margin-left:1px;
 }
 
 QToolBar QToolButton {
 	border:0;
+	margin-top:1px;
+	margin-right:1px;
 }
+
+QToolBar QToolButton, QToolBar QLabel, QToolBar QWidget#spacer {
+	background-color:#ffffff;
+}
+
 QToolBar QToolButton:hover {
 	background-color:#EEEEEE;
 }
@@ -91,16 +106,12 @@ QLabel#titleLabel {
 	font-weight:normal;
 }
 
-/* wizard style */
-QWizard * {
-	background-color:#FFFFFF;
-}
-
 /* open folder and wizard buttons */
 QWizard QPushButton:enabled {
 	background-color:#07a28e;
 	color:#FFFFFF;
 }
+
 QWizard QPushButton {
 	border:0;
 }
@@ -109,9 +120,35 @@ QWizard QPushButton:hover {
 	background-color:#12bda7;
 }
 
-/* */
 QMainWindow, #InstallationUI * {
 	background-color:#FFFFFF;
+}
+
+QMainWindow {
+	border:1px solid #aaaaaa;
+}
+
+QMainWindow QLabel#titleIconLabel {
+	padding:5px;
+}
+
+QMainWindow QPushButton#closeButton {
+	border:none;
+	margin:1px;
+}
+
+QMainWindow QPushButton#closeButton:hover {
+	background-color:#eeeeee;
+}
+
+QProgressBar#totalProgressBar {
+	height:10px;
+	border:none;
+	margin:1px;
+}
+
+QProgressBar#totalProgressBar::chunk {
+	background-color:#7dd1ee;
 }
 
 .EndInstallationUI QPushButton#buttonFinish,
@@ -146,7 +183,7 @@ QWizard QPushButton {
 }
 
 .AskPopupUI, QMessageBox {
-	border:1px solid gray;
+	border:1px solid #cccccc;
 	background-color:#FFFFFF;
 }
 
@@ -197,5 +234,56 @@ QMessageBox QLabel {
 
 .InstallationUI QLabel#labelText {
 	color:#555555;
+}
+
+.AuthenticationDialogUI {
+	border:1px solid #cccccc;
+	background-color:#ffffff;
+}
+
+.AuthenticationDialogUI QLabel#titleLabel {
+	color:#555555;
+}
+
+.AuthenticationDialogUI QDialogButtonBox QPushButton {
+	border-radius:3px;
+	border:1px solid gray;
+	padding:5px;
+	color:#4f5661;
+}
+
+.AuthenticationDialogUI QDialogButtonBox QPushButton:hover {
+	color:#ffffff;
+	background-color:#12aa52;
+}
+
+QMainWindow QLabel#currentFileLabel,
+QMainWindow QLabel#remainingTimeLabel,
+QMainWindow QLabel#speedLabel {
+	color:#555555;
+	padding:3px;
+	margin:2px 10px;
+	font-size:11px;
+}
+
+QMainWindow QLabel#serverLabel {
+	color:#555555;
+	padding:3px;
+	margin:5px 10px;
+	font-size:12px;
+}
+
+QWidget#widgetChangeImageButton QPushButton {
+	border-radius:2px;
+	background-color:#555555;
+	margin:3px;
+}
+
+QWidget#widgetChangeImageButton QPushButton:hover {
+	background-color:#222222;
+}
+
+QWidget#widgetChangeImageButton QPushButton:checked {
+	background-color:#222222;
 }
 

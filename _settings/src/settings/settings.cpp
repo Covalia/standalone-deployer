@@ -10,7 +10,6 @@
 const QString Settings::GroupProxy("proxy");
 const QString Settings::GroupUninst("uninst");
 const QString Settings::GroupConfig("config");
-const QString Settings::GroupTheme("theme");
 
 const QString Settings::AppName("app_name");
 const QString Settings::UpdaterVersion("updater_version");
@@ -32,15 +31,6 @@ const QString Settings::DeploymentUrl("deployment_url");
 
 const QString Settings::RunAtStart("run_at_start");
 
-const QString Settings::InsetColor("inset_color");
-const QString Settings::PanelBackgroundColor("panel_background_color");
-const QString Settings::ButtonHoverBackgroundColor("button_hover_background_color");
-const QString Settings::ButtonBackgroundColor("button_background_color");
-const QString Settings::ColorTextOnBackground("default_text_color");
-const QString Settings::GrayTextColor("gray_text_color");
-const QString Settings::DisabledColor("disabled_color");
-const QString Settings::WindowBorderWidth("window_border_width");
-
 Settings * Settings::sm_instance = nullptr;
 QMutex Settings::sm_instanceMutex;
 QMutex Settings::sm_settingsMutex;
@@ -52,14 +42,6 @@ Settings::Settings() :
     m_locale(""),
     m_shortcutName("Application"),
     m_runAtStart(false),
-    m_insetColor("#364058"),
-    m_panelBackgroundColor("#2d364c"),
-    m_buttonHoverBackgroundColor("#2a7d7d"),
-    m_buttonBackgroundColor("#339999"),
-    m_defaultTextColor("#eff0f2"),
-    m_grayTextColor("#9ea0a5"),
-    m_disabledColor("#656976"),
-    m_windowBorderWidth("0"),
     m_dataLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
@@ -162,17 +144,6 @@ bool Settings::writeSettings()
     putSetting(DeploymentUrl, m_deploymentUrl);
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupTheme);
-    putSetting(InsetColor, m_insetColor);
-    putSetting(PanelBackgroundColor, m_panelBackgroundColor);
-    putSetting(ButtonHoverBackgroundColor, m_buttonHoverBackgroundColor);
-    putSetting(ButtonBackgroundColor, m_buttonBackgroundColor);
-    putSetting(ColorTextOnBackground, m_defaultTextColor);
-    putSetting(GrayTextColor, m_grayTextColor);
-    putSetting(DisabledColor, m_disabledColor);
-    putSetting(WindowBorderWidth, m_windowBorderWidth);
-    m_settings->endGroup();
-
     L_INFO("End to write all settings");
 
     // write immediately in .ini file
@@ -207,17 +178,6 @@ void Settings::readSettings()
     m_deploymentUrl = getSetting(DeploymentUrl, "").toString();
     m_settings->endGroup();
 
-    m_settings->beginGroup(GroupTheme);
-    m_insetColor = getSetting(InsetColor, m_dataLocation).toString();
-    m_panelBackgroundColor = getSetting(PanelBackgroundColor, m_dataLocation).toString();
-    m_buttonHoverBackgroundColor = getSetting(ButtonHoverBackgroundColor, m_dataLocation).toString();
-    m_buttonBackgroundColor = getSetting(ButtonBackgroundColor, m_dataLocation).toString();
-    m_defaultTextColor = getSetting(ColorTextOnBackground, m_dataLocation).toString();
-    m_grayTextColor = getSetting(GrayTextColor, m_dataLocation).toString();
-    m_disabledColor = getSetting(DisabledColor, m_dataLocation).toString();
-    m_windowBorderWidth = getSetting(WindowBorderWidth, m_dataLocation).toString();
-    m_settings->endGroup();
-
     L_INFO("End to read all settings");
 }
 
@@ -239,86 +199,6 @@ QString Settings::paramListString()
     s += "run_at_start = " + QString::number(m_runAtStart) + "\n";
 
     return s;
-}
-
-QString Settings::getWindowBorderWidth() const
-{
-    return m_windowBorderWidth;
-}
-
-void Settings::setWindowBorderWidth(const QString &windowBorderWidth)
-{
-    m_windowBorderWidth = windowBorderWidth;
-}
-
-QString Settings::getDisabledColor() const
-{
-    return m_disabledColor;
-}
-
-void Settings::setDisabledColor(const QString &disabledColor)
-{
-    m_disabledColor = disabledColor;
-}
-
-QString Settings::getGrayTextColor() const
-{
-    return m_grayTextColor;
-}
-
-void Settings::setGrayTextColor(const QString &grayTextColor)
-{
-    m_grayTextColor = grayTextColor;
-}
-
-QString Settings::getDefaultTextColor() const
-{
-    return m_defaultTextColor;
-}
-
-void Settings::setDefaultTextColor(const QString &defaultTextColor)
-{
-    m_defaultTextColor = defaultTextColor;
-}
-
-QString Settings::getButtonBackgroundColor() const
-{
-    return m_buttonBackgroundColor;
-}
-
-void Settings::setButtonBackgroundColor(const QString &buttonBackgroundColor)
-{
-    m_buttonBackgroundColor = buttonBackgroundColor;
-}
-
-QString Settings::getButtonHoverBackgroundColor() const
-{
-    return m_buttonHoverBackgroundColor;
-}
-
-void Settings::setButtonHoverBackgroundColor(const QString &buttonHoverBackgroundColor)
-{
-    m_buttonHoverBackgroundColor = buttonHoverBackgroundColor;
-}
-
-QString Settings::getPanelBackgroundColor() const
-{
-    return m_panelBackgroundColor;
-}
-
-void Settings::setPanelBackgroundColor(const QString &panelBackgroundColor)
-{
-    m_panelBackgroundColor = panelBackgroundColor;
-}
-
-QString Settings::getInsetColor() const
-{
-    return m_insetColor;
-}
-
-void Settings::setInsetColor(const QString &insetColor)
-{
-    m_insetColor = insetColor;
 }
 
 QString Settings::getUpdaterVersion() const

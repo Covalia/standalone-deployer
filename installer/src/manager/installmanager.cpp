@@ -64,15 +64,6 @@ InstallManager::InstallManager() : QThread(),
     m_settings->setAppName(m_projectSettings->getAppName());
     m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
     m_settings->setShortcutName(m_projectSettings->getShortcutName());
-
-    m_settings->setInsetColor(m_projectSettings->getInsetColor());
-    m_settings->setPanelBackgroundColor(m_projectSettings->getPanelBackgroundColor());
-    m_settings->setButtonHoverBackgroundColor(m_projectSettings->getButtonHoverBackgroundColor());
-    m_settings->setButtonBackgroundColor(m_projectSettings->getButtonBackgroundColor());
-    m_settings->setDefaultTextColor(m_projectSettings->getDefaultTextColor());
-    m_settings->setGrayTextColor(m_projectSettings->getGrayTextColor());
-    m_settings->setDisabledColor(m_projectSettings->getDisabledColor());
-    m_settings->setWindowBorderWidth(m_projectSettings->getWindowBorderWidth());
 }
 
 InstallManager::~InstallManager()

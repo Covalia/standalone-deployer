@@ -10,17 +10,11 @@
     <x>0</x>
     <y>0</y>
     <width>369</width>
-    <height>191</height>
+    <height>193</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string notr="true"/>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QDialog{
-	border :  1px solid gray;
-	background : white
-}</string>
   </property>
   <property name="locale">
    <locale language="French" country="France"/>
@@ -131,6 +125,12 @@
                </property>
                <item alignment="Qt::AlignHCenter">
                 <widget class="QPushButton" name="buttonYes">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>50</width>
@@ -142,28 +142,36 @@
                    <width>50</width>
                    <height>30</height>
                   </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton{
-	border-radius: 3px;
-	background : #12aa52;
-	padding : 5px;
-	color : white;
-}
-
-
-QPushButton:hover {
-	background : #0c7438;
-}
-</string>
                  </property>
                  <property name="text">
                   <string>Yes</string>
                  </property>
                 </widget>
                </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Fixed</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
                <item alignment="Qt::AlignHCenter">
                 <widget class="QPushButton" name="buttonNo">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>50</width>
@@ -175,22 +183,6 @@ QPushButton:hover {
                    <width>50</width>
                    <height>30</height>
                   </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton{
-	border-radius: 3px;
-	border: 1px solid gray;
-	background : transparent;
-	padding : 5px;
-	color : #4f5661;
-}
-
-
-QPushButton:hover {
-	color : white;
-	background : gray;
-}
-</string>
                  </property>
                  <property name="text">
                   <string>No</string>

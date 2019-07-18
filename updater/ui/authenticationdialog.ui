@@ -13,26 +13,17 @@
     <height>187</height>
    </rect>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QDialog{
-	border :  1px solid gray;
-	background : white
-}</string>
-  </property>
   <property name="locale">
    <locale language="French" country="France"/>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="titlelabel">
+    <widget class="QLabel" name="titleLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color : @gray-text-color;</string>
      </property>
      <property name="text">
       <string>Credentials are required by the remote host</string>
@@ -71,20 +62,6 @@
    </item>
    <item row="5" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-border-radius:3px;
-border:1px solid gray;
-color:white;
-padding:5px 5px;
-color:#4f5661;
-}
-
-QPushButton:hover {
-color:white;
-background:#12aa52;
-}</string>
-     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

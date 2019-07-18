@@ -11,37 +11,16 @@ class ResourceSettings
         static const QString DeploymentUrl;
         static const QString AppName;
         static const QString DefaultLocale;
-
         static const QString ShortcutName;
-
         static const QString RunAtStart;
-
         static const QString DefaultInstallationPath;
-
         static const QString ChangeDataLocationAllowed;
-
-        static const QString InsetColor;
-        static const QString PanelBackgroundColor;
-        static const QString ButtonHoverBackgroundColor;
-        static const QString ButtonBackgroundColor;
-        static const QString DefaultTextColor;
-        static const QString GrayTextColor;
-        static const QString DisabledColor;
-        static const QString WindowBorderWidth;
 
         ResourceSettings(const QString &_appPath);
         virtual ~ResourceSettings();
 
         void readSettings();
 
-        QString getWindowBorderWidth() const;
-        QString getDisabledColor() const;
-        QString getGrayTextColor() const;
-        QString getDefaultTextColor() const;
-        QString getButtonBackgroundColor() const;
-        QString getButtonHoverBackgroundColor() const;
-        QString getPanelBackgroundColor() const;
-        QString getInsetColor() const;
         bool isChangeDataLocationAllowed() const;
         QString getDefaultInstallationPath() const;
         QString getShortcutName() const;
@@ -66,15 +45,6 @@ class ResourceSettings
         QString m_defaultLocale;
         QString m_shortcutName;
         bool m_runAtStart;
-
-        QString m_insetColor;
-        QString m_panelBackgroundColor;
-        QString m_buttonHoverBackgroundColor;
-        QString m_buttonBackgroundColor;
-        QString m_defaultTextColor;
-        QString m_grayTextColor;
-        QString m_disabledColor;
-        QString m_windowBorderWidth;
 
         QString m_defaultInstallationPath;
         bool m_changeDataLocationAllowed;

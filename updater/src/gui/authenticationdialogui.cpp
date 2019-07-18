@@ -1,8 +1,6 @@
 #include "gui/authenticationdialogui.h"
 #include "ui_authenticationdialog.h"
 
-#include "gui/style/stylemanager.h"
-
 #include <QPoint>
 #include <QRect>
 #ifdef Q_OS_WIN
@@ -17,8 +15,6 @@ AuthenticationDialogUI::AuthenticationDialogUI(QWidget * _parent, const QString 
     m_ui->setupUi(this);
 
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
-    StyleManager::transformStyle(this);
 
     if (!_siteDescription.isEmpty()) {
         m_ui->siteDescription->setText(_siteDescription);

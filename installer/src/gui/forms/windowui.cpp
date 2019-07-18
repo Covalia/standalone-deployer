@@ -30,7 +30,7 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
 
     if (_centralWidget) {
         _centralWidget->setVisible(true);
-        setCentralWidget(_centralWidget);
+        setCentralWidget(encloseByWidget(_centralWidget));
     }
 
     m_toolbar = new QToolBar(this);
@@ -78,6 +78,7 @@ WindowUI::WindowUI(QWidget * _centralWidget, const QString & _appName, QWidget *
     connect(m_closeAction, SIGNAL(triggered(bool)), qApp, SLOT(closeAllWindows()));
 
     QWidget * spacer = new QWidget(this);
+    spacer->setObjectName("spacer");
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_toolbar->addWidget(m_iconLabel);
@@ -147,4 +148,24 @@ void WindowUI::setLocale(const QString &_locale)
 QString WindowUI::getLocale() const
 {
     return m_comboBoxLanguage->currentData().toString();
+}
+
+void WindowUI::setCentralWidget(QWidget * _widget)
+{
+    QMainWindow::setCentralWidget(encloseByWidget(_widget));
+}
+
+QWidget * WindowUI::encloseByWidget(QWidget * _innerWidget)
+{
+    QWidget * outerWidget = new QWidget;
+
+    outerWidget->setObjectName("outerWidget");
+
+    QGridLayout * layout = new QGridLayout(outerWidget);
+    layout->setContentsMargins(1, 1, 1, 1);
+    outerWidget->setLayout(layout);
+
+    layout->addWidget(_innerWidget);
+
+    return outerWidget;
 }
