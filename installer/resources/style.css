@@ -275,14 +275,11 @@ QMainWindow QLabel#serverLabel {
 
 QWidget#widgetChangeImageButton QPushButton {
 	border-radius:2px;
-	background-color:#555555;
+	background-color:#777777;
 	margin:3px;
 }
 
-QWidget#widgetChangeImageButton QPushButton:hover {
-	background-color:#222222;
-}
-
+QWidget#widgetChangeImageButton QPushButton:hover,
 QWidget#widgetChangeImageButton QPushButton:checked {
 	background-color:#222222;
 }

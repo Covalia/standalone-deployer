@@ -197,7 +197,8 @@ void MainWindow::loadSlideShowImagesFromResources()
     m_buttonsList.clear();
     for (int i = 0; i < m_imagesList.size(); i++) {
         QPushButton * button = new QPushButton("", this);
-        button->setMaximumSize(QSize(10, 10));
+        button->setMinimumSize(10, 10);
+        button->setMaximumSize(10, 10);
         button->setCheckable(true);
         button->setCursor(Qt::PointingHandCursor);
         connect(button, SIGNAL(clicked(bool)), this, SLOT(buttonSlideEvent()));
