@@ -34,4 +34,4 @@ const QString IOConfig::ConfigurationFile("standalone-deployer.ini");
 const QString IOConfig::LocaleFrFr("fr_FR");
 const QString IOConfig::LocaleEnUs("en_US");
 
-const QString IOConfig::SourceCodeUrl("http://www.github.com/mondepot/standalonedeployer");
+const QString IOConfig::SourceCodeUrl("https://github.com/covalia/standalone-deployer");
