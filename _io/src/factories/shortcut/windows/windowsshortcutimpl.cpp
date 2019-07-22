@@ -72,7 +72,7 @@ bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _star
     }
 
     const QString runApplicationPathShortcut =  _applicationName + ".lnk";
-    const QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
+    const QString settingsApplicationPathShortcut = QObject::tr("Configuration %1").arg(_applicationName) + ".lnk";
 
     QSharedPointer<QFile> loader = _appPath.getLoaderFile();
     const QString description = _applicationName;
