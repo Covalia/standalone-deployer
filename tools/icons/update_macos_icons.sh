@@ -38,7 +38,6 @@ function pack_icon {
     rm -rf "${SCRIPT_PATH}/${PROJECT}".iconset
 }
 
-# TODO put icon license into the about page
 # license: Freepik on flaticon.com
 # updater
 pack_icon 'updater'
