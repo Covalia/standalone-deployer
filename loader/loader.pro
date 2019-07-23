@@ -18,12 +18,20 @@ CONFIG(release, debug|release) {
 TARGET = loader
 TEMPLATE = app
 
-# icone macos
+# macos icon
 defined(LOADER_MACOS_ICON, var) {
     ICON = "$$LOADER_MACOS_ICON"
 }
 else {
     ICON = "$$TARGET".icns
+}
+
+# windows icon
+defined(LOADER_WINDOWS_ICON, var) {
+	RC_ICONS = "$$LOADER_WINDOWS_ICON"
+}
+else {
+	RC_ICONS = "$$TARGET".ico
 }
 
 DESTDIR = bin
@@ -44,7 +52,7 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-# attention, l'ordre est important.
+# warning, order is important.
 INCLUDEPATH += ../_io/src
 INCLUDEPATH += ../_settings/src
 INCLUDEPATH += ../_logger/src
@@ -56,7 +64,7 @@ macx {
 	LIBS += -L./libs/libarchive/macos -larchive
 }
 win32 {
-	# attention, l'ordre est important.
+	# warning, order is important.
 	LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
@@ -66,8 +74,6 @@ SOURCES += src/utils.cpp
 
 HEADERS += src/loadermanager.h
 HEADERS += src/utils.h
-
-# RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg
 

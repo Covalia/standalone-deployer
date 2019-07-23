@@ -21,12 +21,20 @@ CONFIG(release, debug|release) {
 TARGET = updater
 TEMPLATE = app
 
-# icone macos
+# macos icon
 defined(UPDATER_MACOS_ICON, var) {
     ICON = "$$UPDATER_MACOS_ICON"
 }
 else {
     ICON = "$$TARGET".icns
+}
+
+# windows icon
+defined(UPDATER_WINDOWS_ICON, var) {
+	RC_ICONS = "$$UPDATER_WINDOWS_ICON"
+}
+else {
+	RC_ICONS = "$$TARGET".ico
 }
 
 DESTDIR = bin
@@ -47,7 +55,7 @@ INCLUDEPATH += src
 DEPENDPATH += .
 DEPENDPATH += src
 
-# attention, l'ordre est important.
+# warning, order is important.
 INCLUDEPATH += ../_io/src
 INCLUDEPATH += ../_settings/src
 INCLUDEPATH += ../_logger/src
@@ -59,7 +67,7 @@ macx {
 	LIBS += -L./libs/libarchive/macos -larchive
 }
 win32 {
-	# attention, l'ordre est important.
+	# warning, order is important.
 	LIBS += -L./libs/libarchive/win32 -larchive -lbz2 -lxml2 -lz -llzma -llz4 -lnettle -llzo
 }
 
