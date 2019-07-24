@@ -485,20 +485,42 @@ bool AppPathImpl::startPostInstallTasks(const QString &_javaVersion, const QStri
     process.setWorkingDirectory(installDir.absolutePath());
     process.start(java_command, arguments);
     process.setReadChannel(QProcess::StandardOutput);
-    bool result = process.waitForFinished();
+
+    const bool finished = process.waitForFinished();
+    const QProcess::ExitStatus status = process.exitStatus();
+    const int exitCode = process.exitCode();
 
     while (process.canReadLine()) {
         QString line = QString::fromLocal8Bit(process.readLine());
         L_INFO(line);
     }
 
-    if (result) {
-        L_INFO("Post Install Process has finished...");
-    } else {
-        L_ERROR(QString("Error starting Post Install Process: %1").arg(process.errorString()));
-    }
+    if (finished) {
+        L_INFO("Post Install Process has finished... Checking status.");
+        // check status: exited normally or crashed.
 
-    return result;
+        if (status == QProcess::NormalExit) {
+            L_INFO("Post Install Process exited normally. Checking exit code.");
+
+            // check exit
+            if (exitCode == 0) {
+                // 0 is ok
+                L_INFO("Exit code is: O, ok.");
+                return true;
+            } else {
+                // everything else is an error
+                L_FATAL(QString("Exit code is: %1").arg(exitCode));
+                return false;
+            }
+        } else {
+            L_FATAL("Post Install Process has crashed.");
+            return false;
+        }
+    } else {
+        // Timeout
+        L_ERROR(QString("Error starting Post Install Process: %1").arg(process.errorString()));
+        return false;
+    }
 }
 
 QString AppPathImpl::getDataPathFromInstallPath(const QString &_installPath)
