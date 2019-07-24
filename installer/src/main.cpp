@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
 
     new Logger(Utils::getInstallerlLogPath());
 
-    L_INFO(QString("Installer started: %1").arg(Utils::getAppPath().getInstallerVersion()));
+    L_INFO(QString("Installer started: %1").arg(STANDALONE_DEPLOYER_VERSION));
 
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);

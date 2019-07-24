@@ -30,9 +30,7 @@ class AppPathImpl {
         virtual bool createDirectoryIfNotExist();
         virtual bool makeAppDirectories() = 0;
 
-        virtual QString getInstallerVersion();
         virtual QString getUpdaterVersion();
-        virtual QString getLoaderVersion();
 
         virtual QDir getAppDir() const;
         virtual QDir getAppOldDir() const;

@@ -19,9 +19,7 @@ class AppPath {
         bool createDirectoryIfNotExist();
         bool makeAppDirectories();
 
-        QString getInstallerVersion();
         QString getUpdaterVersion();
-        QString getLoaderVersion();
 
         QDir getAppDir() const;
         QDir getAppOldDir() const;

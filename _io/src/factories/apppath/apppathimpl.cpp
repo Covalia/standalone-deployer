@@ -43,19 +43,9 @@ bool AppPathImpl::createDirectoryIfNotExist()
     return true;
 }
 
-QString AppPathImpl::getInstallerVersion()
-{
-    return IOConfig::InstallerVersion;
-}
-
 QString AppPathImpl::getUpdaterVersion()
 {
-    return IOConfig::UpdaterVersion;
-}
-
-QString AppPathImpl::getLoaderVersion()
-{
-    return IOConfig::LoaderVersion;
+    return STANDALONE_DEPLOYER_VERSION;
 }
 
 QDir AppPathImpl::getAppDir() const

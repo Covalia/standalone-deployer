@@ -13,15 +13,6 @@ class IOConfig
             Installer
         };
 
-        /// Installer version number
-        static const QString InstallerVersion;
-
-        /// Updater version number
-        static const QString UpdaterVersion;
-
-        /// Loader version number
-        static const QString LoaderVersion;
-
         /// Loader application name.
         static const QString LoaderName;
 

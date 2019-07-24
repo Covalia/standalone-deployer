@@ -45,26 +45,10 @@ bool AppPath::makeAppDirectories()
     return false;
 }
 
-QString AppPath::getInstallerVersion()
-{
-    if (m_appPathImpl) {
-        return m_appPathImpl->getInstallerVersion();
-    }
-    return "";
-}
-
 QString AppPath::getUpdaterVersion()
 {
     if (m_appPathImpl) {
         return m_appPathImpl->getUpdaterVersion();
-    }
-    return "";
-}
-
-QString AppPath::getLoaderVersion()
-{
-    if (m_appPathImpl) {
-        return m_appPathImpl->getLoaderVersion();
     }
     return "";
 }
