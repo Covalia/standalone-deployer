@@ -2,6 +2,10 @@
 #include <QDir>
 #include <cstdlib>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #include "log/logger.h"
 #include "manager/installmanager.h"
 #include "installerfactories/osresources/osresources.h"
@@ -9,13 +13,33 @@
 
 int main(int argc, char * argv[])
 {
+
+#ifdef Q_OS_WIN
+    DWORD procIDs[2];
+    DWORD maxCount = 2;
+    // get a list of the processes attached to the current console
+    DWORD result = GetConsoleProcessList((LPDWORD)procIDs, maxCount);
+    if (result == 1)
+    {
+        // only one process: windows application was mouse clicked
+        // so, we hide the console window. this can cause artifacts when console hides..
+        ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+    }
+    // else, more than one process (cannot be zero), this is run from the terminal
+    // so, we do not hide the console window.
+    // allow to print help and installation progress, for example.
+#endif
+
+
     QApplication app(argc, argv);
 
     QStringList arguments = qApp->arguments();
-
     if (arguments.contains("--version")) {
-        // TODO console app on windows
-        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
+        // print to stdout on macOS and Windows, then quit.
+        // we only do this way in the installer because loader / updater will
+        // show black console artifact at each run... too annoying.
+        const QString buildHashLine = QString("Build hash: %1\n").arg(Info::getBuildHash());
+        QTextStream(stdout) << buildHashLine;
         app.quit();
         return 0;
     }

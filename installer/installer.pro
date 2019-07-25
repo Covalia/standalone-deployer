@@ -6,15 +6,11 @@ CONFIG += warn_on
 CONFIG += debug_and_release
 CONFIG += app_bundle
 CONFIG += resources_big
+CONFIG += console
 
 QMAKE_TARGET_BUNDLE_PREFIX = com.covalia.standalonedeployer
 
-CONFIG(debug, release|debug) {
-	CONFIG += console
-}
-
 CONFIG(release, debug|release) {
-	CONFIG -= console
 	DEFINES += QT_NO_DEBUG_OUTPUT
 }
 
