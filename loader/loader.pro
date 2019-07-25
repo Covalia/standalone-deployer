@@ -86,11 +86,11 @@ macx {
 		}
 	}
 
-	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
+	QMAKE_POST_LINK += $$escape_expand(\n\t)$$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background-no-run.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
-			QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+			QMAKE_POST_LINK += $$escape_expand(\n\t)codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
 		}
 	}
 
@@ -108,7 +108,7 @@ win32 {
 		QMAKE_POST_LINK += $$escape_expand(\n\t)../tools/windows/upx/upx.exe -9 \"$$DESTDIR/"$$TARGET".exe\"
 		defined(SIGNATURE_IDENTITY, var) {
 			# signtool.exe must be in the PATH
-			QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+			QMAKE_POST_LINK += $$escape_expand(\n\t)signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
 		}
 		else {
 			error(SIGNATURE_IDENTITY must be specified in order to sign exe files.)

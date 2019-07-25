@@ -151,27 +151,27 @@ macx {
 	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
 	QMAKE_POST_LINK += cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
-	QMAKE_POST_LINK += $$escape_expand(\n\t) cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
-	QMAKE_POST_LINK += $$escape_expand(\n\t) cp -r resources/overridable/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp -r resources/overridable/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
 			equals(SIGN_INSTALLER, "false") {
 				message("Do not sign the installer.")
 			} else {
-				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
+				QMAKE_POST_LINK += $$escape_expand(\n\t)codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\" --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".app
 			}
 		}
 	}
 
-	QMAKE_POST_LINK += $$escape_expand(\n\t) $$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
+	QMAKE_POST_LINK += $$escape_expand(\n\t)$$(HOME)/.virtualenvs/standalone-deployer/bin/dmgbuild -s ../tools/macos/dmg/dmgbuild-settings.py -D background="../tools/macos/dmg/background.png" \"$$TARGET\" \"$$DESTDIR/$$TARGET\".dmg
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {
 			equals(SIGN_INSTALLER, "false") {
 				message("Do not sign the installer.")
 			} else {
-				QMAKE_POST_LINK += $$escape_expand(\n\t) codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
+				QMAKE_POST_LINK += $$escape_expand(\n\t)codesign --force -i \"$$QMAKE_TARGET_BUNDLE_PREFIX\".\"$$TARGET\".dmg --deep --sign \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/$$TARGET\".dmg
 			}
 		}
 	}
@@ -192,7 +192,7 @@ win32 {
 				message("Do not sign the installer.")
 			} else {
 				# signtool.exe must be in the PATH
-				QMAKE_POST_LINK += $$escape_expand(\n\t) signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
+				QMAKE_POST_LINK += $$escape_expand(\n\t)signtool.exe sign /t http://timestamp.digicert.com /n \"$$SIGNATURE_IDENTITY\" \"$$DESTDIR/"$$TARGET".exe\"
 			}
 		}
 		else {

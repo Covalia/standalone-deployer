@@ -5,12 +5,16 @@
 #include "log/logger.h"
 #include "manager/installmanager.h"
 #include "installerfactories/osresources/osresources.h"
+#include "io/info.h"
 
 int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
     new Logger(Utils::getInstallerlLogPath());
+
+    QCoreApplication::setApplicationVersion(QString("\nBuild hash: %1\n").arg(Info::getBuildHash()));
+
     L_INFO(QString("Installer started: %1").arg(Utils::getAppPath().getInstallerVersion()));
 
     // load settings resource static file. must be called keymanager_resources

@@ -9,6 +9,7 @@
 #include "log/logger.h"
 #include "settings/settings.h"
 #include "settings/commandlinesingleton.h"
+#include "io/info.h"
 #include "utils.h"
 
 /*!
@@ -41,6 +42,14 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
+    QStringList arguments = qApp->arguments();
+
+    if (arguments.contains("--version")) {
+        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
+        app.quit();
+        return 0;
+    }
+
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);
 
@@ -72,9 +81,8 @@ int main(int argc, char * argv[])
 
     // init language with locale in settings
     LanguageManager::updateLocale(settings->getLocale());
-	L_INFO(QString("Updated locale with: %1").arg(settings->getLocale()));
+    L_INFO(QString("Updated locale with: %1").arg(settings->getLocale()));
 
-    QStringList arguments = qApp->arguments();
     arguments.removeFirst();
     CommandLineSingleton::getInstance()->setArguments(arguments);
 

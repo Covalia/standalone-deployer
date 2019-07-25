@@ -5,11 +5,20 @@
 #include "log/logger.h"
 #include "loadermanager.h"
 #include "settings/settings.h"
+#include "io/info.h"
 #include "utils.h"
 
 int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
+
+    QStringList arguments = qApp->arguments();
+
+    if (arguments.contains("--version")) {
+        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
+        app.quit();
+        return 0;
+    }
 
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);

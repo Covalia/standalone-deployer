@@ -35,6 +35,7 @@ INCLUDEPATH += ../_logger/src
 
 SOURCES += src/io/config.cpp
 SOURCES += src/io/fileutils.cpp
+SOURCES += src/io/info.cpp
 SOURCES += src/io/unzip/zipextractor.cpp
 SOURCES += src/factories/factory/factory.cpp
 SOURCES += src/factories/apppath/apppath.cpp
@@ -42,8 +43,10 @@ SOURCES += src/factories/apppath/apppathimpl.cpp
 SOURCES += src/factories/shortcut/shortcut.cpp
 SOURCES += src/factories/shortcut/shortcutimpl.cpp
 
+HEADERS += src/build_hash.h
 HEADERS += src/io/config.h
 HEADERS += src/io/fileutils.h
+HEADERS += src/io/info.h
 HEADERS += src/io/unzip/qarchive/qarchive.h
 HEADERS += src/io/unzip/zipextractor.h
 HEADERS += src/factories/factory/factory.h
@@ -71,3 +74,20 @@ macx {
 	SOURCES += src/factories/apppath/macos/macosapppathimpl.cpp
 	SOURCES += src/factories/shortcut/macos/macosshortcutimpl.cpp
 }
+
+# get hash from git
+BUILD_HASH = $$system("git rev-parse --short HEAD")
+
+message(">>> Build from revision: $$BUILD_HASH")
+
+build_hash.target = src/build_hash.h
+build_hash.depends = FORCE
+macx {
+	build_hash.commands = echo \"$${LITERAL_HASH}define STANDALONE_DEPLOYER_BUILD_HASH \\\"$$BUILD_HASH\\\"\" > src/build_hash.h
+}
+win32 {
+	build_hash.commands = echo $${LITERAL_HASH}define STANDALONE_DEPLOYER_BUILD_HASH \"$$BUILD_HASH\" > src/build_hash.h
+}
+PRE_TARGETDEPS += src/build_hash.h
+QMAKE_EXTRA_TARGETS += build_hash
+

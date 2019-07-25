@@ -14,3 +14,4 @@ debug/
 *.dmg
 *.log
 object_script.*.*
+/_io/src/build_hash.h
