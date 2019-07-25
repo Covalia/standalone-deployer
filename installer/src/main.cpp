@@ -11,9 +11,16 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    new Logger(Utils::getInstallerlLogPath());
+    QStringList arguments = qApp->arguments();
 
-    QCoreApplication::setApplicationVersion(QString("\nBuild hash: %1\n").arg(Info::getBuildHash()));
+    if (arguments.contains("--version")) {
+        // TODO console app on windows
+        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
+        app.quit();
+        return 0;
+    }
+
+    new Logger(Utils::getInstallerlLogPath());
 
     L_INFO(QString("Installer started: %1").arg(Utils::getAppPath().getInstallerVersion()));
 

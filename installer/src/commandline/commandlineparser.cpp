@@ -19,7 +19,6 @@ CommandLineParser::CommandLineParser() :
 {
     parser.setApplicationDescription("Covalia standalone deployer. Use --help option to display help.");
     parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addOption(silentOption);
     parser.addOption(installLocationOption);

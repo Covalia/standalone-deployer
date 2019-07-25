@@ -45,6 +45,7 @@ int main(int argc, char * argv[])
     QStringList arguments = qApp->arguments();
 
     if (arguments.contains("--version")) {
+        // TODO LOG on windows
         QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
         app.quit();
         return 0;
