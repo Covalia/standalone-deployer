@@ -42,15 +42,6 @@ int main(int argc, char * argv[])
 {
     QApplication app(argc, argv);
 
-    QStringList arguments = qApp->arguments();
-
-    if (arguments.contains("--version")) {
-        // TODO LOG on windows
-        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
-        app.quit();
-        return 0;
-    }
-
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);
 
@@ -64,6 +55,21 @@ int main(int argc, char * argv[])
     }
 
     new Logger(appPath.getLogsDir().absoluteFilePath("updater.log"));
+
+    QStringList arguments = qApp->arguments();
+    if (arguments.contains("--version")) {
+        const QString buildHashLine = QString("Build hash: %1\n").arg(Info::getBuildHash());
+#ifdef Q_OS_MACOS
+        // print on stdout on macOS
+        QTextStream(stdout) << buildHashLine;
+#endif
+#ifdef Q_OS_WIN
+        // print in log on windows. only console app can print to stdout...
+        L_INFO(buildHashLine.trimmed());
+#endif
+        app.quit();
+        return 0;
+    }
 
     L_INFO("Updater started.");
 

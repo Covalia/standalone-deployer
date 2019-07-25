@@ -12,15 +12,6 @@ int main(int argc, char * argv[])
 {
     QCoreApplication app(argc, argv);
 
-    QStringList arguments = qApp->arguments();
-
-    if (arguments.contains("--version")) {
-        // TODO LOG on windows
-        QTextStream(stdout) << QString("Build hash: %1\n").arg(Info::getBuildHash());
-        app.quit();
-        return 0;
-    }
-
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);
 
@@ -29,6 +20,21 @@ int main(int argc, char * argv[])
 
     appPath.makeAppDirectories();
     new Logger(appPath.getLogsDir().absoluteFilePath("loader.log"));
+
+    QStringList arguments = qApp->arguments();
+    if (arguments.contains("--version")) {
+        const QString buildHashLine = QString("Build hash: %1\n").arg(Info::getBuildHash());
+#ifdef Q_OS_MACOS
+        // print on stdout on macOS
+        QTextStream(stdout) << buildHashLine;
+#endif
+#ifdef Q_OS_WIN
+        // print in log on windows. only console app can print to stdout...
+        L_INFO(buildHashLine.trimmed());
+#endif
+        app.quit();
+        return 0;
+    }
 
     QSharedPointer<QFile> settingsPath = appPath.getConfigurationFile();
     L_INFO(QString("Start read settings in %1").arg(settingsPath->fileName()));
