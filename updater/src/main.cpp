@@ -58,14 +58,17 @@ int main(int argc, char * argv[])
 
     QStringList arguments = qApp->arguments();
     if (arguments.contains("--version")) {
+        const QString versionLine = QString("Version: %1\n").arg(STANDALONE_DEPLOYER_VERSION);
         const QString buildHashLine = QString("Build hash: %1\n").arg(Info::getBuildHash());
 #ifdef Q_OS_MACOS
-        // print on stdout on macOS
-        QTextStream(stdout) << buildHashLine;
+            // print on stdout on macOS
+            QTextStream(stdout) << versionLine;
+            QTextStream(stdout) << buildHashLine;
 #endif
 #ifdef Q_OS_WIN
-        // print in log on windows. only console app can print to stdout...
-        L_INFO(buildHashLine.trimmed());
+            // print in log on windows. only console app can print to stdout...
+            L_INFO(versionLine.trimmed());
+            L_INFO(buildHashLine.trimmed());
 #endif
         app.quit();
         return 0;

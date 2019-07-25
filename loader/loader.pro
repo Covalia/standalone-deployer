@@ -1,3 +1,4 @@
+include("../standalone-deployer-version.pri")
 QT += core
 
 CONFIG += warn_on
