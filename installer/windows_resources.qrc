@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/bin">
+        <file alias="updater.exe">../updater/bin/updater.exe</file>
+        <file alias="loader.exe">../loader/bin/loader.exe</file>
+    </qresource>
+</RCC>
