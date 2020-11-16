@@ -24,6 +24,7 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
     m_encoding(""),
     m_mainClass(""),
     m_runnerClass(""),
+    m_serverName(""),
     m_memory("")
 {
     m_appUrl = _appUrl;
@@ -32,19 +33,19 @@ AppUpdater::AppUpdater(const QUrl &_appUrl, QWidget * _parent) : QObject(_parent
 
     QNetworkProxy proxy;
     // get proxy configuration
-	if (settings->isProxyUsed()) {
-		if (!settings->getProxyHostname().isEmpty()) {
-			proxy.setType(QNetworkProxy::HttpProxy);
-			proxy.setHostName(settings->getProxyHostname());
-			proxy.setPort(static_cast<quint16>(settings->getProxyPort()));
-			if (!settings->getProxyLogin().isEmpty()) {
-				proxy.setUser(settings->getProxyLogin());
-				if (!settings->getProxyPassword().isEmpty()) {
-					proxy.setPassword(settings->getProxyPassword());
-				}
-			}
-		}
-	}
+    if (settings->isProxyUsed()) {
+        if (!settings->getProxyHostname().isEmpty()) {
+            proxy.setType(QNetworkProxy::HttpProxy);
+            proxy.setHostName(settings->getProxyHostname());
+            proxy.setPort(static_cast<quint16>(settings->getProxyPort()));
+            if (!settings->getProxyLogin().isEmpty()) {
+                proxy.setUser(settings->getProxyLogin());
+                if (!settings->getProxyPassword().isEmpty()) {
+                    proxy.setPassword(settings->getProxyPassword());
+                }
+            }
+        }
+    }
 
     m_updater = new DownloadManager(m_appPath.getTempDir(), _appUrl.resolved(UpdaterConfig::DeployRootPath + "/"), proxy, _parent);
 
@@ -145,6 +146,9 @@ void AppUpdater::cnlpDownloadFinished()
         m_mainClass = applicationXml.getMainClass();
         // retrieving application runner class
         m_runnerClass = applicationXml.getRunnerClass();
+        // retrieving server name
+        m_serverName = applicationXml.getServerName();
+        emit serverNameUpdated(m_serverName);
 
         // retrieving cnlp arguments
         m_arguments.clear();

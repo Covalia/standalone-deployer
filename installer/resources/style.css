@@ -259,11 +259,17 @@ QMessageBox QLabel {
 
 QMainWindow QLabel#currentFileLabel,
 QMainWindow QLabel#remainingTimeLabel,
+QMainWindow QLabel#serverNameLabel,
 QMainWindow QLabel#speedLabel {
 	color:#555555;
 	padding:3px;
 	margin:2px 10px;
 	font-size:11px;
+}
+
+QMainWindow QLabel#serverNameLabel {
+	font-weight:bold;
+	color:#999999;
 }
 
 QMainWindow QLabel#serverLabel {

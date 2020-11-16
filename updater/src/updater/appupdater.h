@@ -59,6 +59,8 @@ class AppUpdater : public QObject
         QString m_mainClass;
         // post class runner to start
         QString m_runnerClass;
+        // server name to print in download screen
+        QString m_serverName;
 
         // received arguments list from cnlp
         QStringList m_arguments;
@@ -92,6 +94,7 @@ class AppUpdater : public QObject
         void serverUrlUpdated(const QUrl &_url);
         void downloadingFileUpdated(const QString &_file);
         void totalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void serverNameUpdated(const QString &_serverName);
         void errorOccurred(const QString &_message);
 };
 
