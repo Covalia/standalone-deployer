@@ -1,3 +1,12 @@
+<html>
+<head>
+<style type="text/css">
+* {
+font-family: "courier new";
+}
+</style>
+</head>
+<body>
 <h3>Qt 5</h3>
 
 <p> Qt is a free and open-source widget toolkit for creating graphical user
@@ -2681,28 +2690,28 @@ Public License instead of this License.
 
 <pre>License
 
-Resource you have downloaded from PixelBuddha is royalty free for use in 
+Resource you have downloaded from PixelBuddha is royalty free for use in
 both personal and commercial projects.
 
 Rights
 
-You may modify the resource according to your requirements and include it 
-into works, such as websites, applications or other materials intended for 
-sale. It is not necessary to link back to PixelBuddha.net, but we appreciate 
+You may modify the resource according to your requirements and include it
+into works, such as websites, applications or other materials intended for
+sale. It is not necessary to link back to PixelBuddha.net, but we appreciate
 if you do credit our resources.
 
 Prohibitions
 
-You do not have the rights to redistribute, resell, lease, license, 
-sub-license or offer this resource to any third party "as is" or as a 
-separate attachment from any of your work. If you wish to use the resource 
-as item or template that will be sold on a website or marketplace, we ask of 
-you to contact us to determine the proper use of our resource before doing 
+You do not have the rights to redistribute, resell, lease, license,
+sub-license or offer this resource to any third party "as is" or as a
+separate attachment from any of your work. If you wish to use the resource
+as item or template that will be sold on a website or marketplace, we ask of
+you to contact us to determine the proper use of our resource before doing
 so.</pre>
 
 <h3>Icons</h3>
 
-<p>They are made by <a href="http://www.freepik.com/">Freepik</a>, 
+<p>They are made by <a href="http://www.freepik.com/">Freepik</a>,
 <a href="https://www.flaticon.com/authors/smashicons">Smashicons</a> and
 <a href="https://thoseicons.com/">ThoseIcons</a> from
 <a href="http://www.flaticon.com/">Flaticon</a> and are licensed by
@@ -3030,3 +3039,5 @@ Creative Commons Notice
 </pre>
 
 <hr />
+</body>
+</html>

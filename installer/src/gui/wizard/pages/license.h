@@ -8,7 +8,7 @@
 QT_BEGIN_NAMESPACE
 class QCheckBox;
 class QLabel;
-class QPlainTextEdit;
+class QTextBrowser;
 QT_END_NAMESPACE
 
 class LicensePage : public QWizardPage, public AbstractTranslatedUi
@@ -28,7 +28,7 @@ class LicensePage : public QWizardPage, public AbstractTranslatedUi
     private:
         QLabel * m_licenseLabel;
         QLabel * m_linkToSourcesLabel;
-        QPlainTextEdit * m_licensePlainTextEdit;
+        QTextBrowser * m_licenseTextBrowser;
         QCheckBox * m_agreeLicenseCheckBox;
 };
 

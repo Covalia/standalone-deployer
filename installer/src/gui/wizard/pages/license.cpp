@@ -12,7 +12,7 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     m_agreeLicenseCheckBoxText(QT_TR_NOOP("I agree to the terms of the license")),
     m_licenseLabel(nullptr),
     m_linkToSourcesLabel(nullptr),
-    m_licensePlainTextEdit(nullptr),
+    m_licenseTextBrowser(nullptr),
     m_agreeLicenseCheckBox(nullptr)
 {
     setTitle(tr_helper(m_titleText));
@@ -21,8 +21,9 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     m_licenseLabel->setWordWrap(true);
     m_agreeLicenseCheckBox = new QCheckBox(tr_helper(m_agreeLicenseCheckBoxText), this);
 
-    m_licensePlainTextEdit = new QPlainTextEdit(this);
-    m_licensePlainTextEdit->setReadOnly(true);
+    m_licenseTextBrowser = new QTextBrowser(this);
+    m_licenseTextBrowser->setReadOnly(true);
+    m_licenseTextBrowser->setOpenExternalLinks(true);
 
     const QString urlLink = QString("<a href='%1'>%1</a>").arg(IOConfig::SourceCodeUrl);
     m_linkToSourcesLabel = new QLabel(tr_helper(m_linkToSourcesLabelText).arg(urlLink), this);
@@ -34,19 +35,19 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     QFile f(":/gpl-3.0.txt");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
-        m_licensePlainTextEdit->appendPlainText(in.readAll());
+        m_licenseTextBrowser->insertHtml(in.readAll());
         f.close();
     }
 
-    m_licensePlainTextEdit->moveCursor(QTextCursor::Start);
-    m_licensePlainTextEdit->ensureCursorVisible();
+    m_licenseTextBrowser->moveCursor(QTextCursor::Start);
+    m_licenseTextBrowser->ensureCursorVisible();
 
     registerField("license.agree*", m_agreeLicenseCheckBox);
 
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->addWidget(m_licenseLabel);
     layout->addWidget(m_linkToSourcesLabel);
-    layout->addWidget(m_licensePlainTextEdit);
+    layout->addWidget(m_licenseTextBrowser);
     layout->addWidget(m_agreeLicenseCheckBox);
     setLayout(layout);
 }
