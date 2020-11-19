@@ -5,11 +5,11 @@
 #include <QTextStream>
 #include <QFile>
 
-void StyleManager::setGeneralStyle()
+void StyleManager::setGeneralStyle(const QString &_styleName)
 {
     AppPath appPath = Utils::getAppPath();
 
-    QFile f(appPath.getConfigurationDir().absoluteFilePath("style.css"));
+    QFile f(QString(":/styles/%1.css").arg(_styleName));
 
     if (f.exists()) {
         if (f.open(QFile::ReadOnly | QFile::Text)) {

@@ -10,4 +10,7 @@
     <qresource prefix="/images">
         <file alias="close.png">resources/images/close.png</file>
     </qresource>
+    <qresource prefix="/styles">
+        <file alias="default.css">resources/styles/default.css</file>
+    </qresource>
 </RCC>

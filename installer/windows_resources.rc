@@ -5,7 +5,7 @@
 
 _PROJECT__INI					RCDATA	"resources\\project.ini"
 
-CONFIG_STYLE__CSS				RCDATA	"resources\\style.css"
+_STYLE__CSS						RCDATA	"resources\\style.css"
 
 IMAGES_CONFIG__ICO				RCDATA	"resources\\overridable\\images\\config.ico"
 IMAGES_SHORTCUT__ICO			RCDATA	"resources\\overridable\\images\\shortcut.ico"

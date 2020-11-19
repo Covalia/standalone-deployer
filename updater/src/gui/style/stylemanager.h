@@ -1,10 +1,12 @@
 #ifndef INSTALLER__STYLEMANAGER_H
 #define INSTALLER__STYLEMANAGER_H
 
+#include <QString>
+
 class StyleManager
 {
     public:
-        static void setGeneralStyle();
+        static void setGeneralStyle(const QString &_styleName);
 
     private:
         StyleManager();

@@ -64,6 +64,7 @@ InstallManager::InstallManager() : QThread(),
     m_settings->setAppName(m_projectSettings->getAppName());
     m_settings->setDeploymentUrl(m_projectSettings->getDeploymentUrl());
     m_settings->setShortcutName(m_projectSettings->getShortcutName());
+    m_settings->setStyle(m_projectSettings->getStyle());
 }
 
 InstallManager::~InstallManager()

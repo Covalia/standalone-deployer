@@ -24,7 +24,7 @@ bool WindowsResourcesImpl::extractProjectIniToTempFile(const QString &_toPath)
 
 bool WindowsResourcesImpl::extractStyleCssToTempFile(const QString &_toPath)
 {
-    return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _toPath);
+    return writeResourceIdToFile(L"_STYLE__CSS", _toPath);
 }
 bool WindowsResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 {

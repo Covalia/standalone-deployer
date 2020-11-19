@@ -27,24 +27,6 @@ bool MacosResourcesImpl::extractResources()
         extractResources = false;
     }
 
-    const QString styleCssFileName = "style.css";
-    const QString styleCssFileDest = m_appPath.getConfigurationDir().absoluteFilePath(styleCssFileName);
-    if (QFile::exists(styleCssFileDest)) {
-        L_INFO(QString("%1 already exists.").arg(styleCssFileDest));
-        if (QFile::remove(styleCssFileDest)) {
-            L_INFO(QString("%1 removed.").arg(styleCssFileDest));
-        } else {
-            L_ERROR(QString("Unable to remove %1").arg(styleCssFileDest));
-        }
-    }
-
-    if (QFile::copy(dir.absoluteFilePath(styleCssFileName), styleCssFileDest)) {
-        L_INFO("style.css file copied from app resources.");
-    } else {
-        L_ERROR("Unable to copy style.css file from app resources.");
-        extractResources = false;
-    }
-
     return extractResources;
 }
 
