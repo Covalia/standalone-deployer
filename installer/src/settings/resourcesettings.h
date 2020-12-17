@@ -15,6 +15,7 @@ class ResourceSettings
         static const QString RunAtStart;
         static const QString DefaultInstallationPath;
         static const QString ChangeDataLocationAllowed;
+        static const QString Style;
 
         ResourceSettings(const QString &_appPath);
         virtual ~ResourceSettings();
@@ -27,6 +28,7 @@ class ResourceSettings
         QString getDefaultLocale() const;
         QString getAppName() const;
         QString getDeploymentUrl() const;
+        QString getStyle() const;
         bool isRunAtStart() const;
 
     private:
@@ -48,6 +50,8 @@ class ResourceSettings
 
         QString m_defaultInstallationPath;
         bool m_changeDataLocationAllowed;
+
+        QString m_style;
 };
 
 #endif

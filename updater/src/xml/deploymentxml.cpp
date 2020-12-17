@@ -33,6 +33,7 @@ const QString DeploymentXML::VersionTag("version");
 const QString DeploymentXML::EncodingTag("encoding");
 const QString DeploymentXML::MainClassTag("mainclass");
 const QString DeploymentXML::RunnerClassTag("runnerclass");
+const QString DeploymentXML::ServerNameTag("server_name");
 
 DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     QObject(_parent),
@@ -44,6 +45,7 @@ DeploymentXML::DeploymentXML(const QString &_pathCnlp, QObject * _parent) :
     m_encoding = "";
     m_mainClass = "";
     m_runnerClass = "";
+    m_serverName = "";
     m_downloads = QList<Download>();
     m_arguments = QList<QString>();
 }
@@ -67,7 +69,7 @@ bool DeploymentXML::read()
         L_ERROR("Error processing deployment file.");
     }
     m_xmlFile.close();
-	L_INFO("Closed deployment file.");
+    L_INFO("Closed deployment file.");
 
     return result;
 }
@@ -88,6 +90,7 @@ QList<Download> DeploymentXML::getDownloads() const
     QList<Download> downloads;
 
     QString osValue;
+
 #ifdef Q_OS_MACOS
         osValue = OsMacOsValue;
 #endif
@@ -125,6 +128,11 @@ QString DeploymentXML::getMainClass() const
 QString DeploymentXML::getRunnerClass() const
 {
     return m_runnerClass;
+}
+
+QString DeploymentXML::getServerName() const
+{
+    return m_serverName;
 }
 
 QString DeploymentXML::getCurrentOsValue()
@@ -175,6 +183,9 @@ bool DeploymentXML::processDeployment()
             m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == RunnerClassTag) {
             result &= processRunnerClass();
+            m_xmlReader.skipCurrentElement();
+        } else if (m_xmlReader.name() == ServerNameTag) {
+            result &= processServerName();
             m_xmlReader.skipCurrentElement();
         } else if (m_xmlReader.name() == ArgumentsTag) {
             result &= processArguments();
@@ -230,6 +241,15 @@ bool DeploymentXML::processRunnerClass()
         return false;
     }
     m_runnerClass = readNextText();
+    return true;
+}
+
+bool DeploymentXML::processServerName()
+{
+    if (!m_xmlReader.isStartElement() || m_xmlReader.name() != ServerNameTag) {
+        return false;
+    }
+    m_serverName = readNextText();
     return true;
 }
 

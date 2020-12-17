@@ -64,6 +64,8 @@ MainWindow::MainWindow(QWidget * _parent) :
             SLOT(updateDownloadFileMessage(const QString&)));
     connect(m_appUpdater, SIGNAL(totalDownloadProgress(qint64,qint64)),
             SLOT(updateTotalDownloadProgress(qint64,qint64)));
+    connect(m_appUpdater, SIGNAL(serverNameUpdated(const QString&)),
+            SLOT(updateServerName(const QString&)));
     connect(m_appUpdater, SIGNAL(downloadSpeedUpdated(const QString&)),
             SLOT(updateDownloadSpeedMessage(const QString&)));
     connect(m_appUpdater, SIGNAL(remainingTimeUpdated(const QString&)),
@@ -176,6 +178,11 @@ void MainWindow::updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _byte
         m_ui->totalProgressBar->setMaximum(100);
         m_ui->totalProgressBar->setValue(static_cast<int>(_bytesReceived * 100.0 / _bytesTotal));
     }
+}
+
+void MainWindow::updateServerName(const QString &_serverName)
+{
+    m_ui->serverNameLabel->setText(_serverName);
 }
 
 void MainWindow::loadSlideShowImagesFromResources()

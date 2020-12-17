@@ -14,6 +14,10 @@ const QString Settings::GroupConfig("config");
 const QString Settings::AppName("app_name");
 const QString Settings::UpdaterVersion("updater_version");
 const QString Settings::JavaVersion("java_version");
+const QString Settings::DataLocation("data_location");
+const QString Settings::DeploymentUrl("deployment_url");
+const QString Settings::Locale("locale");
+const QString Settings::Style("style");
 
 const QString Settings::ProxyUsed("proxy_use");
 const QString Settings::ProxyHostname("proxy_hostname");
@@ -21,14 +25,7 @@ const QString Settings::ProxyPort("proxy_port");
 const QString Settings::ProxyLogin("proxy_login");
 const QString Settings::ProxyPassword("proxy_password");
 
-const QString Settings::Locale("locale");
-
 const QString Settings::ShortcutName("shortcut_name");
-
-const QString Settings::DataLocation("data_location");
-
-const QString Settings::DeploymentUrl("deployment_url");
-
 const QString Settings::RunAtStart("run_at_start");
 
 Settings * Settings::sm_instance = nullptr;
@@ -37,19 +34,20 @@ QMutex Settings::sm_settingsMutex;
 
 Settings::Settings() :
     m_settings(nullptr),
-    m_deploymentUrl(""),
     m_appName("Application"),
-    m_locale(""),
-    m_shortcutName("Application"),
-    m_runAtStart(false),
-    m_dataLocation(""),
     m_updaterVersion(""),
     m_javaVersion(""),
+    m_dataLocation(""),
+    m_deploymentUrl(""),
+    m_locale(""),
+    m_style(""),
     m_proxyUsed(false),
     m_proxyHostname(""),
     m_proxyPort(0),
     m_proxyLogin(""),
-    m_proxyPassword("")
+    m_proxyPassword(""),
+    m_shortcutName("Application"),
+    m_runAtStart(false)
 
 {
     L_INFO("Initialise Setting singleton instance");
@@ -138,6 +136,7 @@ bool Settings::writeSettings()
     m_settings->beginGroup(GroupConfig);
     putSetting(AppName, m_appName);
     putSetting(Locale, m_locale);
+    putSetting(Style, m_style);
     putSetting(UpdaterVersion, m_updaterVersion);
     putSetting(JavaVersion, m_javaVersion);
     putSetting(DataLocation, m_dataLocation);
@@ -172,6 +171,7 @@ void Settings::readSettings()
     m_settings->beginGroup(GroupConfig);
     m_appName = getSetting(AppName, m_appName).toString();
     m_locale = getSetting(Locale, "").toString();
+    m_style = getSetting(Style, "default").toString();
     m_updaterVersion = getSetting(UpdaterVersion, m_updaterVersion).toString();
     m_javaVersion = getSetting(JavaVersion, m_javaVersion).toString();
     m_dataLocation = getSetting(DataLocation, m_dataLocation).toString();
@@ -193,6 +193,7 @@ QString Settings::paramListString()
     s += "proxy_login = " + m_proxyLogin + "\n";
     s += "proxy_password (encrypted) = " + m_proxyPassword + "\n";
     s += "locale = " + m_locale + "\n";
+    s += "style = " + m_style + "\n";
     s += "shortcut_name = " + m_shortcutName + "\n";
     s += "data_location = " + m_dataLocation + "\n";
     s += "deployment_url = " + m_deploymentUrl + "\n";
@@ -279,6 +280,16 @@ QString Settings::getLocale() const
 void Settings::setLocale(const QString &_locale)
 {
     m_locale = _locale;
+}
+
+QString Settings::getStyle() const
+{
+    return m_style;
+}
+
+void Settings::setStyle(const QString &_style)
+{
+    m_style = _style;
 }
 
 QString Settings::getProxyPassword() const

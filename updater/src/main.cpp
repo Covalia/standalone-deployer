@@ -87,7 +87,8 @@ int main(int argc, char * argv[])
     L_INFO("-----------------------------------");
 
     // init style
-    StyleManager::setGeneralStyle();
+    const QString style = settings->getStyle();
+    StyleManager::setGeneralStyle(style);
 
     // init language with locale in settings
     LanguageManager::updateLocale(settings->getLocale());

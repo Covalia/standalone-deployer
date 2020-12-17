@@ -291,6 +291,16 @@
                   </property>
                  </widget>
                 </item>
+                <item row="3" column="0" colspan="3">
+                 <widget class="QLabel" name="serverNameLabel">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
               <item row="0" column="0">
