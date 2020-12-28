@@ -7,14 +7,14 @@
         <file alias="qtbase_fr.qm">resources/lang/qt/qtbase_fr.qm</file>
         <file alias="qtbase_en.qm">resources/lang/qt/qtbase_en.qm</file>
     </qresource>
-    <qresource prefix="/">
-        <file alias="gpl-3.0.txt">resources/fixed/gpl-3.0.txt</file>
-        <file alias="third-party.txt">resources/fixed/third-party.txt</file>
+    <qresource prefix="/license">
+        <file alias="gpl-3.0.txt">resources/fixed/common/license/gpl-3.0.txt</file>
+        <file alias="third-party.txt">resources/fixed/common/license/third-party.txt</file>
     </qresource>
     <qresource prefix="/images">
-        <file alias="close.png">resources/fixed/images/close.png</file>
-        <file alias="failure.png">resources/fixed/images/failure.png</file>
-        <file alias="loading.gif">resources/fixed/images/loading.gif</file>
-        <file alias="success.png">resources/fixed/images/success.png</file>
+        <file alias="close.png">resources/fixed/common/images/close.png</file>
+        <file alias="failure.png">resources/fixed/common/images/failure.png</file>
+        <file alias="loading.gif">resources/fixed/common/images/loading.gif</file>
+        <file alias="success.png">resources/fixed/common/images/success.png</file>
     </qresource>
 </RCC>
