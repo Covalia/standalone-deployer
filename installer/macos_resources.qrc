@@ -3,4 +3,12 @@
         <file alias="updater.dmg">../updater/bin/updater.dmg</file>
         <file alias="loader.dmg">../loader/bin/loader.dmg</file>
     </qresource>
+    <qresource prefix="/app/configure">
+        <file alias="Info.plist">resources/fixed/macos/app/configure/Info.plist</file>
+        <file alias="configure">resources/fixed/macos/app/configure/configure</file>
+    </qresource>
+    <qresource prefix="/app/uninstall">
+        <file alias="Info.plist">resources/fixed/macos/app/uninstall/Info.plist</file>
+        <file alias="uninstall">resources/fixed/macos/app/uninstall/uninstall</file>
+    </qresource>
 </RCC>
