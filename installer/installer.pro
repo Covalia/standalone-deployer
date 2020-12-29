@@ -112,10 +112,10 @@ HEADERS += src/manager/installmanager.h
 HEADERS += src/settings/resourcesettings.h
 HEADERS += src/utils.h
 
-RESOURCES += fixed_resources.qrc
+RESOURCES += fixed_common_resources.qrc
 
 win32 {
-	RESOURCES += windows_resources.qrc
+	RESOURCES += fixed_windows_resources.qrc
 
 	HEADERS += src/installerfactories/factory/windows/windowsinstallerfactory.h
 	HEADERS += src/installerfactories/osresources/windows/windowsresourcesimpl.h
@@ -125,7 +125,7 @@ win32 {
 }
 
 macx {
-	RESOURCES += macos_resources.qrc
+	RESOURCES += fixed_macos_resources.qrc
 
 	HEADERS += src/installerfactories/factory/macos/macosinstallerfactory.h
 	HEADERS += src/installerfactories/osresources/macos/macosresourcesimpl.h

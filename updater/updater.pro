@@ -108,7 +108,7 @@ HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h
 HEADERS += src/xml/deploymentxml.h
 
-RESOURCES += fixed_resources.qrc
+RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/translations/app/fr_FR.ts

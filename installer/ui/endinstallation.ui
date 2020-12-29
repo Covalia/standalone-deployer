@@ -70,7 +70,7 @@
              <string notr="true"/>
             </property>
             <property name="pixmap">
-             <pixmap resource="../fixed_resources.qrc">:/images/success.png</pixmap>
+             <pixmap resource="../fixed_common_resources.qrc">:/images/success.png</pixmap>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -191,7 +191,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../fixed_resources.qrc"/>
+  <include location="../fixed_common_resources.qrc"/>
  </resources>
  <connections/>
 </ui>
