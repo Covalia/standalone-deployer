@@ -138,7 +138,7 @@ DISTFILES += ../uncrustify.cfg
 TRANSLATIONS += resources/fixed/common/translations/app/fr_FR.ts
 TRANSLATIONS += resources/fixed/common/translations/app/en_US.ts
 
-RC_FILE = windows_resources.rc
+RC_FILE = overridable_windows_resources.rc
 
 macx {
 	CONFIG(release, debug|release) {
