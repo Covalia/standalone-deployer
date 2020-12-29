@@ -151,10 +151,10 @@ macx {
 
 	QMAKE_POST_LINK += mkdir -pv \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/configure
 	QMAKE_POST_LINK += $$escape_expand(\n\t)mkdir -pv \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/uninstall
-	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/common/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/macos/application/configure/configure.icns \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/configure/
 	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/macos/application/uninstall/uninstall.icns \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/uninstall/
-	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/common/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 	QMAKE_POST_LINK += $$escape_expand(\n\t)cp -r resources/overridable/common/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 
 	CONFIG(release, debug|release) {
