@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/translations/app">
-        <file alias="fr_FR.qm">resources/lang/app/fr_FR.qm</file>
-        <file alias="en_US.qm">resources/lang/app/en_US.qm</file>
+        <file alias="fr_FR.qm">resources/fixed/common/translations/app/fr_FR.qm</file>
+        <file alias="en_US.qm">resources/fixed/common/translations/app/en_US.qm</file>
     </qresource>
     <qresource prefix="/translations/qt">
-        <file alias="qtbase_fr.qm">resources/lang/qt/qtbase_fr.qm</file>
-        <file alias="qtbase_en.qm">resources/lang/qt/qtbase_en.qm</file>
+        <file alias="qtbase_fr.qm">resources/fixed/common/translations/qt/qtbase_fr.qm</file>
+        <file alias="qtbase_en.qm">resources/fixed/common/translations/qt/qtbase_en.qm</file>
     </qresource>
     <qresource prefix="/license">
         <file alias="gpl-3.0.txt">resources/fixed/common/license/gpl-3.0.txt</file>
