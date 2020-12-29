@@ -18,7 +18,7 @@ bool MacosShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _shortcu
     return true;
 }
 
-bool MacosShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutName, QString _applicationName)
+bool MacosShortcutImpl::createStartShortcut(AppPath _appPath, QString _shortcutName, QString _applicationName)
 {
     Q_UNUSED(_appPath)
     Q_UNUSED(_shortcutName)
@@ -27,7 +27,7 @@ bool MacosShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutNa
     return true;
 }
 
-bool MacosShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName)
+bool MacosShortcutImpl::createStartMenuShortcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName)
 {
     Q_UNUSED(_appPath)
     Q_UNUSED(_startMenuFolderName)

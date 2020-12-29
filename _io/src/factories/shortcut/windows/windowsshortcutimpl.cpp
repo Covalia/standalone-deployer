@@ -31,7 +31,7 @@ bool WindowsShortcutImpl::createDesktopShortcut(AppPath _appPath, QString _short
     return createShortcut(shortcutFile, *loaderFile, _args, installDir, iconFile, _applicationName);
 }
 
-bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcutName, QString _applicationName)
+bool WindowsShortcutImpl::createStartShortcut(AppPath _appPath, QString _shortcutName, QString _applicationName)
 {
     L_INFO("Will create shortcut in startup folder");
     QSharedPointer<QFile> loaderFile = _appPath.getLoaderFile();
@@ -42,7 +42,7 @@ bool WindowsShortcutImpl::createStartShorcut(AppPath _appPath, QString _shortcut
     return createShortcut(file, *loaderFile, "", installDir, iconFile, _applicationName);
 }
 
-bool WindowsShortcutImpl::createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName)
+bool WindowsShortcutImpl::createStartMenuShortcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName)
 {
     L_INFO("Will create shortcut in startMenu folder");
     QString folderPath("");

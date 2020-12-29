@@ -27,7 +27,7 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartShorcut(AppPath _appPath, QString _shortcutName, QString _applicationName);
+        virtual bool createStartShortcut(AppPath _appPath, QString _shortcutName, QString _applicationName);
 
         /**
          * @brief create startmenu folder and shortcut
@@ -36,7 +36,7 @@ class WindowsShortcutImpl : public ShortcutImpl {
          * @param _applicationName : name of application
          * @return true if success
          */
-        virtual bool createStartMenuShorcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName);
+        virtual bool createStartMenuShortcut(AppPath _appPath, QString _startMenuFolderName, QString _applicationName);
 
     private:
         /**
