@@ -1,9 +1,9 @@
-#include "factories/shortcut/shortcut.h"
-#include "factories/factory/factory.h"
+#include "installerfactories/shortcut/shortcut.h"
+#include "installerfactories/factory/installerfactory.h"
 
 Shortcut::Shortcut() : m_shortcutImpl(nullptr)
 {
-    Factory * factory = Factory::getFactory();
+    InstallerFactory * factory = InstallerFactory::getFactory();
 
     if (factory) {
         m_shortcutImpl = QSharedPointer<ShortcutImpl>(factory->makeShortcut());

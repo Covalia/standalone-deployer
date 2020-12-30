@@ -58,3 +58,13 @@ bool OsResources::extractTitlePngToTempFile(const QString &_toPath)
         return MacosResourcesImpl::extractTitlePngToTempFile(_toPath);
 #endif
 }
+
+bool OsResources::extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath)
+{
+#ifdef Q_OS_WIN
+        return WindowsResourcesImpl::extractShortcutIcnsIconToTempFile(_fromResource, _toPath);
+#endif
+#ifdef Q_OS_MACOS
+        return MacosResourcesImpl::extractShortcutIcnsIconToTempFile(_fromResource, _toPath);
+#endif
+}

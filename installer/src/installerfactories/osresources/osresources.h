@@ -18,6 +18,7 @@ class OsResources {
         static bool extractProjectIniToTempFile(const QString &_toPath);
         static bool extractStyleCssToTempFile(const QString &_toPath);
         static bool extractTitlePngToTempFile(const QString &_toPath);
+        static bool extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath);
 
     private:
         QSharedPointer<OsResourcesImpl> m_osResourcesImpl;

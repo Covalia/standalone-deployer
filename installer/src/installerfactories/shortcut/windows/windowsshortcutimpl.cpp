@@ -1,4 +1,4 @@
-#include "factories/shortcut/windows/windowsshortcutimpl.h"
+#include "installerfactories/shortcut/windows/windowsshortcutimpl.h"
 
 #include <Windows.h>
 #include <shlobj.h>
@@ -72,7 +72,8 @@ bool WindowsShortcutImpl::createStartMenuShortcut(AppPath _appPath, QString _sta
     }
 
     const QString runApplicationPathShortcut =  _applicationName + ".lnk";
-    const QString settingsApplicationPathShortcut = QObject::tr("Configuration %1").arg(_applicationName) + ".lnk";
+    const QString settingsApplicationPathShortcut = QObject::tr("Configure %1").arg(_applicationName) + ".lnk";
+    const QString uninstallApplicationPathShortcut = QObject::tr("Uninstall %1").arg(_applicationName) + ".lnk";
 
     QSharedPointer<QFile> loader = _appPath.getLoaderFile();
     const QString description = _applicationName;
@@ -80,14 +81,17 @@ bool WindowsShortcutImpl::createStartMenuShortcut(AppPath _appPath, QString _sta
 
     const QString iconApplicationPath = _appPath.getImagesDir().absoluteFilePath("shortcut.ico");
     const QString iconConfigurationPath = _appPath.getImagesDir().absoluteFilePath("config.ico");
+    const QString iconUninstallPath = _appPath.getImagesDir().absoluteFilePath("trash.ico");
 
     QFile appShortcutIn(installDir.absoluteFilePath(runApplicationPathShortcut));
     QFile configShortcutIn(installDir.absoluteFilePath(settingsApplicationPathShortcut));
+    QFile uninstallShortcutIn(installDir.absoluteFilePath(uninstallApplicationPathShortcut));
 
     bool runApplicationShortcut = createShortcut(appShortcutIn, *loader, "", installDir, iconApplicationPath, description);
     bool configureApplicationShortcut = createShortcut(configShortcutIn, *loader, "--configure", installDir, iconConfigurationPath, description);
+    bool uninstallApplicationShortcut = createShortcut(uninstallShortcutIn, *loader, "--uninstall", installDir, iconUninstallPath, description);
 
-    if (runApplicationShortcut && configureApplicationShortcut) {
+    if (runApplicationShortcut && configureApplicationShortcut && uninstallApplicationShortcut) {
         L_INFO("Will copy shortcut into startmenu");
 
         QFile appShortcutOut(applicationFolder + QDir::separator() + runApplicationPathShortcut);
@@ -96,7 +100,10 @@ bool WindowsShortcutImpl::createStartMenuShortcut(AppPath _appPath, QString _sta
         QFile configShortcutOut(applicationFolder + QDir::separator() + settingsApplicationPathShortcut);
         const QPair<bool, QString> copyConfigurationShortcut = _appPath.extractResource(configShortcutIn, configShortcutOut);
 
-        if (copyApplicationShortcut.first && copyConfigurationShortcut.first) {
+        QFile uninstallShortcutOut(applicationFolder + QDir::separator() + uninstallApplicationPathShortcut);
+        const QPair<bool, QString> copyUninstallShortcut = _appPath.extractResource(uninstallShortcutIn, uninstallShortcutOut);
+
+        if (copyApplicationShortcut.first && copyConfigurationShortcut.first && copyUninstallShortcut.first) {
             L_INFO("Startmenu folder created and shortcuts copied");
             return true;
         }
@@ -128,7 +135,7 @@ bool WindowsShortcutImpl::createShortcut(QFile &_shortcutFile, const QFile &_tar
         }
     }
 
-    L_INFO("Will create shortcut");
+    L_INFO("Create Windows Shortcut");
     return createWindowsShortcut(_targetFile.fileName(), _args, _shortcutFile.fileName(), _description,
                                  _workingDir.absolutePath(), _iconFile.fileName(), 0);
 }

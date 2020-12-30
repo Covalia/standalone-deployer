@@ -1,4 +1,4 @@
-#include "factories/shortcut/shortcutimpl.h"
+#include "installerfactories/shortcut/shortcutimpl.h"
 
 ShortcutImpl::ShortcutImpl()
 {

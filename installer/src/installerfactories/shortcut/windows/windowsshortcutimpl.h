@@ -1,7 +1,7 @@
-#ifndef IO_WINDOWSSHORTCUTIMPL_H
-#define IO_WINDOWSSHORTCUTIMPL_H
+#ifndef INSTALLER_WINDOWSSHORTCUTIMPL_H
+#define INSTALLER_WINDOWSSHORTCUTIMPL_H
 
-#include "factories/shortcut/shortcutimpl.h"
+#include "installerfactories/shortcut/shortcutimpl.h"
 
 #include <Windows.h>
 

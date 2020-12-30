@@ -3,7 +3,6 @@
 
 #include "factories/factory/factory.h"
 #include "factories/apppath/apppathimpl.h"
-#include "factories/shortcut/shortcutimpl.h"
 
 class WindowsFactory : public Factory {
     public:
@@ -22,7 +21,6 @@ class WindowsFactory : public Factory {
 
         virtual ~WindowsFactory();
         virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app);
-        virtual ShortcutImpl * makeShortcut();
 
     private:
         WindowsFactory();

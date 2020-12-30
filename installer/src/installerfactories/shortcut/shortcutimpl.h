@@ -1,7 +1,7 @@
-#ifndef IO_SHORTCUTIMPL_H
-#define IO_SHORTCUTIMPL_H
+#ifndef INSTALLER_SHORTCUTIMPL_H
+#define INSTALLER_SHORTCUTIMPL_H
 
-#include "factories/shortcut/shortcut.h"
+#include "installerfactories/shortcut/shortcut.h"
 #include "factories/apppath/apppath.h"
 #include "io/config.h"
 

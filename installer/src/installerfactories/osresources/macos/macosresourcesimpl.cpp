@@ -45,6 +45,11 @@ bool MacosResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
     return writeFileToTempFile("images/title.png", _toPath);
 }
 
+bool MacosResourcesImpl::extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath)
+{
+	return writeFileToTempFile(_fromResource, _toPath);
+}
+
 bool MacosResourcesImpl::writeFileToTempFile(const QString &_resourceFile, const QString &_toPath)
 {
     QDir dir(QCoreApplication::applicationDirPath());

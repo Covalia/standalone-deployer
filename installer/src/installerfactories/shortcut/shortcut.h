@@ -1,9 +1,9 @@
-#ifndef IO_SHORTCUT_H
-#define IO_SHORTCUT_H
+#ifndef INSTALLER_SHORTCUT_H
+#define INSTALLER_SHORTCUT_H
 
 #include <QString>
 #include <QSharedPointer>
-#include "factories/shortcut/shortcutimpl.h"
+#include "installerfactories/shortcut/shortcutimpl.h"
 #include "factories/apppath/apppath.h"
 #include "io/config.h"
 

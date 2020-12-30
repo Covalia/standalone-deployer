@@ -11,4 +11,8 @@
         <file alias="Info.plist">resources/fixed/macos/application/uninstall/Info.plist</file>
         <file alias="uninstall">resources/fixed/macos/application/uninstall/uninstall</file>
     </qresource>
+    <qresource prefix="/application/start">
+        <file alias="Info.plist">resources/fixed/macos/application/start/Info.plist</file>
+        <file alias="start">resources/fixed/macos/application/start/start</file>
+    </qresource>
 </RCC>

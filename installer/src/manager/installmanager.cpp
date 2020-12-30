@@ -11,7 +11,7 @@
 #include <QStringList>
 
 #include "log/logger.h"
-#include "factories/shortcut/shortcut.h"
+#include "installerfactories/shortcut/shortcut.h"
 #include "settings/settings.h"
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
