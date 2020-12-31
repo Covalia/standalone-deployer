@@ -11,7 +11,7 @@
 #include <QStringList>
 
 #include "log/logger.h"
-#include "factories/shortcut/shortcut.h"
+#include "installerfactories/shortcut/shortcut.h"
 #include "settings/settings.h"
 #include "settings/resourcesettings.h"
 #include "lang/languagemanager.h"
@@ -302,7 +302,7 @@ void InstallManager::startInstallation()
         errorMessages << QT_TR_NOOP("Unable to extract resources");
     }
 
-    // create shorcut
+    // create shortcut
     bool successCreatingShortcut = createShortcut();
     if (!successCreatingShortcut) {
         errorMessages << QT_TR_NOOP("Unable to create shortcuts");
@@ -449,10 +449,10 @@ bool InstallManager::createShortcut()
     success &= shortcut.createDesktopShortcut(m_appPath, m_settings->getShortcutName(), "", m_settings->getAppName());
     // startup shortcut
     if (m_settings->isRunAtStart()) {
-        success &= shortcut.createStartShorcut(m_appPath, m_settings->getShortcutName(), m_settings->getAppName());
+        success &= shortcut.createStartShortcut(m_appPath, m_settings->getShortcutName(), m_settings->getAppName());
     }
     // StartMenu folder and shortcut
-    success &= shortcut.createStartMenuShorcut(m_appPath, QDir(m_projectSettings->getDefaultInstallationPath()).dirName(), m_settings->getAppName());
+    success &= shortcut.createStartMenuShortcut(m_appPath, QDir(m_projectSettings->getDefaultInstallationPath()).dirName(), m_settings->getAppName());
     return success;
 }
 

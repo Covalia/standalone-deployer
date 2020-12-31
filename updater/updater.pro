@@ -108,11 +108,11 @@ HEADERS += src/xml/data/download.h
 HEADERS += src/xml/data/javaupdate.h
 HEADERS += src/xml/deploymentxml.h
 
-RESOURCES += fixed_resources.qrc
+RESOURCES += resources.qrc
 
 DISTFILES += ../uncrustify.cfg
-TRANSLATIONS += resources/lang/app/fr_FR.ts
-TRANSLATIONS += resources/lang/app/en_US.ts
+TRANSLATIONS += resources/translations/app/fr_FR.ts
+TRANSLATIONS += resources/translations/app/en_US.ts
 
 macx {
 	CONFIG(release, debug|release) {

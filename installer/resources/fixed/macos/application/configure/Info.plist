@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>NSPrincipalClass</key>
+		<string>NSApplication</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleExecutable</key>
+		<string>configure</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.covalia.standalonedeployer.configure</string>
+		<key>CFBundleIconFile</key>
+		<string>configure.icns</string>
+	</dict>
+</plist>

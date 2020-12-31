@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/translations/app">
+        <file alias="fr_FR.qm">resources/translations/app/fr_FR.qm</file>
+        <file alias="en_US.qm">resources/translations/app/en_US.qm</file>
+    </qresource>
+    <qresource prefix="/translations/qt">
+        <file alias="qtbase_fr.qm">resources/translations/qt/qtbase_fr.qm</file>
+        <file alias="qtbase_en.qm">resources/translations/qt/qtbase_en.qm</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="close.png">resources/images/close.png</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file alias="default.css">resources/styles/default.css</file>
+    </qresource>
+</RCC>

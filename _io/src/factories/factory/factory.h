@@ -6,7 +6,6 @@
 #include "io/config.h"
 
 class AppPathImpl;
-class ShortcutImpl;
 
 class Factory {
     public:
@@ -16,8 +15,6 @@ class Factory {
 
         // manage working directories
         virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app) = 0;
-        // manage shortcuts
-        virtual ShortcutImpl * makeShortcut() = 0;
 
     protected:
         static std::mutex sm_mutex;

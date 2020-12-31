@@ -56,5 +56,5 @@ bool CommandLineSingleton::isDebugMode() const
 
 bool CommandLineSingleton::isConfigureMode() const
 {
-    return m_arguments.contains("--config");
+    return m_arguments.contains("--configure");
 }

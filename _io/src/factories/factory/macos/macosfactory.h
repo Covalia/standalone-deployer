@@ -3,7 +3,6 @@
 
 #include "factories/factory/factory.h"
 #include "factories/apppath/apppathimpl.h"
-#include "factories/shortcut/shortcutimpl.h"
 
 class MacosFactory : public Factory {
     public:
@@ -22,7 +21,6 @@ class MacosFactory : public Factory {
 
         virtual ~MacosFactory();
         virtual AppPathImpl * makeAppPath(IOConfig::AppComponent _app);
-        virtual ShortcutImpl * makeShortcut();
 
     private:
         MacosFactory();

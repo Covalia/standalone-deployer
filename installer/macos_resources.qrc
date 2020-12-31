@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/bin">
-        <file alias="updater.dmg">../updater/bin/updater.dmg</file>
-        <file alias="loader.dmg">../loader/bin/loader.dmg</file>
-    </qresource>
-</RCC>

@@ -3,6 +3,7 @@
 
 #include "installerfactories/factory/installerfactory.h"
 #include "installerfactories/osresources/osresourcesimpl.h"
+#include "installerfactories/shortcut/shortcutimpl.h"
 
 class WindowsInstallerFactory : public InstallerFactory {
     public:
@@ -21,6 +22,7 @@ class WindowsInstallerFactory : public InstallerFactory {
 
         virtual ~WindowsInstallerFactory();
         virtual OsResourcesImpl * makeOsResources(const QString &_installPath);
+        virtual ShortcutImpl * makeShortcut();
 
     private:
         WindowsInstallerFactory();

@@ -32,7 +32,7 @@ LicensePage::LicensePage(QWidget * parent) : QWizardPage(parent),
     m_linkToSourcesLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_linkToSourcesLabel->setOpenExternalLinks(true);
 
-    QFile f(":/gpl-3.0.txt");
+    QFile f(":/license/gpl-3.0.txt");
     if (f.open(QFile::ReadOnly | QFile::Text)) {
         QTextStream in(&f);
         m_licenseTextBrowser->insertHtml(in.readAll());

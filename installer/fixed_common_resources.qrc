@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/translations/app">
+        <file alias="fr_FR.qm">resources/fixed/common/translations/app/fr_FR.qm</file>
+        <file alias="en_US.qm">resources/fixed/common/translations/app/en_US.qm</file>
+    </qresource>
+    <qresource prefix="/translations/qt">
+        <file alias="qtbase_fr.qm">resources/fixed/common/translations/qt/qtbase_fr.qm</file>
+        <file alias="qtbase_en.qm">resources/fixed/common/translations/qt/qtbase_en.qm</file>
+    </qresource>
+    <qresource prefix="/license">
+        <file alias="gpl-3.0.txt">resources/fixed/common/license/gpl-3.0.txt</file>
+        <file alias="third-party.txt">resources/fixed/common/license/third-party.txt</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="close.png">resources/fixed/common/images/close.png</file>
+        <file alias="failure.png">resources/fixed/common/images/failure.png</file>
+        <file alias="loading.gif">resources/fixed/common/images/loading.gif</file>
+        <file alias="success.png">resources/fixed/common/images/success.png</file>
+    </qresource>
+</RCC>

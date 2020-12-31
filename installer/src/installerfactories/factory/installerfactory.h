@@ -1,11 +1,10 @@
-#ifndef IO_FACTORY_H
-#define IO_FACTORY_H
+#ifndef INSTALLER_FACTORY_H
+#define INSTALLER_FACTORY_H
 
 #include <mutex>
 #include <QDir>
 #include "io/config.h"
 
-class AppPathImpl;
 class ShortcutImpl;
 class OsResourcesImpl;
 
@@ -17,6 +16,9 @@ class InstallerFactory {
 
         // overridable specific os resources
         virtual OsResourcesImpl * makeOsResources(const QString &_installPath) = 0;
+
+        // manage shortcuts
+        virtual ShortcutImpl * makeShortcut() = 0;
 
     protected:
         static std::mutex sm_mutex;
