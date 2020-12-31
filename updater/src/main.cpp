@@ -102,9 +102,15 @@ int main(int argc, char * argv[])
         L_INFO(QString("Query Arguments: %1").arg(CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
     }
 
-    MainWindow window;
-    window.show();
-    window.center();
-
-    return app.exec();
+    if (CommandLineSingleton::getInstance()->isConfigureMode()) {
+        L_INFO("Configuration mode");
+    } else if (CommandLineSingleton::getInstance()->isUninstallMode()) {
+        L_INFO("Uninstallation mode");
+    } else {
+        MainWindow window;
+        window.show();
+        window.center();
+        return app.exec();
+    }
+    return 0;
 }
