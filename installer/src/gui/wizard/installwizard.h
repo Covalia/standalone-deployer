@@ -28,7 +28,7 @@ class InstallWizard : public QWizard, public AbstractTranslatedUi
             Page_Shortcuts,
             Page_Proxy,
             Page_Launch,
-            Page_ThirdParty
+            Page_ThirdParty,
         };
 
         InstallWizard(const QString &_appName, bool _changeDataLocationAllowed, QWidget * parent = nullptr);

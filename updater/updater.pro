@@ -74,11 +74,17 @@ win32 {
 
 FORMS += ui/askpopup.ui
 FORMS += ui/authenticationdialog.ui
+FORMS += ui/configwindow.ui
 FORMS += ui/mainwindow.ui
 
 SOURCES += src/main.cpp
 SOURCES += src/gui/askpopupui.cpp
 SOURCES += src/gui/authenticationdialogui.cpp
+SOURCES += src/gui/wizard/configwindow.cpp
+SOURCES += src/gui/wizard/configwizard.cpp
+SOURCES += src/gui/wizard/pages/proxy.cpp
+SOURCES += src/gui/wizard/pages/readytowrite.cpp
+SOURCES += src/gui/wizard/pages/welcome.cpp
 SOURCES += src/gui/mainwindow.cpp
 SOURCES += src/gui/style/stylemanager.cpp
 SOURCES += src/network/downloadmanager.cpp
@@ -94,6 +100,11 @@ SOURCES += src/xml/deploymentxml.cpp
 
 HEADERS += src/gui/askpopupui.h
 HEADERS += src/gui/authenticationdialogui.h
+HEADERS += src/gui/wizard/configwindow.h
+HEADERS += src/gui/wizard/configwizard.h
+HEADERS += src/gui/wizard/pages/proxy.h
+HEADERS += src/gui/wizard/pages/readytowrite.h
+HEADERS += src/gui/wizard/pages/welcome.h
 HEADERS += src/gui/mainwindow.h
 HEADERS += src/gui/style/stylemanager.h
 HEADERS += src/network/downloadmanager.h

@@ -167,6 +167,32 @@
     </message>
 </context>
 <context>
+    <name>ConfigWindow</name>
+    <message>
+        <location filename="../../../src/gui/wizard/configwindow.cpp" line="75"/>
+        <source>The configuration will not be saved.</source>
+        <translation>The configuration will not be saved.</translation>
+    </message>
+</context>
+<context>
+    <name>ConfigWizard</name>
+    <message>
+        <location filename="../../../src/gui/wizard/configwizard.cpp" line="23"/>
+        <source>Next &gt;</source>
+        <translation>Next &gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/configwizard.cpp" line="24"/>
+        <source>&lt; Back</source>
+        <translation>&lt; Back</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/configwizard.cpp" line="25"/>
+        <source>Finish</source>
+        <translation>Finish</translation>
+    </message>
+</context>
+<context>
     <name>DownloadManager</name>
     <message>
         <location filename="../../../src/network/downloadmanager.cpp" line="410"/>
@@ -271,32 +297,96 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../../src/gui/mainwindow.cpp" line="150"/>
+        <location filename="../../../src/gui/mainwindow.cpp" line="147"/>
         <source>Estimated time: %1</source>
         <extracomment>This string refers to a remaining time.</extracomment>
         <translation>Estimated time: %1</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/mainwindow.cpp" line="157"/>
+        <location filename="../../../src/gui/mainwindow.cpp" line="154"/>
         <source>Server %1</source>
         <extracomment>This string refers to a web URL.</extracomment>
         <translation>Server %1</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/mainwindow.cpp" line="166"/>
+        <location filename="../../../src/gui/mainwindow.cpp" line="163"/>
         <source>Downloading %1</source>
         <extracomment>This string refers to a downloaded file.</extracomment>
         <translation>Downloading %1</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/mainwindow.cpp" line="263"/>
+        <location filename="../../../src/gui/mainwindow.cpp" line="260"/>
         <source>An error occurred!</source>
         <translation>An error occurred!</translation>
     </message>
     <message>
-        <location filename="../../../src/gui/mainwindow.cpp" line="264"/>
+        <location filename="../../../src/gui/mainwindow.cpp" line="261"/>
         <source>The application will quit.</source>
         <translation>The application will quit.</translation>
+    </message>
+</context>
+<context>
+    <name>ProxyPage</name>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="18"/>
+        <source>Proxy configuration</source>
+        <translation>Proxy configuration</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="20"/>
+        <source>Use Proxy</source>
+        <translation>Use proxy</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="22"/>
+        <source>&amp;Hostname</source>
+        <translation>&amp;Hostname</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="23"/>
+        <source>&amp;Port</source>
+        <translation>&amp;Port</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="24"/>
+        <source>&amp;Login</source>
+        <translation>&amp;Login</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/proxy.cpp" line="25"/>
+        <source>&amp;Password</source>
+        <translation>&amp;Password</translation>
+    </message>
+</context>
+<context>
+    <name>ReadyToWritePage</name>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/readytowrite.cpp" line="10"/>
+        <source>Configuration ready to be saved</source>
+        <translation>Configuration ready to be saved</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/readytowrite.cpp" line="12"/>
+        <source>Configuration will be written when you will finish this wizard.</source>
+        <translation>Configuration will be written when you will finish this wizard.</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/welcome.cpp" line="12"/>
+        <source>Welcome to the %1 config wizard</source>
+        <translation>Welcome to the %1 config wizard</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/welcome.cpp" line="14"/>
+        <source>This wizard will help you to configure %1.</source>
+        <translation>This wizard will help you to configure %1.</translation>
+    </message>
+    <message>
+        <location filename="../../../src/gui/wizard/pages/welcome.cpp" line="17"/>
+        <source>Click Next to continue.</source>
+        <translation>Click Next to continue.</translation>
     </message>
 </context>
 </TS>
