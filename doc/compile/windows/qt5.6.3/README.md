@@ -87,5 +87,6 @@ cd /D C:\Qt\Qt5.6.3\5.6.3\mingw49_32
 Now, from the **Start menu ➡️️ Qt 5.6.3 ➡️️ 5.6.3 ➡️️ MinGW 4.9.2 (32-bit)**, duplicate **Qt 5.6.3 for Desktop (MinGW 4.9.2 32 bit)**
 to **Qt 5.6.3 Static for Desktop (MinGW 4.9.2 32 bit)** and change the target to use **static-qtenv2.bat**.
 
-[qt-exe]: https://download.qt.io/official_releases/qt/5.6/5.6.3/qt-opensource-windows-x86-mingw492-5.6.3.exe
-[qt-src]: https://download.qt.io/official_releases/qt/5.6/5.6.3/single/qt-everywhere-opensource-src-5.6.3.zip
+[qt-exe]: https://download.qt.io/new_archive/qt/5.6/5.6.3/qt-opensource-windows-x86-mingw492-5.6.3.exe
+[qt-src]: https://download.qt.io/new_archive/qt/5.6/5.6.3/single/qt-everywhere-opensource-src-5.6.3.zip
+
