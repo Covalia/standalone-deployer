@@ -134,3 +134,74 @@ QWidget#widgetChangeImageButton QPushButton:checked {
 	background-color:#222222;
 }
 
+/* qwizard related styles */
+QWizard, QWizardPage {
+	border:none;
+}
+
+QWizard QPushButton {
+	font-weight:bold;
+	min-width:4em;
+	padding:5px 20px 5px 20px;
+	border-radius:3px;
+	border:0;
+}
+
+/* open folder and wizard buttons */
+QWizard QPushButton:enabled {
+	background-color:#07a28e;
+	color:#FFFFFF;
+}
+
+QWizard QPushButton:hover {
+	background-color:#12bda7;
+}
+
+QCheckBox, QRadioButton {
+	color:#555555;
+}
+
+QCheckBox, QRadioButton {
+	margin-top:10px;
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+	margin-right:5px;
+}
+
+QCheckBox::indicator, QRadioButton::indicator {
+	border:2px solid #555555;
+	width:15px;
+	height:15px;
+	background:none;
+}
+
+QCheckBox::indicator {
+	border-radius:3px;
+}
+
+QRadioButton::indicator {
+	border-radius:9px;
+}
+
+QCheckBox::indicator:hover, QRadioButton::indicator:hover,
+QCheckBox::indicator:checked:hover, QRadioButton::indicator:checked:hover {
+	background-color:#00917d;
+}
+
+QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+	background-color:#07a28e;
+}
+
+QLineEdit {
+	border-radius:3px;
+	border:1px solid #555555;
+	background-color:transparent;
+	padding:4px 10px 4px 10px;
+	color:#222222;
+}
+
+QLineEdit::disabled {
+	border:1px solid #bbbbbb;
+	color:#bbbbbb;
+}

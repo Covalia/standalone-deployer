@@ -37,6 +37,9 @@ class CommandLineSingleton {
         /// is it configuration mode?
         bool isConfigureMode() const;
 
+        /// is it uninstall mode?
+        bool isUninstallMode() const;
+
     private:
         CommandLineSingleton();
 

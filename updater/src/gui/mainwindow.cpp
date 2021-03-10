@@ -38,9 +38,6 @@ MainWindow::MainWindow(QWidget * _parent) :
     setAttribute(Qt::WA_QuitOnClose);
     setWindowFlags(Qt::FramelessWindowHint);
 
-    setAttribute(Qt::WA_QuitOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
-
     m_ui->setupUi(this);
 
     AppPath appPath = Utils::getAppPath();

@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
 
     public:
         explicit MainWindow(QWidget * _parent = nullptr);
-        ~MainWindow();
+        virtual ~MainWindow();
         void center();
 
     protected:

@@ -50,6 +50,7 @@ int main(int argc, char * argv[])
     // load settings resource static file. must be called keymanager_resources
     Q_INIT_RESOURCE(keymanager_resources);
 
+    // remove qwizard ugly line
     QPalette p(qApp->palette());
     p.setColor(QPalette::Mid, p.color(QPalette::Base));
     qApp->setPalette(p);
