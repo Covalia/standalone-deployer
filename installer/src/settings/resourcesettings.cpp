@@ -12,6 +12,7 @@ const QString ResourceSettings::ShortcutName("shortcut_name");
 const QString ResourceSettings::RunAtStart("run_at_start");
 const QString ResourceSettings::DefaultInstallationPath("default_installation_path");
 const QString ResourceSettings::ChangeDataLocationAllowed("change_data_location_allowed");
+const QString ResourceSettings::Style("style");
 
 ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_settings(_appPath, QSettings::IniFormat),
@@ -19,9 +20,10 @@ ResourceSettings::ResourceSettings(const QString &_appPath) :
     m_appName("Application"),
     m_defaultLocale(IOConfig::LocaleEnUs),
     m_shortcutName("Application"),
-    m_runAtStart(true),
+    m_runAtStart(false),
     m_defaultInstallationPath("$HOME"),
-    m_changeDataLocationAllowed(false)
+    m_changeDataLocationAllowed(false),
+    m_style("default")
 {
     L_INFO("Initialise ResourceSettings");
     m_settings.setFallbacksEnabled(false);
@@ -45,6 +47,8 @@ void ResourceSettings::readSettings()
     m_defaultInstallationPath = getTransformedVariablePath(m_settings.value(DefaultInstallationPath, m_defaultInstallationPath).toString());
 
     m_changeDataLocationAllowed = m_settings.value(ChangeDataLocationAllowed, m_changeDataLocationAllowed).toBool();
+
+    m_style = m_settings.value(Style, m_style).toString();
 }
 
 QString ResourceSettings::getTransformedVariablePath(QString _path)
@@ -62,6 +66,11 @@ bool ResourceSettings::isRunAtStart() const
 QString ResourceSettings::getDeploymentUrl() const
 {
     return m_deploymentUrl;
+}
+
+QString ResourceSettings::getStyle() const
+{
+    return m_style;
 }
 
 QString ResourceSettings::getAppName() const

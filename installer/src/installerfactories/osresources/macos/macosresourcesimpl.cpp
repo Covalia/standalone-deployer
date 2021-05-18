@@ -27,24 +27,6 @@ bool MacosResourcesImpl::extractResources()
         extractResources = false;
     }
 
-    const QString styleCssFileName = "style.css";
-    const QString styleCssFileDest = m_appPath.getConfigurationDir().absoluteFilePath(styleCssFileName);
-    if (QFile::exists(styleCssFileDest)) {
-        L_INFO(QString("%1 already exists.").arg(styleCssFileDest));
-        if (QFile::remove(styleCssFileDest)) {
-            L_INFO(QString("%1 removed.").arg(styleCssFileDest));
-        } else {
-            L_ERROR(QString("Unable to remove %1").arg(styleCssFileDest));
-        }
-    }
-
-    if (QFile::copy(dir.absoluteFilePath(styleCssFileName), styleCssFileDest)) {
-        L_INFO("style.css file copied from app resources.");
-    } else {
-        L_ERROR("Unable to copy style.css file from app resources.");
-        extractResources = false;
-    }
-
     return extractResources;
 }
 
@@ -61,6 +43,11 @@ bool MacosResourcesImpl::extractStyleCssToTempFile(const QString &_toPath)
 bool MacosResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 {
     return writeFileToTempFile("images/title.png", _toPath);
+}
+
+bool MacosResourcesImpl::extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath)
+{
+	return writeFileToTempFile(_fromResource, _toPath);
 }
 
 bool MacosResourcesImpl::writeFileToTempFile(const QString &_resourceFile, const QString &_toPath)

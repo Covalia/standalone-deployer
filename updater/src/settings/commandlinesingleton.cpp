@@ -25,6 +25,7 @@ QStringList CommandLineSingleton::getApplicationArguments() const
     QStringList arguments = QStringList(m_arguments);
 
     arguments.removeAll("--configure");
+    arguments.removeAll("--uninstall");
     arguments.removeAll("--debug");
 
     return arguments;
@@ -37,6 +38,7 @@ QString CommandLineSingleton::getApplicationHttpArguments() const
     QString separator = "?";
     QString start = "--";
     QStringListIterator iterator(arguments);
+
     while (iterator.hasNext()) {
         const QString arg = iterator.next();
         if (arg.startsWith(start)) {
@@ -56,5 +58,10 @@ bool CommandLineSingleton::isDebugMode() const
 
 bool CommandLineSingleton::isConfigureMode() const
 {
-    return m_arguments.contains("--config");
+    return m_arguments.contains("--configure");
+}
+
+bool CommandLineSingleton::isUninstallMode() const
+{
+    return m_arguments.contains("--uninstall");
 }

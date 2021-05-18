@@ -26,6 +26,10 @@ class Settings
         static const QString AppName;
         static const QString UpdaterVersion;
         static const QString JavaVersion;
+        static const QString DataLocation;
+        static const QString DeploymentUrl;
+        static const QString Locale;
+        static const QString Style;
 
         static const QString ProxyUsed;
         static const QString ProxyHostname;
@@ -33,14 +37,7 @@ class Settings
         static const QString ProxyLogin;
         static const QString ProxyPassword;
 
-        static const QString Locale;
-
         static const QString ShortcutName;
-
-        static const QString DataLocation;
-
-        static const QString DeploymentUrl;
-
         static const QString RunAtStart;
 
         static Settings * getInstance();
@@ -73,6 +70,9 @@ class Settings
 
         QString getLocale() const;
         void setLocale(const QString &_locale);
+
+        QString getStyle() const;
+        void setStyle(const QString &_style);
 
         QString getShortcutName() const;
         void setShortcutName(const QString &shortcutName);
@@ -154,24 +154,22 @@ class Settings
          */
         QSettings * m_settings;
 
-        QString m_deploymentUrl;
         QString m_appName;
-
-        QString m_locale;
-
-        QString m_shortcutName;
-        bool m_runAtStart;
-
-        QString m_dataLocation;
-
         QString m_updaterVersion;
         QString m_javaVersion;
+        QString m_dataLocation;
+        QString m_deploymentUrl;
+        QString m_locale;
+        QString m_style;
 
         bool m_proxyUsed;
         QString m_proxyHostname;
         int m_proxyPort;
         QString m_proxyLogin;
         QString m_proxyPassword;
+
+        QString m_shortcutName;
+        bool m_runAtStart;
 };
 
 #endif

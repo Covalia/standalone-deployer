@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
 
     public:
         explicit MainWindow(QWidget * _parent = nullptr);
-        ~MainWindow();
+        virtual ~MainWindow();
         void center();
 
     protected:
@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow
         void updateServerUrlMessage(const QUrl &_url);
         void updateDownloadFileMessage(const QString &_file);
         void updateTotalDownloadProgress(qint64 _bytesReceived, qint64 _bytesTotal);
+        void updateServerName(const QString &_serverName);
 
         void updateSlideShow();
         void updateSlideShow(int _index);

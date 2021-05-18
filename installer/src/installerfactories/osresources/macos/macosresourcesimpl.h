@@ -12,6 +12,7 @@ class MacosResourcesImpl : public OsResourcesImpl {
         static bool extractProjectIniToTempFile(const QString &_toPath);
         static bool extractStyleCssToTempFile(const QString &_toPath);
         static bool extractTitlePngToTempFile(const QString &_toPath);
+        static bool extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath);
 
     private:
         static bool writeFileToTempFile(const QString &_resourceFile, const QString &_toPath);

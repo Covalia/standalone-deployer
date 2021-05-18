@@ -24,11 +24,21 @@ bool WindowsResourcesImpl::extractProjectIniToTempFile(const QString &_toPath)
 
 bool WindowsResourcesImpl::extractStyleCssToTempFile(const QString &_toPath)
 {
-    return writeResourceIdToFile(L"CONFIG_STYLE__CSS", _toPath);
+    return writeResourceIdToFile(L"_STYLE__CSS", _toPath);
 }
+
 bool WindowsResourcesImpl::extractTitlePngToTempFile(const QString &_toPath)
 {
     return writeResourceIdToFile(L"IMAGES_TITLE__PNG", _toPath);
+}
+
+bool WindowsResourcesImpl::extractShortcutIcnsIconToTempFile(const QString &_fromResource, const QString &_toPath)
+{
+    Q_UNUSED(_fromResource);
+    Q_UNUSED(_toPath);
+
+    // no-op on windows
+    return true;
 }
 
 BOOL WindowsResourcesImpl::EnumNamesFunc(HMODULE hModule, LPCWSTR lpType, LPWSTR lpName, LONG_PTR lParam)

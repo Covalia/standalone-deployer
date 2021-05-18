@@ -71,6 +71,8 @@ SOURCES += src/commandline/commandlineparser.cpp
 SOURCES += src/installerfactories/factory/installerfactory.cpp
 SOURCES += src/installerfactories/osresources/osresources.cpp
 SOURCES += src/installerfactories/osresources/osresourcesimpl.cpp
+SOURCES += src/installerfactories/shortcut/shortcut.cpp
+SOURCES += src/installerfactories/shortcut/shortcutimpl.cpp
 SOURCES += src/gui/forms/askpopupui.cpp
 SOURCES += src/gui/forms/endinstallationui.cpp
 SOURCES += src/gui/forms/installationui.cpp
@@ -93,6 +95,8 @@ HEADERS += src/commandline/commandlineparser.h
 HEADERS += src/installerfactories/factory/installerfactory.h
 HEADERS += src/installerfactories/osresources/osresources.h
 HEADERS += src/installerfactories/osresources/osresourcesimpl.h
+HEADERS += src/installerfactories/shortcut/shortcut.h
+HEADERS += src/installerfactories/shortcut/shortcutimpl.h
 HEADERS += src/gui/abstract_translated_ui.h
 HEADERS += src/gui/forms/askpopupui.h
 HEADERS += src/gui/forms/endinstallationui.h
@@ -112,33 +116,37 @@ HEADERS += src/manager/installmanager.h
 HEADERS += src/settings/resourcesettings.h
 HEADERS += src/utils.h
 
-RESOURCES += fixed_resources.qrc
+RESOURCES += fixed_common_resources.qrc
 
 win32 {
-	RESOURCES += windows_resources.qrc
+	RESOURCES += fixed_windows_resources.qrc
 
 	HEADERS += src/installerfactories/factory/windows/windowsinstallerfactory.h
 	HEADERS += src/installerfactories/osresources/windows/windowsresourcesimpl.h
+	HEADERS += src/installerfactories/shortcut/windows/windowsshortcutimpl.h
 
 	SOURCES += src/installerfactories/factory/windows/windowsinstallerfactory.cpp
 	SOURCES += src/installerfactories/osresources/windows/windowsresourcesimpl.cpp
+	SOURCES += src/installerfactories/shortcut/windows/windowsshortcutimpl.cpp
 }
 
 macx {
-	RESOURCES += macos_resources.qrc
+	RESOURCES += fixed_macos_resources.qrc
 
 	HEADERS += src/installerfactories/factory/macos/macosinstallerfactory.h
 	HEADERS += src/installerfactories/osresources/macos/macosresourcesimpl.h
+	HEADERS += src/installerfactories/shortcut/macos/macosshortcutimpl.h
 
 	SOURCES += src/installerfactories/factory/macos/macosinstallerfactory.cpp
 	SOURCES += src/installerfactories/osresources/macos/macosresourcesimpl.cpp
+	SOURCES += src/installerfactories/shortcut/macos/macosshortcutimpl.cpp
 }
 
 DISTFILES += ../uncrustify.cfg
-TRANSLATIONS += resources/lang/app/fr_FR.ts
-TRANSLATIONS += resources/lang/app/en_US.ts
+TRANSLATIONS += resources/fixed/common/translations/app/fr_FR.ts
+TRANSLATIONS += resources/fixed/common/translations/app/en_US.ts
 
-RC_FILE = windows_resources.rc
+RC_FILE = overridable_windows_resources.rc
 
 macx {
 	CONFIG(release, debug|release) {
@@ -149,9 +157,15 @@ macx {
 
 	QMAKE_PRE_LINK += rm -f .DS_Store bin/*.log;
 
-	QMAKE_POST_LINK += cp resources/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
-	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
-	QMAKE_POST_LINK += $$escape_expand(\n\t)cp -r resources/overridable/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += mkdir -pv \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/configure
+	QMAKE_POST_LINK += $$escape_expand(\n\t)mkdir -pv \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/uninstall
+	QMAKE_POST_LINK += $$escape_expand(\n\t)mkdir -pv \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/start
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/common/project.ini \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/macos/application/configure/configure.icns \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/configure/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/macos/application/uninstall/uninstall.icns \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/uninstall/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp installer.icns \"$$DESTDIR/$$TARGET\".app/Contents/Resources/application/start/start.icns
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp resources/overridable/common/style.css \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
+	QMAKE_POST_LINK += $$escape_expand(\n\t)cp -r resources/overridable/common/images/ \"$$DESTDIR/$$TARGET\".app/Contents/Resources/
 
 	CONFIG(release, debug|release) {
 		defined(SIGNATURE_IDENTITY, var) {

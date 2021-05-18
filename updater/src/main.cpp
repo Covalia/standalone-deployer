@@ -11,6 +11,7 @@
 #include "settings/commandlinesingleton.h"
 #include "io/info.h"
 #include "utils.h"
+#include "gui/wizard/configwindow.h"
 
 /*!
  *
@@ -87,7 +88,13 @@ int main(int argc, char * argv[])
     L_INFO("-----------------------------------");
 
     // init style
-    StyleManager::setGeneralStyle();
+    const QString style = settings->getStyle();
+    StyleManager::setGeneralStyle(style);
+
+    // remove qwizard ugly line
+    QPalette p(qApp->palette());
+    p.setColor(QPalette::Mid, p.color(QPalette::Base));
+    qApp->setPalette(p);
 
     // init language with locale in settings
     LanguageManager::updateLocale(settings->getLocale());
@@ -101,9 +108,19 @@ int main(int argc, char * argv[])
         L_INFO(QString("Query Arguments: %1").arg(CommandLineSingleton::getInstance()->getApplicationHttpArguments()));
     }
 
-    MainWindow window;
-    window.show();
-    window.center();
-
-    return app.exec();
+    if (CommandLineSingleton::getInstance()->isConfigureMode()) {
+        L_INFO("Configuration mode");
+        ConfigWindow configWindow(settings);
+        configWindow.show();
+        configWindow.center();
+        return app.exec();
+    } else if (CommandLineSingleton::getInstance()->isUninstallMode()) {
+        L_INFO("Uninstallation mode");
+    } else {
+        MainWindow window;
+        window.show();
+        window.center();
+        return app.exec();
+    }
+    return 0;
 }
